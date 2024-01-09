@@ -1,4 +1,4 @@
-package com.badlogic.androidgames.framework.impl;
+package com.personal.groucho.badlogic.androidgames.framework.impl;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -22,12 +22,10 @@ public class AccelerometerHandler implements SensorEventListener {
         }
     }
 
-    @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // nothing to do here
     }
 
-    @Override
     public void onSensorChanged(SensorEvent event) {
         accelX = event.values[0];
         accelY = event.values[1];

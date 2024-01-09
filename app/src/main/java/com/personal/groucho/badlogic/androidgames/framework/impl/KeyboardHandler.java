@@ -1,4 +1,4 @@
-package com.badlogic.androidgames.framework.impl;
+package com.personal.groucho.badlogic.androidgames.framework.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,19 +6,15 @@ import java.util.List;
 import android.view.View;
 import android.view.View.OnKeyListener;
 
-import com.badlogic.androidgames.framework.Input.KeyEvent;
-import com.badlogic.androidgames.framework.Pool;
-import com.badlogic.androidgames.framework.Pool.PoolObjectFactory;
+import com.personal.groucho.badlogic.androidgames.framework.Input.KeyEvent;
 
 public class KeyboardHandler implements OnKeyListener {
     boolean[] pressedKeys = new boolean[128];
     Pool<KeyEvent> keyEventPool;
-    List<KeyEvent> keyEventsBuffer = new ArrayList<KeyEvent>();    
+    List<KeyEvent> keyEventsBuffer = new ArrayList<KeyEvent>();
     List<KeyEvent> keyEvents = new ArrayList<KeyEvent>();
-
     public KeyboardHandler(View view) {
-        PoolObjectFactory<KeyEvent> factory = new PoolObjectFactory<KeyEvent>() {
-            @Override
+        Pool.PoolObjectFactory<KeyEvent> factory = new Pool.PoolObjectFactory<KeyEvent>() {
             public KeyEvent createObject() {
                 return new KeyEvent();
             }
@@ -28,8 +24,6 @@ public class KeyboardHandler implements OnKeyListener {
         view.setFocusableInTouchMode(true);
         view.requestFocus();
     }
-
-    @Override
     public boolean onKey(View v, int keyCode, android.view.KeyEvent event) {
         if (event.getAction() == android.view.KeyEvent.ACTION_MULTIPLE)
             return false;
@@ -52,18 +46,17 @@ public class KeyboardHandler implements OnKeyListener {
         }
         return false;
     }
-
     public boolean isKeyPressed(int keyCode) {
         if (keyCode < 0 || keyCode > 127)
             return false;
         return pressedKeys[keyCode];
     }
-
     public List<KeyEvent> getKeyEvents() {
         synchronized (this) {
             int len = keyEvents.size();
-            for (int i = 0; i < len; i++)
+            for (int i = 0; i < len; i++) {
                 keyEventPool.free(keyEvents.get(i));
+            }
             keyEvents.clear();
             keyEvents.addAll(keyEventsBuffer);
             keyEventsBuffer.clear();

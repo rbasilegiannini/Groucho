@@ -1,8 +1,8 @@
-package com.badlogic.androidgames.framework.impl;
+package com.personal.groucho.badlogic.androidgames.framework.impl;
 
 import android.media.SoundPool;
 
-import com.badlogic.androidgames.framework.Sound;
+import com.personal.groucho.badlogic.androidgames.framework.Sound;
 
 public class AndroidSound implements Sound {
     int soundId;
@@ -13,15 +13,12 @@ public class AndroidSound implements Sound {
         this.soundPool = soundPool;
     }
 
-    @Override
     public void play(float volume) {
-        
         soundPool.play(soundId, volume, volume, 0, 0, 1);
     }
 
-    @Override
     public void dispose() {
         soundPool.unload(soundId);
     }
-
 }
+

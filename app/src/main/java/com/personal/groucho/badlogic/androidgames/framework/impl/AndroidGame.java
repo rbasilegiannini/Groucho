@@ -1,22 +1,20 @@
-package com.badlogic.androidgames.framework.impl;
+package com.personal.groucho.badlogic.androidgames.framework.impl;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
+import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.badlogic.androidgames.framework.Audio;
-import com.badlogic.androidgames.framework.FileIO;
-import com.badlogic.androidgames.framework.Game;
-import com.badlogic.androidgames.framework.Graphics;
-import com.badlogic.androidgames.framework.Input;
-import com.badlogic.androidgames.framework.Screen;
+import com.personal.groucho.badlogic.androidgames.framework.Audio;
+import com.personal.groucho.badlogic.androidgames.framework.FileIO;
+import com.personal.groucho.badlogic.androidgames.framework.Game;
+import com.personal.groucho.badlogic.androidgames.framework.Graphics;
+import com.personal.groucho.badlogic.androidgames.framework.Input;
+import com.personal.groucho.badlogic.androidgames.framework.Screen;
 
 public abstract class AndroidGame extends Activity implements Game {
     AndroidFastRenderView renderView;
@@ -25,7 +23,6 @@ public abstract class AndroidGame extends Activity implements Game {
     Input input;
     FileIO fileIO;
     Screen screen;
-    WakeLock wakeLock;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,69 +32,61 @@ public abstract class AndroidGame extends Activity implements Game {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        int frameBufferWidth = isLandscape ? 480 : 320;
-        int frameBufferHeight = isLandscape ? 320 : 480;
+        int frameBufferWidth = isLandscape ? 420 : 380;
+        int frameBufferHeight = isLandscape ? 380 : 420;
         Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth,
                 frameBufferHeight, Config.RGB_565);
-        
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+
         float scaleX = (float) frameBufferWidth
-                / getWindowManager().getDefaultDisplay().getWidth();
+                / displaymetrics.widthPixels;
         float scaleY = (float) frameBufferHeight
-                / getWindowManager().getDefaultDisplay().getHeight();
+                / displaymetrics.heightPixels;
 
         renderView = new AndroidFastRenderView(this, frameBuffer);
         graphics = new AndroidGraphics(getAssets(), frameBuffer);
-        fileIO = new AndroidFileIO(getAssets());
+        fileIO = new AndroidFileIO(this);
         audio = new AndroidAudio(this);
         input = new AndroidInput(this, renderView, scaleX, scaleY);
         screen = getStartScreen();
         setContentView(renderView);
-        
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "GLGame");
-    }
 
+    }
     @Override
     public void onResume() {
         super.onResume();
-        wakeLock.acquire();
         screen.resume();
         renderView.resume();
     }
-
     @Override
     public void onPause() {
         super.onPause();
-        wakeLock.release();
         renderView.pause();
         screen.pause();
 
         if (isFinishing())
             screen.dispose();
     }
-
-    @Override
     public Input getInput() {
         return input;
     }
 
-    @Override
     public FileIO getFileIO() {
         return fileIO;
     }
 
-    @Override
     public Graphics getGraphics() {
         return graphics;
     }
 
-    @Override
     public Audio getAudio() {
         return audio;
     }
-
-    @Override
     public void setScreen(Screen screen) {
         if (screen == null)
             throw new IllegalArgumentException("Screen must not be null");
@@ -108,7 +97,6 @@ public abstract class AndroidGame extends Activity implements Game {
         screen.update(0);
         this.screen = screen;
     }
-    
     public Screen getCurrentScreen() {
         return screen;
     }

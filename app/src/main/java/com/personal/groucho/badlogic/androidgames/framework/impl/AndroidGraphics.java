@@ -1,4 +1,4 @@
-package com.badlogic.androidgames.framework.impl;
+package com.personal.groucho.badlogic.androidgames.framework.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,8 +13,8 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 
-import com.badlogic.androidgames.framework.Graphics;
-import com.badlogic.androidgames.framework.Pixmap;
+import com.personal.groucho.badlogic.androidgames.framework.Graphics;
+import com.personal.groucho.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidGraphics implements Graphics {
     AssetManager assets;
@@ -23,15 +23,12 @@ public class AndroidGraphics implements Graphics {
     Paint paint;
     Rect srcRect = new Rect();
     Rect dstRect = new Rect();
-
     public AndroidGraphics(AssetManager assets, Bitmap frameBuffer) {
         this.assets = assets;
         this.frameBuffer = frameBuffer;
         this.canvas = new Canvas(frameBuffer);
         this.paint = new Paint();
     }
-
-    @Override
     public Pixmap newPixmap(String fileName, PixmapFormat format) {
         Config config = null;
         if (format == PixmapFormat.RGB565)
@@ -73,35 +70,25 @@ public class AndroidGraphics implements Graphics {
 
         return new AndroidPixmap(bitmap, format);
     }
-
-    @Override
     public void clear(int color) {
         canvas.drawRGB((color & 0xff0000) >> 16, (color & 0xff00) >> 8,
                 (color & 0xff));
     }
-
-    @Override
     public void drawPixel(int x, int y, int color) {
         paint.setColor(color);
         canvas.drawPoint(x, y, paint);
     }
-
-    @Override
     public void drawLine(int x, int y, int x2, int y2, int color) {
         paint.setColor(color);
         canvas.drawLine(x, y, x2, y2, paint);
     }
-
-    @Override
     public void drawRect(int x, int y, int width, int height, int color) {
         paint.setColor(color);
         paint.setStyle(Style.FILL);
         canvas.drawRect(x, y, x + width - 1, y + width - 1, paint);
     }
-
-    @Override
     public void drawPixmap(Pixmap pixmap, int x, int y, int srcX, int srcY,
-            int srcWidth, int srcHeight) {
+                           int srcWidth, int srcHeight) {
         srcRect.left = srcX;
         srcRect.top = srcY;
         srcRect.right = srcX + srcWidth - 1;
@@ -112,22 +99,17 @@ public class AndroidGraphics implements Graphics {
         dstRect.right = x + srcWidth - 1;
         dstRect.bottom = y + srcHeight - 1;
 
-        canvas.drawBitmap(((AndroidPixmap) pixmap).bitmap, srcRect, dstRect,
-                null);
+        canvas.drawBitmap(((AndroidPixmap) pixmap).bitmap, srcRect, dstRect, null);
     }
-    
-    @Override
     public void drawPixmap(Pixmap pixmap, int x, int y) {
         canvas.drawBitmap(((AndroidPixmap)pixmap).bitmap, x, y, null);
     }
-
-    @Override
     public int getWidth() {
         return frameBuffer.getWidth();
     }
 
-    @Override
     public int getHeight() {
         return frameBuffer.getHeight();
     }
 }
+

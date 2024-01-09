@@ -1,4 +1,4 @@
-package com.badlogic.androidgames.framework.impl;
+package com.personal.groucho.badlogic.androidgames.framework.impl;
 
 import java.io.IOException;
 
@@ -9,27 +9,28 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
-import com.badlogic.androidgames.framework.Audio;
-import com.badlogic.androidgames.framework.Music;
-import com.badlogic.androidgames.framework.Sound;
+import com.personal.groucho.badlogic.androidgames.framework.Audio;
+import com.personal.groucho.badlogic.androidgames.framework.Music;
+import com.personal.groucho.badlogic.androidgames.framework.Sound;
 
 public class AndroidAudio implements Audio {
     AssetManager assets;
     SoundPool soundPool;
-    private static final int SIMULTANEOUS_CHANNELS = 4;
 
     public AndroidAudio(Activity activity) {
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
         this.assets = activity.getAssets();
-        this.soundPool = new SoundPool.Builder().setMaxStreams(SIMULTANEOUS_CHANNELS)
-                                                .setAudioAttributes(
-                                                        new AudioAttributes.Builder()
-                                                                           .setUsage(AudioAttributes.USAGE_GAME)
-                                                                           .build())
-                                                .build();
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        this.soundPool = new SoundPool.Builder()
+                .setMaxStreams(20)
+                .setAudioAttributes(audioAttributes)
+                .build();
     }
 
-    @Override
     public Music newMusic(String filename) {
         try {
             AssetFileDescriptor assetDescriptor = assets.openFd(filename);
@@ -38,8 +39,6 @@ public class AndroidAudio implements Audio {
             throw new RuntimeException("Couldn't load music '" + filename + "'");
         }
     }
-
-    @Override
     public Sound newSound(String filename) {
         try {
             AssetFileDescriptor assetDescriptor = assets.openFd(filename);

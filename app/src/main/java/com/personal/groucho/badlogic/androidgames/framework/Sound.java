@@ -1,4 +1,4 @@
-package com.badlogic.androidgames.framework;
+package com.personal.groucho.badlogic.androidgames.framework;
 
 public interface Sound {
     public void play(float volume);
