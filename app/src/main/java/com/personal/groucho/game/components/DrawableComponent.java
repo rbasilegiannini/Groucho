@@ -1,8 +1,8 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.components;
 
 import android.graphics.Canvas;
 
-abstract class DrawableComponent extends Component{
+public abstract class DrawableComponent extends Component{
     @Override
     public ComponentType type() {
         return ComponentType.Drawable;
