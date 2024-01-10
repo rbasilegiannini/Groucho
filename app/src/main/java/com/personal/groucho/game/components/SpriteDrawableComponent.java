@@ -38,7 +38,7 @@ public class SpriteDrawableComponent extends DrawableComponent {
 
         currentStep = spritesheet.drawAnimation(
                 canvas, currentAnimation,
-                currentStep, pos.getPosX(), pos.getPosY()
+                currentStep, pos.getPosX(), pos.getPosY(), 5
         );
     }
 }

@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameWorld {
-    final static int bufferWidth = 400, bufferHeight = 600;    // actual pixels
+    final static int bufferWidth = 2280, bufferHeight = 1080;    // actual pixels
     Bitmap buffer;
     private Canvas canvas;
 
     final Box physicalSize, screenSize, currentView;
     final Activity activity;
+
+    private Controller controller;
 
     List<GameObject> objects;
 
@@ -27,8 +29,9 @@ public class GameWorld {
         this.currentView = physicalSize;
         this.activity = activity;
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
-
         //
+
+        controller = new Controller((float) 200, (float) bufferHeight /2);
 
         this.objects = new ArrayList<>();
         this.canvas = new Canvas(buffer);
@@ -55,6 +58,7 @@ public class GameWorld {
                 drawable.draw(canvas);
             }
         }
+        controller.draw(canvas);
     }
 
     public float toMetersX(float x) { return currentView.xmin + x * (currentView.width/screenSize.width); }

@@ -30,7 +30,8 @@ public class MainActivity extends Activity {
 
         // Game world
         GameWorld gameWorld = buildGameWorld();
-        gameWorld.addGameObject(GameObjectFactory.makePlayer(0,0));
+        gameWorld.addGameObject(GameObjectFactory.
+                makePlayer(GameWorld.bufferWidth /2, GameWorld.bufferHeight/2));
 
         // View
         renderView = new AndroidFastRenderView(this, gameWorld);
