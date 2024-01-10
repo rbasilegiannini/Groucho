@@ -3,10 +3,15 @@ package com.personal.groucho.game;
 import com.personal.groucho.game.components.Component;
 import com.personal.groucho.game.components.ComponentType;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Entity {
-    private Map<ComponentType, Component> components;
+    private final Map<ComponentType, Component> components;
+
+    public Entity() {
+        components = new HashMap<>();
+    }
 
     public void addComponent(Component component) {
         component.setOwner(this);
