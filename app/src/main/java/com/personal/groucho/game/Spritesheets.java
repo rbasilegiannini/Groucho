@@ -32,7 +32,7 @@ public class Spritesheets {
 
         spritesheet.setFrameSize(64, 64);
         for (int anim = 0; anim < grouchoAnimations; anim++) {
-            spritesheet.setAnimation(anim, anim*numOfFrames, numOfFrames, 300);
+            spritesheet.setAnimation(anim, anim*numOfFrames, numOfFrames, 100);
         }
 
         return spritesheet;
