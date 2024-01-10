@@ -1,10 +1,10 @@
 package com.personal.groucho.game;
 
 public class PositionComponent extends Component{
-    private int posX;
-    private int posY;
+    private float posX;
+    private float posY;
 
-    public PositionComponent(int posX, int posY) {
+    public PositionComponent(float posX, float posY) {
         this.posX = posX;
         this.posY = posY;
     }
@@ -14,10 +14,10 @@ public class PositionComponent extends Component{
         return ComponentType.Position;
     }
 
-    public int getPosX() {return this.posX;}
-    public int getPosY() {return this.posY;}
+    public float getPosX() {return this.posX;}
+    public float getPosY() {return this.posY;}
 
-    public void setPosX(int newPosX) {this.posX = newPosX;}
-    public void setPosY(int newPosY) {this.posY = newPosY;}
+    public void setPosX(float newPosX) {this.posX = newPosX;}
+    public void setPosY(float newPosY) {this.posY = newPosY;}
 
 }
