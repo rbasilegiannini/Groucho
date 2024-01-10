@@ -14,17 +14,20 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     Thread renderThread = null;
     SurfaceHolder holder;
     volatile boolean running = false;
+
     public AndroidFastRenderView(Context context, GameWorld gameWorld) {
         super(context);
         this.gameWorld = gameWorld;
         this.framebuffer = gameWorld.buffer;
         this.holder = getHolder();
     }
+
     public void resume() {
         running = true;
         renderThread = new Thread(this);
         renderThread.start();
     }
+
     public void run() {
         Rect dstRect = new Rect();
         long startTime = System.nanoTime();
@@ -44,6 +47,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             holder.unlockCanvasAndPost(canvas);
         }
     }
+
     public void pause() {
         running = false;
         while(true) {
