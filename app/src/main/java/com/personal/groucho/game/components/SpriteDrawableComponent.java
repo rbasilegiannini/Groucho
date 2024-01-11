@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import com.personal.groucho.game.Spritesheet;
 
 public class SpriteDrawableComponent extends DrawableComponent {
-    private final Spritesheet spritesheet;
+    private Spritesheet spritesheet;
     private int currentAnimation;
     private int currentStep;
     private long lastTimestamp;
@@ -17,13 +17,11 @@ public class SpriteDrawableComponent extends DrawableComponent {
         this.lastTimestamp = 0;
     }
 
+    public void setSpritesheet(Spritesheet sheet) { spritesheet = sheet;}
     public void setAnimation(int animation) {
         currentAnimation = animation;
     }
-
-    public void setStep(int step) {
-        currentStep = step;
-    }
+    public void setStep(int step) { currentStep = step;}
 
     @Override
     public void draw(Canvas canvas) {

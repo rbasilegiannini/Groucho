@@ -32,7 +32,12 @@ public class MainActivity extends Activity {
         // Game world
         GameWorld gameWorld = buildGameWorld();
         gameWorld.addGameObject(GameObjectFactory.
-                makePlayer(GameWorld.bufferWidth /2, GameWorld.bufferHeight/2));
+                makePlayer(
+                        GameWorld.bufferWidth /2,
+                        GameWorld.bufferHeight/2,
+                        gameWorld.getController()
+                )
+        );
 
         // View
         renderView = new AndroidFastRenderView(this, gameWorld);

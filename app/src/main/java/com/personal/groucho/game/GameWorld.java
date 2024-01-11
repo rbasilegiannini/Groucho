@@ -8,6 +8,7 @@ import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
 import com.personal.groucho.game.components.Component;
 import com.personal.groucho.game.components.ComponentType;
+import com.personal.groucho.game.components.ControllableComponent;
 import com.personal.groucho.game.components.DrawableComponent;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class GameWorld {
 
     public synchronized void update(float elapsedTime) {
         // Update game state
+        updatePlayerState();
     }
 
     public synchronized void render() {
@@ -65,9 +67,21 @@ public class GameWorld {
         controller.draw(canvas);
     }
 
+    private void updatePlayerState() {
+        for (GameObject gameObject : objects) {
+            Component component = gameObject.getComponent(ComponentType.Controllable);
+            if (component != null) {
+                ControllableComponent controllable = (ControllableComponent) component;
+                controllable.updatePlayerState();
+            }
+        }
+    }
+
     public void setTouchHandler(TouchHandler touchHandler) {
         this.touchHandler = touchHandler;
     }
+
+    public Controller getController() { return controller; }
 
     public float fromScreenToBufferX(float x) { return x/screenSize.width*bufferWidth; }
     public float fromScreenToBufferY(float y) { return y/screenSize.height*bufferHeight; }
