@@ -34,15 +34,6 @@ public class Spritesheet {
     }
 
     public int drawAnimation(Canvas canvas, int animation, int step, int x, int y, int scaleFactor) {
-//        boolean isLoop = true;
-//        if (isLoop) {
-//            if (step >= length[animation] - 1)
-//                step = start[animation] + 1;
-//        }
-//        else {
-//            if (step >= length[animation] - 1)
-//                step = length[animation] - 1;
-//        }
         if (step >= length[animation] - 1)
             step = 0;
 
