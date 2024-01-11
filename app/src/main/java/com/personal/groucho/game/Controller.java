@@ -101,76 +101,52 @@ public class Controller {
         float x = gameWorld.fromScreenToBufferX(event.x);
         float y = gameWorld.fromScreenToBufferY(event.y);
 
-        if (upPressed && !isInUp(x, y)) {upPressed = false;
+        if (upPressed && !isInUp(x, y))
+            upPressed = false;
 
-            Log.d("Controller", "released Up");}
-        if (downPressed && !isInDown(x, y)){
-            if(downPressed) {downPressed = false;
+        if (downPressed && !isInDown(x, y))
+            downPressed = false;
 
-                Log.d("Controller", "released Down");}
-        }
-        if (leftPressed && !isInLeft(x,y)) {
-            if(leftPressed) {leftPressed = false;
+        if (leftPressed && !isInLeft(x,y))
+            leftPressed = false;
 
-                Log.d("Controller", "released Left");}
-        }
-        if (rightPressed && !isInRight(x,y)) {
-            if(rightPressed) {rightPressed = false;
-
-                Log.d("Controller", "released Right");}
-        }
+        if (rightPressed && !isInRight(x,y))
+            rightPressed = false;
     }
 
     private void consumeTouchUp(Input.TouchEvent event) {
         float x = gameWorld.fromScreenToBufferX(event.x);
         float y = gameWorld.fromScreenToBufferY(event.y);
 
-        if(isInUp(x, y)){
-            if(upPressed) {upPressed = false;
+        if(isInUp(x, y))
+            if(upPressed) upPressed = false;
 
-                Log.d("Controller", "released Up");}
-        }
-        if (isInDown(x, y)){
-            if(downPressed) {downPressed = false;
+        if (isInDown(x, y))
+            if(downPressed) downPressed = false;
 
-                Log.d("Controller", "released Down");}
-        }
-        if (isInLeft(x,y)) {
-            if(leftPressed) {leftPressed = false;
+        if (isInLeft(x,y))
+            if(leftPressed) leftPressed = false;
 
-                Log.d("Controller", "released Left");}
-        }
-        if (isInRight(x,y)) {
-            if(rightPressed) {rightPressed = false;
-
-                Log.d("Controller", "released Right");}
-        }
+        if (isInRight(x,y))
+            if(rightPressed) rightPressed = false;
     }
 
     private void consumeTouchDown(Input.TouchEvent event) {
         float x = gameWorld.fromScreenToBufferX(event.x);
         float y = gameWorld.fromScreenToBufferY(event.y);
 
-        if(isInUp(x, y)){
-            if(!upPressed) {upPressed = true;
+        if(isInUp(x, y))
+            if(!upPressed) upPressed = true;
 
-            Log.d("Controller", "pressed Up");}
-        }
-        if (isInDown(x, y)){
-            if(!downPressed) {downPressed = true;
+        if (isInDown(x, y))
+            if(!downPressed) downPressed = true;
 
-            Log.d("Controller", "pressed Down");}
-        }
-        if (isInLeft(x,y)) {
-            if(!leftPressed) {leftPressed = true;
+        if (isInLeft(x,y))
+            if(!leftPressed) leftPressed = true;
 
-            Log.d("Controller", "pressed Left");}
-        }
-        if (isInRight(x,y)) {
-            if(!rightPressed) {rightPressed = true;
+        if (isInRight(x,y))
+            if(!rightPressed) rightPressed = true;
 
-            Log.d("Controller", "pressed Right");}
-        }
     }
 
     private boolean isInRight(float x, float y) { return isInCircle(x, rightDPadPosX, y, rightDPadPosY); }
