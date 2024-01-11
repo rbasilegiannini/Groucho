@@ -183,4 +183,8 @@ public class Controller {
         return pointerPositionSqr <= radiusSqr;
     }
 
+    public boolean isIdle(){
+        return !(upPressed || downPressed || rightPressed || leftPressed);
+    }
+
 }
