@@ -31,7 +31,7 @@ public class GameWorld {
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
         //
 
-        controller = new Controller((float) 200, (float) bufferHeight /2);
+        controller = new Controller((float) 200, (float) bufferHeight /2, this);
 
         this.objects = new ArrayList<>();
         this.canvas = new Canvas(buffer);
@@ -61,18 +61,10 @@ public class GameWorld {
         controller.draw(canvas);
     }
 
-    public float toMetersX(float x) { return currentView.xmin + x * (currentView.width/screenSize.width); }
-    public float toMetersY(float y) { return currentView.ymin + y * (currentView.height/screenSize.height); }
-
-    public float toPixelsX(float x) { return (x-currentView.xmin)/currentView.width*bufferWidth; }
-    public float toPixelsY(float y) { return (y-currentView.ymin)/currentView.height*bufferHeight; }
-
-    public float toPixelsXLength(float x)
-    {
-        return x/currentView.width*bufferWidth;
+    public void setTouchHandler(TouchHandler touchHandler) {
+        this.touchHandler = touchHandler;
     }
-    public float toPixelsYLength(float y)
-    {
-        return y/currentView.height*bufferHeight;
-    }
+
+    public float fromScreenToBufferX(float x) { return x/screenSize.width*bufferWidth; }
+    public float fromScreenToBufferY(float y) { return y/screenSize.height*bufferHeight; }
 }
