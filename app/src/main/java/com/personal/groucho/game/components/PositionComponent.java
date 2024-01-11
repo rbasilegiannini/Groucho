@@ -20,4 +20,6 @@ public class PositionComponent extends Component{
     public void setPosX(int newPosX) {this.posX = newPosX;}
     public void setPosY(int newPosY) {this.posY = newPosY;}
 
+    public void updatePosX(int increase) {this.posX += increase;}
+    public void updatePosY(int increase) {this.posY += increase;}
 }
