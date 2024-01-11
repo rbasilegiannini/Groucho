@@ -1,4 +1,4 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.animation;
 
 public class AnimationType {
     public static final int UP = 0;

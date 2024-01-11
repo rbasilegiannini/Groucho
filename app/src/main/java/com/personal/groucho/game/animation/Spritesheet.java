@@ -1,4 +1,4 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -44,7 +44,7 @@ public class Spritesheet {
 //                step = length[animation] - 1;
 //        }
         if (step >= length[animation] - 1)
-            step = 1;
+            step = 0;
 
         int srcTop = animation * frameHeight;
         int srcLeft = step * frameWidth;

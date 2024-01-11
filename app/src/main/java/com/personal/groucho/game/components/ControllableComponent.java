@@ -1,9 +1,9 @@
 package com.personal.groucho.game.components;
 
-import com.personal.groucho.game.AnimationType;
+import com.personal.groucho.game.animation.AnimationType;
 import com.personal.groucho.game.Controller;
-import com.personal.groucho.game.Spritesheet;
-import com.personal.groucho.game.Spritesheets;
+import com.personal.groucho.game.animation.Spritesheet;
+import com.personal.groucho.game.animation.Spritesheets;
 
 public class ControllableComponent extends Component {
 

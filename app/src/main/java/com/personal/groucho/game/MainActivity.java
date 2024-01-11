@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.personal.groucho.R;
 import com.personal.groucho.badlogic.androidgames.framework.impl.MultiTouchHandler;
+import com.personal.groucho.game.animation.Spritesheets;
 
 public class MainActivity extends Activity {
 

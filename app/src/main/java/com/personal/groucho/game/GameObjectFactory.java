@@ -1,5 +1,6 @@
 package com.personal.groucho.game;
 
+import com.personal.groucho.game.animation.Spritesheets;
 import com.personal.groucho.game.components.ControllableComponent;
 import com.personal.groucho.game.components.PositionComponent;
 import com.personal.groucho.game.components.SpriteDrawableComponent;
