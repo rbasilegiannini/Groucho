@@ -10,13 +10,14 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 
 import com.personal.groucho.R;
+import com.personal.groucho.badlogic.androidgames.framework.impl.MultiTouchHandler;
 
 public class MainActivity extends Activity {
 
     private AndroidFastRenderView renderView;
+    private MultiTouchHandler touch;
 
     private static final float XMIN = -10, XMAX = 10, YMIN = -15, YMAX = 15;
-
 
     public static String TAG;
 
@@ -38,6 +39,8 @@ public class MainActivity extends Activity {
         setContentView(renderView);
 
         // Touch
+        touch = new MultiTouchHandler(renderView, 1, 1);
+        gameWorld.setTouchHandler(touch);
     }
 
     @NonNull
