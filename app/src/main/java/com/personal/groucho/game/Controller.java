@@ -15,8 +15,10 @@ public class Controller {
     private final float leftDPadPosX, leftDPadPosY;
     private final float rightDPadPosX, rightDPadPosY;
     private final float shootPosX, shootPosY;
-    private final float triggerPosX;
-    private final float triggerPosY;
+    private float triggerPosX;
+    private float triggerPosY;
+    private final float originalTriggerPosX;
+    private final float originalTriggerPosY;
 
     private boolean upPressed, downPressed, leftPressed, rightPressed;
     private boolean triggerPressed;
@@ -50,6 +52,8 @@ public class Controller {
 
         triggerPosX = shootPosX+2*(int)radius;
         triggerPosY = shootPosY+2*(int)radius+150;
+        originalTriggerPosX = triggerPosX;
+        originalTriggerPosY = triggerPosY;
 
         circlePaint = new Paint();
         circlePaint.setColor(Color.GRAY);
@@ -105,34 +109,26 @@ public class Controller {
         }
     }
 
-    private void consumeTouchDragged(Input.TouchEvent event) {
+    private void consumeTouchDown(Input.TouchEvent event) {
         float x = gameWorld.fromScreenToBufferX(event.x);
         float y = gameWorld.fromScreenToBufferY(event.y);
 
-        if (upPressed && !isOnUp(x, y))
-            upPressed = false;
+        if(isOnUp(x, y))
+            if(!upPressed) upPressed = true;
 
-        if (downPressed && !isOnDown(x, y))
-            downPressed = false;
+        if (isOnDown(x, y))
+            if(!downPressed) downPressed = true;
 
-        if (leftPressed && !isOnLeft(x, y))
-            leftPressed = false;
+        if (isOnLeft(x,y))
+            if(!leftPressed) leftPressed = true;
 
-        if (rightPressed && !isOnRight(x, y))
-            rightPressed = false;
+        if (isOnRight(x,y))
+            if(!rightPressed) rightPressed = true;
 
-        if (triggerPressed && isOnShootArea(x, y)) {
-            load = true;
-            // Sound loading
-            // Change color of arc paint
-            arcPaint.setColor(Color.RED);
-        }
-
-        if (triggerPressed && !isOnShootArea(x, y)) {
-            load = false;
-            // Restore color of arc paint
-            arcPaint.setColor(Color.GRAY);
-        }
+        if(isOnTrigger(x,y))
+            if(!triggerPressed) {
+                triggerPressed = true;
+            }
     }
 
     private void consumeTouchUp(Input.TouchEvent event) {
@@ -153,33 +149,49 @@ public class Controller {
 
         if (triggerPressed) {
             if(load) shoot();
-            triggerPressed = false;
-            Log.i("Controller", "trigger up");
+            resetTrigger();
         }
 
     }
 
-    private void consumeTouchDown(Input.TouchEvent event) {
+    private void resetTrigger() {
+        triggerPressed = false;
+        triggerPosX = originalTriggerPosX;
+        triggerPosY = originalTriggerPosY;
+    }
+
+    private void consumeTouchDragged(Input.TouchEvent event) {
         float x = gameWorld.fromScreenToBufferX(event.x);
         float y = gameWorld.fromScreenToBufferY(event.y);
 
-        if(isOnUp(x, y))
-            if(!upPressed) upPressed = true;
+        if (upPressed && !isOnUp(x, y))
+            upPressed = false;
 
-        if (isOnDown(x, y))
-            if(!downPressed) downPressed = true;
+        if (downPressed && !isOnDown(x, y))
+            downPressed = false;
 
-        if (isOnLeft(x,y))
-            if(!leftPressed) leftPressed = true;
+        if (leftPressed && !isOnLeft(x, y))
+            leftPressed = false;
 
-        if (isOnRight(x,y))
-            if(!rightPressed) rightPressed = true;
+        if (rightPressed && !isOnRight(x, y))
+            rightPressed = false;
 
-        if(isOnTrigger(x,y))
-            if(!triggerPressed) {
-                triggerPressed = true;
-                Log.i("Controller", "trigger down");
+        if (triggerPressed) {
+            triggerPosX = x;
+            triggerPosY = y;
+
+            if (isOnShootArea(x, y)) {
+                load = true;
+                // Sound loading
+                // Change color of arc paint
+                arcPaint.setColor(Color.RED);
             }
+            else {
+                load = false;
+                // Restore color of arc paint
+                arcPaint.setColor(Color.GRAY);
+            }
+        }
     }
 
     private boolean isOnRight(float x, float y) { return isInCircle(x, rightDPadPosX, y, rightDPadPosY); }
@@ -188,11 +200,11 @@ public class Controller {
     private boolean isOnUp(float x, float y) { return isInCircle(x, upDPadPosX, y, upDPadPosY); }
     private boolean isOnTrigger(float x, float y) { return isInCircle(x, triggerPosX, y, triggerPosY);}
     private boolean isOnShootArea(float x, float y) {
-        return isInCircle(x, shootPosX+100, y, shootPosY+100);
+        return isInCircle(x, shootPosX+100, y, (float) (shootPosY+radius/2));
     }
 
-    private boolean isInCircle(float x, float upDPadPosX, float y, float upDPadPosY) {
-        double pointerPositionSqr = Math.pow(x - upDPadPosX, 2) + Math.pow(y - upDPadPosY, 2);
+    private boolean isInCircle(float x, float posX, float y, float posY) {
+        double pointerPositionSqr = Math.pow(x - posX, 2) + Math.pow(y - posY, 2);
         return pointerPositionSqr <= radiusSqr;
     }
 
