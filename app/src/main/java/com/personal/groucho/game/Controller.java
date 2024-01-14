@@ -20,7 +20,7 @@ public class Controller {
 
     private boolean load;
 
-    private final double radius, radiusSqr;
+    private final double dpadRadius, dpadRadiusSqr, triggerRadius;
 
     private final Paint circlePaint;
     private Paint arcPaint;
@@ -32,8 +32,9 @@ public class Controller {
         playerState = PlayerState.IDLE;
         orientation = Orientation.DOWN;
 
-        radius = 50;
-        radiusSqr = Math.pow(radius, 2);
+        dpadRadius = 75;
+        dpadRadiusSqr = Math.pow(dpadRadius, 2);
+        triggerRadius = 50;
 
         upDPadPosX = controllerCenterX;
         upDPadPosY = controllerCenterY - 75;
@@ -49,10 +50,10 @@ public class Controller {
 
         loadPosX = gameWorld.buffer.getWidth() - 300;
         loadPosY = controllerCenterY - 200;
-        originalTriggerPosX = loadPosX +2*(int)radius;
-        originalTriggerPosY = loadPosY +2*(int)radius+150;
+        originalTriggerPosX = loadPosX +2*(int)triggerRadius;
+        originalTriggerPosY = loadPosY +2*(int)triggerRadius+150;
         shootPosX = loadPosX;
-        shootPosY = originalTriggerPosY+ (int)radius;
+        shootPosY = originalTriggerPosY+ (int)triggerRadius;
         triggerPosX = originalTriggerPosX;
         triggerPosY = originalTriggerPosY;
 
@@ -74,10 +75,10 @@ public class Controller {
     }
 
     private void drawMovementControls(Canvas canvas) {
-        canvas.drawCircle(upDPadPosX, upDPadPosY, (int)radius, circlePaint);
-        canvas.drawCircle(downDPadPosX, downDPadPosY, (int)radius, circlePaint);
-        canvas.drawCircle(leftDPadPosX, leftDPadPosY, (int)radius, circlePaint);
-        canvas.drawCircle(rightDPadPosX, rightDPadPosY, (int)radius, circlePaint);
+        canvas.drawCircle(upDPadPosX, upDPadPosY, (int)dpadRadius, circlePaint);
+        canvas.drawCircle(downDPadPosX, downDPadPosY, (int)dpadRadius, circlePaint);
+        canvas.drawCircle(leftDPadPosX, leftDPadPosY, (int)dpadRadius, circlePaint);
+        canvas.drawCircle(rightDPadPosX, rightDPadPosY, (int)dpadRadius, circlePaint);
     }
 
     private void drawShootingControls(Canvas canvas) {
@@ -85,7 +86,7 @@ public class Controller {
                 225, 90, false, arcPaint);
         canvas.drawArc(shootPosX, shootPosY, shootPosX + 200, shootPosY + 200,
                 45, 90, false, arcPaint);
-        canvas.drawCircle(triggerPosX, triggerPosY, (int)radius, circlePaint);
+        canvas.drawCircle(triggerPosX, triggerPosY, (int)triggerRadius, circlePaint);
     }
 
     public void consumeTouchEvent(Input.TouchEvent event){
@@ -196,15 +197,15 @@ public class Controller {
     private boolean isOnUp(float x, float y) { return isInCircle(x, upDPadPosX, y, upDPadPosY); }
     private boolean isOnTrigger(float x, float y) { return isInCircle(x, triggerPosX, y, triggerPosY);}
     private boolean isOnLoadingArea(float x, float y) {
-        return isInCircle(x, loadPosX +100, y, (float) (loadPosY +radius/2));
+        return isInCircle(x, loadPosX +100, y, (float) (loadPosY +triggerRadius/2));
     }
     private boolean isOnShootingArea(float x, float y) {
-        return isInCircle(x, shootPosX +100, y, (float) (shootPosY+3*radius));
+        return isInCircle(x, shootPosX +100, y, (float) (shootPosY+3*triggerRadius));
     }
 
     private boolean isInCircle(float x, float posX, float y, float posY) {
         double pointerPositionSqr = Math.pow(x - posX, 2) + Math.pow(y - posY, 2);
-        return pointerPositionSqr <= radiusSqr;
+        return pointerPositionSqr <= dpadRadiusSqr;
     }
 
     public void consumeShoot() {
