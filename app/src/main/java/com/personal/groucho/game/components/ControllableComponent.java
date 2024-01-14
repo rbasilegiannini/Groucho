@@ -1,6 +1,8 @@
 package com.personal.groucho.game.components;
 
-import com.personal.groucho.game.animation.AnimationType;
+import android.util.Log;
+
+import com.personal.groucho.game.Orientation;
 import com.personal.groucho.game.Controller;
 import com.personal.groucho.game.animation.Spritesheet;
 import com.personal.groucho.game.animation.Spritesheets;
@@ -8,7 +10,8 @@ import com.personal.groucho.game.animation.Spritesheets;
 public class ControllableComponent extends Component {
 
     private final Controller controller;
-    private int currentAnimationType;
+    private SpriteDrawableComponent spriteComponent = null;
+    private PositionComponent positionComponent = null;
 
     public ControllableComponent(Controller controller) {
         this.controller = controller;
@@ -18,37 +21,44 @@ public class ControllableComponent extends Component {
     public ComponentType type() { return ComponentType.Controllable;}
 
     public void updatePlayerState() {
-        SpriteDrawableComponent spriteComponent =
-                (SpriteDrawableComponent) owner.getComponent(ComponentType.Drawable);
+        if (spriteComponent == null)
+            spriteComponent = (SpriteDrawableComponent) owner.getComponent(ComponentType.Drawable);
 
-        if (controller.isIdle()) {
-            handleIdlePlayer(spriteComponent);
-        }
-        else  {
-            handleActivePlayer(spriteComponent);
+        switch (controller.getPlayerState()) {
+            case IDLE:
+                handleIdlePlayer(spriteComponent);
+                break;
+            case WALKING:
+                handleWalkingPlayer(spriteComponent);
+                break;
+            case AIMING:
+                handleAimingPlayer(spriteComponent);
+                break;
+            case SHOOTING:
+                handleShootingPlayer(spriteComponent);
+                break;
         }
     }
 
-    private void handleActivePlayer(SpriteDrawableComponent spriteComponent) {
-        PositionComponent positionComponent =
-                (PositionComponent) owner.getComponent(ComponentType.Position);
+    private void handleIdlePlayer(SpriteDrawableComponent spriteComponent) {
+        updateSprite(spriteComponent, Spritesheets.groucho_idle, controller.getOrientation());
+    }
 
-        if (controller.isUpPressed()) {
-            updateSprite(spriteComponent, Spritesheets.groucho_walk, AnimationType.UP);
-            updatePosition(positionComponent, 0, 0);
-        }
-        if (controller.isDownPressed()) {
-            updateSprite(spriteComponent, Spritesheets.groucho_walk, AnimationType.DOWN);
-            updatePosition(positionComponent, 0, 0);
-        }
-        if (controller.isLeftPressed()) {
-            updateSprite(spriteComponent, Spritesheets.groucho_walk, AnimationType.LEFT);
-            updatePosition(positionComponent, 0, 0);
-        }
-        if (controller.isRightPressed()) {
-            updateSprite(spriteComponent, Spritesheets.groucho_walk, AnimationType.RIGHT);
-            updatePosition(positionComponent, 0, 0);
-        }
+    private void handleWalkingPlayer(SpriteDrawableComponent spriteComponent) {
+        if(positionComponent == null)
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+
+        updateSprite(spriteComponent, Spritesheets.groucho_walk, controller.getOrientation());
+        updatePosition(positionComponent, 0, 0);
+    }
+
+    private void handleAimingPlayer(SpriteDrawableComponent spriteComponent) {
+        updateSprite(spriteComponent, Spritesheets.groucho_aim, controller.getOrientation());
+    }
+
+    private void handleShootingPlayer(SpriteDrawableComponent spriteComponent) {
+        controller.consumeShoot();
+        Log.i("Controller", "Fire!");
     }
 
     private void updatePosition(PositionComponent positionComponent, int increaseX, int increaseY) {
@@ -56,26 +66,8 @@ public class ControllableComponent extends Component {
         positionComponent.updatePosY(increaseY);
     }
 
-    private void updateSprite(SpriteDrawableComponent spriteComponent, Spritesheet sheet, int animation) {
+    private void updateSprite(SpriteDrawableComponent spriteComponent, Spritesheet sheet, Orientation orientation) {
         spriteComponent.setSpritesheet(sheet);
-        spriteComponent.setAnimation(animation);
-        currentAnimationType = animation;
-    }
-
-    private void handleIdlePlayer(SpriteDrawableComponent spriteComponent) {
-        switch (currentAnimationType) {
-            case AnimationType.UP:
-                updateSprite(spriteComponent, Spritesheets.groucho_idle, AnimationType.UP);
-                break;
-            case AnimationType.DOWN:
-                updateSprite(spriteComponent, Spritesheets.groucho_idle, AnimationType.DOWN);
-                break;
-            case AnimationType.LEFT:
-                updateSprite(spriteComponent, Spritesheets.groucho_idle, AnimationType.LEFT);
-                break;
-            case AnimationType.RIGHT:
-                updateSprite(spriteComponent, Spritesheets.groucho_idle, AnimationType.RIGHT);
-                break;
-        }
+        spriteComponent.setAnimation(orientation.getValue());
     }
 }
