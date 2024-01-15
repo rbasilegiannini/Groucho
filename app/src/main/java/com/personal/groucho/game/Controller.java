@@ -132,10 +132,13 @@ public class Controller {
     }
 
     private void consumeTouchUp(Input.TouchEvent event) {
-        if (event.pointer == DpadPointer)
+        if (event.pointer == DpadPointer) {
             playerState = PlayerState.IDLE;
+            DpadPointer = -1;
+        }
         else if (event.pointer == triggerPointer) {
             playerState = PlayerState.IDLE;
+            triggerPointer = -1;
             resetTrigger();
         }
     }
