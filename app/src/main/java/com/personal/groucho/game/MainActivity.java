@@ -10,12 +10,16 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 
 import com.personal.groucho.R;
+import com.personal.groucho.badlogic.androidgames.framework.Sound;
+import com.personal.groucho.badlogic.androidgames.framework.impl.AndroidAudio;
 import com.personal.groucho.badlogic.androidgames.framework.impl.MultiTouchHandler;
+import com.personal.groucho.badlogic.androidgames.framework.Audio;
 import com.personal.groucho.game.animation.Spritesheets;
 
 public class MainActivity extends Activity {
 
     private AndroidFastRenderView renderView;
+    private Audio audio;
     private MultiTouchHandler touch;
 
     private static final float XMIN = -10, XMAX = 10, YMIN = -15, YMAX = 15;
@@ -47,6 +51,11 @@ public class MainActivity extends Activity {
         // Touch
         touch = new MultiTouchHandler(renderView, 1, 1);
         gameWorld.setTouchHandler(touch);
+
+        // Sound
+        audio = new AndroidAudio(this);
+        PlayerSounds.init(audio);
+
     }
 
     @NonNull
