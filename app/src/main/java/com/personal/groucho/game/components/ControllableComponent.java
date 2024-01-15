@@ -26,47 +26,47 @@ public class ControllableComponent extends Component {
 
         switch (controller.getPlayerState()) {
             case IDLE:
-                handleIdlePlayer(spriteComponent);
+                handleIdlePlayer();
                 break;
             case WALKING:
-                handleWalkingPlayer(spriteComponent);
+                handleWalkingPlayer();
                 break;
             case AIMING:
-                handleAimingPlayer(spriteComponent);
+                handleAimingPlayer();
                 break;
             case SHOOTING:
-                handleShootingPlayer(spriteComponent);
+                handleShootingPlayer();
                 break;
         }
     }
 
-    private void handleIdlePlayer(SpriteDrawableComponent spriteComponent) {
-        updateSprite(spriteComponent, Spritesheets.groucho_idle, controller.getOrientation());
+    private void handleIdlePlayer() {
+        updateSprite(Spritesheets.groucho_idle, controller.getOrientation());
     }
 
-    private void handleWalkingPlayer(SpriteDrawableComponent spriteComponent) {
+    private void handleWalkingPlayer() {
         if(positionComponent == null)
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
 
-        updateSprite(spriteComponent, Spritesheets.groucho_walk, controller.getOrientation());
-        updatePosition(positionComponent, 0, 0);
+        updateSprite(Spritesheets.groucho_walk, controller.getOrientation());
+        updatePosition(0, 0);
     }
 
-    private void handleAimingPlayer(SpriteDrawableComponent spriteComponent) {
-        updateSprite(spriteComponent, Spritesheets.groucho_aim, controller.getOrientation());
+    private void handleAimingPlayer() {
+        updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
     }
 
-    private void handleShootingPlayer(SpriteDrawableComponent spriteComponent) {
+    private void handleShootingPlayer() {
         controller.consumeShoot();
         Log.i("Controller", "Fire!");
     }
 
-    private void updatePosition(PositionComponent positionComponent, int increaseX, int increaseY) {
+    private void updatePosition(int increaseX, int increaseY) {
         positionComponent.updatePosX(increaseX);
         positionComponent.updatePosY(increaseY);
     }
 
-    private void updateSprite(SpriteDrawableComponent spriteComponent, Spritesheet sheet, Orientation orientation) {
+    private void updateSprite(Spritesheet sheet, Orientation orientation) {
         spriteComponent.setSpritesheet(sheet);
         spriteComponent.setAnimation(orientation.getValue());
     }
