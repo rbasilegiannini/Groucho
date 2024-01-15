@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.personal.groucho.game.Orientation;
 import com.personal.groucho.game.Controller;
+import com.personal.groucho.game.PlayerSounds;
 import com.personal.groucho.game.animation.Spritesheet;
 import com.personal.groucho.game.animation.Spritesheets;
 
@@ -58,6 +59,9 @@ public class ControllableComponent extends Component {
 
     private void handleShootingPlayer() {
         controller.consumeShoot();
+        PlayerSounds.shootingSound.play(1f);
+        // Shot sprite
+        // Shot effect
         Log.i("Controller", "Fire!");
     }
 

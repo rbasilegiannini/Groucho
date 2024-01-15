@@ -64,6 +64,7 @@ public class Controller {
         arcPaint = new Paint();
         arcPaint.setColor(Color.GRAY);
         arcPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        arcPaint.setAlpha(150);
 
         triggerPointer = -1;
         DpadPointer = -1;
@@ -218,4 +219,5 @@ public class Controller {
 
     public PlayerState getPlayerState() {return playerState;}
     public Orientation getOrientation() {return orientation;}
+
 }
