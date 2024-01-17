@@ -7,20 +7,27 @@ import com.personal.groucho.game.Orientation;
 
 public class Aiming extends ControllerState{
 
-    public Aiming(Controller controller) {
+    private static Aiming state = null;
+
+    private Aiming(Controller controller) {
         super(controller);
     }
 
+    public static ControllerState getInstance(Controller controller) {
+        if (state == null)
+            state = new Aiming(controller);
+        return state;
+    }
+
     @Override
-    public void handleDPadTouchDown(int pointer, Orientation orientation) {
-        controller.setDpadPointer(pointer);
+    public void handleDPadTouchDown(Orientation orientation) {
         controller.setOrientation(orientation);
     }
 
     @Override
     public void handleTriggerTouchDragged(float x, float y) {
         if (controller.isOnLoadingArea(x, y)) {
-            controller.setCurrentState(new Loading(controller));
+            controller.setCurrentState(Loading.getInstance(controller));
             controller.arcPaint.setColor(Color.RED);
         }
     }
@@ -31,11 +38,10 @@ public class Aiming extends ControllerState{
     }
 
     @Override
-    public void handleDPadTouchUp() {
-    }
+    public void handleDPadTouchUp() {}
 
     @Override
     public void handleTriggerTouchUp() {
-        controller.setCurrentState(new Idle(controller));
+        controller.setCurrentState(Idle.getInstance(controller));
     }
 }

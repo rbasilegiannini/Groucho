@@ -5,13 +5,20 @@ import com.personal.groucho.game.Orientation;
 
 public class Shooting extends ControllerState{
 
-    public Shooting(Controller controller) {
+    private static Shooting state = null;
+
+    private Shooting(Controller controller) {
         super(controller);
     }
 
+    public static ControllerState getInstance(Controller controller) {
+        if (state == null)
+            state = new Shooting(controller);
+        return state;
+    }
+
     @Override
-    public void handleDPadTouchDown(int pointer, Orientation orientation) {
-        controller.setDpadPointer(pointer);
+    public void handleDPadTouchDown(Orientation orientation) {
     }
 
     @Override

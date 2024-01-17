@@ -3,6 +3,7 @@ package com.personal.groucho.game;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.game.states.Aiming;
@@ -24,22 +25,13 @@ public class Controller {
     private final Paint circlePaint;
     public Paint arcPaint;
 
-    private int DpadPointer, triggerPointer;
-
-    public void setDpadPointer(int dpadPointer) {
-        DpadPointer = dpadPointer;
-    }
-
-    public void setTriggerPointer(int triggerPointer) {
-        this.triggerPointer = triggerPointer;
-    }
+    private int dpadPointer, triggerPointer;
 
     private ControllerState currentState;
 
-    public void setCurrentState(ControllerState state) {currentState = state;}
     public Controller(float controllerCenterX, float controllerCenterY, GameWorld gw) {
         gameWorld = gw;
-        currentState = new Idle(this);
+        currentState = Idle.getInstance(this);
         orientation = Orientation.DOWN;
 
         dpadRadius = 75;
@@ -77,12 +69,14 @@ public class Controller {
         arcPaint.setAlpha(150);
 
         triggerPointer = -1;
-        DpadPointer = -1;
+        dpadPointer = -1;
     }
 
     public void draw(Canvas canvas) {
         drawMovementControls(canvas);
         drawShootingControls(canvas);
+        Log.i("Controller", currentState.getClass().getName());
+        Log.i("Controller", orientation.name());
     }
 
     private void drawMovementControls(Canvas canvas) {
@@ -119,28 +113,28 @@ public class Controller {
         float y = gameWorld.fromScreenToBufferY(event.y);
 
         if (isOnUp(x, y))
-            currentState.handleDPadTouchDown(event.pointer, Orientation.UP);
+            handleDPadTouchDown(event.pointer, Orientation.UP);
         else if (isOnDown(x, y))
-            currentState.handleDPadTouchDown(event.pointer, Orientation.DOWN);
+            handleDPadTouchDown(event.pointer, Orientation.DOWN);
         else if (isOnLeft(x, y))
-            currentState.handleDPadTouchDown(event.pointer, Orientation.LEFT);
+            handleDPadTouchDown(event.pointer, Orientation.LEFT);
         else if (isOnRight(x, y))
-            currentState.handleDPadTouchDown(event.pointer, Orientation.RIGHT);
+            handleDPadTouchDown(event.pointer, Orientation.RIGHT);
         else if(isOnTrigger(x,y)) {
             triggerPointer = event.pointer;
-            currentState = new Aiming(this);
+            currentState = Aiming.getInstance(this);
         }
     }
 
-//    private void handleDPadTouchDown(int pointer, Orientation orientation){
-//        DpadPointer = pointer;
-//        currentState.handleDPadTouchDown(orientation);
-//    }
+    private void handleDPadTouchDown(int pointer, Orientation orientation){
+        dpadPointer = pointer;
+        currentState.handleDPadTouchDown(orientation);
+    }
 
     private void consumeTouchUp(Input.TouchEvent event) {
-        if (event.pointer == DpadPointer) {
+        if (event.pointer == dpadPointer) {
             currentState.handleDPadTouchUp();
-            DpadPointer = -1;
+            dpadPointer = -1;
         }
         else if (event.pointer == triggerPointer) {
             currentState.handleTriggerTouchUp();
@@ -159,7 +153,7 @@ public class Controller {
         float x = gameWorld.fromScreenToBufferX(event.x);
         float y = gameWorld.fromScreenToBufferY(event.y);
 
-        if (event.pointer == DpadPointer) {
+        if (event.pointer == dpadPointer) {
             if (isOnUp(x, y))
                 currentState.handleDPadTouchDragged(Orientation.UP);
             else if (isOnDown(x, y))
@@ -194,10 +188,12 @@ public class Controller {
     }
 
     public void consumeShoot() {
-        currentState = new Aiming(this);
+        currentState = Aiming.getInstance(this);
     }
 
     public ControllerState getPlayerState() {return currentState;}
     public Orientation getOrientation() {return orientation;}
+    public void setCurrentState(ControllerState state) {currentState = state;}
+
     public void setOrientation(Orientation orientation) {this.orientation = orientation;}
 }

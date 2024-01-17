@@ -5,13 +5,20 @@ import com.personal.groucho.game.Orientation;
 
 public class Walking extends ControllerState{
 
-    public Walking(Controller controller) {
+    private static Walking state = null;
+
+    private Walking(Controller controller) {
         super(controller);
     }
 
+    public static ControllerState getInstance(Controller controller) {
+        if (state == null)
+            state = new Walking(controller);
+        return state;
+    }
+
     @Override
-    public void handleDPadTouchDown(int pointer, Orientation orientation) {
-        controller.setDpadPointer(pointer);
+    public void handleDPadTouchDown(Orientation orientation) {
         controller.setOrientation(orientation);
     }
 
@@ -27,7 +34,7 @@ public class Walking extends ControllerState{
 
     @Override
     public void handleDPadTouchUp() {
-        controller.setCurrentState(new Idle(controller));
+        controller.setCurrentState(Idle.getInstance(controller));
     }
 
     @Override

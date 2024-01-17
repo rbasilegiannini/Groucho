@@ -10,6 +10,7 @@ import com.personal.groucho.game.animation.Spritesheets;
 import com.personal.groucho.game.states.Aiming;
 import com.personal.groucho.game.states.ControllerState;
 import com.personal.groucho.game.states.Idle;
+import com.personal.groucho.game.states.Loading;
 import com.personal.groucho.game.states.Shooting;
 import com.personal.groucho.game.states.Walking;
 
@@ -37,7 +38,10 @@ public class ControllableComponent extends Component {
             handleWalkingPlayer();
         } else if (aClass.equals(Aiming.class)) {
             handleAimingPlayer();
-        } else if (aClass.equals(Shooting.class)) {
+        } else if (aClass.equals(Loading.class)) {
+            handleLoadingPlayer();
+        }
+        else if (aClass.equals(Shooting.class)) {
             handleShootingPlayer();
         }
     }
@@ -55,6 +59,10 @@ public class ControllableComponent extends Component {
     }
 
     private void handleAimingPlayer() {
+        updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
+    }
+
+    private void handleLoadingPlayer() {
         updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
     }
 
