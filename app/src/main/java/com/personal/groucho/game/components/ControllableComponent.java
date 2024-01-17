@@ -7,6 +7,11 @@ import com.personal.groucho.game.Controller;
 import com.personal.groucho.game.PlayerSounds;
 import com.personal.groucho.game.animation.Spritesheet;
 import com.personal.groucho.game.animation.Spritesheets;
+import com.personal.groucho.game.states.Aiming;
+import com.personal.groucho.game.states.ControllerState;
+import com.personal.groucho.game.states.Idle;
+import com.personal.groucho.game.states.Shooting;
+import com.personal.groucho.game.states.Walking;
 
 public class ControllableComponent extends Component {
 
@@ -25,19 +30,15 @@ public class ControllableComponent extends Component {
         if (spriteComponent == null)
             spriteComponent = (SpriteDrawableComponent) owner.getComponent(ComponentType.Drawable);
 
-        switch (controller.getPlayerState()) {
-            case IDLE:
-                handleIdlePlayer();
-                break;
-            case WALKING:
-                handleWalkingPlayer();
-                break;
-            case AIMING:
-                handleAimingPlayer();
-                break;
-            case SHOOTING:
-                handleShootingPlayer();
-                break;
+        Class<? extends ControllerState> aClass = controller.getPlayerState().getClass();
+        if (aClass.equals(Idle.class)) {
+            handleIdlePlayer();
+        } else if (aClass.equals(Walking.class)) {
+            handleWalkingPlayer();
+        } else if (aClass.equals(Aiming.class)) {
+            handleAimingPlayer();
+        } else if (aClass.equals(Shooting.class)) {
+            handleShootingPlayer();
         }
     }
 

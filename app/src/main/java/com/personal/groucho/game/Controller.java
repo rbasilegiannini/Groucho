@@ -3,13 +3,14 @@ package com.personal.groucho.game;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
+import com.personal.groucho.game.states.Aiming;
+import com.personal.groucho.game.states.ControllerState;
+import com.personal.groucho.game.states.Idle;
 
 public class Controller {
     private final GameWorld gameWorld;
-    private PlayerState playerState;
     private Orientation orientation;
 
     private final float upDPadPosX, upDPadPosY, downDPadPosX, downDPadPosY;
@@ -18,18 +19,27 @@ public class Controller {
     private final float originalTriggerPosX, originalTriggerPosY;
     private float triggerPosX, triggerPosY;
 
-    private boolean load;
-
     private final double dpadRadius, dpadRadiusSqr, triggerRadius;
 
     private final Paint circlePaint;
-    private Paint arcPaint;
+    public Paint arcPaint;
 
     private int DpadPointer, triggerPointer;
 
+    public void setDpadPointer(int dpadPointer) {
+        DpadPointer = dpadPointer;
+    }
+
+    public void setTriggerPointer(int triggerPointer) {
+        this.triggerPointer = triggerPointer;
+    }
+
+    private ControllerState currentState;
+
+    public void setCurrentState(ControllerState state) {currentState = state;}
     public Controller(float controllerCenterX, float controllerCenterY, GameWorld gw) {
         gameWorld = gw;
-        playerState = PlayerState.IDLE;
+        currentState = new Idle(this);
         orientation = Orientation.DOWN;
 
         dpadRadius = 75;
@@ -109,36 +119,31 @@ public class Controller {
         float y = gameWorld.fromScreenToBufferY(event.y);
 
         if (isOnUp(x, y))
-            handleDPadTouchDown(event.pointer, Orientation.UP);
+            currentState.handleDPadTouchDown(event.pointer, Orientation.UP);
         else if (isOnDown(x, y))
-            handleDPadTouchDown(event.pointer, Orientation.DOWN);
+            currentState.handleDPadTouchDown(event.pointer, Orientation.DOWN);
         else if (isOnLeft(x, y))
-            handleDPadTouchDown(event.pointer, Orientation.LEFT);
+            currentState.handleDPadTouchDown(event.pointer, Orientation.LEFT);
         else if (isOnRight(x, y))
-            handleDPadTouchDown(event.pointer, Orientation.RIGHT);
+            currentState.handleDPadTouchDown(event.pointer, Orientation.RIGHT);
         else if(isOnTrigger(x,y)) {
             triggerPointer = event.pointer;
-            playerState = PlayerState.AIMING;
+            currentState = new Aiming(this);
         }
     }
 
-    private void handleDPadTouchDown(int pointer, Orientation orientation) {
-        DpadPointer = pointer;
-        if (playerState == PlayerState.IDLE) {
-            playerState = PlayerState.WALKING;
-            this.orientation = orientation;
-        }
-        else if (playerState == PlayerState.AIMING || playerState == PlayerState.WALKING)
-            this.orientation = orientation;
-    }
+//    private void handleDPadTouchDown(int pointer, Orientation orientation){
+//        DpadPointer = pointer;
+//        currentState.handleDPadTouchDown(orientation);
+//    }
 
     private void consumeTouchUp(Input.TouchEvent event) {
         if (event.pointer == DpadPointer) {
-            playerState = PlayerState.IDLE;
+            currentState.handleDPadTouchUp();
             DpadPointer = -1;
         }
         else if (event.pointer == triggerPointer) {
-            playerState = PlayerState.IDLE;
+            currentState.handleTriggerTouchUp();
             triggerPointer = -1;
             resetTrigger();
         }
@@ -147,7 +152,6 @@ public class Controller {
     private void resetTrigger() {
         triggerPosX = originalTriggerPosX;
         triggerPosY = originalTriggerPosY;
-        if(load) load = false;
         arcPaint.setColor(Color.GRAY);
     }
 
@@ -157,42 +161,19 @@ public class Controller {
 
         if (event.pointer == DpadPointer) {
             if (isOnUp(x, y))
-                handleDPadTouchDragged(Orientation.UP);
+                currentState.handleDPadTouchDragged(Orientation.UP);
             else if (isOnDown(x, y))
-                handleDPadTouchDragged(Orientation.DOWN);
+                currentState.handleDPadTouchDragged(Orientation.DOWN);
             else if (isOnLeft(x, y))
-                handleDPadTouchDragged(Orientation.LEFT);
+                currentState.handleDPadTouchDragged(Orientation.LEFT);
             else if (isOnRight(x, y))
-                handleDPadTouchDragged(Orientation.RIGHT);
+                currentState.handleDPadTouchDragged(Orientation.RIGHT);
         }
-        else if (event.pointer == triggerPointer)
-            handleTriggerTouchDragged(x, y);
-    }
-
-    private void handleTriggerTouchDragged(float x, float y) {
-        triggerPosX = x;
-        triggerPosY = y;
-
-        if (playerState == PlayerState.AIMING) {
-            if (isOnLoadingArea(x, y)) {
-                load = true;
-                arcPaint.setColor(Color.RED);
-            } else if (isOnShootingArea(x, y)) {
-                if (load) playerState = PlayerState.SHOOTING;
-                arcPaint.setColor(Color.GREEN);
-            }
+        else if (event.pointer == triggerPointer){
+            triggerPosX = x;
+            triggerPosY = y;
+            currentState.handleTriggerTouchDragged(x, y);
         }
-        else if (playerState == PlayerState.IDLE)
-            playerState = PlayerState.AIMING;
-    }
-
-    private void handleDPadTouchDragged(Orientation orientation) {
-        if (playerState == PlayerState.IDLE) {
-            playerState = PlayerState.WALKING;
-            this.orientation = orientation;
-        }
-        else if (playerState == PlayerState.AIMING || playerState == PlayerState.WALKING)
-            this.orientation = orientation;
     }
 
     private boolean isOnRight(float x, float y) { return isInCircle(x, rightDPadPosX, y, rightDPadPosY); }
@@ -200,10 +181,10 @@ public class Controller {
     private boolean isOnDown(float x, float y) { return isInCircle(x, downDPadPosX, y, downDPadPosY); }
     private boolean isOnUp(float x, float y) { return isInCircle(x, upDPadPosX, y, upDPadPosY); }
     private boolean isOnTrigger(float x, float y) { return isInCircle(x, triggerPosX, y, triggerPosY);}
-    private boolean isOnLoadingArea(float x, float y) {
+    public boolean isOnLoadingArea(float x, float y) {
         return isInCircle(x, loadPosX +100, y, (float) (loadPosY +triggerRadius/2));
     }
-    private boolean isOnShootingArea(float x, float y) {
+    public boolean isOnShootingArea(float x, float y) {
         return isInCircle(x, shootPosX +100, y, (float) (shootPosY+3*triggerRadius));
     }
 
@@ -213,11 +194,10 @@ public class Controller {
     }
 
     public void consumeShoot() {
-        playerState = PlayerState.AIMING;
-        load = false;
+        currentState = new Aiming(this);
     }
 
-    public PlayerState getPlayerState() {return playerState;}
+    public ControllerState getPlayerState() {return currentState;}
     public Orientation getOrientation() {return orientation;}
-
+    public void setOrientation(Orientation orientation) {this.orientation = orientation;}
 }
