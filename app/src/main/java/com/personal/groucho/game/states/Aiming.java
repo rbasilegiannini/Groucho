@@ -28,7 +28,7 @@ public class Aiming extends ControllerState{
     public void handleTriggerTouchDragged(float x, float y) {
         if (controller.isOnLoadingArea(x, y)) {
             controller.setCurrentState(Loading.getInstance(controller));
-            controller.arcPaint.setColor(Color.RED);
+            controller.setAimColor(Color.RED);
         }
     }
 

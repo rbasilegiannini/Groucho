@@ -26,10 +26,8 @@ public class Loading extends ControllerState{
 
     @Override
     public void handleTriggerTouchDragged(float x, float y) {
-        if (controller.isOnShootingArea(x, y)) {
+        if (controller.isOnShootingArea(x, y))
             controller.setCurrentState(Shooting.getInstance(controller));
-            controller.arcPaint.setColor(Color.GREEN);
-        }
     }
 
     @Override

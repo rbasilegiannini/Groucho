@@ -19,6 +19,7 @@ public class ControllableComponent extends Component {
     private final Controller controller;
     private SpriteDrawableComponent spriteComponent = null;
     private PositionComponent positionComponent = null;
+    private boolean canPlaySound;
 
     public ControllableComponent(Controller controller) {
         this.controller = controller;
@@ -40,8 +41,7 @@ public class ControllableComponent extends Component {
             handleAimingPlayer();
         } else if (aClass.equals(Loading.class)) {
             handleLoadingPlayer();
-        }
-        else if (aClass.equals(Shooting.class)) {
+        } else if (aClass.equals(Shooting.class)) {
             handleShootingPlayer();
         }
     }
@@ -59,10 +59,15 @@ public class ControllableComponent extends Component {
     }
 
     private void handleAimingPlayer() {
+        canPlaySound = true;
         updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
     }
 
     private void handleLoadingPlayer() {
+        if (canPlaySound) {
+            PlayerSounds.loadingSound.play(1f);
+            canPlaySound = false;
+        }
         updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
     }
 

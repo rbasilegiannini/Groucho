@@ -3,7 +3,6 @@ package com.personal.groucho.game;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.game.states.Aiming;
@@ -23,7 +22,7 @@ public class Controller {
     private final double dpadRadius, dpadRadiusSqr, triggerRadius;
 
     private final Paint circlePaint;
-    public Paint arcPaint;
+    private Paint arcPaint;
 
     private int dpadPointer, triggerPointer;
 
@@ -75,8 +74,6 @@ public class Controller {
     public void draw(Canvas canvas) {
         drawMovementControls(canvas);
         drawShootingControls(canvas);
-        Log.i("Controller", currentState.getClass().getName());
-        Log.i("Controller", orientation.name());
     }
 
     private void drawMovementControls(Canvas canvas) {
@@ -146,6 +143,10 @@ public class Controller {
     private void resetTrigger() {
         triggerPosX = originalTriggerPosX;
         triggerPosY = originalTriggerPosY;
+        resetAimColor();
+    }
+
+    private void resetAimColor() {
         arcPaint.setColor(Color.GRAY);
     }
 
@@ -189,6 +190,7 @@ public class Controller {
 
     public void consumeShoot() {
         currentState = Aiming.getInstance(this);
+        resetAimColor();
     }
 
     public ControllerState getPlayerState() {return currentState;}
@@ -196,4 +198,5 @@ public class Controller {
     public void setCurrentState(ControllerState state) {currentState = state;}
 
     public void setOrientation(Orientation orientation) {this.orientation = orientation;}
+    public void setAimColor(int color) {arcPaint.setColor(color);}
 }
