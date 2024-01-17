@@ -9,9 +9,9 @@ public abstract class ControllerState {
 
     protected ControllerState(Controller controller) {this.controller = controller;}
 
-    public abstract void handleDPadTouchDown(Orientation orientation);
-    public abstract void handleTriggerTouchDragged(float x, float y);
-    public abstract void handleDPadTouchDragged(Orientation orientation);
-    public abstract void handleDPadTouchUp();
-    public abstract void handleTriggerTouchUp();
+    public void handleDPadTouchDown(Orientation orientation){}
+    public void handleTriggerTouchDragged(float x, float y){}
+    public void handleDPadTouchDragged(Orientation orientation){}
+    public void handleDPadTouchUp(){}
+    public void handleTriggerTouchUp(){}
 }

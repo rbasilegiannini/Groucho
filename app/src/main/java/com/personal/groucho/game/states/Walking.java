@@ -23,11 +23,6 @@ public class Walking extends ControllerState{
     }
 
     @Override
-    public void handleTriggerTouchDragged(float x, float y) {
-
-    }
-
-    @Override
     public void handleDPadTouchDragged(Orientation orientation) {
         controller.setOrientation(orientation);
     }
@@ -35,10 +30,5 @@ public class Walking extends ControllerState{
     @Override
     public void handleDPadTouchUp() {
         controller.setCurrentState(Idle.getInstance(controller));
-    }
-
-    @Override
-    public void handleTriggerTouchUp() {
-
     }
 }

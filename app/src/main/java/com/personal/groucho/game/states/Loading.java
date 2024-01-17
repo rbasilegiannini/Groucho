@@ -36,9 +36,6 @@ public class Loading extends ControllerState{
     }
 
     @Override
-    public void handleDPadTouchUp() {}
-
-    @Override
     public void handleTriggerTouchUp() {
         controller.setCurrentState(Idle.getInstance(controller));
     }

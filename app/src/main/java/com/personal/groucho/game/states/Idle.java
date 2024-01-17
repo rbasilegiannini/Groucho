@@ -33,14 +33,4 @@ public class Idle extends ControllerState{
         controller.setOrientation(orientation);
         controller.setCurrentState(Walking.getInstance(controller));
     }
-
-    @Override
-    public void handleDPadTouchUp() {
-
-    }
-
-    @Override
-    public void handleTriggerTouchUp() {
-
-    }
 }

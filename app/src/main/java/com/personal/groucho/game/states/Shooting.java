@@ -18,26 +18,7 @@ public class Shooting extends ControllerState{
     }
 
     @Override
-    public void handleDPadTouchDown(Orientation orientation) {
-    }
-
-    @Override
-    public void handleTriggerTouchDragged(float x, float y) {
-
-    }
-
-    @Override
     public void handleDPadTouchDragged(Orientation orientation) {
         controller.setOrientation(orientation);
-    }
-
-    @Override
-    public void handleDPadTouchUp() {
-
-    }
-
-    @Override
-    public void handleTriggerTouchUp() {
-
     }
 }
