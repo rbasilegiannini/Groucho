@@ -2,14 +2,24 @@ package com.personal.groucho.game;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Shader;
 
+import com.personal.groucho.R;
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
+import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.components.Component;
 import com.personal.groucho.game.components.ComponentType;
 import com.personal.groucho.game.components.ControllableComponent;
 import com.personal.groucho.game.components.DrawableComponent;
+import com.personal.groucho.game.levels.FirstLevel;
+import com.personal.groucho.game.levels.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +27,15 @@ import java.util.List;
 public class GameWorld {
     final static int bufferWidth = 1920, bufferHeight = 1080;    // actual pixels
     Bitmap buffer;
-    private Canvas canvas;
+    private final Canvas canvas;
 
     final Box physicalSize, screenSize, currentView;
     final Activity activity;
-    private Controller controller;
+    private final Controller controller;
     List<GameObject> objects;
     private TouchHandler touchHandler;
+
+    private Level currentLevel;
 
     public GameWorld(Box physicalSize, Box screenSize, Activity activity) {
         this.physicalSize = physicalSize;
@@ -31,12 +43,12 @@ public class GameWorld {
         this.currentView = physicalSize;
         this.activity = activity;
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
-        //
 
-        controller = new Controller((float) 200, (float) bufferHeight /2, this);
+        this.controller = new Controller((float) 200, (float) bufferHeight /2, this);
 
         this.objects = new ArrayList<>();
         this.canvas = new Canvas(buffer);
+        this.currentLevel = new FirstLevel(this);
     }
 
     public synchronized GameObject addGameObject(GameObject obj) {
@@ -51,12 +63,12 @@ public class GameWorld {
     }
 
     public synchronized void update(float elapsedTime) {
-        // Update game state
         updatePlayerState();
     }
 
     public synchronized void render() {
         canvas.drawARGB(255,0,0,0);
+        currentLevel.draw(canvas);
         for (GameObject gameObject : objects) {
             Component component = gameObject.getComponent(ComponentType.Drawable);
             if (component != null) {

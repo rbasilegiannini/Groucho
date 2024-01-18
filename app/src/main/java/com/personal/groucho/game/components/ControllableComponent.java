@@ -19,7 +19,7 @@ public class ControllableComponent extends Component {
     private final Controller controller;
     private SpriteDrawableComponent spriteComponent = null;
     private PositionComponent positionComponent = null;
-    private boolean canPlaySound;
+    private boolean canLoadingSound;
 
     public ControllableComponent(Controller controller) {
         this.controller = controller;
@@ -59,14 +59,14 @@ public class ControllableComponent extends Component {
     }
 
     private void handleAimingPlayer() {
-        canPlaySound = true;
+        canLoadingSound = true;
         updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
     }
 
     private void handleLoadingPlayer() {
-        if (canPlaySound) {
+        if (canLoadingSound) {
             PlayerSounds.loadingSound.play(1f);
-            canPlaySound = false;
+            canLoadingSound = false;
         }
         updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
     }

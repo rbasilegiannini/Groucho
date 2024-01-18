@@ -10,11 +10,11 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 
 import com.personal.groucho.R;
-import com.personal.groucho.badlogic.androidgames.framework.Sound;
 import com.personal.groucho.badlogic.androidgames.framework.impl.AndroidAudio;
 import com.personal.groucho.badlogic.androidgames.framework.impl.MultiTouchHandler;
 import com.personal.groucho.badlogic.androidgames.framework.Audio;
 import com.personal.groucho.game.animation.Spritesheets;
+import com.personal.groucho.game.assets.Textures;
 
 public class MainActivity extends Activity {
 
@@ -78,6 +78,7 @@ public class MainActivity extends Activity {
         System.loadLibrary("liquidfun");
         System.loadLibrary("liquidfun_jni");
         Spritesheets.load(getResources());
+        Textures.load(getResources());
     }
 
     @Override
