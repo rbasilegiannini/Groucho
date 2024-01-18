@@ -33,6 +33,7 @@ public class GameWorld {
     final Activity activity;
     private final Controller controller;
     List<GameObject> objects;
+    GameObject player;
     private TouchHandler touchHandler;
 
     private Level currentLevel;
@@ -49,6 +50,17 @@ public class GameWorld {
         this.objects = new ArrayList<>();
         this.canvas = new Canvas(buffer);
         this.currentLevel = new FirstLevel(this);
+    }
+
+    public void setPlayer(GameObject player) {
+        this.player = player;
+        Component component = player.getComponent(ComponentType.Position);
+        if (component != null) {
+            PositionComponent position = (PositionComponent) component;
+            currentPlayerPosX = position.getPosX();
+            currentPlayerPosY = position.getPosY();
+        }
+        addGameObject(player);
     }
 
     public synchronized GameObject addGameObject(GameObject obj) {

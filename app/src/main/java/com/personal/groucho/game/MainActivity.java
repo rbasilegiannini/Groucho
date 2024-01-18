@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
 
         // Game world
         GameWorld gameWorld = buildGameWorld();
-        gameWorld.addGameObject(GameObjectFactory.
+        gameWorld.setPlayer(GameObjectFactory.
                 makePlayer(
                         GameWorld.bufferWidth /2,
                         GameWorld.bufferHeight/2,
