@@ -2,24 +2,19 @@ package com.personal.groucho.game;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Shader;
 
-import com.personal.groucho.R;
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
-import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.components.Component;
 import com.personal.groucho.game.components.ComponentType;
 import com.personal.groucho.game.components.ControllableComponent;
 import com.personal.groucho.game.components.DrawableComponent;
+import com.personal.groucho.game.components.PositionComponent;
 import com.personal.groucho.game.levels.FirstLevel;
 import com.personal.groucho.game.levels.Level;
+import com.personal.groucho.game.states.Walking;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +30,9 @@ public class GameWorld {
     List<GameObject> objects;
     GameObject player;
     private TouchHandler touchHandler;
-
     private Level currentLevel;
+    private int currentPlayerPosX;
+    private int currentPlayerPosY;
 
     public GameWorld(Box physicalSize, Box screenSize, Activity activity) {
         this.physicalSize = physicalSize;
@@ -76,6 +72,7 @@ public class GameWorld {
 
     public synchronized void update(float elapsedTime) {
         updatePlayerState();
+        updateCamera();
     }
 
     public synchronized void render() {
@@ -92,13 +89,37 @@ public class GameWorld {
     }
 
     private void updatePlayerState() {
-        for (GameObject gameObject : objects) {
-            Component component = gameObject.getComponent(ComponentType.Controllable);
-            if (component != null) {
-                ControllableComponent controllable = (ControllableComponent) component;
-                controllable.updatePlayerState();
+        Component component = player.getComponent(ComponentType.Controllable);
+        if (component != null) {
+            ControllableComponent controllable = (ControllableComponent) component;
+            controllable.updatePlayerState();
+        }
+    }
+
+    public void updateCamera() {
+        Component component = player.getComponent(ComponentType.Position);
+        if (component != null) {
+            if (controller.getPlayerState().getClass().equals(Walking.class)) {
+                PositionComponent position = (PositionComponent) component;
+                float cameraX = currentPlayerPosX - position.getPosX();
+                float cameraY = currentPlayerPosY - position.getPosY();
+                moveCamera(cameraX, cameraY);
+                moveController(cameraX, cameraY);
+
+                currentPlayerPosX = position.getPosX();
+                currentPlayerPosY =  position.getPosY();
             }
         }
+    }
+
+    private void moveCamera(float cameraX, float cameraY) {
+        Matrix matrix = new Matrix();
+        matrix.postTranslate(cameraX, cameraY);
+        canvas.concat(matrix);
+    }
+
+    private void moveController(float cameraX, float cameraY) {
+        controller.updateControllerPosition(-cameraX, -cameraY);
     }
 
     public void setTouchHandler(TouchHandler touchHandler) {
