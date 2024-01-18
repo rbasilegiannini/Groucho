@@ -55,7 +55,22 @@ public class ControllableComponent extends Component {
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
 
         updateSprite(Spritesheets.groucho_walk, controller.getOrientation());
-        updatePosition(0, 0);
+
+        int speed = 1;
+        switch (controller.getOrientation()) {
+            case UP:
+                updatePosition(0, speed*(-10));
+                break;
+            case DOWN:
+                updatePosition(0,speed*(10));
+                break;
+            case LEFT:
+                updatePosition(speed*(-10),0);
+                break;
+            case RIGHT:
+                updatePosition(speed*(10),0);
+                break;
+        }
     }
 
     private void handleAimingPlayer() {
