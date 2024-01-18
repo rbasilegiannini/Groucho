@@ -13,10 +13,10 @@ public class Controller {
     private final GameWorld gameWorld;
     private Orientation orientation;
 
-    private final float upDPadPosX, upDPadPosY, downDPadPosX, downDPadPosY;
-    private final float leftDPadPosX, leftDPadPosY, rightDPadPosX, rightDPadPosY;
-    private final float loadPosX, loadPosY, shootPosX, shootPosY;
-    private final float originalTriggerPosX, originalTriggerPosY;
+    private float upDPadPosX, upDPadPosY, downDPadPosX, downDPadPosY;
+    private float leftDPadPosX, leftDPadPosY, rightDPadPosX, rightDPadPosY;
+    private float loadPosX, loadPosY, shootPosX, shootPosY;
+    private float originalTriggerPosX, originalTriggerPosY;
     private float triggerPosX, triggerPosY;
 
     private final double dpadRadius, dpadRadiusSqr, triggerRadius;
@@ -25,6 +25,8 @@ public class Controller {
     private Paint arcPaint;
 
     private int dpadPointer, triggerPointer;
+
+    private float offsetX, offsetY;
 
     private ControllerState currentState;
 
@@ -106,8 +108,8 @@ public class Controller {
     }
 
     private void consumeTouchDown(Input.TouchEvent event) {
-        float x = gameWorld.fromScreenToBufferX(event.x);
-        float y = gameWorld.fromScreenToBufferY(event.y);
+        float x = gameWorld.fromScreenToBufferX(event.x) + offsetX;
+        float y = gameWorld.fromScreenToBufferY(event.y) + offsetY;
 
         if (isOnUp(x, y))
             handleDPadTouchDown(event.pointer, Orientation.UP);
@@ -151,8 +153,8 @@ public class Controller {
     }
 
     private void consumeTouchDragged(Input.TouchEvent event) {
-        float x = gameWorld.fromScreenToBufferX(event.x);
-        float y = gameWorld.fromScreenToBufferY(event.y);
+        float x = gameWorld.fromScreenToBufferX(event.x) + offsetX;
+        float y = gameWorld.fromScreenToBufferY(event.y) + offsetY;
 
         if (event.pointer == dpadPointer) {
             if (isOnUp(x, y))
@@ -199,4 +201,29 @@ public class Controller {
 
     public void setOrientation(Orientation orientation) {this.orientation = orientation;}
     public void setAimColor(int color) {arcPaint.setColor(color);}
+
+    public void updateControllerPosition(float increaseX, float increaseY) {
+        offsetX += increaseX;
+        offsetY += increaseY;
+
+        upDPadPosX += increaseX;
+        upDPadPosY += increaseY;
+        downDPadPosX += increaseX;
+        downDPadPosY += increaseY;
+
+        leftDPadPosX += increaseX;
+        leftDPadPosY += increaseY;
+        rightDPadPosX += increaseX;
+        rightDPadPosY += increaseY;
+
+        loadPosX += increaseX;
+        loadPosY += increaseY;
+        shootPosX += increaseX;
+        shootPosY += increaseY;
+
+        originalTriggerPosX += increaseX;
+        originalTriggerPosY += increaseY;
+        triggerPosX += increaseX;
+        triggerPosY += increaseY;
+    }
 }
