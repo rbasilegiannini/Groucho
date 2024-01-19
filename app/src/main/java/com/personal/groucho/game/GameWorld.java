@@ -15,6 +15,7 @@ import com.personal.groucho.game.components.PositionComponent;
 import com.personal.groucho.game.levels.FirstLevel;
 import com.personal.groucho.game.levels.Level;
 import com.personal.groucho.game.states.Walking;
+import com.personal.groucho.google.fpl.liquidfun.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +24,20 @@ public class GameWorld {
     final static int bufferWidth = 1920, bufferHeight = 1080;    // actual pixels
     Bitmap buffer;
     private final Canvas canvas;
-
     final Box physicalSize, screenSize, currentView;
     final Activity activity;
+    private World world;
     private final Controller controller;
-    List<GameObject> objects;
-    GameObject player;
+    private List<GameObject> objects;
+    private GameObject player;
     private TouchHandler touchHandler;
     private Level currentLevel;
     private int currentPlayerPosX;
     private int currentPlayerPosY;
+
+    private static final int VELOCITY_ITERATIONS = 8;
+    private static final int POSITION_ITERATIONS = 3;
+    private static final int PARTICLE_ITERATIONS = 0;
 
     public GameWorld(Box physicalSize, Box screenSize, Activity activity) {
         this.physicalSize = physicalSize;
@@ -41,6 +46,7 @@ public class GameWorld {
         this.activity = activity;
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
 
+        this.world = new World(0, 0); // No gravity
         this.controller = new Controller((float) 200, (float) bufferHeight /2, this);
 
         this.objects = new ArrayList<>();
@@ -71,6 +77,7 @@ public class GameWorld {
     }
 
     public synchronized void update(float elapsedTime) {
+        world.step(elapsedTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
         updatePlayerState();
         updateCamera();
     }
