@@ -12,6 +12,7 @@ public class Spritesheets {
     public static Spritesheet groucho_walk;
     public static Spritesheet groucho_shoot;
     public static Spritesheet groucho_aim;
+    public static Spritesheet groucho_fire;
     public static Spritesheet groucho_door;
     public static Spritesheet groucho_death;
 
@@ -20,6 +21,7 @@ public class Spritesheets {
         groucho_walk = loadGroucho(res, R.drawable.groucho_walk, 8);
         groucho_shoot = loadGroucho(res, R.drawable.groucho_shoot, 5);
         groucho_aim = loadGroucho(res, R.drawable.groucho_aim, 1);
+        groucho_fire = loadGroucho(res, R.drawable.groucho_fire, 1);
         groucho_door = loadGroucho(res, R.drawable.groucho_door, 6);
         groucho_death = loadGroucho(res, R.drawable.groucho_death, 6);
     }

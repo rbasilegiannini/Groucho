@@ -89,7 +89,7 @@ public class ControllableComponent extends Component {
     private void handleShootingPlayer() {
         controller.consumeShoot();
         PlayerSounds.shootingSound.play(1f);
-        // Shot sprite
+        updateSprite(Spritesheets.groucho_fire, controller.getOrientation());
         // Shot effect
         Log.i("Controller", "Fire!");
     }
