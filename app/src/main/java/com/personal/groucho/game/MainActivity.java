@@ -13,7 +13,8 @@ import com.personal.groucho.R;
 import com.personal.groucho.badlogic.androidgames.framework.impl.AndroidAudio;
 import com.personal.groucho.badlogic.androidgames.framework.impl.MultiTouchHandler;
 import com.personal.groucho.badlogic.androidgames.framework.Audio;
-import com.personal.groucho.game.animation.Spritesheets;
+import com.personal.groucho.game.assets.PlayerSounds;
+import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.assets.Textures;
 
 public class MainActivity extends Activity {

@@ -1,4 +1,4 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.assets;
 
 import com.personal.groucho.badlogic.androidgames.framework.Audio;
 import com.personal.groucho.badlogic.androidgames.framework.Sound;

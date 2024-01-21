@@ -2,7 +2,7 @@ package com.personal.groucho.game.components;
 
 import android.graphics.Canvas;
 
-import com.personal.groucho.game.animation.Spritesheet;
+import com.personal.groucho.game.Spritesheet;
 
 public class SpriteDrawableComponent extends DrawableComponent {
     private Spritesheet spritesheet;

@@ -1,4 +1,4 @@
-package com.personal.groucho.game.animation;
+package com.personal.groucho.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
