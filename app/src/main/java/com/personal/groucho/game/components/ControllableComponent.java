@@ -2,6 +2,7 @@ package com.personal.groucho.game.components;
 
 import android.util.Log;
 
+import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Orientation;
 import com.personal.groucho.game.Controller;
 import com.personal.groucho.game.PlayerSounds;
@@ -17,12 +18,14 @@ import com.personal.groucho.game.states.Walking;
 public class ControllableComponent extends Component {
 
     private final Controller controller;
+    private final GameWorld gameworld;
     private SpriteDrawableComponent spriteComponent = null;
     private PositionComponent positionComponent = null;
     private boolean canLoadingSound;
 
-    public ControllableComponent(Controller controller) {
+    public ControllableComponent(Controller controller, GameWorld gameworld) {
         this.controller = controller;
+        this.gameworld = gameworld;
     }
 
     @Override
@@ -90,7 +93,37 @@ public class ControllableComponent extends Component {
         controller.consumeShoot();
         PlayerSounds.shootingSound.play(1f);
         updateSprite(Spritesheets.groucho_fire, controller.getOrientation());
-        // Shot effect
+        shot();
+    }
+
+    private void shot() {
+        if(positionComponent == null)
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+
+        float originX = positionComponent.getPosX();
+        float originY = positionComponent.getPosY();
+        float endX = 0;
+        float endY = 0;
+
+        switch (controller.getOrientation()) {
+            case UP:
+                endX = originX;
+                endY = originY - 1000;
+                break;
+            case DOWN:
+                endX = originX;
+                endY = originY + 1000;
+                break;
+            case LEFT:
+                endX = originX - 1000;
+                endY = originY;
+                break;
+            case RIGHT:
+                endX = originX + 1000;
+                endY = originY;
+                break;
+        }
+        gameworld.shootEvent(originX, originY, endX, endY);
         Log.i("Controller", "Fire!");
     }
 
