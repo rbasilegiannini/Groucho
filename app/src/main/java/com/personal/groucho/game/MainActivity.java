@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
     private Audio audio;
     private MultiTouchHandler touch;
 
-    private static final float XMIN = -10, XMAX = 10, YMIN = -15, YMAX = 15;
+    private static final float XMIN = -15, XMAX = 15, YMIN = -10, YMAX = 10;
 
     public static String TAG;
 
@@ -40,7 +40,8 @@ public class MainActivity extends Activity {
                 makePlayer(
                         GameWorld.bufferWidth /2,
                         GameWorld.bufferHeight/2,
-                        gameWorld.getController()
+                        gameWorld.controller,
+                        gameWorld
                 )
         );
 

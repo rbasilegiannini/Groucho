@@ -1,5 +1,8 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.Utils.fromScreenToBufferX;
+import static com.personal.groucho.game.Utils.fromScreenToBufferY;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -108,8 +111,8 @@ public class Controller {
     }
 
     private void consumeTouchDown(Input.TouchEvent event) {
-        float x = gameWorld.fromScreenToBufferX(event.x) + offsetX;
-        float y = gameWorld.fromScreenToBufferY(event.y) + offsetY;
+        float x = fromScreenToBufferX(event.x) + offsetX;
+        float y = fromScreenToBufferY(event.y) + offsetY;
 
         if (isOnUp(x, y))
             handleDPadTouchDown(event.pointer, Orientation.UP);
@@ -153,8 +156,8 @@ public class Controller {
     }
 
     private void consumeTouchDragged(Input.TouchEvent event) {
-        float x = gameWorld.fromScreenToBufferX(event.x) + offsetX;
-        float y = gameWorld.fromScreenToBufferY(event.y) + offsetY;
+        float x = fromScreenToBufferX(event.x) + offsetX;
+        float y = fromScreenToBufferY(event.y) + offsetY;
 
         if (event.pointer == dpadPointer) {
             if (isOnUp(x, y))
