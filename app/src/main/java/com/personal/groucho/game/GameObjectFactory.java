@@ -24,7 +24,7 @@ public class GameObjectFactory {
     private static final float characterDimensionsY = 110;
 
     public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameworld) {
-        GameObject gameObject = new GameObject();
+        GameObject gameObject = new GameObject("Groucho");
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(Spritesheets.groucho_walk));
@@ -38,7 +38,7 @@ public class GameObjectFactory {
     }
 
     public static GameObject makeEnemy(int posX, int posY, Spritesheet idle, World world) {
-        GameObject gameObject = new GameObject();
+        GameObject gameObject = new GameObject("Enemy");
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(world));
@@ -53,7 +53,8 @@ public class GameObjectFactory {
     private static void setCharacterPhysics(int posX, int posY, PhysicsComponent physics) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setPosition(new Vec2(fromBufferToMetersX(posX), fromBufferToMetersY(posY)));
-        bodyDef.setType(BodyType.staticBody);
+        bodyDef.setType(BodyType.dynamicBody);
+        bodyDef.setAllowSleep(false);
         physics.setBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
