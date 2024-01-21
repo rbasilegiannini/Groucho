@@ -29,7 +29,10 @@ public class GameObjectFactory {
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(Spritesheets.groucho_walk));
         gameObject.addComponent(new ControllableComponent(controller, gameworld));
-        //gameObject.addComponent(new PhysicsComponent());
+        gameObject.addComponent(new PhysicsComponent(gameworld.world));
+
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
+        setCharacterPhysics(posX, posY, physics);
 
         return gameObject;
     }
@@ -42,18 +45,23 @@ public class GameObjectFactory {
         gameObject.addComponent(new SpriteDrawableComponent(idle));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
+        setCharacterPhysics(posX, posY, physics);
 
+        return gameObject;
+    }
+
+    private static void setCharacterPhysics(int posX, int posY, PhysicsComponent physics) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setPosition(new Vec2(fromBufferToMetersX(posX), fromBufferToMetersY(posY)));
         bodyDef.setType(BodyType.staticBody);
-        bodyDef.setUserData(gameObject);
         physics.setBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape box = new PolygonShape();
         box.setAsBox(
                 toMetersXLength(characterDimensionsX),
-                toMetersYLength(characterDimensionsY), 0,0.6f,0
+                toMetersYLength(characterDimensionsY),
+                0,0.6f,0
         );
         fixtureDef.setShape(box);
         physics.addFixture(fixtureDef);
@@ -61,7 +69,5 @@ public class GameObjectFactory {
         box.delete();
         bodyDef.delete();
         fixtureDef.delete();
-
-        return gameObject;
     }
 }

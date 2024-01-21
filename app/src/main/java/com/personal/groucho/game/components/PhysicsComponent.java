@@ -20,6 +20,7 @@ public class PhysicsComponent extends Component{
 
     public void setBody(BodyDef bodyDef) {
         body = world.createBody(bodyDef);
+        body.setUserData(this.owner);
     }
 
     public void addFixture(FixtureDef fixtureDef) {
