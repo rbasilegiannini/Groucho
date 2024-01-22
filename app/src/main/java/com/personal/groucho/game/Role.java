@@ -4,5 +4,6 @@ public enum Role {
     NEUTRAL,
     PLAYER,
     ENEMY,
+    WALL,
     FURNITURE
 }
