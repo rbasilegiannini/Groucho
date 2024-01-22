@@ -32,7 +32,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class GameWorld {
-    final static int bufferWidth = 1920, bufferHeight = 1080;
+    public final static int bufferWidth = 1920;
+    public final static int bufferHeight = 1080;
     private final MyContactListener contactListener;
     Bitmap buffer;
     private final Canvas canvas;
