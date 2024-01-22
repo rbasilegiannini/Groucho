@@ -1,7 +1,5 @@
 package com.personal.groucho.game.components;
 
-import android.util.Log;
-
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Orientation;
 import com.personal.groucho.game.Controller;
@@ -20,7 +18,7 @@ public class ControllableComponent extends Component {
     private final Controller controller;
     private final GameWorld gameworld;
     private SpriteDrawableComponent spriteComponent = null;
-    private PositionComponent positionComponent = null;
+    private PhysicsComponent physicsComponent = null;
     private boolean canLoadingSound;
 
     public ControllableComponent(Controller controller, GameWorld gameworld) {
@@ -54,24 +52,24 @@ public class ControllableComponent extends Component {
     }
 
     private void handleWalkingPlayer() {
-        if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+        if(physicsComponent == null)
+            physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.Physics);
 
         updateSprite(Spritesheets.groucho_walk, controller.getOrientation());
 
-        int speed = 1;
+        float speed = 0.1f;
         switch (controller.getOrientation()) {
             case UP:
-                updatePosition(0, speed*(-10));
+                updatePosition(0, speed*(-1));
                 break;
             case DOWN:
-                updatePosition(0,speed*(10));
+                updatePosition(0,speed*(1));
                 break;
             case LEFT:
-                updatePosition(speed*(-10),0);
+                updatePosition(speed*(-1),0);
                 break;
             case RIGHT:
-                updatePosition(speed*(10),0);
+                updatePosition(speed*(1),0);
                 break;
         }
     }
@@ -97,11 +95,11 @@ public class ControllableComponent extends Component {
     }
 
     private void shot() {
-        if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+        if(physicsComponent == null)
+            physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.Physics);
 
-        float originX = positionComponent.getPosX();
-        float originY = positionComponent.getPosY();
+        float originX = physicsComponent.getPositionX();
+        float originY = physicsComponent.getPositionY();
         float endX = 0;
         float endY = 0;
 
@@ -124,12 +122,11 @@ public class ControllableComponent extends Component {
                 break;
         }
         gameworld.shootEvent(originX, originY, endX, endY);
-        Log.i("Controller", "Fire!");
     }
 
-    private void updatePosition(int increaseX, int increaseY) {
-        positionComponent.updatePosX(increaseX);
-        positionComponent.updatePosY(increaseY);
+    private void updatePosition(float increaseX, float increaseY) {
+        physicsComponent.updatePosX(increaseX);
+        physicsComponent.updatePosY(increaseY);
     }
 
     private void updateSprite(Spritesheet sheet, Orientation orientation) {
