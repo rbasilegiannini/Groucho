@@ -30,5 +30,4 @@ public class MyContactListener extends ContactListener {
         // TO DO: use an object pool instead
         collisions.add(new Collision(a, b));
     }
-
 }

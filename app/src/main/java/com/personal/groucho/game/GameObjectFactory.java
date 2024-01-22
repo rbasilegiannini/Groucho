@@ -24,7 +24,7 @@ public class GameObjectFactory {
     private static final float characterDimensionsY = 110;
 
     public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameworld) {
-        GameObject gameObject = new GameObject("Groucho");
+        GameObject gameObject = new GameObject("Groucho", Role.PLAYER);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(Spritesheets.groucho_walk));
@@ -32,28 +32,28 @@ public class GameObjectFactory {
         gameObject.addComponent(new PhysicsComponent(gameworld.world));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
-        setCharacterPhysics(posX, posY, physics);
+        setCharacterPhysics(posX, posY, physics, BodyType.dynamicBody);
 
         return gameObject;
     }
 
     public static GameObject makeEnemy(int posX, int posY, Spritesheet idle, World world) {
-        GameObject gameObject = new GameObject("Enemy");
+        GameObject gameObject = new GameObject("Enemy", Role.ENEMY);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(world));
         gameObject.addComponent(new SpriteDrawableComponent(idle));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
-        setCharacterPhysics(posX, posY, physics);
+        setCharacterPhysics(posX, posY, physics, BodyType.staticBody);
 
         return gameObject;
     }
 
-    private static void setCharacterPhysics(int posX, int posY, PhysicsComponent physics) {
+    private static void setCharacterPhysics(int posX, int posY, PhysicsComponent physics, BodyType type) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setPosition(new Vec2(fromBufferToMetersX(posX), fromBufferToMetersY(posY)));
-        bodyDef.setType(BodyType.dynamicBody);
+        bodyDef.setType(type);
         bodyDef.setAllowSleep(false);
         physics.setBody(bodyDef);
 
@@ -65,6 +65,8 @@ public class GameObjectFactory {
                 0,0.6f,0
         );
         fixtureDef.setShape(box);
+        fixtureDef.setDensity(10f);
+        fixtureDef.setFriction(1f);
         physics.addFixture(fixtureDef);
 
         box.delete();
