@@ -5,6 +5,8 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.toMetersXLength;
 import static com.personal.groucho.game.Utils.toMetersYLength;
 
+import android.graphics.Color;
+
 import com.google.fpl.liquidfun.BodyDef;
 import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.FixtureDef;
@@ -12,6 +14,7 @@ import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.assets.Spritesheets;
+import com.personal.groucho.game.components.BoxDrawableComponent;
 import com.personal.groucho.game.components.ComponentType;
 import com.personal.groucho.game.components.ControllableComponent;
 import com.personal.groucho.game.components.PhysicsComponent;
@@ -45,7 +48,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new SpriteDrawableComponent(idle));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
-        setCharacterPhysics(posX, posY, physics, BodyType.staticBody);
+        setCharacterPhysics(posX, posY, physics, BodyType.dynamicBody);
 
         return gameObject;
     }
@@ -65,12 +68,45 @@ public class GameObjectFactory {
                 0,0.6f,0
         );
         fixtureDef.setShape(box);
-        fixtureDef.setDensity(10f);
+        fixtureDef.setDensity(1f);
         fixtureDef.setFriction(1f);
         physics.addFixture(fixtureDef);
 
         box.delete();
         bodyDef.delete();
         fixtureDef.delete();
+    }
+
+    public static GameObject makeWall(int posX, int posY, float dimX, float dimY, World world) {
+        GameObject gameObject = new GameObject("Wall", Role.WALL);
+
+        gameObject.addComponent(new PositionComponent(posX, posY));
+        gameObject.addComponent(new PhysicsComponent(world));
+        gameObject.addComponent(
+                new BoxDrawableComponent(dimX, dimY, Color.valueOf(188, 143, 143))
+        );
+
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.setPosition(new Vec2(fromBufferToMetersX(posX), fromBufferToMetersY(posY)));
+        bodyDef.setType(BodyType.staticBody);
+        physics.setBody(bodyDef);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        PolygonShape box = new PolygonShape();
+        box.setAsBox(
+                toMetersXLength(dimX)/2,
+                toMetersYLength(dimY)/2,
+                0, 0, 0
+        );
+        fixtureDef.setShape(box);
+        physics.addFixture(fixtureDef);
+
+        box.delete();
+        bodyDef.delete();
+        fixtureDef.delete();
+
+        return gameObject;
     }
 }
