@@ -8,14 +8,19 @@ import com.personal.groucho.R;
 
 public class Textures {
     public static Bitmap firstLevelFloor;
+    public static Bitmap table;
 
     public static void load(Resources res) {
-        int targetWidth = 512;
-        int targetHeight = 512;
+        firstLevelFloor = setBitmap(res, R.drawable.wooden_floor,512, 512);
+        table = setBitmap(res, R.drawable.table, 128, 124);
+    }
 
+    private static Bitmap setBitmap(Resources res, int id, int targetWidth, int targetHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
-        firstLevelFloor = BitmapFactory.decodeResource(res, R.drawable.wooden_floor, options);
-        firstLevelFloor = Bitmap.createScaledBitmap(firstLevelFloor, targetWidth, targetHeight, true);
+        Bitmap bitmap = BitmapFactory.decodeResource(res, id, options);
+        bitmap = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true);
+
+        return bitmap;
     }
 }
