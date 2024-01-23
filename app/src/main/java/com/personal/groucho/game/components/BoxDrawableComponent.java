@@ -1,27 +1,22 @@
 package com.personal.groucho.game.components;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 public class BoxDrawableComponent extends DrawableComponent{
 
-    private Color color;
+    private Paint paint;
     private float dimensionX, dimensionY;
 
-    public BoxDrawableComponent(float dimensionX, float dimensionY, Color color) {
+    public BoxDrawableComponent(float dimensionX, float dimensionY, Paint paint) {
         this.dimensionX = dimensionX;
         this.dimensionY = dimensionY;
-        this.color = color;
+        this.paint = paint;
     }
 
     @Override
     public void draw(Canvas canvas){
         PositionComponent pos = (PositionComponent) owner.getComponent(ComponentType.Position);
-
-        Paint paint = new Paint();
-        paint.setColor(color.toArgb());
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         canvas.drawRect(
                 (float)pos.getPosX() - dimensionX/2,

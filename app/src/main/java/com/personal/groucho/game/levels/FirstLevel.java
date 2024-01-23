@@ -35,9 +35,17 @@ public class FirstLevel extends Level{
         m.postTranslate(surface.width(),surface.height());
         floorPaint.getShader().setLocalMatrix(m);
 
-        // Set walls
+        // Set furniture
         gameWorld.addGameObject(GameObjectFactory.
                 makeWall(bufferWidth, bufferHeight/2, 100, bufferHeight, gameWorld.world)
+        );
+        gameWorld.addGameObject(GameObjectFactory.
+                makeFurniture(
+                        bufferWidth/2,
+                        (int)(0.75*bufferHeight),
+                        250, 150,
+                        gameWorld.world,
+                        Textures.table)
         );
 
         // Set enemies
