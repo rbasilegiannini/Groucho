@@ -23,12 +23,12 @@ public class Spritesheets {
         groucho_aim = loadAnimation(res, R.drawable.groucho_aim, 1, directions);
         groucho_fire = loadAnimation(res, R.drawable.groucho_fire, 1, directions);
         groucho_door = loadAnimation(res, R.drawable.groucho_door, 6, directions);
-        groucho_death = loadAnimation(res, R.drawable.groucho_death, 6, 1);
+        groucho_death = loadAnimation(res, R.drawable.groucho_death, 1, 1);
 
         skeleton_idle = loadAnimation(res, R.drawable.skeleton_idle, 1, directions);
         skeleton_walk = loadAnimation(res, R.drawable.skeleton_walk, 9, directions);
         skeleton_hurt = loadAnimation(res, R.drawable.skeleton_hurt, 6, directions);
-        skeleton_death = loadAnimation(res, R.drawable.skeleton_death, 6, 1);
+        skeleton_death = loadAnimation(res, R.drawable.skeleton_death, 1, 1);
     }
 
     private static Spritesheet loadAnimation(Resources res, int idDraw, int frames, int animations) {
