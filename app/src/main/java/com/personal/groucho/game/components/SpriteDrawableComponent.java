@@ -1,5 +1,7 @@
 package com.personal.groucho.game.components;
 
+import static com.personal.groucho.game.Constants.characterScaleFactor;
+
 import android.graphics.Canvas;
 
 import com.personal.groucho.game.Spritesheet;
@@ -9,7 +11,6 @@ public class SpriteDrawableComponent extends DrawableComponent {
     private int currentAnimation;
     private int currentStep;
     private long lastTimestamp;
-    private int scaleFactor = 5;
 
     public SpriteDrawableComponent (Spritesheet spritesheet) {
         this.spritesheet = spritesheet;
@@ -23,8 +24,6 @@ public class SpriteDrawableComponent extends DrawableComponent {
         currentAnimation = animation;
     }
     public void setStep(int step) { currentStep = step;}
-    public void setScaleFactor(int scale) {scaleFactor = scale;}
-    public int getScaleFactor() {return scaleFactor;}
 
     @Override
     public void draw(Canvas canvas) {
@@ -39,7 +38,7 @@ public class SpriteDrawableComponent extends DrawableComponent {
 
         currentStep = spritesheet.drawAnimation(
                 canvas, currentAnimation,
-                currentStep, pos.getPosX(), pos.getPosY(), scaleFactor
+                currentStep, pos.getPosX(), pos.getPosY(), characterScaleFactor
         );
     }
 }

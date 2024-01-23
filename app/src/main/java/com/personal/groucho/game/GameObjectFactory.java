@@ -1,5 +1,6 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.Constants.characterScaleFactor;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.toMetersXLength;
@@ -23,8 +24,8 @@ import com.personal.groucho.game.components.SpriteDrawableComponent;
 
 public class GameObjectFactory {
 
-    private static final float characterDimensionsX = 64;
-    private static final float characterDimensionsY = 110;
+    private static final float characterDimensionsX = 32;
+    private static final float characterDimensionsY = 64;
 
     public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameworld) {
         GameObject gameObject = new GameObject("Groucho", Role.PLAYER);
@@ -63,10 +64,11 @@ public class GameObjectFactory {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape box = new PolygonShape();
         box.setAsBox(
-                toMetersXLength(characterDimensionsX),
-                toMetersYLength(characterDimensionsY),
+                (characterScaleFactor*toMetersXLength(characterDimensionsX))/2,
+                (characterScaleFactor*toMetersYLength(characterDimensionsY))/2,
                 0,0.6f,0
         );
+
         fixtureDef.setShape(box);
         fixtureDef.setDensity(1f);
         fixtureDef.setFriction(1f);
@@ -95,11 +97,7 @@ public class GameObjectFactory {
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape box = new PolygonShape();
-        box.setAsBox(
-                toMetersXLength(dimX)/2,
-                toMetersYLength(dimY)/2,
-                0, 0, 0
-        );
+        box.setAsBox(toMetersXLength(dimX)/2, toMetersYLength(dimY)/2);
         fixtureDef.setShape(box);
         physics.addFixture(fixtureDef);
 

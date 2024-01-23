@@ -1,5 +1,8 @@
 package com.personal.groucho.game.levels;
 
+import static com.personal.groucho.game.GameWorld.bufferHeight;
+import static com.personal.groucho.game.GameWorld.bufferWidth;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -22,7 +25,7 @@ public class FirstLevel extends Level{
     public FirstLevel(GameWorld gw) {
         gameWorld = gw;
         floor = Textures.firstLevelFloor;
-        surface = new Rect(0,0, 2000, 2000);
+        surface = new Rect(0,0, bufferWidth, bufferHeight);
 
         // Set floor
         BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
@@ -31,6 +34,11 @@ public class FirstLevel extends Level{
         Matrix m = new Matrix();
         m.postTranslate(surface.width(),surface.height());
         floorPaint.getShader().setLocalMatrix(m);
+
+        // Set walls
+        gameWorld.addGameObject(GameObjectFactory.
+                makeWall(bufferWidth, bufferHeight/2, 100, bufferHeight, gameWorld.world)
+        );
 
         // Set enemies
         gameWorld.addGameObject(GameObjectFactory.

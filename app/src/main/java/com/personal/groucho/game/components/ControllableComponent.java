@@ -1,5 +1,7 @@
 package com.personal.groucho.game.components;
 
+import static com.personal.groucho.game.Constants.speed;
+
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Orientation;
 import com.personal.groucho.game.Controller;
@@ -57,7 +59,6 @@ public class ControllableComponent extends Component {
 
         updateSprite(Spritesheets.groucho_walk, controller.getOrientation());
 
-        float speed = 0.1f;
         switch (controller.getOrientation()) {
             case UP:
                 updatePosition(0, speed*(-1));
