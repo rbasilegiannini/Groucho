@@ -9,10 +9,12 @@ import com.personal.groucho.R;
 public class Textures {
     public static Bitmap firstLevelFloor;
     public static Bitmap table;
+    public static Bitmap lightbulb;
 
     public static void load(Resources res) {
         firstLevelFloor = setBitmap(res, R.drawable.wooden_floor,512, 512);
         table = setBitmap(res, R.drawable.table, 128, 124);
+        lightbulb = setBitmap(res, R.drawable.lightbulb, 128, 128);
     }
 
     private static Bitmap setBitmap(Resources res, int id, int targetWidth, int targetHeight) {

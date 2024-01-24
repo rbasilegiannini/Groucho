@@ -2,10 +2,12 @@ package com.personal.groucho.game;
 
 import static com.personal.groucho.game.Utils.fromScreenToBufferX;
 import static com.personal.groucho.game.Utils.fromScreenToBufferY;
+import static com.personal.groucho.game.assets.Textures.lightbulb;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.game.states.Aiming;
@@ -20,21 +22,27 @@ public class Controller {
     private float loadPosX, loadPosY, shootPosX, shootPosY;
     private float originalTriggerPosX, originalTriggerPosY;
     private float triggerPosX, triggerPosY;
-
+    private float lightPosX;
+    private float lightPosY;
+    private final Rect src;
+    private final Rect dest;
     private final double dpadRadius, dpadRadiusSqr, triggerRadius;
 
     private final Paint circlePaint;
     private final Paint arcPaint;
+    private final Paint lightPaint;
 
     private int dpadPointer, triggerPointer;
 
     private float offsetX, offsetY;
 
     private ControllerState currentState;
+    private boolean turnOn;
 
     public Controller(float controllerCenterX, float controllerCenterY, GameWorld gw) {
         currentState = Idle.getInstance(this);
         orientation = Orientation.DOWN;
+        turnOn = false;
 
         dpadRadius = 75;
         dpadRadiusSqr = Math.pow(dpadRadius, 2);
@@ -60,6 +68,11 @@ public class Controller {
         shootPosY = originalTriggerPosY+ (int)triggerRadius;
         triggerPosX = originalTriggerPosX;
         triggerPosY = originalTriggerPosY;
+        lightPosX = (float) (loadPosX + 0.75*triggerRadius);
+        lightPosY = loadPosY - 300;
+
+        src = new Rect(0, 0, lightbulb.getWidth(), lightbulb.getHeight());
+        dest = new Rect();
 
         circlePaint = new Paint();
         circlePaint.setColor(Color.GRAY);
@@ -70,6 +83,9 @@ public class Controller {
         arcPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         arcPaint.setAlpha(150);
 
+        lightPaint = new Paint();
+        lightPaint.setAlpha(150);
+
         triggerPointer = -1;
         dpadPointer = -1;
     }
@@ -77,6 +93,7 @@ public class Controller {
     public void draw(Canvas canvas) {
         drawMovementControls(canvas);
         drawShootingControls(canvas);
+        drawFlashLight(canvas);
     }
 
     private void drawMovementControls(Canvas canvas) {
@@ -92,6 +109,15 @@ public class Controller {
         canvas.drawArc(shootPosX, shootPosY, shootPosX + 200, shootPosY + 200,
                 45, 90, false, arcPaint);
         canvas.drawCircle(triggerPosX, triggerPosY, (int)triggerRadius, circlePaint);
+    }
+
+    private void drawFlashLight(Canvas canvas) {
+        dest.top = (int) lightPosY;
+        dest.left = (int) lightPosX;
+        dest.right = (int) lightPosX + 128;
+        dest.bottom = (int) lightPosY + 128;
+
+        canvas.drawBitmap(lightbulb, src, dest, lightPaint);
     }
 
     public void consumeTouchEvent(Input.TouchEvent event){
@@ -112,6 +138,8 @@ public class Controller {
         float x = fromScreenToBufferX(event.x) + offsetX;
         float y = fromScreenToBufferY(event.y) + offsetY;
 
+        if (isOnLight(x, y))
+            handleLightTouchDown();
         if (isOnUp(x, y))
             handleDPadTouchDown(event.pointer, Orientation.UP);
         else if (isOnDown(x, y))
@@ -123,6 +151,17 @@ public class Controller {
         else if(isOnTrigger(x,y)) {
             triggerPointer = event.pointer;
             currentState = Aiming.getInstance(this);
+        }
+    }
+
+    private void handleLightTouchDown() {
+        if (!turnOn) {
+            turnOn = true;
+            lightPaint.setAlpha(255);
+        }
+        else {
+            turnOn = false;
+            lightPaint.setAlpha(150);
         }
     }
 
@@ -174,6 +213,7 @@ public class Controller {
         }
     }
 
+    private boolean isOnLight(float x, float y) {return isInCircle(x, lightPosX+64, y, lightPosY+64);}
     private boolean isOnRight(float x, float y) { return isInCircle(x, rightDPadPosX, y, rightDPadPosY); }
     private boolean isOnLeft(float x, float y) { return isInCircle(x, leftDPadPosX, y, leftDPadPosY); }
     private boolean isOnDown(float x, float y) { return isInCircle(x, downDPadPosX, y, downDPadPosY); }
@@ -198,8 +238,9 @@ public class Controller {
 
     public ControllerState getPlayerState() {return currentState;}
     public Orientation getOrientation() {return orientation;}
-    public void setCurrentState(ControllerState state) {currentState = state;}
+    public boolean isLightTurnOn() { return turnOn;}
 
+    public void setCurrentState(ControllerState state) {currentState = state;}
     public void setOrientation(Orientation orientation) {this.orientation = orientation;}
     public void setAimColor(int color) {arcPaint.setColor(color);}
 
@@ -226,5 +267,8 @@ public class Controller {
         originalTriggerPosY += increaseY;
         triggerPosX += increaseX;
         triggerPosY += increaseY;
+
+        lightPosX += increaseX;
+        lightPosY += increaseY;
     }
 }

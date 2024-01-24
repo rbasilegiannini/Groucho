@@ -2,6 +2,7 @@ package com.personal.groucho.game.components;
 
 import static com.personal.groucho.game.Constants.brightness;
 import static com.personal.groucho.game.Constants.characterDimensionsY;
+import static com.personal.groucho.game.Constants.minLightIntensity;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,7 +16,7 @@ import com.personal.groucho.game.GameWorld;
 public class LightComponent extends Component{
     private final GameWorld gameWorld;
     private PositionComponent position = null;
-    private float intensity = 150;
+    private float intensity = minLightIntensity;
 
 
     @Override

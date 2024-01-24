@@ -1,5 +1,7 @@
 package com.personal.groucho.game.components;
 
+import static com.personal.groucho.game.Constants.maxLightIntensity;
+import static com.personal.groucho.game.Constants.minLightIntensity;
 import static com.personal.groucho.game.Constants.speed;
 
 import com.personal.groucho.game.GameWorld;
@@ -21,6 +23,8 @@ public class ControllableComponent extends Component {
     private final GameWorld gameworld;
     private SpriteDrawableComponent spriteComponent = null;
     private PhysicsComponent physicsComponent = null;
+    private LightComponent lightComponent = null;
+
     private boolean canLoadingSound;
 
     public ControllableComponent(Controller controller, GameWorld gameworld) {
@@ -34,6 +38,8 @@ public class ControllableComponent extends Component {
     public void updatePlayerState() {
         if (spriteComponent == null)
             spriteComponent = (SpriteDrawableComponent) owner.getComponent(ComponentType.Drawable);
+        if (lightComponent == null)
+            lightComponent = (LightComponent) owner.getComponent(ComponentType.Light);
 
         Class<? extends ControllerState> aClass = controller.getPlayerState().getClass();
         if (aClass.equals(Idle.class)) {
@@ -46,6 +52,19 @@ public class ControllableComponent extends Component {
             handleLoadingPlayer();
         } else if (aClass.equals(Shooting.class)) {
             handleShootingPlayer();
+        }
+
+        handleLight();
+    }
+
+    private void handleLight() {
+        if (controller.isLightTurnOn()){
+            // Sound
+            lightComponent.setLightIntensity(maxLightIntensity);
+        }
+        else {
+            // Sound
+            lightComponent.setLightIntensity(minLightIntensity);
         }
     }
 
