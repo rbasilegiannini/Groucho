@@ -19,6 +19,7 @@ import com.personal.groucho.game.components.Component;
 import com.personal.groucho.game.components.ComponentType;
 import com.personal.groucho.game.components.ControllableComponent;
 import com.personal.groucho.game.components.DrawableComponent;
+import com.personal.groucho.game.components.LightComponent;
 import com.personal.groucho.game.components.PhysicsComponent;
 import com.personal.groucho.game.components.PositionComponent;
 import com.personal.groucho.game.levels.FirstLevel;
@@ -37,7 +38,7 @@ public class GameWorld {
     public final static int bufferWidth = 1920;
     public final static int bufferHeight = 1080;
     private final MyContactListener contactListener;
-    Bitmap buffer;
+    public Bitmap buffer;
     private final Canvas canvas;
     static Box physicalSize, screenSize, currentView;
     final Activity activity;
@@ -131,6 +132,14 @@ public class GameWorld {
             if (drawComponent != null){
                 DrawableComponent drawable = (DrawableComponent) drawComponent;
                 drawable.draw(canvas);
+            }
+        }
+
+        for (GameObject gameObject : objects) {
+            Component lightComponent = gameObject.getComponent(ComponentType.Light);
+            if (lightComponent != null){
+                LightComponent light = (LightComponent) lightComponent;
+                light.draw(canvas);
             }
         }
     }

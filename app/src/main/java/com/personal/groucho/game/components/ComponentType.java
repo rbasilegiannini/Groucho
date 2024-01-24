@@ -6,5 +6,6 @@ public enum ComponentType {
     Drawable,
     Position,
     Controllable,
+    Light,
     Alive
 }

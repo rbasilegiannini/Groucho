@@ -1,5 +1,7 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.Constants.characterDimensionsX;
+import static com.personal.groucho.game.Constants.characterDimensionsY;
 import static com.personal.groucho.game.Constants.characterScaleFactor;
 import static com.personal.groucho.game.Constants.grouchoHealth;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
@@ -23,6 +25,7 @@ import com.personal.groucho.game.components.AliveComponent;
 import com.personal.groucho.game.components.BoxDrawableComponent;
 import com.personal.groucho.game.components.ComponentType;
 import com.personal.groucho.game.components.ControllableComponent;
+import com.personal.groucho.game.components.LightComponent;
 import com.personal.groucho.game.components.PhysicsComponent;
 import com.personal.groucho.game.components.PositionComponent;
 import com.personal.groucho.game.components.SpriteDrawableComponent;
@@ -46,9 +49,6 @@ public class GameObjectFactory {
         }
     }
 
-    private static final float characterDimensionsX = 32;
-    private static final float characterDimensionsY = 32;
-
     public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameworld) {
         GameObject gameObject = new GameObject("Groucho", Role.PLAYER);
 
@@ -57,6 +57,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new ControllableComponent(controller, gameworld));
         gameObject.addComponent(new PhysicsComponent(gameworld.world));
         gameObject.addComponent(new AliveComponent(grouchoHealth));
+        gameObject.addComponent(new LightComponent(gameworld));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
         PhysicsProperties properties = new PhysicsProperties(posX, posY, 1f, 1f, BodyType.dynamicBody);
