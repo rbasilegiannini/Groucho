@@ -18,10 +18,10 @@ import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.assets.Textures;
 
 public class FirstLevel extends Level{
-    private Paint floorPaint;
-    private GameWorld gameWorld;
-    private Bitmap floor;
-    private Rect surface;
+    private final Paint floorPaint;
+    private final GameWorld gameWorld;
+    private final Bitmap floor;
+    private final Rect surface;
 
     public FirstLevel(GameWorld gw) {
         gameWorld = gw;

@@ -1,8 +1,5 @@
 package com.personal.groucho.game.components;
 
-import android.util.Log;
-
-import com.personal.groucho.game.GameObject;
 import com.personal.groucho.game.Status;
 
 public class AliveComponent extends Component{

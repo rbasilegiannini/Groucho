@@ -1,7 +1,5 @@
 package com.personal.groucho.game.states;
 
-import android.graphics.Color;
-
 import com.personal.groucho.game.Controller;
 import com.personal.groucho.game.Orientation;
 

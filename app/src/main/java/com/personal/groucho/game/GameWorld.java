@@ -44,7 +44,7 @@ public class GameWorld {
     final Activity activity;
     public World world;
     final Controller controller;
-    private List<GameObject> objects;
+    private final List<GameObject> objects;
     private GameObject player;
     private TouchHandler touchHandler;
     private Level currentLevel;
@@ -127,6 +127,7 @@ public class GameWorld {
     }
 
     private void drawGameObjects() {
+        //TODO: use a better solution
         for (GameObject gameObject : objects) {
             Component drawComponent = gameObject.getComponent(ComponentType.Drawable);
             if (drawComponent != null){
