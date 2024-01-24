@@ -14,7 +14,7 @@ import com.google.fpl.liquidfun.World;
 public class PhysicsComponent extends Component{
 
     private final World world;
-    PositionComponent positionComponent = null;
+    private PositionComponent positionComponent = null;
     private Body body;
 
     public PhysicsComponent(World world){

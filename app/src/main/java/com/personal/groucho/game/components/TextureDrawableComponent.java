@@ -7,10 +7,11 @@ import android.graphics.Rect;
 
 public class TextureDrawableComponent extends DrawableComponent{
 
+    private PositionComponent position = null;
     private final int dimX, dimY;
     private final Bitmap texture;
     private final Rect src;
-    private Rect dest;
+    private final Rect dest;
 
     public TextureDrawableComponent(Bitmap texture, int dimX, int dimY) {
         this.texture = texture;
@@ -22,8 +23,10 @@ public class TextureDrawableComponent extends DrawableComponent{
 
     @Override
     public void draw(Canvas canvas) {
-        PositionComponent pos = (PositionComponent) owner.getComponent(ComponentType.Position);
-        dest.offsetTo(pos.getPosX()-dimX/2, pos.getPosY()-dimY/2);
+        if (position == null)
+            position = (PositionComponent) owner.getComponent(ComponentType.Position);
+
+        dest.offsetTo(position.getPosX()-dimX/2, position.getPosY()-dimY/2);
         canvas.drawBitmap(texture, src, dest, null);
     }
 }

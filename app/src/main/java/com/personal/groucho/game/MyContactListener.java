@@ -10,7 +10,7 @@ import java.util.HashSet;
 
 public class MyContactListener extends ContactListener {
 
-    private Collection<Collision> collisions = new HashSet<>();
+    private final Collection<Collision> collisions = new HashSet<>();
 
     public Collection<Collision> getCollisions() {
         Collection<Collision> result = new HashSet<>(collisions);

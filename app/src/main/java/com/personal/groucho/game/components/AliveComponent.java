@@ -22,7 +22,6 @@ public class AliveComponent extends Component{
 
     public void damage(int power) {
         currentHealth -= power;
-        Log.i("Alive", ((GameObject)owner).getName()+" current health: " + currentHealth);
 
         if (currentHealth <= 0)
             die();

@@ -5,8 +5,9 @@ import android.graphics.Paint;
 
 public class BoxDrawableComponent extends DrawableComponent{
 
-    private Paint paint;
-    private float dimensionX, dimensionY;
+    private final Paint paint;
+    private final float dimensionX;
+    private final float dimensionY;
 
     public BoxDrawableComponent(float dimensionX, float dimensionY, Paint paint) {
         this.dimensionX = dimensionX;

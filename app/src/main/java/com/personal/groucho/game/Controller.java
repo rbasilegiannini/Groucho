@@ -13,7 +13,6 @@ import com.personal.groucho.game.states.ControllerState;
 import com.personal.groucho.game.states.Idle;
 
 public class Controller {
-    private final GameWorld gameWorld;
     private Orientation orientation;
 
     private float upDPadPosX, upDPadPosY, downDPadPosX, downDPadPosY;
@@ -25,7 +24,7 @@ public class Controller {
     private final double dpadRadius, dpadRadiusSqr, triggerRadius;
 
     private final Paint circlePaint;
-    private Paint arcPaint;
+    private final Paint arcPaint;
 
     private int dpadPointer, triggerPointer;
 
@@ -34,7 +33,6 @@ public class Controller {
     private ControllerState currentState;
 
     public Controller(float controllerCenterX, float controllerCenterY, GameWorld gw) {
-        gameWorld = gw;
         currentState = Idle.getInstance(this);
         orientation = Orientation.DOWN;
 
@@ -54,7 +52,7 @@ public class Controller {
         rightDPadPosX = controllerCenterX + 75;
         rightDPadPosY = controllerCenterY;
 
-        loadPosX = gameWorld.buffer.getWidth() - 300;
+        loadPosX = gw.buffer.getWidth() - 300;
         loadPosY = controllerCenterY - 200;
         originalTriggerPosX = loadPosX +2*(int)triggerRadius;
         originalTriggerPosY = loadPosY +2*(int)triggerRadius+150;

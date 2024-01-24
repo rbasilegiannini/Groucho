@@ -13,7 +13,8 @@ import com.personal.groucho.game.Spritesheet;
 public class SpriteDrawableComponent extends DrawableComponent {
     private Spritesheet currentSpritesheet;
     private final Spritesheet deathSpritesheet;
-    private Paint spriteColor;
+    private final Paint spriteColor;
+    private PositionComponent position = null;
 
     private int currentAnimation;
     private int currentStep;
@@ -47,7 +48,9 @@ public class SpriteDrawableComponent extends DrawableComponent {
 
     @Override
     public void draw(Canvas canvas) {
-        PositionComponent pos = (PositionComponent) owner.getComponent(ComponentType.Position);
+        if (position == null)
+            position = (PositionComponent) owner.getComponent(ComponentType.Position);
+
         long currentTimeMillis = System.currentTimeMillis();
         long delay = currentTimeMillis - lastTimestamp;
 
@@ -60,7 +63,7 @@ public class SpriteDrawableComponent extends DrawableComponent {
                 canvas,
                 currentAnimation,
                 currentStep,
-                pos.getPosX(), pos.getPosY(),
+                position.getPosX(), position.getPosY(),
                 characterScaleFactor,
                 spriteColor
         );
