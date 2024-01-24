@@ -1,5 +1,6 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.Constants.grouchoPower;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 
@@ -13,6 +14,7 @@ import android.util.Log;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
+import com.personal.groucho.game.components.AliveComponent;
 import com.personal.groucho.game.components.Component;
 import com.personal.groucho.game.components.ComponentType;
 import com.personal.groucho.game.components.ControllableComponent;
@@ -100,22 +102,50 @@ public class GameWorld {
         // Player state
         updatePlayerState();
         updateCamera();
+
+        //
+        for (GameObject gameObject : objects) {
+            Component aliveComponent = gameObject.getComponent(ComponentType.Alive);
+            if (aliveComponent != null){
+                AliveComponent alive = (AliveComponent) aliveComponent;
+                if (alive.getCurrentStatus() == Status.DEAD)
+                    handleDeath(gameObject);
+            }
+        }
     }
 
     public synchronized void render() {
         canvas.drawARGB(255,0,0,0);
+
         currentLevel.draw(canvas);
-        for (GameObject gameObject : objects) {
-            Component component = gameObject.getComponent(ComponentType.Drawable);
-            if (component != null) {
-                DrawableComponent drawable = (DrawableComponent) component;
-                drawable.draw(canvas);
-            }
-        }
+        drawGameObjects();
         controller.draw(canvas);
 
         //
         debugRayCast();
+    }
+
+    private void drawGameObjects() {
+        for (GameObject gameObject : objects) {
+            Component drawComponent = gameObject.getComponent(ComponentType.Drawable);
+            if (drawComponent != null){
+                DrawableComponent drawable = (DrawableComponent) drawComponent;
+                drawable.draw(canvas);
+            }
+        }
+    }
+
+    private void handleDeath(GameObject gameObject) {
+//        Component spriteComponent = gameObject.getComponent(ComponentType.Drawable);
+//        if (spriteComponent != null) {
+//            SpriteDrawableComponent sprite = (SpriteDrawableComponent) spriteComponent;
+//
+//            if (sprite.isAnimationComplete()) {
+//                //sprite.setIdleDeathSpritesheet();
+//            }
+//        }
+
+        // Remove object
     }
 
     /// ONLY DEBUG
@@ -152,7 +182,10 @@ public class GameWorld {
 
     private void handleCollisions(Collection<Collision> collisions) {
         for (Collision event: collisions) {
-            Log.d("GG", "Collision...");
+            if (event.GO1.role == Role.FURNITURE || event.GO2.role == Role.FURNITURE) {
+                Log.d("GW", "Collision with furniture...");
+                // Furniture collision sound
+            }
         }
     }
 
@@ -203,6 +236,8 @@ public class GameWorld {
         world.rayCast(
                 new RayCastCallback() {
                     public float reportFixture(Fixture fixture, Vec2 i, Vec2 n, float f) {
+                        Log.i("GW", "hit");
+
                         // Fixture hitFixture = fixture;
                         // frictions.add(f);
                         // ...
@@ -210,7 +245,14 @@ public class GameWorld {
                         // and sorting from less friction.
                         // if (first == Role.ENEMY) kill it;
                         // ...but not in this callback.
-                        Log.i("GW", "hit");
+
+                        // Without any control about fraction
+                        GameObject hitGO = (GameObject) fixture.getBody().getUserData();
+                        if (hitGO.role == Role.ENEMY) {
+                            AliveComponent alive = (AliveComponent)hitGO.getComponent(ComponentType.Alive);
+                            alive.damage(grouchoPower);
+                        }
+
                         return f;
                     }
                 },
