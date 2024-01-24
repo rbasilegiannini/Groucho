@@ -1,10 +1,13 @@
 package com.personal.groucho.game;
 
 import static com.personal.groucho.game.Constants.characterScaleFactor;
+import static com.personal.groucho.game.Constants.grouchoHealth;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.toMetersXLength;
 import static com.personal.groucho.game.Utils.toMetersYLength;
+import static com.personal.groucho.game.assets.Spritesheets.groucho_death;
+import static com.personal.groucho.game.assets.Spritesheets.groucho_walk;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,7 +19,7 @@ import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
-import com.personal.groucho.game.assets.Spritesheets;
+import com.personal.groucho.game.components.AliveComponent;
 import com.personal.groucho.game.components.BoxDrawableComponent;
 import com.personal.groucho.game.components.ComponentType;
 import com.personal.groucho.game.components.ControllableComponent;
@@ -50,9 +53,10 @@ public class GameObjectFactory {
         GameObject gameObject = new GameObject("Groucho", Role.PLAYER);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
-        gameObject.addComponent(new SpriteDrawableComponent(Spritesheets.groucho_walk));
+        gameObject.addComponent(new SpriteDrawableComponent(groucho_walk, groucho_death));
         gameObject.addComponent(new ControllableComponent(controller, gameworld));
         gameObject.addComponent(new PhysicsComponent(gameworld.world));
+        gameObject.addComponent(new AliveComponent(grouchoHealth));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
         PhysicsProperties properties = new PhysicsProperties(posX, posY, 1f, 1f, BodyType.dynamicBody);
@@ -61,12 +65,14 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeEnemy(int posX, int posY, Spritesheet idle, World world) {
+    public static GameObject makeEnemy(int posX, int posY, int health, Spritesheet idle,
+                                       Spritesheet death, World world) {
         GameObject gameObject = new GameObject("Enemy", Role.ENEMY);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(world));
-        gameObject.addComponent(new SpriteDrawableComponent(idle));
+        gameObject.addComponent(new SpriteDrawableComponent(idle, death));
+        gameObject.addComponent(new AliveComponent(health));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
         PhysicsProperties properties = new PhysicsProperties(posX, posY,1f, 1f, BodyType.dynamicBody);
@@ -132,7 +138,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new TextureDrawableComponent(texture, (int)dimX, (int)dimY));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY, 5f, 1f, BodyType.dynamicBody);
+        PhysicsProperties properties = new PhysicsProperties(posX, posY, 1f, 2f, BodyType.dynamicBody);
         setFurniturePhysics(physics, properties, dimX, dimY);
 
         return gameObject;
