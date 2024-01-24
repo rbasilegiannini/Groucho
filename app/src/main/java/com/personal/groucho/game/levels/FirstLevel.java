@@ -1,5 +1,6 @@
 package com.personal.groucho.game.levels;
 
+import static com.personal.groucho.game.Constants.skeletonHealth;
 import static com.personal.groucho.game.GameWorld.bufferHeight;
 import static com.personal.groucho.game.GameWorld.bufferWidth;
 
@@ -50,7 +51,12 @@ public class FirstLevel extends Level{
 
         // Set enemies
         gameWorld.addGameObject(GameObjectFactory.
-                makeEnemy(100,100, Spritesheets.skeleton_idle, gw.world)
+                makeEnemy(
+                        100,100,
+                        skeletonHealth,
+                        Spritesheets.skeleton_idle,
+                        Spritesheets.skeleton_death,
+                        gw.world)
         );
     }
 

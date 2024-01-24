@@ -131,7 +131,7 @@ public class ControllableComponent extends Component {
     }
 
     private void updateSprite(Spritesheet sheet, Orientation orientation) {
-        spriteComponent.setSpritesheet(sheet);
+        spriteComponent.setCurrentSpritesheet(sheet);
         spriteComponent.setAnimation(orientation.getValue());
     }
 }

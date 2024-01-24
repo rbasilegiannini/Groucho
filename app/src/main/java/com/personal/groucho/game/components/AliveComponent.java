@@ -3,14 +3,16 @@ package com.personal.groucho.game.components;
 import android.util.Log;
 
 import com.personal.groucho.game.GameObject;
-import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.Status;
 
 public class AliveComponent extends Component{
+    private final int maxHealth;
     private int currentHealth;
     private Status currentStatus;
+    private SpriteDrawableComponent sprite = null;
 
     public AliveComponent (int health) {
+        maxHealth = health;
         currentHealth = health;
         currentStatus = Status.ALIVE;
     }
@@ -21,18 +23,26 @@ public class AliveComponent extends Component{
     public void damage(int power) {
         currentHealth -= power;
         Log.i("Alive", ((GameObject)owner).getName()+" current health: " + currentHealth);
-        if (currentHealth < 0)
+
+        if (currentHealth <= 0)
             die();
+
+        if (sprite == null) {
+            Component spriteComponent = owner.getComponent(ComponentType.Drawable);
+            if (spriteComponent != null) {
+                sprite = (SpriteDrawableComponent) spriteComponent;
+                sprite.updateColorFilter(currentHealth, maxHealth);
+            }
+        }
+        else
+            sprite.updateColorFilter(currentHealth, maxHealth);
     }
 
     private void die() {
         currentStatus = Status.DEAD;
 
-        Component spriteComponent = owner.getComponent(ComponentType.Drawable);
-        if (spriteComponent != null) {
-            SpriteDrawableComponent sprite = (SpriteDrawableComponent) spriteComponent;
+        if (sprite != null)
             sprite.setDeathSpritesheet();
-        }
     }
 
     public Status getCurrentStatus() {return currentStatus;}

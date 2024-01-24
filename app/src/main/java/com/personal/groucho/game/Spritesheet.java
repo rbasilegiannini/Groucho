@@ -2,6 +2,7 @@ package com.personal.groucho.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class Spritesheet {
@@ -33,7 +34,7 @@ public class Spritesheet {
         this.delay[animation] = delay;
     }
 
-    public int drawAnimation(Canvas canvas, int animation, int step, int x, int y, int scaleFactor) {
+    public int drawAnimation(Canvas canvas, int animation, int step, int x, int y, int scaleFactor, Paint paint) {
         if (step >= length[animation] - 1)
             step = 0;
 
@@ -53,7 +54,7 @@ public class Spritesheet {
                 destTop + scaleFactor*frameHeight -1
         );
 
-        canvas.drawBitmap(sheet, src, dest, null);
+        canvas.drawBitmap(sheet, src, dest, paint);
         return step;
     }
 
