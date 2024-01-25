@@ -1,7 +1,7 @@
 package com.personal.groucho.game.states;
 
-import com.personal.groucho.game.Controller;
 import com.personal.groucho.game.Orientation;
+import com.personal.groucho.game.controller.Controller;
 
 public class Loading extends ControllerState{
 
@@ -26,7 +26,6 @@ public class Loading extends ControllerState{
     @Override
     public void handleTriggerTouchDragged(float x, float y) {
         if (controller.isOnShootingArea(x, y))
-            //controller.shoot();
             controller.setCurrentState(Shooting.getInstance(controller));
     }
 

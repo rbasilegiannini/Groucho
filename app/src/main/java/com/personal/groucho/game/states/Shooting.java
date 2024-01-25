@@ -1,7 +1,7 @@
 package com.personal.groucho.game.states;
 
-import com.personal.groucho.game.Controller;
 import com.personal.groucho.game.Orientation;
+import com.personal.groucho.game.controller.Controller;
 
 public class Shooting extends ControllerState{
 

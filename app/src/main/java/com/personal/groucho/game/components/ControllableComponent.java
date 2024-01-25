@@ -9,10 +9,10 @@ import static com.personal.groucho.game.assets.PlayerSounds.loadingSound;
 import com.personal.groucho.game.ControllerObserver;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Orientation;
-import com.personal.groucho.game.Controller;
 import com.personal.groucho.game.assets.PlayerSounds;
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.assets.Spritesheets;
+import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.states.ControllerState;
 import com.personal.groucho.game.states.NameState;
 

@@ -30,6 +30,7 @@ import com.personal.groucho.game.components.PhysicsComponent;
 import com.personal.groucho.game.components.PositionComponent;
 import com.personal.groucho.game.components.SpriteDrawableComponent;
 import com.personal.groucho.game.components.TextureDrawableComponent;
+import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.states.Idle;
 
 public class GameObjectFactory {

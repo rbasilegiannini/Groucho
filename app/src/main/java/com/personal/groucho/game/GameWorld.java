@@ -22,6 +22,7 @@ import com.personal.groucho.game.components.DrawableComponent;
 import com.personal.groucho.game.components.LightComponent;
 import com.personal.groucho.game.components.PhysicsComponent;
 import com.personal.groucho.game.components.PositionComponent;
+import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.levels.FirstLevel;
 import com.personal.groucho.game.levels.Level;
 import com.personal.groucho.game.states.Walking;
@@ -63,7 +64,8 @@ public class GameWorld {
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
 
         this.world = new World(0, 0); // No gravity
-        this.controller = new Controller((float) 200, (float) bufferHeight /2, this);
+        this.controller = new Controller((float) bufferWidth/2, (float) bufferHeight /2);
+
         contactListener = new MyContactListener();
         world.setContactListener(contactListener);
 
