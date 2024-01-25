@@ -12,9 +12,11 @@ import android.graphics.Rect;
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.game.states.Aiming;
 import com.personal.groucho.game.states.ControllerState;
-import com.personal.groucho.game.states.Idle;
 
-public class Controller {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Controller implements ControllerSubject{
     private Orientation orientation;
 
     private float upDPadPosX, upDPadPosY, downDPadPosX, downDPadPosY;
@@ -37,10 +39,12 @@ public class Controller {
     private float offsetX, offsetY;
 
     private ControllerState currentState;
+    private final List<ControllerObserver> controllerObservers = new ArrayList<>();
+
     private boolean turnOn;
 
     public Controller(float controllerCenterX, float controllerCenterY, GameWorld gw) {
-        currentState = Idle.getInstance(this);
+        //currentState = Idle.getInstance(this);
         orientation = Orientation.DOWN;
         turnOn = false;
 
@@ -84,7 +88,7 @@ public class Controller {
         arcPaint.setAlpha(150);
 
         lightPaint = new Paint();
-        lightPaint.setAlpha(150);
+        lightPaint.setAlpha(75);
 
         triggerPointer = -1;
         dpadPointer = -1;
@@ -140,6 +144,7 @@ public class Controller {
 
         if (isOnLight(x, y))
             handleLightTouchDown();
+
         if (isOnUp(x, y))
             handleDPadTouchDown(event.pointer, Orientation.UP);
         else if (isOnDown(x, y))
@@ -150,7 +155,7 @@ public class Controller {
             handleDPadTouchDown(event.pointer, Orientation.RIGHT);
         else if(isOnTrigger(x,y)) {
             triggerPointer = event.pointer;
-            currentState = Aiming.getInstance(this);
+            setCurrentState(Aiming.getInstance(this));
         }
     }
 
@@ -161,8 +166,10 @@ public class Controller {
         }
         else {
             turnOn = false;
-            lightPaint.setAlpha(150);
+            lightPaint.setAlpha(75);
         }
+        for (ControllerObserver observer : controllerObservers)
+            observer.switchLightEvent(turnOn);
     }
 
     private void handleDPadTouchDown(int pointer, Orientation orientation){
@@ -232,16 +239,39 @@ public class Controller {
     }
 
     public void consumeShoot() {
-        currentState = Aiming.getInstance(this);
+        setCurrentState(Aiming.getInstance(this));
         resetAimColor();
     }
 
     public ControllerState getPlayerState() {return currentState;}
     public Orientation getOrientation() {return orientation;}
-    public boolean isLightTurnOn() { return turnOn;}
 
-    public void setCurrentState(ControllerState state) {currentState = state;}
-    public void setOrientation(Orientation orientation) {this.orientation = orientation;}
+    @Override
+    public void addControllerListener(ControllerObserver observer) {
+        controllerObservers.add(observer);
+    }
+
+    @Override
+    public void removeControllerListener(ControllerObserver observer) {
+        controllerObservers.remove(observer);
+    }
+
+    @Override
+    public void notifyToListeners() {
+        for (ControllerObserver observer : controllerObservers)
+            observer.update(currentState);
+    }
+
+    public void setCurrentState(ControllerState state) {
+        currentState = state;
+        notifyToListeners();
+    }
+
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
+        notifyToListeners();
+    }
+
     public void setAimColor(int color) {arcPaint.setColor(color);}
 
     public void updateControllerPosition(float increaseX, float increaseY) {

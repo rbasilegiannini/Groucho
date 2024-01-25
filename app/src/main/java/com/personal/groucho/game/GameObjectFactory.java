@@ -30,6 +30,7 @@ import com.personal.groucho.game.components.PhysicsComponent;
 import com.personal.groucho.game.components.PositionComponent;
 import com.personal.groucho.game.components.SpriteDrawableComponent;
 import com.personal.groucho.game.components.TextureDrawableComponent;
+import com.personal.groucho.game.states.Idle;
 
 public class GameObjectFactory {
 
@@ -62,6 +63,12 @@ public class GameObjectFactory {
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
         PhysicsProperties properties = new PhysicsProperties(posX, posY, 1f, 1f, BodyType.dynamicBody);
         setCharacterPhysics(physics, properties);
+
+        ControllableComponent controllable = (ControllableComponent) gameObject.getComponent(ComponentType.Controllable);
+
+        gameworld.controller.addControllerListener(controllable);
+        controller.setCurrentState(Idle.getInstance(controller));
+
 
         return gameObject;
     }

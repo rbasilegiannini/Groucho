@@ -3,21 +3,20 @@ package com.personal.groucho.game.components;
 import static com.personal.groucho.game.Constants.maxLightIntensity;
 import static com.personal.groucho.game.Constants.minLightIntensity;
 import static com.personal.groucho.game.Constants.speed;
+import static com.personal.groucho.game.assets.PlayerSounds.click;
+import static com.personal.groucho.game.assets.PlayerSounds.loadingSound;
 
+import com.personal.groucho.game.ControllerObserver;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Orientation;
 import com.personal.groucho.game.Controller;
 import com.personal.groucho.game.assets.PlayerSounds;
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.assets.Spritesheets;
-import com.personal.groucho.game.states.Aiming;
 import com.personal.groucho.game.states.ControllerState;
-import com.personal.groucho.game.states.Idle;
-import com.personal.groucho.game.states.Loading;
-import com.personal.groucho.game.states.Shooting;
-import com.personal.groucho.game.states.Walking;
+import com.personal.groucho.game.states.NameState;
 
-public class ControllableComponent extends Component {
+public class ControllableComponent extends Component implements ControllerObserver {
 
     private final Controller controller;
     private final GameWorld gameworld;
@@ -25,7 +24,8 @@ public class ControllableComponent extends Component {
     private PhysicsComponent physicsComponent = null;
     private LightComponent lightComponent = null;
 
-    private boolean canLoadingSound;
+    private boolean playShotAnimation = false;
+    private boolean playLoadingSound = true;
 
     public ControllableComponent(Controller controller, GameWorld gameworld) {
         this.controller = controller;
@@ -41,38 +41,33 @@ public class ControllableComponent extends Component {
         if (lightComponent == null)
             lightComponent = (LightComponent) owner.getComponent(ComponentType.Light);
 
-        Class<? extends ControllerState> aClass = controller.getPlayerState().getClass();
-        if (aClass.equals(Idle.class)) {
-            handleIdlePlayer();
-        } else if (aClass.equals(Walking.class)) {
+        if (controller.getPlayerState().getName() == NameState.WALKING)
             handleWalkingPlayer();
-        } else if (aClass.equals(Aiming.class)) {
+        else if (controller.getPlayerState().getName() == NameState.AIMING)
             handleAimingPlayer();
-        } else if (aClass.equals(Loading.class)) {
-            handleLoadingPlayer();
-        } else if (aClass.equals(Shooting.class)) {
-            handleShootingPlayer();
-        }
 
-        handleLight();
+        if (playShotAnimation) {
+            updateSprite(Spritesheets.groucho_fire, controller.getOrientation());
+            playShotAnimation = false;
+        }
     }
 
-    private void handleLight() {
-        if (controller.isLightTurnOn()){
-            // Sound
+    public void switchLightEvent(boolean isTurnOn) {
+        click.play(1f);
+        if(isTurnOn)
             lightComponent.setLightIntensity(maxLightIntensity);
-        }
-        else {
-            // Sound
+        else
             lightComponent.setLightIntensity(minLightIntensity);
-        }
+
     }
 
     private void handleIdlePlayer() {
+        playLoadingSound = true;
         updateSprite(Spritesheets.groucho_idle, controller.getOrientation());
     }
 
     private void handleWalkingPlayer() {
+        playLoadingSound = true;
         if(physicsComponent == null)
             physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.Physics);
 
@@ -95,26 +90,27 @@ public class ControllableComponent extends Component {
     }
 
     private void handleAimingPlayer() {
-        canLoadingSound = true;
         updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
     }
 
     private void handleLoadingPlayer() {
-        if (canLoadingSound) {
-            PlayerSounds.loadingSound.play(1f);
-            canLoadingSound = false;
+        if (playLoadingSound) {
+            loadingSound.play(1f);
+            playLoadingSound = false;
         }
         updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
     }
 
     private void handleShootingPlayer() {
-        controller.consumeShoot();
+        playShotAnimation = true;
+        playLoadingSound = true;
         PlayerSounds.shootingSound.play(1f);
-        updateSprite(Spritesheets.groucho_fire, controller.getOrientation());
-        shot();
+
+        controller.consumeShoot();
+        shoot();
     }
 
-    private void shot() {
+    private void shoot() {
         if(physicsComponent == null)
             physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.Physics);
 
@@ -152,5 +148,27 @@ public class ControllableComponent extends Component {
     private void updateSprite(Spritesheet sheet, Orientation orientation) {
         spriteComponent.setCurrentSpritesheet(sheet);
         spriteComponent.setAnimation(orientation.getValue());
+    }
+
+    public void update(ControllerState currentState) {
+        if (spriteComponent == null)
+            spriteComponent = (SpriteDrawableComponent) owner.getComponent(ComponentType.Drawable);
+        if (lightComponent == null)
+            lightComponent = (LightComponent) owner.getComponent(ComponentType.Light);
+
+        switch (currentState.getName()) {
+            case IDLE:
+                handleIdlePlayer();
+                break;
+            case AIMING:
+                handleAimingPlayer();
+                break;
+            case LOADING:
+                handleLoadingPlayer();
+                break;
+            case SHOOTING:
+                handleShootingPlayer();
+                break;
+        }
     }
 }
