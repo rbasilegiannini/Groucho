@@ -1,4 +1,4 @@
-package com.personal.groucho.game.components;
+package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.Constants.maxLightIntensity;
 import static com.personal.groucho.game.Constants.minLightIntensity;
@@ -6,15 +6,15 @@ import static com.personal.groucho.game.Constants.speed;
 import static com.personal.groucho.game.assets.PlayerSounds.click;
 import static com.personal.groucho.game.assets.PlayerSounds.loadingSound;
 
-import com.personal.groucho.game.ControllerObserver;
+import com.personal.groucho.game.controller.ControllerObserver;
 import com.personal.groucho.game.GameWorld;
-import com.personal.groucho.game.Orientation;
+import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.assets.PlayerSounds;
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.controller.Controller;
-import com.personal.groucho.game.states.ControllerState;
-import com.personal.groucho.game.states.NameState;
+import com.personal.groucho.game.controller.states.ControllerState;
+import com.personal.groucho.game.controller.states.NameState;
 
 public class ControllableComponent extends Component implements ControllerObserver {
 

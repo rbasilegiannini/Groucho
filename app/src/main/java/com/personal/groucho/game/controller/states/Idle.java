@@ -1,41 +1,37 @@
-package com.personal.groucho.game.states;
+package com.personal.groucho.game.controller.states;
 
-import com.personal.groucho.game.Orientation;
+import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.Controller;
 
-public class Loading extends ControllerState{
+public class Idle extends ControllerState{
 
-    private static Loading state = null;
+    private static Idle state = null;
 
-    private Loading(Controller controller) {
+    private Idle(Controller controller) {
         super(controller);
-        name = NameState.LOADING;
+        name = NameState.IDLE;
     }
 
     public static ControllerState getInstance(Controller controller) {
         if (state == null)
-            state = new Loading(controller);
+            state = new Idle(controller);
         return state;
     }
 
     @Override
     public void handleDPadTouchDown(Orientation orientation) {
         controller.setOrientation(orientation);
+        controller.setCurrentState(Walking.getInstance(controller));
     }
 
     @Override
     public void handleTriggerTouchDragged(float x, float y) {
-        if (controller.isOnShootingArea(x, y))
-            controller.setCurrentState(Shooting.getInstance(controller));
+        controller.setCurrentState(Aiming.getInstance(controller));
     }
 
     @Override
     public void handleDPadTouchDragged(Orientation orientation) {
         controller.setOrientation(orientation);
-    }
-
-    @Override
-    public void handleTriggerTouchUp() {
-        controller.setCurrentState(Idle.getInstance(controller));
+        controller.setCurrentState(Walking.getInstance(controller));
     }
 }

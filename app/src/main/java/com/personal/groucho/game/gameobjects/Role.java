@@ -1,4 +1,4 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.gameobjects;
 
 public enum Role {
     NEUTRAL,

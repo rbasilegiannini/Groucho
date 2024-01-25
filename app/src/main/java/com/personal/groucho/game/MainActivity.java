@@ -16,6 +16,7 @@ import com.personal.groucho.badlogic.androidgames.framework.Audio;
 import com.personal.groucho.game.assets.PlayerSounds;
 import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.assets.Textures;
+import com.personal.groucho.game.gameobjects.GameObjectFactory;
 
 public class MainActivity extends Activity {
 

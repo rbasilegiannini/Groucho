@@ -1,6 +1,6 @@
-package com.personal.groucho.game.states;
+package com.personal.groucho.game.controller.states;
 
-import com.personal.groucho.game.Orientation;
+import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.Controller;
 
 public class Walking extends ControllerState{

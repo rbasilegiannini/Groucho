@@ -1,4 +1,4 @@
-package com.personal.groucho.game.components;
+package com.personal.groucho.game.gameobjects.components;
 
 public enum ComponentType {
     Physics,

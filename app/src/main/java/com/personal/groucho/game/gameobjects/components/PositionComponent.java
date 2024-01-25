@@ -1,4 +1,4 @@
-package com.personal.groucho.game.components;
+package com.personal.groucho.game.gameobjects.components;
 
 public class PositionComponent extends Component{
     private int posX;

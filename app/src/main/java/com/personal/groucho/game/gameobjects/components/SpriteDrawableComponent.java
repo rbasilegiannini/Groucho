@@ -1,4 +1,4 @@
-package com.personal.groucho.game.components;
+package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.Constants.characterScaleFactor;
 

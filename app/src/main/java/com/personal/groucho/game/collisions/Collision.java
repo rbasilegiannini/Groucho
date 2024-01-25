@@ -1,7 +1,9 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.collisions;
+
+import com.personal.groucho.game.gameobjects.GameObject;
 
 public class Collision {
-    GameObject GO1, GO2;
+    public GameObject GO1, GO2;
 
     public Collision(GameObject GO1, GameObject GO2) {
         this.GO1 = GO1;

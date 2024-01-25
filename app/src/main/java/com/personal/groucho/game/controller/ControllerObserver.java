@@ -1,6 +1,6 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.controller;
 
-import com.personal.groucho.game.states.ControllerState;
+import com.personal.groucho.game.controller.states.ControllerState;
 
 public interface ControllerObserver {
     void update(ControllerState currentState);

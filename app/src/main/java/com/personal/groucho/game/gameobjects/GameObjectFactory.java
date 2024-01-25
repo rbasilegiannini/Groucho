@@ -1,4 +1,4 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.gameobjects;
 
 import static com.personal.groucho.game.Constants.characterDimensionsX;
 import static com.personal.groucho.game.Constants.characterDimensionsY;
@@ -21,17 +21,19 @@ import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
-import com.personal.groucho.game.components.AliveComponent;
-import com.personal.groucho.game.components.BoxDrawableComponent;
-import com.personal.groucho.game.components.ComponentType;
-import com.personal.groucho.game.components.ControllableComponent;
-import com.personal.groucho.game.components.LightComponent;
-import com.personal.groucho.game.components.PhysicsComponent;
-import com.personal.groucho.game.components.PositionComponent;
-import com.personal.groucho.game.components.SpriteDrawableComponent;
-import com.personal.groucho.game.components.TextureDrawableComponent;
+import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.Spritesheet;
+import com.personal.groucho.game.gameobjects.components.AliveComponent;
+import com.personal.groucho.game.gameobjects.components.BoxDrawableComponent;
+import com.personal.groucho.game.gameobjects.components.ComponentType;
+import com.personal.groucho.game.gameobjects.components.ControllableComponent;
+import com.personal.groucho.game.gameobjects.components.LightComponent;
+import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
+import com.personal.groucho.game.gameobjects.components.PositionComponent;
+import com.personal.groucho.game.gameobjects.components.SpriteDrawableComponent;
+import com.personal.groucho.game.gameobjects.components.TextureDrawableComponent;
 import com.personal.groucho.game.controller.Controller;
-import com.personal.groucho.game.states.Idle;
+import com.personal.groucho.game.controller.states.Idle;
 
 public class GameObjectFactory {
 

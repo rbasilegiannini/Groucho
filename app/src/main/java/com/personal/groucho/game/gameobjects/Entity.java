@@ -1,7 +1,7 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.gameobjects;
 
-import com.personal.groucho.game.components.Component;
-import com.personal.groucho.game.components.ComponentType;
+import com.personal.groucho.game.gameobjects.components.Component;
+import com.personal.groucho.game.gameobjects.components.ComponentType;
 
 import java.util.HashMap;
 import java.util.Map;

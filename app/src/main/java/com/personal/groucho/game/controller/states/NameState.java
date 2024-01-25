@@ -1,4 +1,4 @@
-package com.personal.groucho.game.states;
+package com.personal.groucho.game.controller.states;
 
 public enum NameState {
     IDLE,

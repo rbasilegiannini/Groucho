@@ -1,4 +1,4 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.controller;
 
 public interface ControllerSubject {
     void addControllerListener(ControllerObserver observer);

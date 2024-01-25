@@ -7,11 +7,8 @@ import static com.personal.groucho.game.Utils.fromScreenToBufferY;
 import android.graphics.Canvas;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
-import com.personal.groucho.game.ControllerObserver;
-import com.personal.groucho.game.ControllerSubject;
-import com.personal.groucho.game.Orientation;
-import com.personal.groucho.game.states.Aiming;
-import com.personal.groucho.game.states.ControllerState;
+import com.personal.groucho.game.controller.states.Aiming;
+import com.personal.groucho.game.controller.states.ControllerState;
 
 import java.util.ArrayList;
 import java.util.List;

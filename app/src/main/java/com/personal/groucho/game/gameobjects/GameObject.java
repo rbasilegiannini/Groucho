@@ -1,8 +1,8 @@
-package com.personal.groucho.game;
+package com.personal.groucho.game.gameobjects;
 
 public class GameObject extends Entity{
     protected String name;
-    Role role;
+    public Role role;
 
     GameObject() {
         this.name = "";
