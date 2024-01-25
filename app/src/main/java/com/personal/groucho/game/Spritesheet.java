@@ -35,7 +35,7 @@ public class Spritesheet {
     }
 
     public int drawAnimation(Canvas canvas, int animation, int step, int x, int y, int scaleFactor, Paint paint) {
-        if (step >= length[animation] - 1)
+        if (step > length[animation] - 1)
             step = 0;
 
         int srcTop = animation * frameHeight;
