@@ -9,6 +9,7 @@ public class Shooting extends ControllerState{
 
     private Shooting(Controller controller) {
         super(controller);
+        name = NameState.SHOOTING;
     }
 
     public static ControllerState getInstance(Controller controller) {

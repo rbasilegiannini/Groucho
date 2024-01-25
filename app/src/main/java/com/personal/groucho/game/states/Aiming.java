@@ -11,6 +11,7 @@ public class Aiming extends ControllerState{
 
     private Aiming(Controller controller) {
         super(controller);
+        name = NameState.AIMING;
     }
 
     public static ControllerState getInstance(Controller controller) {

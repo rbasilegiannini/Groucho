@@ -6,6 +6,7 @@ import com.personal.groucho.game.Orientation;
 public abstract class ControllerState {
 
     protected Controller controller;
+    protected NameState name;
 
     protected ControllerState(Controller controller) {this.controller = controller;}
 
@@ -14,4 +15,6 @@ public abstract class ControllerState {
     public void handleDPadTouchDragged(Orientation orientation){}
     public void handleDPadTouchUp(){}
     public void handleTriggerTouchUp(){}
+
+    public NameState getName() {return name;}
 }
