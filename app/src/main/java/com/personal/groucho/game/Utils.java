@@ -7,6 +7,7 @@ import static com.personal.groucho.game.GameWorld.screenSize;
 
 public class Utils {
 
+    // Screen conversions
     public static float fromScreenToBufferX(float x) { return x/screenSize.width*bufferWidth; }
     public static float fromScreenToBufferY(float y) { return y/screenSize.height*bufferHeight; }
 
@@ -31,4 +32,11 @@ public class Utils {
     }
     public static float toMetersXLength(float x) {return x/bufferWidth * physicalSize.width;}
     public static float toMetersYLength(float y) {return y/bufferHeight * physicalSize.height;}
+
+    public static boolean isInCircle(float x, float posX, float y, float posY, float distance) {
+        double pointerPositionSqr = Math.pow(x - posX, 2) + Math.pow(y - posY, 2);
+        return pointerPositionSqr <= distance;
+    }
+
+
 }
