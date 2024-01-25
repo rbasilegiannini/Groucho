@@ -3,7 +3,7 @@ package com.personal.groucho.game;
 public class Constants {
     public static final float brightness = 0.1f;
     public static final float maxLightIntensity = 400f;
-    public static final float minLightIntensity = 150f;
+    public static final float minLightIntensity = 0f;
 
     public static final float characterDimensionsX = 32;
     public static final float characterDimensionsY = 32;
