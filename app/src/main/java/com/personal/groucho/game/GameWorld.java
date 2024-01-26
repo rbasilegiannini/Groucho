@@ -48,7 +48,6 @@ public class GameWorld {
     public final Controller controller;
     private final List<GameObject> objects;
     private Player player;
-
     private TouchHandler touchHandler;
     private Level currentLevel;
 
@@ -74,6 +73,9 @@ public class GameWorld {
         this.currentLevel = new FirstLevel(this);
     }
 
+    public void setTouchHandler(TouchHandler touchHandler) {
+        this.touchHandler = touchHandler;
+    }
 
     public void setPlayer(GameObject player) {
         Component component = player.getComponent(ComponentType.Position);
@@ -96,7 +98,6 @@ public class GameWorld {
 
     public synchronized void update(float elapsedTime) {
         physics.update(elapsedTime, objects, contactListener.getCollisions());
-
         player.update(canvas, controller);
 
         //
@@ -116,9 +117,6 @@ public class GameWorld {
         currentLevel.draw(canvas);
         drawGameObjects();
         controller.draw(canvas);
-
-        //
-        debugRayCast();
     }
 
     private void drawGameObjects() {
@@ -145,30 +143,7 @@ public class GameWorld {
         // Remove object?
     }
 
-    /// ONLY DEBUG
-    float startX = 0;
-    float startY = 0;
-    float endX = 0;
-    float endY = 0;
-
-    public void debugRayCast() {
-        Paint paint = new Paint();
-        paint.setColor(Color.RED);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        canvas.drawLine(startX, startY, endX, endY, paint);
-    }
-    ///
-
-    public void setTouchHandler(TouchHandler touchHandler) {
-        this.touchHandler = touchHandler;
-    }
-
     public void shootEvent(float originX, float originY, float endX, float endY) {
-        this.startX = originX;
-        this.startY = originY;
-        this.endX = endX;
-        this.endY = endY;
-
         GameObject hitGO = physics.reportGameObject(originX, originY, endX, endY);
         if (hitGO != null) {
             Log.i("RayCast", hitGO.role.name());
