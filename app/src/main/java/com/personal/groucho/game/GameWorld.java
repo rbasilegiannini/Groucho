@@ -22,7 +22,6 @@ import com.google.fpl.liquidfun.RayCastCallback;
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
-import com.personal.groucho.game.assets.Sounds;
 import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.Role;
@@ -55,6 +54,8 @@ public class GameWorld {
     static Box physicalSize, screenSize, currentView;
     final Activity activity;
     public World world;
+    private final Physics physics;
+
     public final Controller controller;
     private final List<GameObject> objects;
     private GameObject player;
@@ -63,9 +64,6 @@ public class GameWorld {
     private int currentPlayerPosX;
     private int currentPlayerPosY;
 
-    private static final int VELOCITY_ITERATIONS = 8;
-    private static final int POSITION_ITERATIONS = 3;
-    private static final int PARTICLE_ITERATIONS = 3;
 
     public GameWorld(Box physicalSize, Box screenSize, Activity activity) {
         GameWorld.physicalSize = physicalSize;
@@ -75,6 +73,7 @@ public class GameWorld {
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
 
         this.world = new World(0, 0); // No gravity
+        physics = new Physics(physicalSize, world);
         this.controller = new Controller(
                 (float) bufferWidth/2, (float) bufferHeight /2
         );
@@ -110,10 +109,7 @@ public class GameWorld {
     }
 
     public synchronized void update(float elapsedTime) {
-        // Physics
-        world.step(elapsedTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
-        handleCollisions(contactListener.getCollisions());
-        updatePhysicsPosition();
+        physics.update(elapsedTime, objects, contactListener.getCollisions());
 
         // Player state
         updatePlayerState();
@@ -188,24 +184,6 @@ public class GameWorld {
     }
     ///
 
-    private void updatePhysicsPosition() {
-        // TODO: use a better solution
-        for (GameObject go : objects) {
-            Component phyComponent = go.getComponent(ComponentType.Physics);
-            Component posComponent = go.getComponent(ComponentType.Position);
-            if (phyComponent != null && posComponent != null) {
-                PhysicsComponent physicsComponent = (PhysicsComponent) phyComponent;
-                PositionComponent positionComponent = (PositionComponent) posComponent;
-                positionComponent.setPosX(
-                        (int) fromMetersToBufferX(physicsComponent.getPositionX())
-                );
-                positionComponent.setPosY(
-                        (int) fromMetersToBufferY(physicsComponent.getPositionY())
-                );
-            }
-        }
-    }
-
     private void handleCollisions(Collection<Collision> collisions) {
         for (Collision event: collisions) {
             if (event.GO1.role == Role.FURNITURE || event.GO2.role == Role.FURNITURE) {
@@ -259,7 +237,7 @@ public class GameWorld {
         this.endX = endX;
         this.endY = endY;
 
-        GameObject hitGO = reportGameObject(originX, originY, endX, endY);
+        GameObject hitGO = physics.reportGameObject(originX, originY, endX, endY);
         if (hitGO != null) {
             Log.i("RayCast", hitGO.role.name());
 
@@ -285,7 +263,6 @@ public class GameWorld {
         if (alive.getCurrentStatus() != DEAD) alive.damage(grouchoPower);
     }
 
-
     private void hitFurnitureEvent( GameObject hitGO, float originX, float originY) {
         bulletHitFurniture.play(1f);
         PhysicsComponent physics = (PhysicsComponent) hitGO.getComponent(ComponentType.Physics);
@@ -298,33 +275,5 @@ public class GameWorld {
         Vec2 force = new Vec2(20*(forceX/module), 20*(forceY/module));
 
         physics.applyForce(force);
-    }
-    private GameObject reportGameObject(float originX, float originY, float endX, float endY) {
-        List<GameObject> hitGameObjects = new ArrayList<>();
-        List<Float> fractions = new ArrayList<>();
-        GameObject firstGO = null;
-
-        world.rayCast(
-                new RayCastCallback() {
-                    public float reportFixture(Fixture fixture, Vec2 i, Vec2 n, float fraction) {
-                        Log.i("RayCast", "hit");
-                        GameObject hitGO = (GameObject) fixture.getBody().getUserData();
-                        hitGameObjects.add(hitGO);
-                        fractions.add(fraction);
-
-                        return fraction;
-                    }
-                },
-                fromBufferToMetersX(originX),
-                fromBufferToMetersY(originY),
-                fromBufferToMetersX(endX),
-                fromBufferToMetersY(endY)
-        );
-        if (!fractions.isEmpty()) {
-            int indexLessFraction = fractions.indexOf(Collections.min(fractions));
-            firstGO = hitGameObjects.get(indexLessFraction);
-        }
-
-        return firstGO;
     }
 }
