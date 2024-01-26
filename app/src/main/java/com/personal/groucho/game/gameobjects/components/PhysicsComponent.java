@@ -37,7 +37,9 @@ public class PhysicsComponent extends Component{
         if(positionComponent == null)
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
 
-        body.applyForceToCenter(force, true);
+        body.setLinearVelocity(new Vec2(0,0));
+        body.applyLinearImpulse(force,body.getPosition(),true);
+
         positionComponent.setPosX((int) fromMetersToBufferX(body.getPositionX()));
         positionComponent.setPosY((int) fromMetersToBufferY(body.getPositionY()));
     }

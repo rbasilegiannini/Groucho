@@ -94,6 +94,7 @@ public class GameObjectFactory {
 
     private static void setCharacterPhysics(PhysicsComponent physics, PhysicsProperties properties) {
         BodyDef bodyDef = new BodyDef();
+        bodyDef.setLinearDamping(10f);
         bodyDef.setPosition(new Vec2(
                 fromBufferToMetersX(properties.positionX),
                 fromBufferToMetersY(properties.positionY))
@@ -149,7 +150,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new TextureDrawableComponent(texture, (int)dimX, (int)dimY));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY, 1f, 2f, BodyType.dynamicBody);
+        PhysicsProperties properties = new PhysicsProperties(posX, posY, 5f, 0, BodyType.dynamicBody);
         setFurniturePhysics(physics, properties, dimX, dimY);
 
         return gameObject;
@@ -158,6 +159,8 @@ public class GameObjectFactory {
     private static void setFurniturePhysics(PhysicsComponent physics, PhysicsProperties properties,
                                             float dimX, float dimY) {
         BodyDef bodyDef = new BodyDef();
+        bodyDef.setLinearDamping(1f);
+
         bodyDef.setPosition(new Vec2(
                 fromBufferToMetersX(properties.positionX),
                 fromBufferToMetersY(properties.positionY))
@@ -172,7 +175,6 @@ public class GameObjectFactory {
         fixtureDef.setFriction(properties.friction);
         fixtureDef.setDensity(properties.density);
         physics.addFixture(fixtureDef);
-
         box.delete();
         bodyDef.delete();
         fixtureDef.delete();

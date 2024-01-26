@@ -5,6 +5,7 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
+import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -22,7 +23,6 @@ import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
 import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.Role;
-import com.personal.groucho.game.gameobjects.Status;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.Component;
 import com.personal.groucho.game.gameobjects.components.ComponentType;
@@ -121,7 +121,7 @@ public class GameWorld {
             Component aliveComponent = gameObject.getComponent(ComponentType.Alive);
             if (aliveComponent != null){
                 AliveComponent alive = (AliveComponent) aliveComponent;
-                if (alive.getCurrentStatus() == Status.DEAD)
+                if (alive.getCurrentStatus() == DEAD)
                     handleDeath(gameObject);
             }
         }
@@ -262,14 +262,11 @@ public class GameWorld {
 
             switch (hitGO.role) {
                 case ENEMY:
-                    // Sound
-                    AliveComponent alive = (AliveComponent)hitGO.getComponent(ComponentType.Alive);
-                    alive.damage(grouchoPower);
+                    hitEnemyEvent(hitGO);
                     break;
 
                 case FURNITURE:
-                    // Sound
-                    // Apply force
+                    hitFurnitureEvent(hitGO, originX, originY);
                     break;
 
                 case WALL:
@@ -279,6 +276,26 @@ public class GameWorld {
         }
     }
 
+    private void hitEnemyEvent(GameObject hitGO) {
+        // Sound
+        AliveComponent alive = (AliveComponent) hitGO.getComponent(ComponentType.Alive);
+        if (alive.getCurrentStatus() != DEAD) alive.damage(grouchoPower);
+    }
+
+
+    private void hitFurnitureEvent( GameObject hitGO, float originX, float originY) {
+        // Sound
+        PhysicsComponent physics = (PhysicsComponent) hitGO.getComponent(ComponentType.Physics);
+        float goPosX = physics.getPositionX();
+        float goPosY = physics.getPositionY();
+        float forceX = goPosX - fromBufferToMetersX(originX);
+        float forceY = goPosY - fromBufferToMetersY(originY);
+        float module = (float) Math.sqrt(Math.pow(forceX,2) + Math.pow(forceY, 2));
+
+        Vec2 force = new Vec2(20*(forceX/module), 20*(forceY/module));
+
+        physics.applyForce(force);
+    }
     private GameObject reportGameObject(float originX, float originY, float endX, float endY) {
         List<GameObject> hitGameObjects = new ArrayList<>();
         List<Float> fractions = new ArrayList<>();
