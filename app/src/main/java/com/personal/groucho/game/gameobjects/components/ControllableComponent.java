@@ -1,8 +1,12 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.Constants.characterDimensionsX;
+import static com.personal.groucho.game.Constants.characterDimensionsY;
 import static com.personal.groucho.game.Constants.maxLightIntensity;
 import static com.personal.groucho.game.Constants.minLightIntensity;
 import static com.personal.groucho.game.Constants.speed;
+import static com.personal.groucho.game.Utils.fromMetersToBufferX;
+import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.PlayerSounds.click;
 import static com.personal.groucho.game.assets.PlayerSounds.loadingSound;
 
@@ -114,26 +118,30 @@ public class ControllableComponent extends Component implements ControllerObserv
         if(physicsComponent == null)
             physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.Physics);
 
-        float originX = physicsComponent.getPositionX();
-        float originY = physicsComponent.getPositionY();
+        float originX = fromMetersToBufferX(physicsComponent.getPositionX());
+        float originY = fromMetersToBufferY(physicsComponent.getPositionY());
         float endX = 0;
         float endY = 0;
 
         switch (controller.getOrientation()) {
             case UP:
+                originY = originY - characterDimensionsY;
                 endX = originX;
-                endY = originY - 1000;
+                endY = originY - 2000;
                 break;
             case DOWN:
+                originY = originY + characterDimensionsY;
                 endX = originX;
-                endY = originY + 1000;
+                endY = originY + 2000;
                 break;
             case LEFT:
-                endX = originX - 1000;
+                originX = originX - characterDimensionsX;
+                endX = originX - 2000;
                 endY = originY;
                 break;
             case RIGHT:
-                endX = originX + 1000;
+                originX = originX + characterDimensionsX;
+                endX = originX + 2000;
                 endY = originY;
                 break;
         }

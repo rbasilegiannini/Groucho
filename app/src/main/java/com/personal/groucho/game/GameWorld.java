@@ -1,6 +1,8 @@
 package com.personal.groucho.game;
 
 import static com.personal.groucho.game.Constants.grouchoPower;
+import static com.personal.groucho.game.Utils.fromBufferToMetersX;
+import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 
@@ -12,6 +14,9 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 
+import com.google.fpl.liquidfun.Fixture;
+import com.google.fpl.liquidfun.RayCastCallback;
+import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
 import com.personal.groucho.game.collisions.Collision;
@@ -31,13 +36,11 @@ import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.levels.FirstLevel;
 import com.personal.groucho.game.levels.Level;
 import com.personal.groucho.game.controller.states.Walking;
-import com.google.fpl.liquidfun.Fixture;
-import com.google.fpl.liquidfun.RayCastCallback;
-import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class GameWorld {
@@ -69,7 +72,9 @@ public class GameWorld {
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
 
         this.world = new World(0, 0); // No gravity
-        this.controller = new Controller((float) bufferWidth/2, (float) bufferHeight /2);
+        this.controller = new Controller(
+                (float) bufferWidth/2, (float) bufferHeight /2
+        );
 
         contactListener = new MyContactListener();
         world.setContactListener(contactListener);
@@ -143,6 +148,7 @@ public class GameWorld {
             }
         }
 
+        //TODO: use a better solution
         for (GameObject gameObject : objects) {
             Component lightComponent = gameObject.getComponent(ComponentType.Light);
             if (lightComponent != null){
@@ -245,35 +251,60 @@ public class GameWorld {
     }
 
     public void shootEvent(float originX, float originY, float endX, float endY) {
-        this.startX = fromMetersToBufferX(originX);
-        this.startY = fromMetersToBufferY(originY);
-        this.endX = fromMetersToBufferX(endX);
-        this.endY = fromMetersToBufferY(endY);
+        this.startX = originX;
+        this.startY = originY;
+        this.endX = endX;
+        this.endY = endY;
+
+        GameObject hitGO = reportGameObject(originX, originY, endX, endY);
+        if (hitGO != null) {
+            Log.i("RayCast", hitGO.role.name());
+
+            switch (hitGO.role) {
+                case ENEMY:
+                    // Sound
+                    AliveComponent alive = (AliveComponent)hitGO.getComponent(ComponentType.Alive);
+                    alive.damage(grouchoPower);
+                    break;
+
+                case FURNITURE:
+                    // Sound
+                    // Apply force
+                    break;
+
+                case WALL:
+                    // Sound
+                    break;
+            }
+        }
+    }
+
+    private GameObject reportGameObject(float originX, float originY, float endX, float endY) {
+        List<GameObject> hitGameObjects = new ArrayList<>();
+        List<Float> fractions = new ArrayList<>();
+        GameObject firstGO = null;
 
         world.rayCast(
                 new RayCastCallback() {
-                    public float reportFixture(Fixture fixture, Vec2 i, Vec2 n, float f) {
-                        Log.i("GW", "hit");
-
-                        // Fixture hitFixture = fixture;
-                        // frictions.add(f);
-                        // ...
-                        // Maybe i have to use a collection of (Role, friction)
-                        // and sorting from less friction.
-                        // if (first == Role.ENEMY) kill it;
-                        // ...but not in this callback.
-
-                        // Without any control about fraction
+                    public float reportFixture(Fixture fixture, Vec2 i, Vec2 n, float fraction) {
+                        Log.i("RayCast", "hit");
                         GameObject hitGO = (GameObject) fixture.getBody().getUserData();
-                        if (hitGO.role == Role.ENEMY) {
-                            AliveComponent alive = (AliveComponent)hitGO.getComponent(ComponentType.Alive);
-                            alive.damage(grouchoPower);
-                        }
+                        hitGameObjects.add(hitGO);
+                        fractions.add(fraction);
 
-                        return f;
+                        return fraction;
                     }
                 },
-                originX, originY, endX, endY
+                fromBufferToMetersX(originX),
+                fromBufferToMetersY(originY),
+                fromBufferToMetersX(endX),
+                fromBufferToMetersY(endY)
         );
+        if (!fractions.isEmpty()) {
+            int indexLessFraction = fractions.indexOf(Collections.min(fractions));
+            firstGO = hitGameObjects.get(indexLessFraction);
+        }
+
+        return firstGO;
     }
 }
