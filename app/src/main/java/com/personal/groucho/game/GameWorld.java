@@ -5,6 +5,8 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
+import static com.personal.groucho.game.assets.Sounds.bulletHitEnemy;
+import static com.personal.groucho.game.assets.Sounds.bulletHitFurniture;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.app.Activity;
@@ -20,6 +22,7 @@ import com.google.fpl.liquidfun.RayCastCallback;
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
+import com.personal.groucho.game.assets.Sounds;
 import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.Role;
@@ -270,21 +273,21 @@ public class GameWorld {
                     break;
 
                 case WALL:
-                    // Sound
+                    bulletHitFurniture.play(1f);
                     break;
             }
         }
     }
 
     private void hitEnemyEvent(GameObject hitGO) {
-        // Sound
+        bulletHitEnemy.play(1f);
         AliveComponent alive = (AliveComponent) hitGO.getComponent(ComponentType.Alive);
         if (alive.getCurrentStatus() != DEAD) alive.damage(grouchoPower);
     }
 
 
     private void hitFurnitureEvent( GameObject hitGO, float originX, float originY) {
-        // Sound
+        bulletHitFurniture.play(1f);
         PhysicsComponent physics = (PhysicsComponent) hitGO.getComponent(ComponentType.Physics);
         float goPosX = physics.getPositionX();
         float goPosY = physics.getPositionY();
