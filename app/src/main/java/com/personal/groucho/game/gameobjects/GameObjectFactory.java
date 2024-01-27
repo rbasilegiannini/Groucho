@@ -21,7 +21,6 @@ import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
-import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
@@ -55,7 +54,7 @@ public class GameObjectFactory {
     }
 
     public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameworld) {
-        GameObject gameObject = new GameObject("Groucho", Role.PLAYER);
+        GameObject gameObject = new GameObject("Groucho", Role.PLAYER, gameworld);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(groucho_walk, groucho_death));
@@ -77,11 +76,11 @@ public class GameObjectFactory {
     }
 
     public static GameObject makeEnemy(int posX, int posY, int health, Spritesheet idle,
-                                       Spritesheet death, World world) {
-        GameObject gameObject = new GameObject("Enemy", Role.ENEMY);
+                                       Spritesheet death, GameWorld gameWorld) {
+        GameObject gameObject = new GameObject("Enemy", Role.ENEMY, gameWorld);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
-        gameObject.addComponent(new PhysicsComponent(world));
+        gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new SpriteDrawableComponent(idle, death));
         gameObject.addComponent(new AliveComponent(health));
 
@@ -92,15 +91,15 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeWall(int posX, int posY, float dimX, float dimY, World world) {
-        GameObject gameObject = new GameObject("Wall", Role.WALL);
+    public static GameObject makeWall(int posX, int posY, float dimX, float dimY, GameWorld gameWorld) {
+        GameObject gameObject = new GameObject("Wall", Role.WALL, gameWorld);
 
         Paint paint = new Paint();
         paint.setColor(Color.valueOf(188, 143, 143).toArgb());
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
-        gameObject.addComponent(new PhysicsComponent(world));
+        gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(
                 new BoxDrawableComponent(dimX, dimY, paint)
         );
@@ -112,12 +111,12 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeFurniture(int posX, int posY, float dimX, float dimY, World world,
+    public static GameObject makeFurniture(int posX, int posY, float dimX, float dimY, GameWorld gameWorld,
                                            Bitmap texture) {
-        GameObject gameObject = new GameObject("Furniture", Role.FURNITURE);
+        GameObject gameObject = new GameObject("Furniture", Role.FURNITURE, gameWorld);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
-        gameObject.addComponent(new PhysicsComponent(world));
+        gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new TextureDrawableComponent(texture, (int)dimX, (int)dimY));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
@@ -127,13 +126,13 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeHealth(int posX, int posY, World world) {
+    public static GameObject makeHealth(int posX, int posY, GameWorld gameWorld) {
         int dimX = 64;
         int dimY = 64;
-        GameObject gameObject = new GameObject("Health", Role.HEALTH);
+        GameObject gameObject = new GameObject("Health", Role.HEALTH, gameWorld);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
-        gameObject.addComponent(new PhysicsComponent(world));
+        gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new TextureDrawableComponent(health, dimX, dimY));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);

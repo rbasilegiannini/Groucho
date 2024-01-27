@@ -100,14 +100,6 @@ public class Physics {
 
     private void handleCollisions() {
         for (Collision event: contactListener.getCollisions()) {
-//            if (event.GO1.role == Role.FURNITURE || event.GO2.role == Role.FURNITURE) {
-//                bodyHitFurniture.play(0.7f);
-//            }
-//
-//            if ((event.GO1.role == Role.PLAYER && event.GO2.role == Role.HEALTH ) ||
-//                event.GO2.role == Role.PLAYER && event.GO1.role == Role.HEALTH) {
-//
-//            }
             if (event.GO1.role == Role.PLAYER)
                 handlePlayerCollision(event.GO1, event.GO2);
             else if (event.GO2.role == Role.PLAYER)
@@ -126,11 +118,7 @@ public class Physics {
                 AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.Alive);
                 alive.heal(medicalKit);
 
-                object.removeComponent(ComponentType.Position);
-                object.removeComponent(ComponentType.Physics);
-                object.removeComponent(ComponentType.Drawable);
-
-                // object.delete();
+                object.delete();
                 break;
         }
     }

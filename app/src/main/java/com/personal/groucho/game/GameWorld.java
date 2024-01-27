@@ -71,9 +71,8 @@ public class GameWorld {
     public Bitmap getBuffer() {return graphics.getBuffer();}
     public World getWorld() {return physics.getWorld();}
 
-    public synchronized void addGameObject(GameObject obj) {
-        objects.add(obj);
-    }
+    public synchronized void addGameObject(GameObject obj) {objects.add(obj);}
+    public synchronized void removeGameObject(GameObject gameObject) {objects.remove(gameObject);}
 
     public synchronized void processInputs(){
         for (Input.TouchEvent event: touchHandler.getTouchEvents()) {

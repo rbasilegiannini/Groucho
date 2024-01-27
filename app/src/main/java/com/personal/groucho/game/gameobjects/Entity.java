@@ -7,10 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Entity {
-    private final Map<ComponentType, Component> components;
+    protected final Map<ComponentType, Component> components;
 
     public Entity() {
         components = new HashMap<>();
+    }
+
+    public Component getComponent(ComponentType type) {
+        return components.get(type);
     }
 
     public void addComponent(Component component) {
@@ -26,7 +30,10 @@ public class Entity {
         }
     }
 
-    public Component getComponent(ComponentType type) {
-        return components.get(type);
+    public void delete() {
+        for (Map.Entry<ComponentType, Component> component : components.entrySet()) {
+            component.getValue().delete();
+        }
+        components.clear();
     }
 }

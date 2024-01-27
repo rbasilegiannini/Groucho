@@ -41,14 +41,14 @@ public class FirstLevel extends Level{
 
         // Set furniture
         gameWorld.addGameObject(GameObjectFactory.
-                makeWall(bufferWidth, bufferHeight/2, 100, bufferHeight, world)
+                makeWall(bufferWidth, bufferHeight/2, 100, bufferHeight, gameWorld)
         );
         gameWorld.addGameObject(GameObjectFactory.
                 makeFurniture(
                         bufferWidth/2,
                         (int)(0.50*bufferHeight)+500,
                         250, 150,
-                        world,
+                        gameWorld,
                         Textures.table)
         );
 
@@ -59,16 +59,16 @@ public class FirstLevel extends Level{
                         skeletonHealth,
                         Spritesheets.skeleton_idle,
                         Spritesheets.skeleton_death,
-                        world)
+                        gameWorld)
         );
 
         // Set health
         gameWorld.addGameObject(GameObjectFactory.
-                makeHealth(bufferWidth/2, 0, world));
+                makeHealth(bufferWidth/2, 0, gameWorld));
         gameWorld.addGameObject(GameObjectFactory.
-                makeHealth(bufferWidth/2 + 100, 0, world));
+                makeHealth(bufferWidth/2 + 100, 0, gameWorld));
         gameWorld.addGameObject(GameObjectFactory.
-                makeHealth(bufferWidth/2 - 100, 0, world));
+                makeHealth(bufferWidth/2 - 100, 0, gameWorld));
     }
 
     @Override
