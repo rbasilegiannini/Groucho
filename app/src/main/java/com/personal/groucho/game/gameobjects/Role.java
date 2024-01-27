@@ -5,5 +5,6 @@ public enum Role {
     PLAYER,
     ENEMY,
     WALL,
-    FURNITURE
+    FURNITURE,
+    HEALTH
 }

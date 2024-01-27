@@ -15,4 +15,6 @@ public class Constants {
 
     public static int grouchoPower = 10;
     public static int skeletonPower = 5;
+
+    public static int medicalKit = 20;
 }

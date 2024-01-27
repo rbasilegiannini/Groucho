@@ -1,7 +1,7 @@
 package com.personal.groucho.game.controller;
 
 import static com.personal.groucho.game.Utils.isInCircle;
-import static com.personal.groucho.game.assets.Textures.lightbulb;
+import static com.personal.groucho.game.assets.Textures.lightBulb;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -24,7 +24,7 @@ public class Bulb extends Widget{
         lightPosX = (float) (centerX - 300 + 0.75*distance);
         lightPosY = centerY - 500;
 
-        src = new Rect(0, 0, lightbulb.getWidth(), lightbulb.getHeight());
+        src = new Rect(0, 0, lightBulb.getWidth(), lightBulb.getHeight());
         dest = new Rect();
 
         minAlpha = 75;
@@ -46,7 +46,7 @@ public class Bulb extends Widget{
         dest.right = (int) lightPosX + 128;
         dest.bottom = (int) lightPosY + 128;
 
-        canvas.drawBitmap(lightbulb, src, dest, lightPaint);
+        canvas.drawBitmap(lightBulb, src, dest, lightPaint);
     }
 
     public boolean switchLight(){

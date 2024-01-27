@@ -1,10 +1,13 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.Constants.medicalKit;
+import static com.personal.groucho.game.Constants.skeletonPower;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.bodyHitFurniture;
+import static com.personal.groucho.game.assets.Sounds.healing;
 
 import android.util.Log;
 
@@ -16,6 +19,7 @@ import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.Role;
+import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.Component;
 import com.personal.groucho.game.gameobjects.components.ComponentType;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
@@ -96,10 +100,38 @@ public class Physics {
 
     private void handleCollisions() {
         for (Collision event: contactListener.getCollisions()) {
-            if (event.GO1.role == Role.FURNITURE || event.GO2.role == Role.FURNITURE) {
-                Log.d("GW", "Collision with furniture...");
+//            if (event.GO1.role == Role.FURNITURE || event.GO2.role == Role.FURNITURE) {
+//                bodyHitFurniture.play(0.7f);
+//            }
+//
+//            if ((event.GO1.role == Role.PLAYER && event.GO2.role == Role.HEALTH ) ||
+//                event.GO2.role == Role.PLAYER && event.GO1.role == Role.HEALTH) {
+//
+//            }
+            if (event.GO1.role == Role.PLAYER)
+                handlePlayerCollision(event.GO1, event.GO2);
+            else if (event.GO2.role == Role.PLAYER)
+                handlePlayerCollision(event.GO2, event.GO1);
+        }
+    }
+
+    private void handlePlayerCollision(GameObject player, GameObject object) {
+        switch (object.role) {
+            case FURNITURE:
                 bodyHitFurniture.play(0.7f);
-            }
+                break;
+
+            case HEALTH:
+                healing.play(0.7f);
+                AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.Alive);
+                alive.heal(medicalKit);
+
+                object.removeComponent(ComponentType.Position);
+                object.removeComponent(ComponentType.Physics);
+                object.removeComponent(ComponentType.Drawable);
+
+                // object.delete();
+                break;
         }
     }
 

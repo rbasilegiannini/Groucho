@@ -10,6 +10,7 @@ import static com.personal.groucho.game.Utils.toMetersXLength;
 import static com.personal.groucho.game.Utils.toMetersYLength;
 import static com.personal.groucho.game.assets.Spritesheets.groucho_death;
 import static com.personal.groucho.game.assets.Spritesheets.groucho_walk;
+import static com.personal.groucho.game.assets.Textures.health;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -72,7 +73,6 @@ public class GameObjectFactory {
         gameworld.controller.addControllerListener(controllable);
         controller.setCurrentState(Idle.getInstance(controller));
 
-
         return gameObject;
     }
 
@@ -90,35 +90,6 @@ public class GameObjectFactory {
         setCharacterPhysics(physics, properties);
 
         return gameObject;
-    }
-
-    private static void setCharacterPhysics(PhysicsComponent physics, PhysicsProperties properties) {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.setLinearDamping(10f);
-        bodyDef.setPosition(new Vec2(
-                fromBufferToMetersX(properties.positionX),
-                fromBufferToMetersY(properties.positionY))
-        );
-        bodyDef.setType(properties.type);
-        bodyDef.setAllowSleep(false);
-        physics.setBody(bodyDef);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        PolygonShape box = new PolygonShape();
-        box.setAsBox(
-                (characterScaleFactor*toMetersXLength(characterDimensionsX))/2,
-                (characterScaleFactor*toMetersYLength(characterDimensionsY))/2,
-                0,1.6f,0
-        );
-
-        fixtureDef.setShape(box);
-        fixtureDef.setDensity(properties.density);
-        fixtureDef.setFriction(properties.friction);
-        physics.addFixture(fixtureDef);
-
-        box.delete();
-        bodyDef.delete();
-        fixtureDef.delete();
     }
 
     public static GameObject makeWall(int posX, int posY, float dimX, float dimY, World world) {
@@ -155,6 +126,52 @@ public class GameObjectFactory {
 
         return gameObject;
     }
+
+    public static GameObject makeHealth(int posX, int posY, World world) {
+        int dimX = 64;
+        int dimY = 64;
+        GameObject gameObject = new GameObject("Health", Role.HEALTH);
+
+        gameObject.addComponent(new PositionComponent(posX, posY));
+        gameObject.addComponent(new PhysicsComponent(world));
+        gameObject.addComponent(new TextureDrawableComponent(health, dimX, dimY));
+
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
+        PhysicsProperties properties = new PhysicsProperties(posX, posY, 0f, 0, BodyType.staticBody);
+        setFurniturePhysics(physics, properties, dimX, dimY);
+
+        return gameObject;
+    }
+
+    private static void setCharacterPhysics(PhysicsComponent physics, PhysicsProperties properties) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.setLinearDamping(10f);
+        bodyDef.setPosition(new Vec2(
+                fromBufferToMetersX(properties.positionX),
+                fromBufferToMetersY(properties.positionY))
+        );
+        bodyDef.setType(properties.type);
+        bodyDef.setAllowSleep(false);
+        physics.setBody(bodyDef);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        PolygonShape box = new PolygonShape();
+        box.setAsBox(
+                (characterScaleFactor*toMetersXLength(characterDimensionsX))/2,
+                (characterScaleFactor*toMetersYLength(characterDimensionsY))/2,
+                0,1.6f,0
+        );
+
+        fixtureDef.setShape(box);
+        fixtureDef.setDensity(properties.density);
+        fixtureDef.setFriction(properties.friction);
+        physics.addFixture(fixtureDef);
+
+        box.delete();
+        bodyDef.delete();
+        fixtureDef.delete();
+    }
+
 
     private static void setFurniturePhysics(PhysicsComponent physics, PhysicsProperties properties,
                                             float dimX, float dimY) {

@@ -23,15 +23,15 @@ public class AliveComponent extends Component{
         if (currentHealth <= 0)
             die();
 
-        if (sprite == null) {
-            Component spriteComponent = owner.getComponent(ComponentType.Drawable);
-            if (spriteComponent != null) {
-                sprite = (SpriteDrawableComponent) spriteComponent;
-                sprite.updateColorFilter(currentHealth, maxHealth);
-            }
-        }
+        updateSprite();
+    }
+
+    public void heal(int medicalKit) {
+        if (currentHealth+medicalKit <= maxHealth)
+            currentHealth += medicalKit;
         else
-            sprite.updateColorFilter(currentHealth, maxHealth);
+            currentHealth = maxHealth;
+        updateSprite();
     }
 
     private void die() {
@@ -39,6 +39,18 @@ public class AliveComponent extends Component{
 
         if (sprite != null)
             sprite.setDeathSpritesheet();
+    }
+
+    private void updateSprite() {
+        if (sprite == null) {
+            Component component = owner.getComponent(ComponentType.Drawable);
+            if (component != null) {
+                sprite = (SpriteDrawableComponent) component;
+                sprite.updateColorFilter(currentHealth, maxHealth);
+            }
+        }
+        else
+            sprite.updateColorFilter(currentHealth, maxHealth);
     }
 
     public Status getCurrentStatus() {return currentStatus;}

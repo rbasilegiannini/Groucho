@@ -10,6 +10,7 @@ public class Sounds {
     public static Sound bulletHitFurniture;
     public static Sound bulletHitEnemy;
     public static Sound bodyHitFurniture;
+    public static Sound healing;
 
     public static void init(Audio audio) {
         loading = audio.newSound("loading.mp3");
@@ -18,5 +19,6 @@ public class Sounds {
         bulletHitEnemy = audio.newSound("bullet_hit_enemy.mp3");
         bulletHitFurniture = audio.newSound("bullet_hit_furniture.mp3");
         bodyHitFurniture = audio.newSound("body_hit_furniture.mp3");
+        healing = audio.newSound("healing.mp3");
     }
 }

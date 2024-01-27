@@ -17,6 +17,7 @@ import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.assets.Textures;
+import com.personal.groucho.game.gameobjects.components.AliveComponent;
 
 public class FirstLevel extends Level{
     private final Paint floorPaint;
@@ -60,6 +61,14 @@ public class FirstLevel extends Level{
                         Spritesheets.skeleton_death,
                         world)
         );
+
+        // Set health
+        gameWorld.addGameObject(GameObjectFactory.
+                makeHealth(bufferWidth/2, 0, world));
+        gameWorld.addGameObject(GameObjectFactory.
+                makeHealth(bufferWidth/2 + 100, 0, world));
+        gameWorld.addGameObject(GameObjectFactory.
+                makeHealth(bufferWidth/2 - 100, 0, world));
     }
 
     @Override
