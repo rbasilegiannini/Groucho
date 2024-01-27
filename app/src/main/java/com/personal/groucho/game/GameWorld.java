@@ -36,7 +36,7 @@ public class GameWorld {
     private final Physics physics;
     private final Graphics graphics;
     private Player player;
-    private final Controller controller;
+    public final Controller controller;
     private Level currentLevel;
     private final List<GameObject> objects;
     private TouchHandler touchHandler;
