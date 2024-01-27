@@ -8,7 +8,7 @@ import static com.personal.groucho.game.Constants.speed;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.click;
-import static com.personal.groucho.game.assets.Sounds.loadingSound;
+import static com.personal.groucho.game.assets.Sounds.loading;
 
 import com.personal.groucho.game.controller.ControllerObserver;
 import com.personal.groucho.game.GameWorld;
@@ -99,7 +99,7 @@ public class ControllableComponent extends Component implements ControllerObserv
 
     private void handleLoadingPlayer() {
         if (playLoadingSound) {
-            loadingSound.play(0.4f);
+            loading.play(0.4f);
             playLoadingSound = false;
         }
         updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
@@ -108,7 +108,7 @@ public class ControllableComponent extends Component implements ControllerObserv
     private void handleShootingPlayer() {
         playShotAnimation = true;
         playLoadingSound = true;
-        Sounds.shootingSound.play(0.2f);
+        Sounds.shooting.play(0.2f);
 
         controller.consumeShoot();
         shoot();

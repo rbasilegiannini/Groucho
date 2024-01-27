@@ -4,6 +4,7 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
+import static com.personal.groucho.game.assets.Sounds.bodyHitFurniture;
 
 import android.util.Log;
 
@@ -97,7 +98,7 @@ public class Physics {
         for (Collision event: contactListener.getCollisions()) {
             if (event.GO1.role == Role.FURNITURE || event.GO2.role == Role.FURNITURE) {
                 Log.d("GW", "Collision with furniture...");
-                // Furniture collision sound
+                bodyHitFurniture.play(0.7f);
             }
         }
     }
