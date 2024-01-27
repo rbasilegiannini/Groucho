@@ -59,7 +59,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(groucho_walk, groucho_death));
         gameObject.addComponent(new ControllableComponent(controller, gameworld));
-        gameObject.addComponent(new PhysicsComponent(gameworld.world));
+        gameObject.addComponent(new PhysicsComponent(gameworld.getWorld()));
         gameObject.addComponent(new AliveComponent(grouchoHealth));
         gameObject.addComponent(new LightComponent(gameworld));
 

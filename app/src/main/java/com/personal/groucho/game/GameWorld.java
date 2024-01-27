@@ -9,20 +9,16 @@ import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.Log;
 
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
-import com.personal.groucho.game.collisions.MyContactListener;
+import static com.personal.groucho.game.Graphics.bufferWidth;
+import static com.personal.groucho.game.Graphics.bufferHeight;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.Component;
 import com.personal.groucho.game.gameobjects.components.ComponentType;
-import com.personal.groucho.game.gameobjects.components.DrawableComponent;
-import com.personal.groucho.game.gameobjects.components.LightComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.controller.Controller;
@@ -35,42 +31,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameWorld {
-    public final static int bufferWidth = 1920;
-    public final static int bufferHeight = 1080;
-    private final MyContactListener contactListener;
-    public Bitmap buffer;
-    private final Canvas canvas;
     static Box physicalSize, screenSize, currentView;
     final Activity activity;
-    public World world;
     private final Physics physics;
-
-    public final Controller controller;
-    private final List<GameObject> objects;
+    private final Graphics graphics;
     private Player player;
-    private TouchHandler touchHandler;
+    private final Controller controller;
     private Level currentLevel;
+    private final List<GameObject> objects;
+    private TouchHandler touchHandler;
 
-
-    public GameWorld(Box physicalSize, Box screenSize, Activity activity) {
+    public GameWorld(Box physicalSize, Box screenSize, Activity newActivity) {
         GameWorld.physicalSize = physicalSize;
         GameWorld.screenSize = screenSize;
         currentView = physicalSize;
-        this.activity = activity;
-        this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
+        activity = newActivity;
 
-        this.world = new World(0, 0); // No gravity
-        physics = new Physics(physicalSize, world);
-        this.controller = new Controller(
-                (float) bufferWidth/2, (float) bufferHeight /2
-        );
+        physics = new Physics(physicalSize);
+        controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
 
-        contactListener = new MyContactListener();
-        world.setContactListener(contactListener);
-
-        this.objects = new ArrayList<>();
-        this.canvas = new Canvas(buffer);
-        this.currentLevel = new FirstLevel(this);
+        graphics = new Graphics();
+        objects = new ArrayList<>();
+        currentLevel = new FirstLevel(this);
     }
 
     public void setTouchHandler(TouchHandler touchHandler) {
@@ -86,6 +68,9 @@ public class GameWorld {
         addGameObject(player);
     }
 
+    public Bitmap getBuffer() {return graphics.getBuffer();}
+    public World getWorld() {return physics.getWorld();}
+
     public synchronized void addGameObject(GameObject obj) {
         objects.add(obj);
     }
@@ -97,8 +82,8 @@ public class GameWorld {
     }
 
     public synchronized void update(float elapsedTime) {
-        physics.update(elapsedTime, objects, contactListener.getCollisions());
-        player.update(canvas, controller);
+        physics.update(elapsedTime, objects);
+        player.update(graphics.getCanvas(), controller);
 
         //
         for (GameObject gameObject : objects) {
@@ -112,31 +97,7 @@ public class GameWorld {
     }
 
     public synchronized void render() {
-        canvas.drawARGB(255,0,0,0);
-
-        currentLevel.draw(canvas);
-        drawGameObjects();
-        controller.draw(canvas);
-    }
-
-    private void drawGameObjects() {
-        //TODO: use a better solution
-        for (GameObject gameObject : objects) {
-            Component drawComponent = gameObject.getComponent(ComponentType.Drawable);
-            if (drawComponent != null){
-                DrawableComponent drawable = (DrawableComponent) drawComponent;
-                drawable.draw(canvas);
-            }
-        }
-
-        //TODO: use a better solution
-        for (GameObject gameObject : objects) {
-            Component lightComponent = gameObject.getComponent(ComponentType.Light);
-            if (lightComponent != null){
-                LightComponent light = (LightComponent) lightComponent;
-                light.draw(canvas);
-            }
-        }
+        graphics.render(objects, currentLevel, controller);
     }
 
     private void handleDeath(GameObject gameObject) {

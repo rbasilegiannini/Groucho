@@ -12,6 +12,7 @@ import com.google.fpl.liquidfun.RayCastCallback;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.collisions.Collision;
+import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.Role;
 import com.personal.groucho.game.gameobjects.components.Component;
@@ -20,27 +21,29 @@ import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class Physics {
     private final Box physicalSize;
     private final World world;
+    private final MyContactListener contactListener;
 
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
     private static final int PARTICLE_ITERATIONS = 3;
 
-    public Physics(Box physicalSize, World world) {
-        this.world = world;
+    public Physics(Box physicalSize) {
+        this.world = new World(0, 0); // No gravity
         this.physicalSize = physicalSize;
+        contactListener = new MyContactListener();
+        world.setContactListener(contactListener);
     }
 
-    public void update(float elapsedTime, List<GameObject> objects, Collection<Collision> collisions) {
+    public synchronized void update(float elapsedTime, List<GameObject> objects) {
         world.step(elapsedTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
         updatePhysicsPosition(objects);
-        handleCollisions(collisions);
+        handleCollisions();
     }
 
     private void updatePhysicsPosition(List<GameObject> objects) {
@@ -90,8 +93,8 @@ public class Physics {
         return firstGO;
     }
 
-    private void handleCollisions(Collection<Collision> collisions) {
-        for (Collision event: collisions) {
+    private void handleCollisions() {
+        for (Collision event: contactListener.getCollisions()) {
             if (event.GO1.role == Role.FURNITURE || event.GO2.role == Role.FURNITURE) {
                 Log.d("GW", "Collision with furniture...");
                 // Furniture collision sound
@@ -99,4 +102,5 @@ public class Physics {
         }
     }
 
+    public World getWorld() {return world;}
 }

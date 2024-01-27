@@ -1,8 +1,8 @@
 package com.personal.groucho.game.levels;
 
 import static com.personal.groucho.game.Constants.skeletonHealth;
-import static com.personal.groucho.game.GameWorld.bufferHeight;
-import static com.personal.groucho.game.GameWorld.bufferWidth;
+import static com.personal.groucho.game.Graphics.bufferHeight;
+import static com.personal.groucho.game.Graphics.bufferWidth;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Shader;
 
+import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Spritesheets;
@@ -25,6 +26,7 @@ public class FirstLevel extends Level{
 
     public FirstLevel(GameWorld gw) {
         gameWorld = gw;
+        World world = gw.getWorld();
         floor = Textures.firstLevelFloor;
         surface = new Rect(0,0, bufferWidth, bufferHeight);
 
@@ -38,14 +40,14 @@ public class FirstLevel extends Level{
 
         // Set furniture
         gameWorld.addGameObject(GameObjectFactory.
-                makeWall(bufferWidth, bufferHeight/2, 100, bufferHeight, gameWorld.world)
+                makeWall(bufferWidth, bufferHeight/2, 100, bufferHeight, world)
         );
         gameWorld.addGameObject(GameObjectFactory.
                 makeFurniture(
                         bufferWidth/2,
                         (int)(0.50*bufferHeight)+500,
                         250, 150,
-                        gameWorld.world,
+                        world,
                         Textures.table)
         );
 
@@ -56,7 +58,7 @@ public class FirstLevel extends Level{
                         skeletonHealth,
                         Spritesheets.skeleton_idle,
                         Spritesheets.skeleton_death,
-                        gw.world)
+                        world)
         );
     }
 

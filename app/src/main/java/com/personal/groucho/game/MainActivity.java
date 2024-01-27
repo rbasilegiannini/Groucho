@@ -40,8 +40,8 @@ public class MainActivity extends Activity {
         GameWorld gameWorld = buildGameWorld();
         gameWorld.setPlayer(GameObjectFactory.
                 makePlayer(
-                        GameWorld.bufferWidth /2,
-                        GameWorld.bufferHeight/2,
+                        Graphics.bufferWidth /2,
+                        Graphics.bufferHeight/2,
                         gameWorld.controller,
                         gameWorld
                 )

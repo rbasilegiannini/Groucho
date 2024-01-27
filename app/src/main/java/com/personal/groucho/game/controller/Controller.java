@@ -1,6 +1,6 @@
 package com.personal.groucho.game.controller;
 
-import static com.personal.groucho.game.GameWorld.bufferWidth;
+import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Utils.fromScreenToBufferX;
 import static com.personal.groucho.game.Utils.fromScreenToBufferY;
 

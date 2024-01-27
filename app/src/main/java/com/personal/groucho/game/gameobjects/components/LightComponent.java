@@ -29,10 +29,11 @@ public class LightComponent extends Component{
     public void draw(Canvas canvas) {
         if (position == null)
             position = (PositionComponent) owner.getComponent(ComponentType.Position);
+        Bitmap buffer = gameWorld.getBuffer();
 
         Bitmap maskBitmap = Bitmap.createBitmap(
-                gameWorld.buffer.getWidth()+100,
-                gameWorld.buffer.getHeight()+100,
+                buffer.getWidth()+100,
+                buffer.getHeight()+100,
                 Bitmap.Config.ARGB_8888
         );
         Canvas maskCanvas = new Canvas(maskBitmap);
@@ -50,7 +51,7 @@ public class LightComponent extends Component{
         );
 
         maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        maskCanvas.drawBitmap(gameWorld.buffer, 0, 0, maskPaint);
+        maskCanvas.drawBitmap(buffer, 0, 0, maskPaint);
 
         canvas.drawBitmap(
                 maskBitmap,

@@ -18,7 +18,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     public AndroidFastRenderView(Context context, GameWorld gameWorld) {
         super(context);
         this.gameWorld = gameWorld;
-        this.framebuffer = gameWorld.buffer;
+        this.framebuffer = gameWorld.getBuffer();
         this.holder = getHolder();
     }
 

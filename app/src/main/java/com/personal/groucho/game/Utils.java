@@ -1,7 +1,7 @@
 package com.personal.groucho.game;
 
-import static com.personal.groucho.game.GameWorld.bufferHeight;
-import static com.personal.groucho.game.GameWorld.bufferWidth;
+import static com.personal.groucho.game.Graphics.bufferHeight;
+import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.GameWorld.physicalSize;
 import static com.personal.groucho.game.GameWorld.screenSize;
 
