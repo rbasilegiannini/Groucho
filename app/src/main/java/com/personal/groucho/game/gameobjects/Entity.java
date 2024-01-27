@@ -18,6 +18,14 @@ public class Entity {
         components.put(component.type(), component);
     }
 
+    public void removeComponent(ComponentType type) {
+        Component component = components.get(type);
+        if (component != null) {
+            component.delete();
+            components.remove(type);
+        }
+    }
+
     public Component getComponent(ComponentType type) {
         return components.get(type);
     }

@@ -24,6 +24,12 @@ public class PhysicsComponent extends Component{
     @Override
     public ComponentType type() {return ComponentType.Physics;}
 
+    @Override
+    public void delete() {
+        body.setActive(false);
+        body.delete();
+    }
+
     public void setBody(BodyDef bodyDef) {
         body = world.createBody(bodyDef);
         body.setUserData(this.owner);

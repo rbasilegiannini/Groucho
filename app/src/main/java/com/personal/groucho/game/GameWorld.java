@@ -85,7 +85,7 @@ public class GameWorld {
         physics.update(elapsedTime, objects);
         player.update(graphics.getCanvas(), controller);
 
-        //
+        //TODO: Use a better solution
         for (GameObject gameObject : objects) {
             Component aliveComponent = gameObject.getComponent(ComponentType.Alive);
             if (aliveComponent != null){
@@ -101,7 +101,9 @@ public class GameWorld {
     }
 
     private void handleDeath(GameObject gameObject) {
-        // Remove object?
+        gameObject.removeComponent(ComponentType.Physics);
+        gameObject.removeComponent(ComponentType.Position);
+        gameObject.removeComponent(ComponentType.Alive);
     }
 
     public void shootEvent(float originX, float originY, float endX, float endY) {
