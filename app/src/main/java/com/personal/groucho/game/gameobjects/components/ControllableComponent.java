@@ -4,7 +4,7 @@ import static com.personal.groucho.game.Constants.characterDimensionsX;
 import static com.personal.groucho.game.Constants.characterDimensionsY;
 import static com.personal.groucho.game.Constants.maxLightIntensity;
 import static com.personal.groucho.game.Constants.minLightIntensity;
-import static com.personal.groucho.game.Constants.speed;
+import static com.personal.groucho.game.Constants.grouchoSpeed;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.click;
@@ -79,16 +79,16 @@ public class ControllableComponent extends Component implements ControllerObserv
 
         switch (controller.getOrientation()) {
             case UP:
-                updatePosition(0, speed*(-1));
+                updatePosition(0, grouchoSpeed *(-1));
                 break;
             case DOWN:
-                updatePosition(0,speed*(1));
+                updatePosition(0, grouchoSpeed *(1));
                 break;
             case LEFT:
-                updatePosition(speed*(-1),0);
+                updatePosition(grouchoSpeed *(-1),0);
                 break;
             case RIGHT:
-                updatePosition(speed*(1),0);
+                updatePosition(grouchoSpeed *(1),0);
                 break;
         }
     }
