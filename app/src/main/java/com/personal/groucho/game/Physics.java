@@ -1,7 +1,6 @@
 package com.personal.groucho.game;
 
 import static com.personal.groucho.game.Constants.medicalKit;
-import static com.personal.groucho.game.Constants.skeletonPower;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
@@ -19,6 +18,7 @@ import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.Role;
+import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.Component;
 import com.personal.groucho.game.gameobjects.components.ComponentType;
@@ -104,6 +104,10 @@ public class Physics {
                 handlePlayerCollision(event.GO1, event.GO2);
             else if (event.GO2.role == Role.PLAYER)
                 handlePlayerCollision(event.GO2, event.GO1);
+            else if (event.GO1.role == Role.ENEMY)
+                handleEnemyCollision(event.GO1, event.GO2);
+            else if (event.GO2.role == Role.ENEMY)
+                handleEnemyCollision(event.GO2, event.GO1);
         }
     }
 
@@ -119,6 +123,19 @@ public class Physics {
                 alive.heal(medicalKit);
 
                 object.delete();
+                break;
+        }
+    }
+
+    private void handleEnemyCollision(GameObject enemy, GameObject object) {
+
+        // TODO: Use PositionComponent instead
+        AIComponent aiComponent = (AIComponent) enemy.getComponent(ComponentType.AI);
+        switch (object.role) {
+            case WALL:
+            case HEALTH:
+            case FURNITURE:
+                aiComponent.updateOrientation(aiComponent.getOrientation().getTurnOnRight());
                 break;
         }
     }

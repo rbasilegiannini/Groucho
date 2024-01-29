@@ -16,6 +16,8 @@ import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
 import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
+
+import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.Component;
 import com.personal.groucho.game.gameobjects.components.ComponentType;
@@ -91,6 +93,15 @@ public class GameWorld {
                 AliveComponent alive = (AliveComponent) aliveComponent;
                 if (alive.getCurrentStatus() == DEAD)
                     handleDeath(gameObject);
+            }
+        }
+
+        //TODO: Use a better solution
+        for (GameObject gameObject : objects) {
+            Component component = gameObject.getComponent(ComponentType.AI);
+            if (component != null){
+                AIComponent ai = (AIComponent) component;
+                ai.update(this);
             }
         }
     }
