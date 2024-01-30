@@ -83,7 +83,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new SpriteDrawableComponent(idle, death));
         gameObject.addComponent(new AliveComponent(health));
-        gameObject.addComponent(new AIComponent());
+        gameObject.addComponent(new AIComponent(gameWorld.getWorld()));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
         PhysicsProperties properties = new PhysicsProperties(posX, posY,1f, 1f, BodyType.dynamicBody);

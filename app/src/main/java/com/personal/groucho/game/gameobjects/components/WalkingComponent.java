@@ -1,7 +1,5 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.Constants.grouchoSpeed;
-
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
@@ -10,27 +8,33 @@ public abstract class WalkingComponent extends Component {
     protected PositionComponent positionComponent = null;
     protected SpriteDrawableComponent spriteComponent = null;
     protected PhysicsComponent physicsComponent = null;
+    protected float increaseX, increaseY;
 
-    protected void walking(Spritesheet sheet) {
+
+    protected void walking(Spritesheet sheet, float speed) {
         if (positionComponent == null)
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
 
-        updateSprite(sheet);
-
         switch (positionComponent.getOrientation()) {
             case UP:
-                updatePosition(0, grouchoSpeed *(-1));
+                increaseX = 0;
+                increaseY = -1;
                 break;
             case DOWN:
-                updatePosition(0, grouchoSpeed *(1));
+                increaseX = 0;
+                increaseY = 1;
                 break;
             case LEFT:
-                updatePosition(grouchoSpeed *(-1),0);
+                increaseX = -1;
+                increaseY = 0;
                 break;
             case RIGHT:
-                updatePosition(grouchoSpeed *(1),0);
+                increaseX = 1;
+                increaseY = 0;
                 break;
         }
+        updatePosition(speed*increaseX, speed * increaseY);
+        updateSprite(sheet);
     }
 
     protected void updateSprite(Spritesheet sheet) {
