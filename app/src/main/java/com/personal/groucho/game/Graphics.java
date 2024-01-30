@@ -5,8 +5,8 @@ import android.graphics.Canvas;
 
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.gameobjects.components.Component;
-import com.personal.groucho.game.gameobjects.components.ComponentType;
+import com.personal.groucho.game.gameobjects.Component;
+import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.components.DrawableComponent;
 import com.personal.groucho.game.gameobjects.components.LightComponent;
 import com.personal.groucho.game.levels.Level;

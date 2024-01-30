@@ -1,6 +1,4 @@
-package com.personal.groucho.game.gameobjects.components;
-
-import com.personal.groucho.game.gameobjects.Entity;
+package com.personal.groucho.game.gameobjects;
 
 public abstract class Component {
     protected Entity owner;

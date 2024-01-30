@@ -3,11 +3,12 @@ package com.personal.groucho.game;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 
+import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.controller.states.Walking;
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.gameobjects.components.Component;
-import com.personal.groucho.game.gameobjects.components.ComponentType;
+import com.personal.groucho.game.gameobjects.Component;
+import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.components.ControllableComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
@@ -54,5 +55,9 @@ public class Player {
         Matrix matrix = new Matrix();
         matrix.postTranslate(cameraX, cameraY);
         canvas.concat(matrix);
+    }
+
+    public Vec2 getPosition() {
+        return new Vec2(playerPosX, playerPosY);
     }
 }

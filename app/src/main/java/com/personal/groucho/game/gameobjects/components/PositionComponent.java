@@ -1,8 +1,10 @@
 package com.personal.groucho.game.gameobjects.components;
 
 import com.personal.groucho.game.controller.Orientation;
+import com.personal.groucho.game.gameobjects.Component;
+import com.personal.groucho.game.gameobjects.ComponentType;
 
-public class PositionComponent extends Component{
+public class PositionComponent extends Component {
     private int posX;
     private int posY;
     private Orientation orientation;

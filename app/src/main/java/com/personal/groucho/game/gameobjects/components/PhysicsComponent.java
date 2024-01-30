@@ -10,8 +10,10 @@ import com.google.fpl.liquidfun.BodyDef;
 import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
+import com.personal.groucho.game.gameobjects.Component;
+import com.personal.groucho.game.gameobjects.ComponentType;
 
-public class PhysicsComponent extends Component{
+public class PhysicsComponent extends Component {
 
     private final World world;
     private PositionComponent positionComponent = null;

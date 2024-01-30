@@ -1,8 +1,10 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import com.personal.groucho.game.gameobjects.Component;
+import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.Status;
 
-public class AliveComponent extends Component{
+public class AliveComponent extends Component {
     private final int maxHealth;
     private int currentHealth;
     private Status currentStatus;

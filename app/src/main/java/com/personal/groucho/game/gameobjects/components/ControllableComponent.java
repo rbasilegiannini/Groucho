@@ -17,6 +17,7 @@ import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.controller.states.ControllerState;
 import com.personal.groucho.game.controller.states.NameState;
+import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class ControllableComponent extends WalkingComponent implements ControllerObserver {
 

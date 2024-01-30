@@ -3,6 +3,8 @@ package com.personal.groucho.game.gameobjects.components;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.personal.groucho.game.gameobjects.ComponentType;
+
 public class BoxDrawableComponent extends DrawableComponent{
 
     private final Paint paint;

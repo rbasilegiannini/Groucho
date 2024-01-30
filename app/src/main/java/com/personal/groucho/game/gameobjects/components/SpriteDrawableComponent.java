@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 
 import com.personal.groucho.game.Spritesheet;
+import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class SpriteDrawableComponent extends DrawableComponent {
     private Spritesheet currentSpritesheet;

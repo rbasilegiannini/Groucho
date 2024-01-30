@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import com.personal.groucho.game.gameobjects.ComponentType;
+
 
 public class TextureDrawableComponent extends DrawableComponent{
 

@@ -12,8 +12,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 
 import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.gameobjects.Component;
+import com.personal.groucho.game.gameobjects.ComponentType;
 
-public class LightComponent extends Component{
+public class LightComponent extends Component {
     private final GameWorld gameWorld;
     private PositionComponent position = null;
     private float intensity = minLightIntensity;

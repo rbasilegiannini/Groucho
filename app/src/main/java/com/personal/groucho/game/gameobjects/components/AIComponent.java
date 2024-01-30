@@ -7,6 +7,7 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.FSM;
 import com.personal.groucho.game.AI.states.Idle;
 import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.gameobjects.ComponentType;
 
 import java.util.List;
 

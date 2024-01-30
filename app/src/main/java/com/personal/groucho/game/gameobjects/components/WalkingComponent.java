@@ -3,6 +3,8 @@ package com.personal.groucho.game.gameobjects.components;
 import static com.personal.groucho.game.Constants.grouchoSpeed;
 
 import com.personal.groucho.game.Spritesheet;
+import com.personal.groucho.game.gameobjects.Component;
+import com.personal.groucho.game.gameobjects.ComponentType;
 
 public abstract class WalkingComponent extends Component {
     protected PositionComponent positionComponent = null;

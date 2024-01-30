@@ -26,7 +26,6 @@ import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.BoxDrawableComponent;
-import com.personal.groucho.game.gameobjects.components.ComponentType;
 import com.personal.groucho.game.gameobjects.components.ControllableComponent;
 import com.personal.groucho.game.gameobjects.components.LightComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;

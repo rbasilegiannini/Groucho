@@ -9,7 +9,6 @@ import com.personal.groucho.game.AI.transitions.EngageTransition;
 import com.personal.groucho.game.AI.transitions.IdleTransition;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
