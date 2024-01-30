@@ -27,6 +27,7 @@ public class ControllableComponent extends Component implements ControllerObserv
     private SpriteDrawableComponent spriteComponent = null;
     private PhysicsComponent physicsComponent = null;
     private LightComponent lightComponent = null;
+    private PositionComponent positionComponent = null;
 
     private boolean playShotAnimation = false;
     private boolean playLoadingSound = true;
@@ -51,7 +52,7 @@ public class ControllableComponent extends Component implements ControllerObserv
             handleAimingPlayer();
 
         if (playShotAnimation) {
-            updateSprite(Spritesheets.groucho_fire, controller.getOrientation());
+            updateSprite(Spritesheets.groucho_fire);
             playShotAnimation = false;
         }
     }
@@ -67,7 +68,7 @@ public class ControllableComponent extends Component implements ControllerObserv
 
     private void handleIdlePlayer() {
         playLoadingSound = true;
-        updateSprite(Spritesheets.groucho_idle, controller.getOrientation());
+        updateSprite(Spritesheets.groucho_idle);
     }
 
     private void handleWalkingPlayer() {
@@ -75,9 +76,9 @@ public class ControllableComponent extends Component implements ControllerObserv
         if(physicsComponent == null)
             physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.Physics);
 
-        updateSprite(Spritesheets.groucho_walk, controller.getOrientation());
+        updateSprite(Spritesheets.groucho_walk);
 
-        switch (controller.getOrientation()) {
+        switch (positionComponent.getOrientation()) {
             case UP:
                 updatePosition(0, grouchoSpeed *(-1));
                 break;
@@ -94,7 +95,7 @@ public class ControllableComponent extends Component implements ControllerObserv
     }
 
     private void handleAimingPlayer() {
-        updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
+        updateSprite(Spritesheets.groucho_aim);
     }
 
     private void handleLoadingPlayer() {
@@ -102,7 +103,7 @@ public class ControllableComponent extends Component implements ControllerObserv
             loading.play(0.4f);
             playLoadingSound = false;
         }
-        updateSprite(Spritesheets.groucho_aim, controller.getOrientation());
+        updateSprite(Spritesheets.groucho_aim);
     }
 
     private void handleShootingPlayer() {
@@ -123,7 +124,7 @@ public class ControllableComponent extends Component implements ControllerObserv
         float endX = 0;
         float endY = 0;
 
-        switch (controller.getOrientation()) {
+        switch (positionComponent.getOrientation()) {
             case UP:
                 originY = originY - characterDimensionsY;
                 endX = originX;
@@ -153,16 +154,21 @@ public class ControllableComponent extends Component implements ControllerObserv
         physicsComponent.updatePosY(increaseY);
     }
 
-    private void updateSprite(Spritesheet sheet, Orientation orientation) {
+    private void updateSprite(Spritesheet sheet) {
         spriteComponent.setCurrentSpritesheet(sheet);
-        spriteComponent.setAnimation(orientation.getValue());
+        spriteComponent.setAnimation(positionComponent.getOrientation().getValue());
     }
 
+    @Override
     public void update(ControllerState currentState) {
         if (spriteComponent == null)
             spriteComponent = (SpriteDrawableComponent) owner.getComponent(ComponentType.Drawable);
         if (lightComponent == null)
             lightComponent = (LightComponent) owner.getComponent(ComponentType.Light);
+        if (positionComponent == null)
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+
+        positionComponent.setOrientation(controller.getOrientation());
 
         switch (currentState.getName()) {
             case IDLE:
