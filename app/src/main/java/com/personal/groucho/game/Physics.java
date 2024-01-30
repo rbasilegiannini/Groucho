@@ -18,7 +18,6 @@ import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.Role;
-import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.Component;
 import com.personal.groucho.game.gameobjects.components.ComponentType;
@@ -128,14 +127,12 @@ public class Physics {
     }
 
     private void handleEnemyCollision(GameObject enemy, GameObject object) {
-
-        // TODO: Use PositionComponent instead
-        AIComponent aiComponent = (AIComponent) enemy.getComponent(ComponentType.AI);
+        PositionComponent position = (PositionComponent) enemy.getComponent(ComponentType.Position);
         switch (object.role) {
             case WALL:
             case HEALTH:
             case FURNITURE:
-                aiComponent.updateOrientation(aiComponent.getOrientation().getTurnOnRight());
+                position.setOrientation(position.getOrientation().getTurnOnRight());
                 break;
         }
     }

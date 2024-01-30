@@ -34,6 +34,8 @@ public abstract class WalkingComponent extends Component {
     protected void updateSprite(Spritesheet sheet) {
         if (spriteComponent == null)
             spriteComponent = (SpriteDrawableComponent) owner.getComponent(ComponentType.Drawable);
+        if (positionComponent == null)
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
 
         spriteComponent.setCurrentSpritesheet(sheet);
         spriteComponent.setAnimation(positionComponent.getOrientation().getValue());
