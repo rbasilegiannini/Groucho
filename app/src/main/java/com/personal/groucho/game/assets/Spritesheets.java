@@ -18,7 +18,7 @@ public class Spritesheets {
 
     public static void load(Resources res){
         groucho_idle = loadAnimation(res, R.drawable.groucho_idle, 1, directions);
-        groucho_walk = loadAnimation(res, R.drawable.groucho_walk, 8, directions);
+        groucho_walk = loadAnimation(res, R.drawable.groucho_walk, 7, directions);
         groucho_shoot = loadAnimation(res, R.drawable.groucho_shoot, 5, directions);
         groucho_aim = loadAnimation(res, R.drawable.groucho_aim, 1, directions);
         groucho_fire = loadAnimation(res, R.drawable.groucho_fire, 1, directions);
