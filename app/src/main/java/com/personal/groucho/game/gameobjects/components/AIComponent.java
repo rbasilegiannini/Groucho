@@ -1,11 +1,8 @@
 package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.Constants.skeletonSpeed;
-import static com.personal.groucho.game.Utils.toPixelsXLength;
-import static com.personal.groucho.game.Utils.toPixelsYLength;
 import static com.personal.groucho.game.assets.Spritesheets.skeleton_idle;
 import static com.personal.groucho.game.assets.Spritesheets.skeleton_walk;
-
 
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
@@ -74,10 +71,7 @@ public class AIComponent extends WalkingComponent {
         }
 
         walking(skeleton_walk, skeletonSpeed);
-        sight.updateSight(
-                toPixelsXLength(skeletonSpeed*increaseX),
-                toPixelsYLength(skeletonSpeed*increaseY)
-        );
+        sight.updateSight(positionComponent.getPosition());
         sight.setNewOrientation(positionComponent.getOrientation());
         currentSteps++;
     }

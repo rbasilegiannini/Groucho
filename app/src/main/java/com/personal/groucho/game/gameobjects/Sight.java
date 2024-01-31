@@ -65,14 +65,13 @@ public class Sight {
         }
     }
 
-    public void updateSight(float increaseX, float increaseY) {
-        origin.setX(origin.getX() + increaseX);
-        origin.setY(origin.getY() + increaseY);
-
+    public void updateSight(Vec2 origin) {
         for (Vec2 point : points) {
-            point.setX(point.getX() + increaseX);
-            point.setY(point.getY() + increaseY);
+            point.setX(point.getX() + origin.getX()-this.origin.getX());
+            point.setY(point.getY() + origin.getY()-this.origin.getY());
         }
+        this.origin.setX(origin.getX());
+        this.origin.setY(origin.getY());
     }
 
     public void setNewOrientation(Orientation orientation){
