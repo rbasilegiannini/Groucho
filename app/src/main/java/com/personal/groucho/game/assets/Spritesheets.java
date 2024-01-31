@@ -26,7 +26,7 @@ public class Spritesheets {
         groucho_death = loadAnimation(res, R.drawable.groucho_death, 1, 1);
 
         skeleton_idle = loadAnimation(res, R.drawable.skeleton_idle, 1, directions);
-        skeleton_walk = loadAnimation(res, R.drawable.skeleton_walk, 9, directions);
+        skeleton_walk = loadAnimation(res, R.drawable.skeleton_walk, 8, directions);
         skeleton_hurt = loadAnimation(res, R.drawable.skeleton_hurt, 6, directions);
         skeleton_death = loadAnimation(res, R.drawable.skeleton_death, 1, 1);
     }
