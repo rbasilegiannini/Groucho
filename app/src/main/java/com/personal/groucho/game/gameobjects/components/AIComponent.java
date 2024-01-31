@@ -44,8 +44,7 @@ public class AIComponent extends WalkingComponent {
 
             sight = new Sight(
                     world,
-                    new Vec2(positionComponent.getPosX(),positionComponent.getPosY()),
-                    500);
+                    new Vec2(positionComponent.getPosX(),positionComponent.getPosY()));
         }
         List<Action> actions = fsm.getActions(gameWorld);
         for (Action action : actions)
