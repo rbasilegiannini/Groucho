@@ -13,23 +13,25 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 
 import com.google.fpl.liquidfun.World;
+import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.assets.Textures;
-import com.personal.groucho.game.gameobjects.components.AliveComponent;
 
 public class FirstLevel extends Level{
     private final Paint floorPaint;
     private final GameWorld gameWorld;
     private final Bitmap floor;
     private final Rect surface;
+    private final GameGrid grid;
 
     public FirstLevel(GameWorld gw) {
         gameWorld = gw;
         World world = gw.getWorld();
         floor = Textures.firstLevelFloor;
         surface = new Rect(0,0, bufferWidth, bufferHeight);
+        grid = new GameGrid(2000/64, 2000/64, 64);
 
         // Set floor
         BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
@@ -52,27 +54,27 @@ public class FirstLevel extends Level{
                         Textures.table)
         );
 
-        gameWorld.addGameObject(GameObjectFactory.
-                makeWall(bufferWidth/2, 0, bufferWidth, 100, gameWorld)
-        );
+//        gameWorld.addGameObject(GameObjectFactory.
+//                makeWall(bufferWidth/2, 0, bufferWidth, 100, gameWorld)
+//        );
 
         // Set enemies
         gameWorld.addGameObject(GameObjectFactory.
                 makeEnemy(
-                        100,(int)(0.75*bufferHeight)+100,
+                        64,64,
                         skeletonHealth,
                         Spritesheets.skeleton_idle,
                         Spritesheets.skeleton_death,
-                        gameWorld)
+                        gameWorld, grid)
         );
 
         // Set health
-        gameWorld.addGameObject(GameObjectFactory.
-                makeHealth(bufferWidth/2, 300, gameWorld));
-        gameWorld.addGameObject(GameObjectFactory.
-                makeHealth(bufferWidth/2 + 100, 300, gameWorld));
-        gameWorld.addGameObject(GameObjectFactory.
-                makeHealth(1000, 1000, gameWorld));
+//        gameWorld.addGameObject(GameObjectFactory.
+//                makeHealth(-253, 556, gameWorld));
+//        gameWorld.addGameObject(GameObjectFactory.
+//                makeHealth(100, 410, gameWorld));
+//        gameWorld.addGameObject(GameObjectFactory.
+//                makeHealth(453, 556, gameWorld));
     }
 
     @Override

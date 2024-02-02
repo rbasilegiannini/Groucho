@@ -17,6 +17,7 @@ import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
 import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 
+import com.personal.groucho.game.gameobjects.Sight;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.Component;
@@ -72,6 +73,7 @@ public class GameWorld {
 
     public Bitmap getBuffer() {return graphics.getBuffer();}
     public World getWorld() {return physics.getWorld();}
+    public Vec2 getPlayerPosition() {return player.getPosition();}
 
     public synchronized void addGameObject(GameObject obj) {objects.add(obj);}
     public synchronized void removeGameObject(GameObject gameObject) {objects.remove(gameObject);}
@@ -102,12 +104,21 @@ public class GameWorld {
             if (component != null){
                 AIComponent ai = (AIComponent) component;
                 ai.update(this);
+
+                //
+                if (sight == null) sight = ai.getSight();
             }
         }
     }
-
+    //
+    Sight sight = null;
+    //
     public synchronized void render() {
         graphics.render(objects, currentLevel, controller);
+
+        //
+        if (sight != null)
+            sight.drawDebugRayCast(graphics.getCanvas());
     }
 
     private void handleDeath(GameObject gameObject) {
@@ -155,5 +166,12 @@ public class GameWorld {
         Vec2 force = new Vec2(20*(forceX/module), 20*(forceY/module));
 
         physics.applyForce(force);
+    }
+
+    public boolean getTestTransition() {
+        if (player.getPosition().getX() >= 600 &&
+                player.getPosition().getX() <= 700)
+            return true;
+        return false;
     }
 }

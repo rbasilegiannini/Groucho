@@ -21,6 +21,7 @@ import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
+import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
@@ -76,14 +77,14 @@ public class GameObjectFactory {
     }
 
     public static GameObject makeEnemy(int posX, int posY, int health, Spritesheet idle,
-                                       Spritesheet death, GameWorld gameWorld) {
+                                       Spritesheet death, GameWorld gameWorld, GameGrid grid) {
         GameObject gameObject = new GameObject("Enemy", Role.ENEMY, gameWorld);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new SpriteDrawableComponent(idle, death));
         gameObject.addComponent(new AliveComponent(health));
-        gameObject.addComponent(new AIComponent(gameWorld.getWorld()));
+        gameObject.addComponent(new AIComponent(gameWorld, grid));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
         PhysicsProperties properties = new PhysicsProperties(posX, posY,1f, 1f, BodyType.dynamicBody);
