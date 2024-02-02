@@ -17,6 +17,8 @@ import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
 import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 
+import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.gameobjects.Sight;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
@@ -41,6 +43,7 @@ public class GameWorld {
     private Player player;
     public final Controller controller;
     private Level currentLevel;
+    private GameGrid grid;
     private final List<GameObject> objects;
     private TouchHandler touchHandler;
 
@@ -70,10 +73,11 @@ public class GameWorld {
         }
         addGameObject(player);
     }
-
+    public void setGameGrid(GameGrid grid) {this.grid = grid;}
     public Bitmap getBuffer() {return graphics.getBuffer();}
     public World getWorld() {return physics.getWorld();}
     public Vec2 getPlayerPosition() {return player.getPosition();}
+    public Node getGameGridNode(int posX, int poxY) {return grid.getNode(posX, poxY);}
 
     public synchronized void addGameObject(GameObject obj) {objects.add(obj);}
     public synchronized void removeGameObject(GameObject gameObject) {objects.remove(gameObject);}

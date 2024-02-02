@@ -1,5 +1,6 @@
 package com.personal.groucho.game.levels;
 
+import static com.personal.groucho.game.Constants.cellSize;
 import static com.personal.groucho.game.Constants.skeletonHealth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 import static com.personal.groucho.game.Graphics.bufferWidth;
@@ -31,7 +32,8 @@ public class FirstLevel extends Level{
         World world = gw.getWorld();
         floor = Textures.firstLevelFloor;
         surface = new Rect(0,0, bufferWidth, bufferHeight);
-        grid = new GameGrid(2000/64, 2000/64, 64);
+        grid = new GameGrid(2000/cellSize, 2000/cellSize, cellSize);
+        gameWorld.setGameGrid(grid);
 
         // Set floor
         BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
@@ -61,7 +63,7 @@ public class FirstLevel extends Level{
         // Set enemies
         gameWorld.addGameObject(GameObjectFactory.
                 makeEnemy(
-                        64,64,
+                        0,0,
                         skeletonHealth,
                         Spritesheets.skeleton_idle,
                         Spritesheets.skeleton_death,
