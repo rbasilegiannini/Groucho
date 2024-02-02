@@ -25,9 +25,9 @@ public class AStar {
         openSet.add(start);
         while (!openSet.isEmpty()) {
             Node current = openSet.poll();
-            if (current.posX == goal.posX && current.posY == goal.posY) {
+            if (current.equal(goal))
                 return buildPath(current);
-            }
+
             processNeighbors(current, goal);
         }
 

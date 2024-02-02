@@ -100,6 +100,12 @@ public class AIComponent extends WalkingComponent {
     }
 
     public void activeEngageAction(){
+        if (!playerPositionOnGrid.equal(gameWorld.getGameGridNode(
+                (int) gameWorld.getPlayerPosition().getX()/cellSize,
+                (int) gameWorld.getPlayerPosition().getY()/cellSize
+        )))
+            setPathToPlayer();
+
         if (!currentPath.isEmpty() || !newNode) {
             if (newNode) {
                 current = currentPath.remove(0);
@@ -111,18 +117,19 @@ public class AIComponent extends WalkingComponent {
                     positionComponent.getPositionYOnGrid()
             );
 
-            if (positionOnGrid.posX != current.posX) {
+            if (positionOnGrid.getPosX() != current.getPosX())
                 walkingToXCoordinate(current.getPosX());
-            } else if (positionOnGrid.posY != current.posY) {
-                walkingToYCoordinate(current.getPosY());
-            }
 
-            if (positionOnGrid.posX == current.posX && positionOnGrid.posY == current.posY) {
+            else if (positionOnGrid.getPosY() != current.getPosY())
+                walkingToYCoordinate(current.getPosY());
+
+            if (positionOnGrid.equal(current))
                 newNode = true;
-            }
         }
-        else
-            spriteComponent.setCurrentSpritesheet(skeleton_idle);
+        else {
+            updateSprite(skeleton_idle);
+            // Come back to patrol. And exit action will be returning to original position
+        }
     }
 
     private void setPathToPlayer() {
