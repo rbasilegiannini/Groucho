@@ -1,5 +1,7 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.Constants.cellSize;
+
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.gameobjects.Component;
@@ -24,6 +26,8 @@ public class PositionComponent extends Component {
     public int getPosX() {return posX;}
     public int getPosY() {return posY;}
     public Vec2 getPosition() { return new Vec2(posX, posY);}
+    public int getPositionXOnGrid() {return posX /cellSize;}
+    public int getPositionYOnGrid() {return posY /cellSize;}
     public Orientation getOrientation() {return orientation;}
 
     public void setPosX(int newPosX) {this.posX = newPosX;}
