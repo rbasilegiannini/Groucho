@@ -14,6 +14,7 @@ import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.AI.states.Idle;
 import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.Sight;
@@ -84,8 +85,6 @@ public class AIComponent extends WalkingComponent {
         currentSteps++;
 
         walking(skeleton_walk, skeletonSpeed);
-        sight.updateSight(positionComponent.getPosition());
-        sight.setNewOrientation(positionComponent.getOrientation());
     }
 
     public void entryEngageAction(){
@@ -147,8 +146,6 @@ public class AIComponent extends WalkingComponent {
                 positionComponent.setOrientation(Orientation.LEFT);
             }
             walking(skeleton_walk, skeletonSpeed);
-            sight.updateSight(positionComponent.getPosition());
-            sight.setNewOrientation(positionComponent.getOrientation());
         }
     }
 
@@ -163,8 +160,13 @@ public class AIComponent extends WalkingComponent {
                 positionComponent.setOrientation(Orientation.UP);
             }
             walking(skeleton_walk, skeletonSpeed);
-            sight.updateSight(positionComponent.getPosition());
-            sight.setNewOrientation(positionComponent.getOrientation());
         }
+    }
+
+    @Override
+    protected void walking(Spritesheet sheet, float speed) {
+        super.walking(sheet, speed);
+        sight.updateSight(positionComponent.getPosition());
+        sight.setNewOrientation(positionComponent.getOrientation());
     }
 }
