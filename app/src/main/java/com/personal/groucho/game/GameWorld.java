@@ -1,5 +1,6 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.Constants.cellSize;
 import static com.personal.groucho.game.Constants.grouchoPower;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
@@ -46,6 +47,8 @@ public class GameWorld {
     private GameGrid grid;
     private final List<GameObject> objects;
     private TouchHandler touchHandler;
+    private boolean isPlayerEngaged = false;
+    private boolean isPlayerReached = false;
 
     public GameWorld(Box physicalSize, Box screenSize, Activity newActivity) {
         GameWorld.physicalSize = physicalSize;
@@ -126,6 +129,7 @@ public class GameWorld {
     }
 
     private void handleDeath(GameObject gameObject) {
+        gameObject.removeComponent(ComponentType.AI);
         gameObject.removeComponent(ComponentType.Physics);
         gameObject.removeComponent(ComponentType.Position);
         gameObject.removeComponent(ComponentType.Alive);
@@ -172,10 +176,25 @@ public class GameWorld {
         physics.applyForce(force);
     }
 
-    public boolean getTestTransition() {
-        if (player.getPosition().getX() >= 600 &&
-                player.getPosition().getX() <= 700)
-            return true;
-        return false;
+    public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
+    public boolean isPlayerEngaged() {
+        return isPlayerEngaged;
+    }
+
+    public void setPlayerReached(boolean isPlayerReached) {
+        this.isPlayerReached = isPlayerReached;
+    }
+
+    public boolean isPlayerReached() {return isPlayerReached;}
+
+    public boolean isAPlayerNeighbor(Node nodeOnGrid) {
+        Node playerOnGrid = grid.getNode(
+                (int)getPlayerPosition().getX()/cellSize,
+                (int)getPlayerPosition().getY()/cellSize
+        );
+
+        List<Node> playerNeighbors = grid.getNeighbors(playerOnGrid);
+
+        return playerNeighbors.contains(nodeOnGrid);
     }
 }

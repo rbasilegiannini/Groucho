@@ -4,9 +4,11 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
 import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.Transition;
+import com.personal.groucho.game.AI.states.Attack;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
+import java.util.Collections;
 import java.util.List;
 
 public class AttackTransition extends Transition {
@@ -19,18 +21,18 @@ public class AttackTransition extends Transition {
         return new Condition() {
             @Override
             public boolean eval(GameWorld gameWorld) {
-                return false;
+                return gameWorld.isPlayerReached();
             }
         };
     }
 
     @Override
     public List<Action> actions() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public State targetState() {
-        return null;
+        return new Attack(owner);
     }
 }

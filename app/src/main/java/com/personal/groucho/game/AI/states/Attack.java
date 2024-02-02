@@ -1,11 +1,14 @@
 package com.personal.groucho.game.AI.states;
 
+import android.util.Log;
+
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Attack extends State {
@@ -16,17 +19,34 @@ public class Attack extends State {
 
     @Override
     public List<Action> entryActions() {
-        return null;
+        Log.i("State", "I'm entering in Attack state....");
+        actions.clear();
+        actions.add(new Action() {
+            @Override
+            public void doIt() {
+                owner.entryAttackAction();
+            }
+        });
+
+        return actions;
     }
 
     @Override
     public List<Action> activeActions() {
-        return null;
+        actions.clear();
+        actions.add(new Action() {
+            @Override
+            public void doIt() {
+                owner.activeAttackAction();
+            }
+        });
+
+        return actions;
     }
 
     @Override
     public List<Action> exitActions() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

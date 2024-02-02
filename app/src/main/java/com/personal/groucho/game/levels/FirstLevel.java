@@ -63,7 +63,7 @@ public class FirstLevel extends Level{
         // Set enemies
         gameWorld.addGameObject(GameObjectFactory.
                 makeEnemy(
-                        0,0,
+                        124,344,
                         skeletonHealth,
                         Spritesheets.skeleton_idle,
                         Spritesheets.skeleton_death,

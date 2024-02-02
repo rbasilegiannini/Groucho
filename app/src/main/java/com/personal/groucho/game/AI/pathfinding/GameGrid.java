@@ -1,5 +1,8 @@
 package com.personal.groucho.game.AI.pathfinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameGrid {
     private final int width;
     private final int height;
@@ -33,5 +36,26 @@ public class GameGrid {
             for (int posY = 0; posY < height; posY++) {
                 grid[posX][posY].reset();
             }
-        }    }
+        }
+    }
+
+    public List<Node> getNeighbors(Node node) {
+        List<Node> neighbors = new ArrayList<>();
+
+        int x = node.getPosX();
+        int y = node.getPosY();
+
+        int[][] directions = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
+
+        for (int[] direction : directions) {
+            int newX = x + direction[0];
+            int newY = y + direction[1];
+
+            if (isInGrid(newX, newY)) {
+                neighbors.add(getNode(newX, newY));
+            }
+        }
+
+        return neighbors;
+    }
 }

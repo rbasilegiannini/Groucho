@@ -16,9 +16,11 @@ import com.google.fpl.liquidfun.Fixture;
 import com.google.fpl.liquidfun.RayCastCallback;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
+import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.controller.Orientation;
 
 public class Sight {
+    private final GameWorld gameWorld;
     private final World world;
     private Orientation orientation;
     private final Vec2 origin;
@@ -27,8 +29,9 @@ public class Sight {
     private final float phase;
     private final int numOfPoints;
 
-    public Sight (World world, Vec2 origin) {
-        this.world = world;
+    public Sight (GameWorld gameWorld, Vec2 origin) {
+        this.gameWorld = gameWorld;
+        this.world = gameWorld.getWorld();
         this.origin = origin;
         this.numOfPoints = pointsOfEnemySight;
         this.orientation = Orientation.UP;
@@ -55,7 +58,7 @@ public class Sight {
                         public float reportFixture(Fixture fixture, Vec2 i, Vec2 n, float fraction) {
                             GameObject hitGO = (GameObject) fixture.getBody().getUserData();
                             if (hitGO.role == Role.PLAYER)
-                                Log.i("RayCast", "Player");
+                                gameWorld.setPlayerEngaged(true);
                             return fraction;
                         }
                     },

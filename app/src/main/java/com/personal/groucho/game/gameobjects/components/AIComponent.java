@@ -2,11 +2,11 @@ package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.Constants.cellSize;
 import static com.personal.groucho.game.Constants.skeletonSpeed;
+import static com.personal.groucho.game.assets.Spritesheets.skeleton_hurt;
 import static com.personal.groucho.game.assets.Spritesheets.skeleton_idle;
 import static com.personal.groucho.game.assets.Spritesheets.skeleton_walk;
 
 import com.google.fpl.liquidfun.Vec2;
-import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.FSM;
 import com.personal.groucho.game.AI.pathfinding.AStar;
@@ -28,7 +28,6 @@ public class AIComponent extends WalkingComponent {
     private final FSM fsm;
     private Sight sight = null;
     private final GameWorld gameWorld;
-    private final World world;
     private final AStar aStar;
     private Node positionOnGrid;
     private Node playerPositionOnGrid;
@@ -38,7 +37,6 @@ public class AIComponent extends WalkingComponent {
 
     public AIComponent(GameWorld gameWorld, GameGrid grid) {
         this.gameWorld = gameWorld;
-        this.world = gameWorld.getWorld();
         fsm = new FSM(new Idle(this));
         aStar = new AStar(grid);
         currentPath = new ArrayList<>();
@@ -55,7 +53,7 @@ public class AIComponent extends WalkingComponent {
                 positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
 
             sight = new Sight(
-                    world,
+                    gameWorld,
                     new Vec2(positionComponent.getPosX(),positionComponent.getPosY()));
         }
         List<Action> actions = fsm.getActions(gameWorld);
@@ -106,6 +104,8 @@ public class AIComponent extends WalkingComponent {
         )))
             setPathToPlayer();
 
+        gameWorld.setPlayerReached(gameWorld.isAPlayerNeighbor(positionOnGrid));
+
         if (!currentPath.isEmpty() || !newNode) {
             if (newNode) {
                 current = currentPath.remove(0);
@@ -130,6 +130,15 @@ public class AIComponent extends WalkingComponent {
             updateSprite(skeleton_idle);
             // Come back to patrol. And exit action will be returning to original position
         }
+    }
+
+    public void entryAttackAction() {
+        sight.setNewOrientation(positionComponent.getOrientation());
+        updateSprite(skeleton_hurt);
+    }
+
+    public void activeAttackAction() {
+        gameWorld.setPlayerReached(gameWorld.isAPlayerNeighbor(positionOnGrid));
     }
 
     private void setPathToPlayer() {
@@ -176,4 +185,5 @@ public class AIComponent extends WalkingComponent {
         sight.updateSight(positionComponent.getPosition());
         sight.setNewOrientation(positionComponent.getOrientation());
     }
+
 }

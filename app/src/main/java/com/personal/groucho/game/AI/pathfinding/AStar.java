@@ -64,6 +64,7 @@ public class AStar {
         return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     }
 
+    // TODO: Remove this method and use grid
     private List<Node> getNeighbors(Node node) {
         List<Node> neighbors = new ArrayList<>();
 

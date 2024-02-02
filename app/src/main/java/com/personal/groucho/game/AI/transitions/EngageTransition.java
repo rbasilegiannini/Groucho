@@ -22,7 +22,7 @@ public class EngageTransition extends Transition {
         return new Condition() {
             @Override
             public boolean eval(GameWorld gameWorld) {
-                return gameWorld.getTestTransition();
+                return gameWorld.isPlayerEngaged() && !gameWorld.isPlayerReached();
             }
         };
     }
