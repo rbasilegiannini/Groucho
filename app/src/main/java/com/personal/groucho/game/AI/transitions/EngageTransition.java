@@ -4,7 +4,7 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
 import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.Transition;
-import com.personal.groucho.game.AI.states.Engagement;
+import com.personal.groucho.game.AI.states.Engage;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
@@ -22,9 +22,10 @@ public class EngageTransition extends Transition {
         return new Condition() {
             @Override
             public boolean eval(GameWorld gameWorld) {
-                return false;
+                return gameWorld.getTestTransition();
             }
-        };    }
+        };
+    }
 
     @Override
     public List<Action> actions() {
@@ -33,6 +34,6 @@ public class EngageTransition extends Transition {
 
     @Override
     public State targetState() {
-        return new Engagement(owner);
+        return new Engage(owner);
     }
 }

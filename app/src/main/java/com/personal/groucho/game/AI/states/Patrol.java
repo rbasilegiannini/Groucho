@@ -38,7 +38,6 @@ public class Patrol extends State {
         actions.add(new Action() {
             @Override
             public void doIt() {
-                Log.i("State: Walking", "I'm walking");
                 owner.activePatrolAction();
             }
         });

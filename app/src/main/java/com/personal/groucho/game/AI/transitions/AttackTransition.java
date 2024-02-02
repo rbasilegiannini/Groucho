@@ -4,6 +4,7 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
 import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.Transition;
+import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
@@ -15,7 +16,12 @@ public class AttackTransition extends Transition {
 
     @Override
     public Condition guard() {
-        return null;
+        return new Condition() {
+            @Override
+            public boolean eval(GameWorld gameWorld) {
+                return false;
+            }
+        };
     }
 
     @Override
