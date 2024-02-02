@@ -1,5 +1,6 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.Constants.cellSize;
 import static com.personal.groucho.game.Constants.skeletonSpeed;
 import static com.personal.groucho.game.assets.Spritesheets.skeleton_idle;
 import static com.personal.groucho.game.assets.Spritesheets.skeleton_walk;
@@ -91,12 +92,12 @@ public class AIComponent extends WalkingComponent {
     public void entryEngageAction(){
         if (positionComponent == null)
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
-        positionOnGrid.setPosX(positionComponent.getPosX()/64);
-        positionOnGrid.setPosY(positionComponent.getPosY()/64);
+        positionOnGrid.setPosX(positionComponent.getPosX()/cellSize);
+        positionOnGrid.setPosY(positionComponent.getPosY()/cellSize);
 
         Node playerPositionOnGrid = new Node(
-                (int) gameWorld.getPlayerPosition().getX()/64,
-                (int) gameWorld.getPlayerPosition().getY()/64
+                (int) gameWorld.getPlayerPosition().getX()/cellSize,
+                (int) gameWorld.getPlayerPosition().getY()/cellSize
         );
 
         currentPath.clear();
@@ -127,7 +128,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void walkingToXCoordinate(int targetPosX){
-        positionOnGrid.setPosX(positionComponent.getPosX()/64);
+        positionOnGrid.setPosX(positionComponent.getPosX()/cellSize);
         int positionOnGridX = positionOnGrid.getPosX();
 
         if (positionOnGridX != targetPosX) {
@@ -144,7 +145,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void walkingToYCoordinate(int targetPosY){
-        positionOnGrid.setPosY(positionComponent.getPosY()/64);
+        positionOnGrid.setPosY(positionComponent.getPosY()/cellSize);
         int positionOnGridY = positionOnGrid.getPosY();
 
         if (positionOnGridY != targetPosY) {
