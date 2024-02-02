@@ -20,8 +20,7 @@ public class AStar {
     }
 
     public List<Node> findPath(Node start, Node goal) {
-        openSet.clear();
-        closedSet.clear();
+        reset();
 
         openSet.add(start);
         while (!openSet.isEmpty()) {
@@ -94,5 +93,11 @@ public class AStar {
         Collections.reverse(path);
 
         return path;
+    }
+
+    private void reset() {
+        openSet.clear();
+        closedSet.clear();
+        grid.reset();
     }
 }

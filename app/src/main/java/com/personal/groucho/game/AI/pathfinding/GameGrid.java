@@ -27,4 +27,11 @@ public class GameGrid {
     public boolean isInGrid(int x, int y) {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
+
+    public void reset() {
+        for (int posX = 0; posX < width; posX++) {
+            for (int posY = 0; posY < height; posY++) {
+                grid[posX][posY].reset();
+            }
+        }    }
 }

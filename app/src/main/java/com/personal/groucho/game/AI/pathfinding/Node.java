@@ -30,4 +30,13 @@ public class Node {
     public void setCostToNode(int gCost) {this.costToNode = gCost;}
     public void setHeuristicCostToGoal(int hCost) {this.heuristicCostToGoal = hCost;}
 
+    public boolean equal(Node other){
+        return posX == other.getPosX() && posY == other.getPosY();
+    }
+
+    public void reset() {
+        this.costToNode = 0;
+        this.heuristicCostToGoal = 0;
+        this.parent = null;
+    }
 }
