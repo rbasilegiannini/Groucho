@@ -1,11 +1,11 @@
 package com.personal.groucho.game.gameobjects;
 
 public enum ComponentType {
-    Physics,
+    PHYSICS,
     AI,
-    Drawable,
-    Position,
-    Controllable,
-    Light,
-    Alive
+    DRAWABLE,
+    POSITION,
+    CONTROLLABLE,
+    LIGHT,
+    ALIVE
 }

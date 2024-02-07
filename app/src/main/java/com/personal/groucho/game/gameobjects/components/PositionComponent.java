@@ -20,7 +20,7 @@ public class PositionComponent extends Component {
 
     @Override
     public ComponentType type() {
-        return ComponentType.Position;
+        return ComponentType.POSITION;
     }
 
     public int getPosX() {return posX;}

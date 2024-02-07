@@ -1,5 +1,6 @@
 package com.personal.groucho.game.AI;
 
+import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.ArrayList;

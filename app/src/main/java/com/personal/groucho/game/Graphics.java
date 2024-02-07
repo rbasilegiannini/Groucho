@@ -36,7 +36,7 @@ public class Graphics {
     private void drawGameObjects(List<GameObject> objects) {
         //TODO: use a better solution
         for (GameObject gameObject : objects) {
-            Component drawComponent = gameObject.getComponent(ComponentType.Drawable);
+            Component drawComponent = gameObject.getComponent(ComponentType.DRAWABLE);
             if (drawComponent != null){
                 DrawableComponent drawable = (DrawableComponent) drawComponent;
                 drawable.draw(canvas);
@@ -45,7 +45,7 @@ public class Graphics {
 
         //TODO: use a better solution
         for (GameObject gameObject : objects) {
-            Component lightComponent = gameObject.getComponent(ComponentType.Light);
+            Component lightComponent = gameObject.getComponent(ComponentType.LIGHT);
             if (lightComponent != null){
                 LightComponent light = (LightComponent) lightComponent;
                 light.draw(canvas);

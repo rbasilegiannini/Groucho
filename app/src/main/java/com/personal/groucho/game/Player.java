@@ -29,7 +29,7 @@ public class Player {
     }
 
     private void updatePlayerState() {
-        Component ctrlComponent = playerGO.getComponent(ComponentType.Controllable);
+        Component ctrlComponent = playerGO.getComponent(ComponentType.CONTROLLABLE);
         if (ctrlComponent != null) {
             ControllableComponent controllable = (ControllableComponent) ctrlComponent;
             controllable.updatePlayerState();
@@ -37,7 +37,7 @@ public class Player {
     }
 
     private void updateCamera(Canvas canvas, Controller controller) {
-        Component component = playerGO.getComponent(ComponentType.Position);
+        Component component = playerGO.getComponent(ComponentType.POSITION);
         if (component != null) {
             PositionComponent position = (PositionComponent) component;
             float cameraX = playerPosX - position.getPosX();

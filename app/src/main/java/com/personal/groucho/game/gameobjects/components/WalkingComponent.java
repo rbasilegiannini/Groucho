@@ -13,7 +13,7 @@ public abstract class WalkingComponent extends Component {
 
     protected void walking(Spritesheet sheet, float speed) {
         if (positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         switch (positionComponent.getOrientation()) {
             case UP:
@@ -39,9 +39,9 @@ public abstract class WalkingComponent extends Component {
 
     protected void updateSprite(Spritesheet sheet) {
         if (spriteComponent == null)
-            spriteComponent = (SpriteDrawableComponent) owner.getComponent(ComponentType.Drawable);
+            spriteComponent = (SpriteDrawableComponent) owner.getComponent(ComponentType.DRAWABLE);
         if (positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         spriteComponent.setCurrentSpritesheet(sheet);
         spriteComponent.setAnimation(positionComponent.getOrientation().getValue());
@@ -49,7 +49,7 @@ public abstract class WalkingComponent extends Component {
 
     private void updatePosition(float increaseX, float increaseY) {
         if(physicsComponent == null)
-            physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.Physics);
+            physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.PHYSICS);
 
         physicsComponent.updatePosX(increaseX);
         physicsComponent.updatePosY(increaseY);

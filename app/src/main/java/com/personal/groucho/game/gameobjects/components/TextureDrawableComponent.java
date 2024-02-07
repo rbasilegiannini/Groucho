@@ -26,7 +26,7 @@ public class TextureDrawableComponent extends DrawableComponent{
     @Override
     public void draw(Canvas canvas) {
         if (position == null)
-            position = (PositionComponent) owner.getComponent(ComponentType.Position);
+            position = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         dest.offsetTo(position.getPosX()-dimX/2, position.getPosY()-dimY/2);
         canvas.drawBitmap(texture, src, dest, null);

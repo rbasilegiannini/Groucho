@@ -35,11 +35,11 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     }
 
     @Override
-    public ComponentType type() { return ComponentType.Controllable;}
+    public ComponentType type() { return ComponentType.CONTROLLABLE;}
 
     public void updatePlayerState() {
         if (lightComponent == null)
-            lightComponent = (LightComponent) owner.getComponent(ComponentType.Light);
+            lightComponent = (LightComponent) owner.getComponent(ComponentType.LIGHT);
 
         if (controller.getPlayerState().getName() == NameState.WALKING)
             handleWalkingPlayer();
@@ -94,7 +94,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
 
     private void shoot() {
         if(physicsComponent == null)
-            physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.Physics);
+            physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.PHYSICS);
 
         float originX = fromMetersToBufferX(physicsComponent.getPositionX());
         float originY = fromMetersToBufferY(physicsComponent.getPositionY());
@@ -129,7 +129,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     @Override
     public void update(ControllerState currentState) {
         if (positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         positionComponent.setOrientation(controller.getOrientation());
 

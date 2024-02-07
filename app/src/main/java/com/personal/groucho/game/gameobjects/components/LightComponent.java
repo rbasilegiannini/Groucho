@@ -23,14 +23,14 @@ public class LightComponent extends Component {
 
     @Override
     public ComponentType type() {
-        return ComponentType.Light;
+        return ComponentType.LIGHT;
     }
 
     public LightComponent(GameWorld gameWorld) {this.gameWorld = gameWorld;}
 
     public void draw(Canvas canvas) {
         if (position == null)
-            position = (PositionComponent) owner.getComponent(ComponentType.Position);
+            position = (PositionComponent) owner.getComponent(ComponentType.POSITION);
         Bitmap buffer = gameWorld.getBuffer();
 
         Bitmap maskBitmap = Bitmap.createBitmap(

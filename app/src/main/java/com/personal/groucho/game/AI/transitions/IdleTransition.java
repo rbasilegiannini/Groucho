@@ -5,6 +5,7 @@ import com.personal.groucho.game.AI.Condition;
 import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.states.Idle;
+import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
@@ -20,7 +21,7 @@ public class IdleTransition extends Transition {
         return new Condition() {
             @Override
             public boolean eval() {
-                return !owner.isPlayerEngaged() && owner.wasIdle();
+                return !owner.isPlayerEngaged() && owner.getOriginalState() == StateName.IDLE;
             }
         };
     }

@@ -17,7 +17,7 @@ public class AliveComponent extends Component {
     }
 
     @Override
-    public ComponentType type() {return ComponentType.Alive;}
+    public ComponentType type() {return ComponentType.ALIVE;}
 
     public void damage(int power) {
         currentHealth -= power;
@@ -45,7 +45,7 @@ public class AliveComponent extends Component {
 
     private void updateSprite() {
         if (sprite == null) {
-            Component component = owner.getComponent(ComponentType.Drawable);
+            Component component = owner.getComponent(ComponentType.DRAWABLE);
             if (component != null) {
                 sprite = (SpriteDrawableComponent) component;
                 sprite.updateColorFilter(currentHealth, maxHealth);

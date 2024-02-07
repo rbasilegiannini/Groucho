@@ -22,6 +22,7 @@ import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
@@ -64,11 +65,11 @@ public class GameObjectFactory {
         gameObject.addComponent(new AliveComponent(grouchoHealth));
         gameObject.addComponent(new LightComponent(gameworld));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
         PhysicsProperties properties = new PhysicsProperties(posX, posY, 1f, 1f, BodyType.dynamicBody);
         setCharacterPhysics(physics, properties);
 
-        ControllableComponent controllable = (ControllableComponent) gameObject.getComponent(ComponentType.Controllable);
+        ControllableComponent controllable = (ControllableComponent) gameObject.getComponent(ComponentType.CONTROLLABLE);
 
         gameworld.controller.addControllerListener(controllable);
         controller.setCurrentState(Idle.getInstance(controller));
@@ -77,16 +78,16 @@ public class GameObjectFactory {
     }
 
     public static GameObject makeEnemy(int posX, int posY, int health, Spritesheet idle,
-                                       Spritesheet death, GameWorld gameWorld, GameGrid grid) {
+                                       StateName originalState, Spritesheet death, GameWorld gameWorld) {
         GameObject gameObject = new GameObject("Enemy", Role.ENEMY, gameWorld);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new SpriteDrawableComponent(idle, death));
         gameObject.addComponent(new AliveComponent(health));
-        gameObject.addComponent(new AIComponent(gameWorld));
+        gameObject.addComponent(new AIComponent(gameWorld, originalState));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
         PhysicsProperties properties = new PhysicsProperties(posX, posY,1f, 1f, BodyType.dynamicBody);
         setCharacterPhysics(physics, properties);
 
@@ -106,7 +107,7 @@ public class GameObjectFactory {
                 new BoxDrawableComponent(dimX, dimY, paint)
         );
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
         PhysicsProperties properties = new PhysicsProperties(posX, posY, 0f, 0f, BodyType.staticBody);
         setFurniturePhysics(physics, properties, dimX, dimY);
 
@@ -121,7 +122,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new TextureDrawableComponent(texture, (int)dimX, (int)dimY));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
         PhysicsProperties properties = new PhysicsProperties(posX, posY, 5f, 0, BodyType.dynamicBody);
         setFurniturePhysics(physics, properties, dimX, dimY);
 
@@ -137,7 +138,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new TextureDrawableComponent(health, dimX, dimY));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.Physics);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
         PhysicsProperties properties = new PhysicsProperties(posX, posY, 0f, 0, BodyType.staticBody);
         setFurniturePhysics(physics, properties, dimX, dimY);
 

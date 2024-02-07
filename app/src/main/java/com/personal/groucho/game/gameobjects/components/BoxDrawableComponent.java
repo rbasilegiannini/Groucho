@@ -19,7 +19,7 @@ public class BoxDrawableComponent extends DrawableComponent{
 
     @Override
     public void draw(Canvas canvas){
-        PositionComponent pos = (PositionComponent) owner.getComponent(ComponentType.Position);
+        PositionComponent pos = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         canvas.drawRect(
                 (float)pos.getPosX() - dimensionX/2,

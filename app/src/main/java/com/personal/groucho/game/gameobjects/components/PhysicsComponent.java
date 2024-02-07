@@ -24,7 +24,7 @@ public class PhysicsComponent extends Component {
     }
 
     @Override
-    public ComponentType type() {return ComponentType.Physics;}
+    public ComponentType type() {return ComponentType.PHYSICS;}
 
     @Override
     public void delete() {
@@ -43,7 +43,7 @@ public class PhysicsComponent extends Component {
 
     public void applyForce(Vec2 force) {
         if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         body.setLinearVelocity(new Vec2(0,0));
         body.applyLinearImpulse(force,body.getPosition(),true);
@@ -58,7 +58,7 @@ public class PhysicsComponent extends Component {
 
     public void setPosition(int posX, int posY) {
         if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         body.setTransform(new Vec2(fromBufferToMetersX(posX), fromBufferToMetersY(posY)),0);
         positionComponent.setPosX((int) fromMetersToBufferX(body.getPositionX()));
@@ -67,7 +67,7 @@ public class PhysicsComponent extends Component {
 
     public void updatePosX(float  increase) {
         if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         float newPosX = body.getPositionX() + increase;
         body.setTransform(newPosX, body.getPositionY(), 0);
@@ -76,7 +76,7 @@ public class PhysicsComponent extends Component {
 
     public void updatePosY(float increase) {
         if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         float newPosY = body.getPositionY() + increase;
         body.setTransform(body.getPositionX(),newPosY, 0);

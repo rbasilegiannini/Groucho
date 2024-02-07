@@ -53,8 +53,8 @@ public class Physics {
     private void updatePhysicsPosition(List<GameObject> objects) {
         // TODO: use a better solution
         for (GameObject go : objects) {
-            Component phyComponent = go.getComponent(ComponentType.Physics);
-            Component posComponent = go.getComponent(ComponentType.Position);
+            Component phyComponent = go.getComponent(ComponentType.PHYSICS);
+            Component posComponent = go.getComponent(ComponentType.POSITION);
             if (phyComponent != null && posComponent != null) {
                 PhysicsComponent physicsComponent = (PhysicsComponent) phyComponent;
                 PositionComponent positionComponent = (PositionComponent) posComponent;
@@ -118,7 +118,7 @@ public class Physics {
 
             case HEALTH:
                 healing.play(0.7f);
-                AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.Alive);
+                AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.ALIVE);
                 alive.heal(medicalKit);
 
                 object.delete();
@@ -127,7 +127,7 @@ public class Physics {
     }
 
     private void handleEnemyCollision(GameObject enemy, GameObject object) {
-        PositionComponent position = (PositionComponent) enemy.getComponent(ComponentType.Position);
+        PositionComponent position = (PositionComponent) enemy.getComponent(ComponentType.POSITION);
         switch (object.role) {
             case WALL:
             case HEALTH:

@@ -1,6 +1,5 @@
 package com.personal.groucho.game;
 
-import static com.personal.groucho.game.Constants.cellSize;
 import static com.personal.groucho.game.Constants.grouchoPower;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
@@ -67,7 +66,7 @@ public class GameWorld {
     }
 
     public void setPlayer(GameObject player) {
-        Component component = player.getComponent(ComponentType.Position);
+        Component component = player.getComponent(ComponentType.POSITION);
         if (component != null) {
             PositionComponent position = (PositionComponent) component;
             this.player = new Player(player, position.getPosX(), position.getPosY());
@@ -96,7 +95,7 @@ public class GameWorld {
 
         //TODO: Use a better solution
         for (GameObject gameObject : objects) {
-            Component aliveComponent = gameObject.getComponent(ComponentType.Alive);
+            Component aliveComponent = gameObject.getComponent(ComponentType.ALIVE);
             if (aliveComponent != null){
                 AliveComponent alive = (AliveComponent) aliveComponent;
                 if (alive.getCurrentStatus() == DEAD)
@@ -129,9 +128,9 @@ public class GameWorld {
 
     private void handleDeath(GameObject gameObject) {
         gameObject.removeComponent(ComponentType.AI);
-        gameObject.removeComponent(ComponentType.Physics);
-        gameObject.removeComponent(ComponentType.Position);
-        gameObject.removeComponent(ComponentType.Alive);
+        gameObject.removeComponent(ComponentType.PHYSICS);
+        gameObject.removeComponent(ComponentType.POSITION);
+        gameObject.removeComponent(ComponentType.ALIVE);
     }
 
     public void shootEvent(float originX, float originY, float endX, float endY) {
@@ -157,13 +156,13 @@ public class GameWorld {
 
     private void hitEnemyEvent(GameObject hitGO) {
         bulletHitEnemy.play(1f);
-        AliveComponent alive = (AliveComponent) hitGO.getComponent(ComponentType.Alive);
+        AliveComponent alive = (AliveComponent) hitGO.getComponent(ComponentType.ALIVE);
         if (alive.getCurrentStatus() != DEAD) alive.damage(grouchoPower);
     }
 
     private void hitFurnitureEvent( GameObject hitGO, float originX, float originY) {
         bulletHitFurniture.play(1f);
-        PhysicsComponent physics = (PhysicsComponent) hitGO.getComponent(ComponentType.Physics);
+        PhysicsComponent physics = (PhysicsComponent) hitGO.getComponent(ComponentType.PHYSICS);
         float goPosX = physics.getPositionX();
         float goPosY = physics.getPositionY();
         float forceX = goPosX - fromBufferToMetersX(originX);

@@ -50,7 +50,7 @@ public class SpriteDrawableComponent extends DrawableComponent {
     @Override
     public void draw(Canvas canvas) {
         if (position == null)
-            position = (PositionComponent) owner.getComponent(ComponentType.Position);
+            position = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
         long currentTimeMillis = System.currentTimeMillis();
         long delay = currentTimeMillis - lastTimestamp;
