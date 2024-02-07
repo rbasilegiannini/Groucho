@@ -2,9 +2,9 @@ package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.Constants.cellSize;
 import static com.personal.groucho.game.Constants.skeletonSpeed;
-import static com.personal.groucho.game.assets.Spritesheets.skeleton_hurt;
-import static com.personal.groucho.game.assets.Spritesheets.skeleton_idle;
-import static com.personal.groucho.game.assets.Spritesheets.skeleton_walk;
+import static com.personal.groucho.game.assets.Spritesheets.skeletonHurt;
+import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
+import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;
 
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.AI.Action;
@@ -73,9 +73,9 @@ public class AIComponent extends WalkingComponent {
 
     public void entryIdleAction() {
         if (!currentPath.isEmpty() || !newNode)
-            updateSprite(skeleton_walk);
+            updateSprite(skeletonWalk);
         else
-            updateSprite(skeleton_idle);
+            updateSprite(skeletonIdle);
     }
 
     public void activeIdleAction() {
@@ -83,7 +83,7 @@ public class AIComponent extends WalkingComponent {
             walkingToDestination();
         else
             // TODO: updateSprite for each call
-            updateSprite(skeleton_idle);
+            updateSprite(skeletonIdle);
     }
 
     public void exitIdleAction() {
@@ -92,7 +92,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     public void entryPatrolAction() {
-        updateSprite(skeleton_walk);
+        updateSprite(skeletonWalk);
         Orientation newOrientation = positionComponent.getOrientation().getOpposite();
         positionComponent.setOrientation(newOrientation);
     }
@@ -121,7 +121,7 @@ public class AIComponent extends WalkingComponent {
 
         currentSteps++;
 
-        walking(skeleton_walk, skeletonSpeed);
+        walking(skeletonWalk, skeletonSpeed);
     }
 
     public void entryEngageAction(){
@@ -149,7 +149,7 @@ public class AIComponent extends WalkingComponent {
             walkingToDestination();
         }
         else {
-            updateSprite(skeleton_idle);
+            updateSprite(skeletonIdle);
             gameWorld.setPlayerReached(false);
         }
     }
@@ -187,7 +187,7 @@ public class AIComponent extends WalkingComponent {
 
     public void entryAttackAction() {
         sight.setNewOrientation(positionComponent.getOrientation());
-        updateSprite(skeleton_hurt);
+        updateSprite(skeletonHurt);
     }
 
     public void activeAttackAction() {
@@ -214,7 +214,7 @@ public class AIComponent extends WalkingComponent {
             if (positionOnGridX > targetPosX) {
                 positionComponent.setOrientation(Orientation.LEFT);
             }
-            walking(skeleton_walk, skeletonSpeed);
+            walking(skeletonWalk, skeletonSpeed);
         }
     }
 
@@ -228,7 +228,7 @@ public class AIComponent extends WalkingComponent {
             if (positionOnGridY > targetPosY) {
                 positionComponent.setOrientation(Orientation.UP);
             }
-            walking(skeleton_walk, skeletonSpeed);
+            walking(skeletonWalk, skeletonSpeed);
         }
     }
 

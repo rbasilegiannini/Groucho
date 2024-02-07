@@ -8,8 +8,8 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.toMetersXLength;
 import static com.personal.groucho.game.Utils.toMetersYLength;
-import static com.personal.groucho.game.assets.Spritesheets.groucho_death;
-import static com.personal.groucho.game.assets.Spritesheets.groucho_walk;
+import static com.personal.groucho.game.assets.Spritesheets.grouchoDeath;
+import static com.personal.groucho.game.assets.Spritesheets.grouchoWalk;
 import static com.personal.groucho.game.assets.Textures.health;
 
 import android.graphics.Bitmap;
@@ -58,7 +58,7 @@ public class GameObjectFactory {
         GameObject gameObject = new GameObject("Groucho", Role.PLAYER, gameworld);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
-        gameObject.addComponent(new SpriteDrawableComponent(groucho_walk, groucho_death));
+        gameObject.addComponent(new SpriteDrawableComponent(grouchoWalk, grouchoDeath));
         gameObject.addComponent(new ControllableComponent(controller, gameworld));
         gameObject.addComponent(new PhysicsComponent(gameworld.getWorld()));
         gameObject.addComponent(new AliveComponent(grouchoHealth));

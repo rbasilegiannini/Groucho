@@ -9,7 +9,7 @@ import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.click;
 import static com.personal.groucho.game.assets.Sounds.loading;
-import static com.personal.groucho.game.assets.Spritesheets.groucho_walk;
+import static com.personal.groucho.game.assets.Spritesheets.grouchoWalk;
 
 import com.personal.groucho.game.controller.ControllerObserver;
 import com.personal.groucho.game.GameWorld;
@@ -47,7 +47,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
             handleAimingPlayer();
 
         if (playShotAnimation) {
-            updateSprite(Spritesheets.groucho_fire);
+            updateSprite(Spritesheets.grouchoFire);
             playShotAnimation = false;
         }
     }
@@ -63,16 +63,16 @@ public class ControllableComponent extends WalkingComponent implements Controlle
 
     private void handleIdlePlayer() {
         playLoadingSound = true;
-        updateSprite(Spritesheets.groucho_idle);
+        updateSprite(Spritesheets.grouchoIdle);
     }
 
     private void handleWalkingPlayer() {
         playLoadingSound = true;
-        walking(groucho_walk, grouchoSpeed);
+        walking(grouchoWalk, grouchoSpeed);
     }
 
     private void handleAimingPlayer() {
-        updateSprite(Spritesheets.groucho_aim);
+        updateSprite(Spritesheets.grouchoAim);
     }
 
     private void handleLoadingPlayer() {
@@ -80,7 +80,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
             loading.play(0.4f);
             playLoadingSound = false;
         }
-        updateSprite(Spritesheets.groucho_aim);
+        updateSprite(Spritesheets.grouchoAim);
     }
 
     private void handleShootingPlayer() {
