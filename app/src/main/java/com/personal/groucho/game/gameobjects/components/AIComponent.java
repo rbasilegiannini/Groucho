@@ -9,7 +9,6 @@ import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.FSM;
-import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.pathfinding.AStar;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.pathfinding.Node;
@@ -28,22 +27,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AIComponent extends WalkingComponent {
-    private StateName originalState;
-    private final int maxSteps;
-    private int currentSteps;
+    private final StateName originalState;
     private final FSM fsm;
     private final GameGrid grid;
     private Sight sight = null;
     private final GameWorld gameWorld;
     private final AStar aStar;
-    private Node originalPositionOnGrid;
     private Orientation originalOrientation;
+    private Node originalPositionOnGrid;
     private Node positionOnGrid;
     private Node playerPositionOnGrid;
     private List<Node> currentPath;
-    private Node current;
-    //TODO: Change "newNode" name.
-    private boolean newNode = true;
+    private Node currentNode;
+    private final int maxSteps;
+    private int currentSteps;
+    private boolean isNodeReached = true;
     private boolean isPlayerEngaged = false;
     private boolean isPlayerReached = false;
     private boolean isIdle = false;
@@ -52,7 +50,8 @@ public class AIComponent extends WalkingComponent {
         this.gameWorld = gameWorld;
         grid = gameWorld.getGameGrid();
 
-        switch (currentState) {
+        originalState = currentState;
+        switch (originalState) {
             case PATROL:
                 fsm = new FSM(new Patrol(this));
                 break;
@@ -67,7 +66,6 @@ public class AIComponent extends WalkingComponent {
                 break;
         }
 
-        originalState = currentState;
         aStar = new AStar(grid);
         currentPath = new ArrayList<>();
         currentSteps = 0;
@@ -96,23 +94,20 @@ public class AIComponent extends WalkingComponent {
 
     public Sight getSight() {return sight;}
     public StateName getOriginalState(){return originalState;}
-
-    public boolean isPlayerEngaged() {
-        return isPlayerEngaged;
-    }
+    public boolean isPlayerEngaged() {return isPlayerEngaged;}
     public boolean isPlayerReached() {return isPlayerReached;}
     public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
 
     // Idle actions
     public void entryIdleAction() {
-        if (!currentPath.isEmpty() || !newNode)
+        if (!currentPath.isEmpty() || !isNodeReached)
             updateSprite(skeletonWalk);
         else
             updateSprite(skeletonIdle);
     }
 
     public void activeIdleAction() {
-        if (!currentPath.isEmpty() || !newNode)
+        if (!currentPath.isEmpty() || !isNodeReached)
             walkingToDestination();
         else if (!isIdle){
             if (originalOrientation != null) {
@@ -141,7 +136,7 @@ public class AIComponent extends WalkingComponent {
         if (positionComponent == null)
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
-        if (!currentPath.isEmpty() || !newNode)
+        if (!currentPath.isEmpty() || !isNodeReached)
             walkingToDestination();
         else {
             if (originalOrientation != null) {
@@ -173,14 +168,14 @@ public class AIComponent extends WalkingComponent {
         if (positionComponent == null)
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
 
-        positionOnGrid = gameWorld.getGameGridNode(
+        positionOnGrid = grid.getNode(
                 positionComponent.getPositionXOnGrid(),
                 positionComponent.getPositionYOnGrid()
         );
         originalPositionOnGrid = positionOnGrid;
 
         setPathToPlayer();
-        newNode = true;
+        isNodeReached = true;
     }
 
     public void activeEngageAction(){
@@ -189,7 +184,7 @@ public class AIComponent extends WalkingComponent {
 
         isPlayerReached = isAPlayerNeighbor(positionOnGrid);
 
-        if (!currentPath.isEmpty() || !newNode) {
+        if (!currentPath.isEmpty() || !isNodeReached) {
             walkingToDestination();
         }
         else {
@@ -204,7 +199,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     private boolean hasPlayerChangedPosition() {
-        return !playerPositionOnGrid.equal(gameWorld.getGameGridNode(
+        return !playerPositionOnGrid.equal(grid.getNode(
                 (int) gameWorld.getPlayerPosition().getX() / cellSize,
                 (int) gameWorld.getPlayerPosition().getY() / cellSize));
     }
@@ -220,7 +215,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void setPathToPlayer() {
-        playerPositionOnGrid = gameWorld.getGameGridNode(
+        playerPositionOnGrid = grid.getNode(
                 (int) gameWorld.getPlayerPosition().getX()/cellSize,
                 (int) gameWorld.getPlayerPosition().getY()/cellSize
         );
@@ -241,24 +236,26 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void walkingToDestination() {
-        if (newNode) {
-            current = currentPath.remove(0);
-            newNode = false;
+        if (isNodeReached || currentNode == null) {
+            currentNode = currentPath.remove(0);
+            isNodeReached = false;
         }
 
-        positionOnGrid = gameWorld.getGameGridNode(
+        positionOnGrid = grid.getNode(
                 positionComponent.getPositionXOnGrid(),
                 positionComponent.getPositionYOnGrid()
         );
 
-        if (positionOnGrid.getPosX() != current.getPosX())
-            walkingToXCoordinate(current.getPosX());
+        if (positionOnGrid.getPosX() != currentNode.getPosX())
+            walkingToXCoordinate(currentNode.getPosX());
 
-        else if (positionOnGrid.getPosY() != current.getPosY())
-            walkingToYCoordinate(current.getPosY());
+        else if (positionOnGrid.getPosY() != currentNode.getPosY())
+            walkingToYCoordinate(currentNode.getPosY());
 
-        if (positionOnGrid.equal(current))
-            newNode = true;
+        if (positionOnGrid.equal(currentNode)) {
+            isNodeReached = true;
+            currentNode = null;
+        }
     }
 
     private void walkingToXCoordinate(int targetPosX){

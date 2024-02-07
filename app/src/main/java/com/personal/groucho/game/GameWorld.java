@@ -9,7 +9,6 @@ import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.badlogic.androidgames.framework.Input;
@@ -18,7 +17,6 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
-import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.gameobjects.Sight;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
@@ -78,7 +76,6 @@ public class GameWorld {
     public World getWorld() {return physics.getWorld();}
     public Vec2 getPlayerPosition() {return player.getPosition();}
     public GameGrid getGameGrid() {return grid;}
-    public Node getGameGridNode(int posX, int poxY) {return grid.getNode(posX, poxY);}
 
     public synchronized void addGameObject(GameObject obj) {objects.add(obj);}
     public synchronized void removeGameObject(GameObject gameObject) {objects.remove(gameObject);}
@@ -136,8 +133,6 @@ public class GameWorld {
     public void shootEvent(float originX, float originY, float endX, float endY) {
         GameObject hitGO = physics.reportGameObject(originX, originY, endX, endY);
         if (hitGO != null) {
-            Log.i("RayCast", hitGO.role.name());
-
             switch (hitGO.role) {
                 case ENEMY:
                     hitEnemyEvent(hitGO);
