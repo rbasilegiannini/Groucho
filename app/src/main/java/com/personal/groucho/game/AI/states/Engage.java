@@ -22,12 +22,7 @@ public class Engage extends State {
     public List<Action> entryActions() {
         Log.i("State", "I'm entering in Engage state....");
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.entryEngageAction();
-            }
-        });
+        actions.add(() -> owner.entryEngageAction());
 
         return actions;
     }
@@ -35,12 +30,7 @@ public class Engage extends State {
     @Override
     public List<Action> activeActions() {
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.activeEngageAction();
-            }
-        });
+        actions.add(() -> owner.activeEngageAction());
 
         return actions;
     }
@@ -49,12 +39,7 @@ public class Engage extends State {
     public List<Action> exitActions() {
         Log.i("State", "I'm leaving Engage state....");
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.exitEngageAction();
-            }
-        });
+        actions.add(() -> owner.exitEngageAction());
         return actions;
     }
 

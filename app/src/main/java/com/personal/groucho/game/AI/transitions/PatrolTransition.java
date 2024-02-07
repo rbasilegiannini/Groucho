@@ -19,12 +19,7 @@ public class PatrolTransition extends Transition {
 
     @Override
     public Condition guard() {
-        return new Condition() {
-            @Override
-            public boolean eval() {
-                return !owner.isPlayerEngaged() && owner.getOriginalState() == StateName.PATROL;
-            }
-        };
+        return () -> !owner.isPlayerEngaged() && owner.getOriginalState() == StateName.PATROL;
     }
 
     @Override

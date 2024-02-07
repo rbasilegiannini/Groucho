@@ -17,12 +17,7 @@ public class AttackTransition extends Transition {
 
     @Override
     public Condition guard() {
-        return new Condition() {
-            @Override
-            public boolean eval() {
-                return owner.isPlayerReached();
-            }
-        };
+        return owner::isPlayerReached;
     }
 
     @Override

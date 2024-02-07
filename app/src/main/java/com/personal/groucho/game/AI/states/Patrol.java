@@ -20,12 +20,7 @@ public class Patrol extends State {
     public List<Action> entryActions() {
         Log.i("State", "I'm entering in Patrol state....");
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.entryPatrolAction();
-            }
-        });
+        actions.add(() -> owner.entryPatrolAction());
 
         return actions;
     }
@@ -33,12 +28,7 @@ public class Patrol extends State {
     @Override
     public List<Action> activeActions() {
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.activePatrolAction();
-            }
-        });
+        actions.add(() -> owner.activePatrolAction());
 
         return actions;
     }
@@ -47,12 +37,7 @@ public class Patrol extends State {
     public List<Action> exitActions() {
         Log.i("State", "I'm leaving Patrol state....");
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.exitPatrolAction();
-            }
-        });
+        actions.add(() -> owner.exitPatrolAction());
 
         return actions;
     }

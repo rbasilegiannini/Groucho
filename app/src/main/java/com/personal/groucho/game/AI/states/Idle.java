@@ -20,12 +20,7 @@ public class Idle extends State {
     public List<Action> entryActions() {
         Log.i("State", "I'm entering in Idle state....");
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.entryIdleAction();
-            }
-        });
+        actions.add(() -> owner.entryIdleAction());
 
         return actions;
     }
@@ -34,12 +29,7 @@ public class Idle extends State {
     public List<Action> activeActions() {
 
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.activeIdleAction();
-            }
-        });
+        actions.add(() -> owner.activeIdleAction());
 
         return actions;
     }
@@ -48,12 +38,7 @@ public class Idle extends State {
     public List<Action> exitActions() {
         Log.i("State", "I'm leaving Idle state....");
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.exitIdleAction();
-            }
-        });
+        actions.add(() -> owner.exitIdleAction());
 
         return actions;
     }
