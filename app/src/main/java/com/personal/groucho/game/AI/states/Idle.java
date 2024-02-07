@@ -6,10 +6,8 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
-import com.personal.groucho.game.AI.transitions.PatrolTransition;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Idle extends State {

@@ -21,7 +21,6 @@ import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
-import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Spritesheet;

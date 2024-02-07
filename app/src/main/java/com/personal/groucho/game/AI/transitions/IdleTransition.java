@@ -6,7 +6,6 @@ import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.states.Idle;
 import com.personal.groucho.game.AI.states.StateName;
-import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.Collections;

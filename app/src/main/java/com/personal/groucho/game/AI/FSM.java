@@ -1,7 +1,5 @@
 package com.personal.groucho.game.AI;
 
-import com.personal.groucho.game.GameWorld;
-
 import java.util.ArrayList;
 import java.util.List;
 
