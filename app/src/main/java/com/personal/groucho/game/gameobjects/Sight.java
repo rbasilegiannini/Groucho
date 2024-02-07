@@ -19,6 +19,10 @@ import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.controller.Orientation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Sight {
     private final GameWorld gameWorld;
     private final World world;
@@ -28,6 +32,9 @@ public class Sight {
     private final float[] angles;
     private final float phase;
     private final int numOfPoints;
+    private long lastSeen;
+    private List<GameObject> hitGameObjects = new ArrayList<>();
+    private List<Float> fractions = new ArrayList<>();
 
     public Sight (GameWorld gameWorld, Vec2 origin) {
         this.gameWorld = gameWorld;
@@ -57,14 +64,32 @@ public class Sight {
                     new RayCastCallback() {
                         public float reportFixture(Fixture fixture, Vec2 i, Vec2 n, float fraction) {
                             GameObject hitGO = (GameObject) fixture.getBody().getUserData();
-                            if (hitGO.role == Role.PLAYER)
-                                gameWorld.setPlayerEngaged(true);
+                            if (hitGO.role != Role.ENEMY) {
+                                hitGameObjects.add(hitGO);
+                                fractions.add(fraction);
+                            }
                             return fraction;
                         }
                     },
                     fromBufferToMetersX(origin.getX()), fromBufferToMetersY(origin.getY()),
                     fromBufferToMetersX(point.getX()), fromBufferToMetersY(point.getY())
             );
+        }
+
+        if (!fractions.isEmpty()) {
+            int indexLessFraction = fractions.indexOf(Collections.min(fractions));
+            GameObject firstGO = hitGameObjects.get(indexLessFraction);
+            if(firstGO.role == Role.PLAYER) {
+                Log.i("RayCast", "I see you");
+                gameWorld.setPlayerEngaged(true);
+                lastSeen = System.currentTimeMillis();
+            }
+            hitGameObjects.clear();
+            fractions.clear();
+        }
+
+        if (gameWorld.isPlayerEngaged() && System.currentTimeMillis() - lastSeen > 5000) {
+            gameWorld.setPlayerEngaged(false);
         }
     }
 
