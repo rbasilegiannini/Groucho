@@ -1,8 +1,8 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.Constants.brightness;
-import static com.personal.groucho.game.Constants.characterDimensionsY;
-import static com.personal.groucho.game.Constants.minLightIntensity;
+import static com.personal.groucho.game.constants.System.characterDimensionsY;
+import static com.personal.groucho.game.constants.Environment.brightness;
+import static com.personal.groucho.game.constants.Environment.minLightIntensity;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

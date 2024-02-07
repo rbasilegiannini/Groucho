@@ -1,10 +1,10 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.Constants.characterDimensionsX;
-import static com.personal.groucho.game.Constants.characterDimensionsY;
-import static com.personal.groucho.game.Constants.grouchoSpeed;
-import static com.personal.groucho.game.Constants.maxLightIntensity;
-import static com.personal.groucho.game.Constants.minLightIntensity;
+import static com.personal.groucho.game.constants.System.characterDimensionsX;
+import static com.personal.groucho.game.constants.System.characterDimensionsY;
+import static com.personal.groucho.game.constants.CharacterProperties.grouchoSpeed;
+import static com.personal.groucho.game.constants.Environment.maxLightIntensity;
+import static com.personal.groucho.game.constants.Environment.minLightIntensity;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.click;

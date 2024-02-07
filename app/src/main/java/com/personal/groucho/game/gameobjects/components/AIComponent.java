@@ -1,7 +1,7 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.Constants.cellSize;
-import static com.personal.groucho.game.Constants.skeletonSpeed;
+import static com.personal.groucho.game.constants.System.cellSize;
+import static com.personal.groucho.game.constants.CharacterProperties.skeletonSpeed;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonHurt;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;

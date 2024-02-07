@@ -1,6 +1,6 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.Constants.cellSize;
+import static com.personal.groucho.game.constants.System.cellSize;
 
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.controller.Orientation;

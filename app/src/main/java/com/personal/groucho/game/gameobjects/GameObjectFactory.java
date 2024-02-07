@@ -1,9 +1,9 @@
 package com.personal.groucho.game.gameobjects;
 
-import static com.personal.groucho.game.Constants.characterDimensionsX;
-import static com.personal.groucho.game.Constants.characterDimensionsY;
-import static com.personal.groucho.game.Constants.characterScaleFactor;
-import static com.personal.groucho.game.Constants.grouchoHealth;
+import static com.personal.groucho.game.constants.System.characterDimensionsX;
+import static com.personal.groucho.game.constants.System.characterDimensionsY;
+import static com.personal.groucho.game.constants.System.characterScaleFactor;
+import static com.personal.groucho.game.constants.CharacterProperties.grouchoHealth;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.toMetersXLength;

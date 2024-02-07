@@ -1,6 +1,6 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.Constants.characterScaleFactor;
+import static com.personal.groucho.game.constants.System.characterScaleFactor;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

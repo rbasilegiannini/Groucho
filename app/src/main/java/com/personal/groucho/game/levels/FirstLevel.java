@@ -1,7 +1,7 @@
 package com.personal.groucho.game.levels;
 
-import static com.personal.groucho.game.Constants.cellSize;
-import static com.personal.groucho.game.Constants.skeletonHealth;
+import static com.personal.groucho.game.constants.System.cellSize;
+import static com.personal.groucho.game.constants.CharacterProperties.skeletonHealth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 import static com.personal.groucho.game.Graphics.bufferWidth;
 
@@ -15,6 +15,7 @@ import android.graphics.Shader;
 
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Spritesheets;
@@ -66,8 +67,9 @@ public class FirstLevel extends Level{
                         124,600,
                         skeletonHealth,
                         Spritesheets.skeletonIdle,
+                        StateName.PATROL,
                         Spritesheets.skeletonDeath,
-                        gameWorld, grid)
+                        gameWorld)
         );
 
         // Set health

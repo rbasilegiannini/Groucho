@@ -1,6 +1,6 @@
 package com.personal.groucho.game;
 
-import static com.personal.groucho.game.Constants.grouchoPower;
+import static com.personal.groucho.game.constants.CharacterProperties.grouchoPower;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.assets.Sounds.bulletHitEnemy;

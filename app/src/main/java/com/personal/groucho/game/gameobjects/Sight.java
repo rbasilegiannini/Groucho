@@ -1,7 +1,7 @@
 package com.personal.groucho.game.gameobjects;
 
-import static com.personal.groucho.game.Constants.distanceOfEnemySight;
-import static com.personal.groucho.game.Constants.pointsOfEnemySight;
+import static com.personal.groucho.game.constants.System.distanceOfEnemySight;
+import static com.personal.groucho.game.constants.System.pointsOfEnemySight;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static java.lang.Math.cos;
