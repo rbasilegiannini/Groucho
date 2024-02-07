@@ -6,10 +6,10 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.AttackTransition;
+import com.personal.groucho.game.AI.transitions.IdleTransition;
 import com.personal.groucho.game.AI.transitions.PatrolTransition;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Engage extends State {
@@ -48,12 +48,20 @@ public class Engage extends State {
     @Override
     public List<Action> exitActions() {
         Log.i("State", "I'm leaving Engage state....");
-        return Collections.emptyList();
+        actions.clear();
+        actions.add(new Action() {
+            @Override
+            public void doIt() {
+                owner.exitEngageAction();
+            }
+        });
+        return actions;
     }
 
     @Override
     public List<Transition> outgoingTransitions() {
         transitions.clear();
+        transitions.add(new IdleTransition(owner));
         transitions.add(new PatrolTransition(owner));
         transitions.add(new AttackTransition(owner));
 

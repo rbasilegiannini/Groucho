@@ -29,11 +29,15 @@ public class AIComponent extends WalkingComponent {
     private Sight sight = null;
     private final GameWorld gameWorld;
     private final AStar aStar;
+    private Node originalPositionOnGrid;
     private Node positionOnGrid;
     private Node playerPositionOnGrid;
     private List<Node> currentPath;
     private Node current;
+    //TODO: Change "newNode" name.
     private boolean newNode = true;
+    private boolean wasIdle = false;
+    private boolean wasPatrol = false;
 
     public AIComponent(GameWorld gameWorld, GameGrid grid) {
         this.gameWorld = gameWorld;
@@ -41,7 +45,7 @@ public class AIComponent extends WalkingComponent {
         aStar = new AStar(grid);
         currentPath = new ArrayList<>();
         currentSteps = 0;
-        maxSteps = 1000;
+        maxSteps = 100;
     }
 
     @Override
@@ -67,19 +71,54 @@ public class AIComponent extends WalkingComponent {
     public Sight getSight() {return sight;}
     //
 
-    public void entryIdleAction() {updateSprite(skeleton_idle);}
+    public void entryIdleAction() {
+        if (!currentPath.isEmpty() || !newNode)
+            updateSprite(skeleton_walk);
+        else
+            updateSprite(skeleton_idle);
+    }
 
-    public void entryPatrolAction() { updateSprite(skeleton_walk); }
+    public void activeIdleAction() {
+        if (!currentPath.isEmpty() || !newNode)
+            walkingToDestination();
+        else
+            // TODO: updateSprite for each call
+            updateSprite(skeleton_idle);
+    }
+
+    public void exitIdleAction() {
+        wasIdle = true;
+        wasPatrol = false;
+    }
+
+    public void entryPatrolAction() {
+        updateSprite(skeleton_walk);
+        Orientation newOrientation = positionComponent.getOrientation().getOpposite();
+        positionComponent.setOrientation(newOrientation);
+    }
 
     public void activePatrolAction() {
         if (positionComponent == null)
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
 
+        if (!currentPath.isEmpty() || !newNode)
+            walkingToDestination();
+        else
+            patrol();
+    }
+
+    public void exitPatrolAction() {
+        wasIdle = false;
+        wasPatrol = true;
+    }
+
+    private void patrol() {
         if (currentSteps == maxSteps) {
-            currentSteps = 0;
-            Orientation newOrientation = positionComponent.getOrientation().getOpposite();
-            positionComponent.setOrientation(newOrientation);
+        currentSteps = 0;
+        Orientation newOrientation = positionComponent.getOrientation().getOpposite();
+        positionComponent.setOrientation(newOrientation);
         }
+
         currentSteps++;
 
         walking(skeleton_walk, skeletonSpeed);
@@ -94,42 +133,56 @@ public class AIComponent extends WalkingComponent {
                 positionComponent.getPositionYOnGrid()
         );
 
+        originalPositionOnGrid = positionOnGrid;
+
         setPathToPlayer();
+        newNode = true;
     }
 
     public void activeEngageAction(){
-        if (!playerPositionOnGrid.equal(gameWorld.getGameGridNode(
-                (int) gameWorld.getPlayerPosition().getX()/cellSize,
-                (int) gameWorld.getPlayerPosition().getY()/cellSize
-        )))
+        if (hasPlayerChangedPosition())
             setPathToPlayer();
 
         gameWorld.setPlayerReached(gameWorld.isAPlayerNeighbor(positionOnGrid));
 
         if (!currentPath.isEmpty() || !newNode) {
-            if (newNode) {
-                current = currentPath.remove(0);
-                newNode = false;
-            }
-
-            positionOnGrid = gameWorld.getGameGridNode(
-                    positionComponent.getPositionXOnGrid(),
-                    positionComponent.getPositionYOnGrid()
-            );
-
-            if (positionOnGrid.getPosX() != current.getPosX())
-                walkingToXCoordinate(current.getPosX());
-
-            else if (positionOnGrid.getPosY() != current.getPosY())
-                walkingToYCoordinate(current.getPosY());
-
-            if (positionOnGrid.equal(current))
-                newNode = true;
+            walkingToDestination();
         }
         else {
             updateSprite(skeleton_idle);
-            // Come back to patrol. And exit action will be returning to original position
+            gameWorld.setPlayerReached(false);
         }
+    }
+
+    private void walkingToDestination() {
+        if (newNode) {
+            current = currentPath.remove(0);
+            newNode = false;
+        }
+
+        positionOnGrid = gameWorld.getGameGridNode(
+                positionComponent.getPositionXOnGrid(),
+                positionComponent.getPositionYOnGrid()
+        );
+
+        if (positionOnGrid.getPosX() != current.getPosX())
+            walkingToXCoordinate(current.getPosX());
+
+        else if (positionOnGrid.getPosY() != current.getPosY())
+            walkingToYCoordinate(current.getPosY());
+
+        if (positionOnGrid.equal(current))
+            newNode = true;
+    }
+
+    public void exitEngageAction() {
+        currentPath = aStar.findPath(positionOnGrid, originalPositionOnGrid);
+    }
+
+    private boolean hasPlayerChangedPosition() {
+        return !playerPositionOnGrid.equal(gameWorld.getGameGridNode(
+                (int) gameWorld.getPlayerPosition().getX() / cellSize,
+                (int) gameWorld.getPlayerPosition().getY() / cellSize));
     }
 
     public void entryAttackAction() {
@@ -186,4 +239,11 @@ public class AIComponent extends WalkingComponent {
         sight.setNewOrientation(positionComponent.getOrientation());
     }
 
+    public boolean wasIdle() {
+        return wasIdle;
+    }
+
+    public boolean wasPatrol() {
+        return wasPatrol;
+    }
 }

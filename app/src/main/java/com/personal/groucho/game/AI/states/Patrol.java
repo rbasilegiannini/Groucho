@@ -20,7 +20,7 @@ public class Patrol extends State {
 
     @Override
     public List<Action> entryActions() {
-        Log.i("State", "I'm entering in Walking state....");
+        Log.i("State", "I'm entering in Patrol state....");
         actions.clear();
         actions.add(new Action() {
             @Override
@@ -47,14 +47,21 @@ public class Patrol extends State {
 
     @Override
     public List<Action> exitActions() {
-        Log.i("State", "I'm leaving Walking state....");
-        return Collections.emptyList();
+        Log.i("State", "I'm leaving Patrol state....");
+        actions.clear();
+        actions.add(new Action() {
+            @Override
+            public void doIt() {
+                owner.exitPatrolAction();
+            }
+        });
+
+        return actions;
     }
 
     @Override
     public List<Transition> outgoingTransitions() {
         transitions.clear();
-        transitions.add(new IdleTransition(owner));
         transitions.add(new EngageTransition(owner));
 
         return transitions;

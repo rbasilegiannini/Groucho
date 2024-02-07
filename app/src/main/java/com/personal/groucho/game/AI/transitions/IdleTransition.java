@@ -20,7 +20,7 @@ public class IdleTransition extends Transition {
         return new Condition() {
             @Override
             public boolean eval(GameWorld gameWorld) {
-                return false;
+                return !gameWorld.isPlayerEngaged() && owner.wasIdle();
             }
         };
     }
