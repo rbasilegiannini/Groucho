@@ -21,8 +21,8 @@ public class EngageTransition extends Transition {
     public Condition guard() {
         return new Condition() {
             @Override
-            public boolean eval(GameWorld gameWorld) {
-                return gameWorld.isPlayerEngaged() && !gameWorld.isPlayerReached();
+            public boolean eval() {
+                return owner.isPlayerEngaged() && !owner.isPlayerReached();
             }
         };
     }

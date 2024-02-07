@@ -18,13 +18,15 @@ import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.controller.Orientation;
+import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Sight {
-    private final GameWorld gameWorld;
+    //private final GameWorld gameWorld;
+    private final AIComponent aiComponent;
     private final World world;
     private Orientation orientation;
     private final Vec2 origin;
@@ -36,9 +38,9 @@ public class Sight {
     private List<GameObject> hitGameObjects = new ArrayList<>();
     private List<Float> fractions = new ArrayList<>();
 
-    public Sight (GameWorld gameWorld, Vec2 origin) {
-        this.gameWorld = gameWorld;
-        this.world = gameWorld.getWorld();
+    public Sight (AIComponent aiComponent, World world, Vec2 origin) {
+        this.aiComponent = aiComponent;
+        this.world = world;
         this.origin = origin;
         this.numOfPoints = pointsOfEnemySight;
         this.orientation = Orientation.UP;
@@ -81,15 +83,15 @@ public class Sight {
             GameObject firstGO = hitGameObjects.get(indexLessFraction);
             if(firstGO.role == Role.PLAYER) {
                 Log.i("RayCast", "I see you");
-                gameWorld.setPlayerEngaged(true);
+                aiComponent.setPlayerEngaged(true);
                 lastSeen = System.currentTimeMillis();
             }
             hitGameObjects.clear();
             fractions.clear();
         }
 
-        if (gameWorld.isPlayerEngaged() && System.currentTimeMillis() - lastSeen > 5000) {
-            gameWorld.setPlayerEngaged(false);
+        if (aiComponent.isPlayerEngaged() && System.currentTimeMillis() - lastSeen > 5000) {
+            aiComponent.setPlayerEngaged(false);
         }
     }
 

@@ -47,8 +47,6 @@ public class GameWorld {
     private GameGrid grid;
     private final List<GameObject> objects;
     private TouchHandler touchHandler;
-    private boolean isPlayerEngaged = false;
-    private boolean isPlayerReached = false;
 
     public GameWorld(Box physicalSize, Box screenSize, Activity newActivity) {
         GameWorld.physicalSize = physicalSize;
@@ -80,6 +78,7 @@ public class GameWorld {
     public Bitmap getBuffer() {return graphics.getBuffer();}
     public World getWorld() {return physics.getWorld();}
     public Vec2 getPlayerPosition() {return player.getPosition();}
+    public GameGrid getGameGrid() {return grid;}
     public Node getGameGridNode(int posX, int poxY) {return grid.getNode(posX, poxY);}
 
     public synchronized void addGameObject(GameObject obj) {objects.add(obj);}
@@ -174,27 +173,5 @@ public class GameWorld {
         Vec2 force = new Vec2(20*(forceX/module), 20*(forceY/module));
 
         physics.applyForce(force);
-    }
-
-    public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
-    public boolean isPlayerEngaged() {
-        return isPlayerEngaged;
-    }
-
-    public void setPlayerReached(boolean isPlayerReached) {
-        this.isPlayerReached = isPlayerReached;
-    }
-
-    public boolean isPlayerReached() {return isPlayerReached;}
-
-    public boolean isAPlayerNeighbor(Node nodeOnGrid) {
-        Node playerOnGrid = grid.getNode(
-                (int)getPlayerPosition().getX()/cellSize,
-                (int)getPlayerPosition().getY()/cellSize
-        );
-
-        List<Node> playerNeighbors = grid.getNeighbors(playerOnGrid);
-
-        return playerNeighbors.contains(nodeOnGrid);
     }
 }

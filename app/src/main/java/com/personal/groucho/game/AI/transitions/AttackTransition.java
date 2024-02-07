@@ -20,8 +20,8 @@ public class AttackTransition extends Transition {
     public Condition guard() {
         return new Condition() {
             @Override
-            public boolean eval(GameWorld gameWorld) {
-                return gameWorld.isPlayerReached();
+            public boolean eval() {
+                return owner.isPlayerReached();
             }
         };
     }

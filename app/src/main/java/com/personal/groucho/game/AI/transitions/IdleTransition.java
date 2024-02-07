@@ -19,8 +19,8 @@ public class IdleTransition extends Transition {
     public Condition guard() {
         return new Condition() {
             @Override
-            public boolean eval(GameWorld gameWorld) {
-                return !gameWorld.isPlayerEngaged() && owner.wasIdle();
+            public boolean eval() {
+                return !owner.isPlayerEngaged() && owner.wasIdle();
             }
         };
     }

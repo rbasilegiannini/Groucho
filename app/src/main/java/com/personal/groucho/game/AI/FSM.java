@@ -14,11 +14,11 @@ public class FSM {
         currentActions = new ArrayList<>();
     }
 
-    public List<Action> getActions(GameWorld gameWorld) {
+    public List<Action> getActions() {
         currentActions.clear();
 
         for (Transition transition : currentState.outgoingTransitions()) {
-            if(transition.guard().eval(gameWorld)){
+            if(transition.guard().eval()){
                 currentActions.addAll(transition.actions());
                 currentActions.addAll(currentState.exitActions());
                 currentState = transition.targetState();

@@ -26,6 +26,7 @@ public class AIComponent extends WalkingComponent {
     private final int maxSteps;
     private int currentSteps;
     private final FSM fsm;
+    private final GameGrid grid;
     private Sight sight = null;
     private final GameWorld gameWorld;
     private final AStar aStar;
@@ -38,9 +39,12 @@ public class AIComponent extends WalkingComponent {
     private boolean newNode = true;
     private boolean wasIdle = false;
     private boolean wasPatrol = false;
+    private boolean isPlayerEngaged = false;
+    private boolean isPlayerReached = false;
 
-    public AIComponent(GameWorld gameWorld, GameGrid grid) {
+    public AIComponent(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
+        this.grid = gameWorld.getGameGrid();
         fsm = new FSM(new Idle(this));
         aStar = new AStar(grid);
         currentPath = new ArrayList<>();
@@ -57,10 +61,11 @@ public class AIComponent extends WalkingComponent {
                 positionComponent = (PositionComponent) owner.getComponent(ComponentType.Position);
 
             sight = new Sight(
-                    gameWorld,
+                    this,
+                    gameWorld.getWorld(),
                     new Vec2(positionComponent.getPosX(),positionComponent.getPosY()));
         }
-        List<Action> actions = fsm.getActions(gameWorld);
+        List<Action> actions = fsm.getActions();
         for (Action action : actions)
             action.doIt();
 
@@ -143,14 +148,14 @@ public class AIComponent extends WalkingComponent {
         if (hasPlayerChangedPosition())
             setPathToPlayer();
 
-        gameWorld.setPlayerReached(gameWorld.isAPlayerNeighbor(positionOnGrid));
+        isPlayerReached = isAPlayerNeighbor(positionOnGrid);
 
         if (!currentPath.isEmpty() || !newNode) {
             walkingToDestination();
         }
         else {
             updateSprite(skeletonIdle);
-            gameWorld.setPlayerReached(false);
+            isPlayerReached = false;
         }
     }
 
@@ -191,7 +196,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     public void activeAttackAction() {
-        gameWorld.setPlayerReached(gameWorld.isAPlayerNeighbor(positionOnGrid));
+        isPlayerReached = isAPlayerNeighbor(positionOnGrid);
     }
 
     private void setPathToPlayer() {
@@ -246,4 +251,28 @@ public class AIComponent extends WalkingComponent {
     public boolean wasPatrol() {
         return wasPatrol;
     }
+
+    //
+
+    public boolean isAPlayerNeighbor(Node nodeOnGrid) {
+        Node playerOnGrid = grid.getNode(
+                (int)gameWorld.getPlayerPosition().getX()/cellSize,
+                (int)gameWorld.getPlayerPosition().getY()/cellSize
+        );
+
+        List<Node> playerNeighbors = grid.getNeighbors(playerOnGrid);
+
+        return playerNeighbors.contains(nodeOnGrid);
+    }
+
+    public boolean isPlayerEngaged() {
+        return isPlayerEngaged;
+    }
+
+    public void setPlayerEngaged(boolean isPlayerEngaged) {
+        this.isPlayerEngaged = isPlayerEngaged;
+    }
+
+    public boolean isPlayerReached() {return isPlayerReached;}
+
 }

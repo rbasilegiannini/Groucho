@@ -45,7 +45,7 @@ public class FirstLevel extends Level{
 
         // Set furniture
         gameWorld.addGameObject(GameObjectFactory.
-                makeWall(bufferWidth, bufferHeight/2, 100, bufferHeight, gameWorld)
+                makeWall(bufferWidth-300, bufferHeight/2, 100, bufferHeight-500, gameWorld)
         );
         gameWorld.addGameObject(GameObjectFactory.
                 makeFurniture(
@@ -63,10 +63,10 @@ public class FirstLevel extends Level{
         // Set enemies
         gameWorld.addGameObject(GameObjectFactory.
                 makeEnemy(
-                        124,344,
+                        124,600,
                         skeletonHealth,
-                        Spritesheets.skeleton_idle,
-                        Spritesheets.skeleton_death,
+                        Spritesheets.skeletonIdle,
+                        Spritesheets.skeletonDeath,
                         gameWorld, grid)
         );
 
