@@ -6,6 +6,7 @@ import com.personal.groucho.badlogic.androidgames.framework.Sound;
 public class Sounds {
     public static Sound loading;
     public static Sound shooting;
+    public static Sound stabbing;
     public static Sound click;
     public static Sound bulletHitFurniture;
     public static Sound bulletHitEnemy;
@@ -15,6 +16,7 @@ public class Sounds {
     public static void init(Audio audio) {
         loading = audio.newSound("loading.mp3");
         shooting = audio.newSound("shot.mp3");
+        stabbing = audio.newSound("stab.mp3");
         click = audio.newSound("click.mp3");
         bulletHitEnemy = audio.newSound("bullet_hit_enemy.mp3");
         bulletHitFurniture = audio.newSound("bullet_hit_furniture.mp3");
