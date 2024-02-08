@@ -85,9 +85,9 @@ public class AIComponent extends WalkingComponent {
 
     public void update(GameWorld gameWorld) {
         if (sight == null) {
-            if (positionComponent == null)
+            if (positionComponent == null) {
                 positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
-
+            }
             sight = new Sight(
                     this,
                     gameWorld.getWorld(),
@@ -109,10 +109,12 @@ public class AIComponent extends WalkingComponent {
 
     // Idle actions
     public void entryIdleAction() {
-        if (!currentPath.isEmpty() || !isNodeReached)
+        if (!currentPath.isEmpty() || !isNodeReached) {
             updateSprite(skeletonWalk);
-        else
+        }
+        else {
             updateSprite(skeletonIdle);
+        }
     }
 
     public void activeIdleAction() {
@@ -142,9 +144,9 @@ public class AIComponent extends WalkingComponent {
     }
 
     public void activePatrolAction() {
-        if (positionComponent == null)
+        if (positionComponent == null) {
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
-
+        }
         if (!currentPath.isEmpty() || !isNodeReached)
             walkingToDestination();
         else {
@@ -155,6 +157,8 @@ public class AIComponent extends WalkingComponent {
             }
             patrol();
         }
+        positionComponent.setOrientation(Orientation.RIGHT);
+
     }
 
     public void exitPatrolAction() {
@@ -174,9 +178,9 @@ public class AIComponent extends WalkingComponent {
 
     // Engage actions
     public void entryEngageAction(){
-        if (positionComponent == null)
+        if (positionComponent == null) {
             positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
-
+        }
         positionOnGrid = grid.getNode(
                 positionComponent.getPositionXOnGrid(),
                 positionComponent.getPositionYOnGrid()
@@ -188,16 +192,15 @@ public class AIComponent extends WalkingComponent {
     }
 
     public void activeEngageAction(){
-        if (hasPlayerChangedPosition())
+        if (hasPlayerChangedPosition() && currentNode == null) {
             setPathToPlayer();
-
+        }
         isPlayerReached = isAPlayerNeighbor();
 
         if (!currentPath.isEmpty() || !isNodeReached) {
             walkingToDestination();
         }
         else {
-            updateSprite(skeletonIdle);
             isPlayerReached = false;
         }
     }
@@ -231,6 +234,11 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void setPathToPlayer() {
+        positionOnGrid = grid.getNode(
+                positionComponent.getPositionXOnGrid(),
+                positionComponent.getPositionYOnGrid()
+        );
+
         playerPositionOnGrid = grid.getNode(
                 (int) gameWorld.getPlayerPosition().getX()/cellSize,
                 (int) gameWorld.getPlayerPosition().getY()/cellSize
@@ -262,11 +270,13 @@ public class AIComponent extends WalkingComponent {
                 positionComponent.getPositionYOnGrid()
         );
 
-        if (positionOnGrid.getPosX() != currentNode.getPosX())
-            walkingToXCoordinate(currentNode.getPosX());
+        if (positionOnGrid.getPosX() != currentNode.getPosX()) {
+            walkingToXCoordinate(positionOnGrid.getPosX(), currentNode.getPosX());
+        }
+        else if (positionOnGrid.getPosY() != currentNode.getPosY()) {
+            walkingToYCoordinate(positionOnGrid.getPosY(), currentNode.getPosY());
+        }
 
-        else if (positionOnGrid.getPosY() != currentNode.getPosY())
-            walkingToYCoordinate(currentNode.getPosY());
 
         if (positionOnGrid.equal(currentNode)) {
             isNodeReached = true;
@@ -274,32 +284,24 @@ public class AIComponent extends WalkingComponent {
         }
     }
 
-    private void walkingToXCoordinate(int targetPosX){
-        int positionOnGridX = positionOnGrid.getPosX();
-
-        if (positionOnGridX != targetPosX) {
-            if (positionOnGridX < targetPosX) {
-                positionComponent.setOrientation(Orientation.RIGHT);
-            }
-            if (positionOnGridX > targetPosX) {
-                positionComponent.setOrientation(Orientation.LEFT);
-            }
-            walking(skeletonWalk, skeletonSpeed);
+    private void walkingToXCoordinate(int startX, int targetPosX){
+        if (startX < targetPosX) {
+            positionComponent.setOrientation(Orientation.RIGHT);
         }
+        if (startX > targetPosX) {
+            positionComponent.setOrientation(Orientation.LEFT);
+        }
+        walking(skeletonWalk, skeletonSpeed);
     }
 
-    private void walkingToYCoordinate(int targetPosY){
-        int positionOnGridY = positionOnGrid.getPosY();
-
-        if (positionOnGridY != targetPosY) {
-            if (positionOnGridY < targetPosY) {
-                positionComponent.setOrientation(Orientation.DOWN);
-            }
-            if (positionOnGridY > targetPosY) {
-                positionComponent.setOrientation(Orientation.UP);
-            }
-            walking(skeletonWalk, skeletonSpeed);
+    private void walkingToYCoordinate(int startY, int targetPosY){
+        if (startY < targetPosY) {
+            positionComponent.setOrientation(Orientation.DOWN);
         }
+        if (startY > targetPosY) {
+            positionComponent.setOrientation(Orientation.UP);
+        }
+        walking(skeletonWalk, skeletonSpeed);
     }
 
     @Override
