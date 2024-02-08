@@ -61,4 +61,5 @@ public class Spritesheet {
     public long getDelay(int animation) {
         return delay[animation];
     }
+    public int getLength(int animation) {return length[animation];}
 }

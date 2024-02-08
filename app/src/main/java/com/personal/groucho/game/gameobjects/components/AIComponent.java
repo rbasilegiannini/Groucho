@@ -1,10 +1,17 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.Events.enemyHitPlayerEvent;
+import static com.personal.groucho.game.constants.CharacterProperties.skeletonPower;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.constants.CharacterProperties.skeletonSpeed;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonHurt;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;
+import static com.personal.groucho.game.constants.System.characterDimensionsX;
+import static com.personal.groucho.game.constants.System.characterScaleFactor;
+
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.AI.Action;
@@ -41,6 +48,7 @@ public class AIComponent extends WalkingComponent {
     private Node currentNode;
     private final int maxSteps;
     private int currentSteps;
+    private long lastHitMillis;
     private boolean isNodeReached = true;
     private boolean isPlayerEngaged = false;
     private boolean isPlayerReached = false;
@@ -183,7 +191,7 @@ public class AIComponent extends WalkingComponent {
         if (hasPlayerChangedPosition())
             setPathToPlayer();
 
-        isPlayerReached = isAPlayerNeighbor(positionOnGrid);
+        isPlayerReached = isAPlayerNeighbor();
 
         if (!currentPath.isEmpty() || !isNodeReached) {
             walkingToDestination();
@@ -207,12 +215,19 @@ public class AIComponent extends WalkingComponent {
 
     // Attack actions
     public void entryAttackAction() {
+        lastHitMillis = System.currentTimeMillis();
         sight.setNewOrientation(positionComponent.getOrientation());
         updateSprite(skeletonHurt);
     }
 
     public void activeAttackAction() {
-        isPlayerReached = isAPlayerNeighbor(positionOnGrid);
+        isPlayerReached = isAPlayerNeighbor();
+
+        long delay = skeletonHurt.getDelay(0)*skeletonHurt.getLength(0);
+        if (isPlayerReached && System.currentTimeMillis() - lastHitMillis > delay) {
+            enemyHitPlayerEvent(gameWorld.getPlayerGO(), skeletonPower);
+            lastHitMillis = System.currentTimeMillis();
+        }
     }
 
     private void setPathToPlayer() {
@@ -225,15 +240,15 @@ public class AIComponent extends WalkingComponent {
         currentPath = aStar.findPath(positionOnGrid, playerPositionOnGrid);
     }
 
-    public boolean isAPlayerNeighbor(Node nodeOnGrid) {
-        Node playerOnGrid = grid.getNode(
-                (int)gameWorld.getPlayerPosition().getX()/cellSize,
-                (int)gameWorld.getPlayerPosition().getY()/cellSize
-        );
+    public boolean isAPlayerNeighbor() {
+        float distanceFromPlayerX =
+                (float)positionComponent.getPosX() - gameWorld.getPlayerPosition().getX();
+        float distanceFromPlayerY =
+                (float)positionComponent.getPosY() - gameWorld.getPlayerPosition().getY();
 
-        List<Node> playerNeighbors = grid.getNeighbors(playerOnGrid);
+        float distanceFromPlayer = (float)sqrt(pow(distanceFromPlayerX,2) + pow(distanceFromPlayerY,2));
 
-        return playerNeighbors.contains(nodeOnGrid);
+        return distanceFromPlayer < 1.2*characterScaleFactor*characterDimensionsX;
     }
 
     private void walkingToDestination() {

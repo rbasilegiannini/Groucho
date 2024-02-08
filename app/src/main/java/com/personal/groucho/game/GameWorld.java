@@ -68,6 +68,7 @@ public class GameWorld {
     public void setGameGrid(GameGrid grid) {this.grid = grid;}
     public Bitmap getBuffer() {return graphics.getBuffer();}
     public World getWorld() {return physics.getWorld();}
+    public GameObject getPlayerGO(){return player.getGameObject();}
     public Vec2 getPlayerPosition() {return player.getPosition();}
     public GameGrid getGameGrid() {return grid;}
 

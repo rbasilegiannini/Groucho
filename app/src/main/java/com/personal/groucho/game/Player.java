@@ -59,4 +59,6 @@ public class Player {
     public Vec2 getPosition() {
         return new Vec2(playerPosX, playerPosY);
     }
+
+    public GameObject getGameObject() {return playerGO;}
 }

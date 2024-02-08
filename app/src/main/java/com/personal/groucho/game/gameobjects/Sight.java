@@ -32,7 +32,7 @@ public class Sight {
     private final float[] angles;
     private final float phase;
     private final int numOfPoints;
-    private long lastSeen;
+    private long lastSeenMillis;
     private final List<GameObject> hitGameObjects = new ArrayList<>();
     private final List<Float> fractions = new ArrayList<>();
 
@@ -82,13 +82,13 @@ public class Sight {
             if(firstGO.role == Role.PLAYER) {
                 Log.i("RayCast", "I see you");
                 aiComponent.setPlayerEngaged(true);
-                lastSeen = System.currentTimeMillis();
+                lastSeenMillis = System.currentTimeMillis();
             }
             hitGameObjects.clear();
             fractions.clear();
         }
 
-        if (aiComponent.isPlayerEngaged() && System.currentTimeMillis() - lastSeen > 5000) {
+        if (aiComponent.isPlayerEngaged() && System.currentTimeMillis() - lastSeenMillis > 5000) {
             aiComponent.setPlayerEngaged(false);
         }
     }

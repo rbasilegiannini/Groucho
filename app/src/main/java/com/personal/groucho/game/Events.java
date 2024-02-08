@@ -4,6 +4,7 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.assets.Sounds.bulletHitEnemy;
 import static com.personal.groucho.game.assets.Sounds.bulletHitFurniture;
+import static com.personal.groucho.game.assets.Sounds.stabbing;
 import static com.personal.groucho.game.constants.CharacterProperties.grouchoPower;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
@@ -14,15 +15,15 @@ import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 
 public class Events {
-    public static void playerShootEnemyEvent(GameObject hitGO) {
+    public static void playerShootEnemyEvent(GameObject enemy) {
         bulletHitEnemy.play(1f);
-        AliveComponent alive = (AliveComponent) hitGO.getComponent(ComponentType.ALIVE);
+        AliveComponent alive = (AliveComponent) enemy.getComponent(ComponentType.ALIVE);
         if (alive.getCurrentStatus() != DEAD) alive.damage(grouchoPower);
     }
 
-    public static void playerShootFurnitureEvent(GameObject hitGO, float originX, float originY) {
+    public static void playerShootFurnitureEvent(GameObject furniture, float originX, float originY) {
         bulletHitFurniture.play(1f);
-        PhysicsComponent physics = (PhysicsComponent) hitGO.getComponent(ComponentType.PHYSICS);
+        PhysicsComponent physics = (PhysicsComponent) furniture.getComponent(ComponentType.PHYSICS);
         float goPosX = physics.getPositionX();
         float goPosY = physics.getPositionY();
         float forceX = goPosX - fromBufferToMetersX(originX);
@@ -36,5 +37,11 @@ public class Events {
 
     public static void playerShootWallEvent() {
         bulletHitFurniture.play(1f);
+    }
+
+    public static void enemyHitPlayerEvent(GameObject player, int power) {
+        stabbing.play(1f);
+        AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.ALIVE);
+        if (alive.getCurrentStatus() != DEAD) alive.damage(power);
     }
 }
