@@ -129,15 +129,15 @@ public class GameWorld {
         if (hitGO != null) {
             switch (hitGO.role) {
                 case ENEMY:
-                    Events.hitEnemyEvent(hitGO);
+                    Events.playerShootEnemyEvent(hitGO);
                     break;
 
                 case FURNITURE:
-                    Events.hitFurnitureEvent(hitGO, originX, originY);
+                    Events.playerShootFurnitureEvent(hitGO, originX, originY);
                     break;
 
                 case WALL:
-                    Events.hitWallEvent();
+                    Events.playerShootWallEvent();
                     break;
             }
         }

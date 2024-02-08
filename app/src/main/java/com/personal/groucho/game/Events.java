@@ -14,13 +14,13 @@ import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 
 public class Events {
-    public static void hitEnemyEvent(GameObject hitGO) {
+    public static void playerShootEnemyEvent(GameObject hitGO) {
         bulletHitEnemy.play(1f);
         AliveComponent alive = (AliveComponent) hitGO.getComponent(ComponentType.ALIVE);
         if (alive.getCurrentStatus() != DEAD) alive.damage(grouchoPower);
     }
 
-    public static void hitFurnitureEvent( GameObject hitGO, float originX, float originY) {
+    public static void playerShootFurnitureEvent(GameObject hitGO, float originX, float originY) {
         bulletHitFurniture.play(1f);
         PhysicsComponent physics = (PhysicsComponent) hitGO.getComponent(ComponentType.PHYSICS);
         float goPosX = physics.getPositionX();
@@ -34,7 +34,7 @@ public class Events {
         physics.applyForce(force);
     }
 
-    public static void hitWallEvent() {
+    public static void playerShootWallEvent() {
         bulletHitFurniture.play(1f);
     }
 }

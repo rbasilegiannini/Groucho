@@ -93,7 +93,7 @@ public class Sight {
         }
     }
 
-    public void updateSight(Vec2 origin) {
+    public void updateSightPosition(Vec2 origin) {
         for (Vec2 point : points) {
             point.setX(point.getX() + origin.getX()-this.origin.getX());
             point.setY(point.getY() + origin.getY()-this.origin.getY());

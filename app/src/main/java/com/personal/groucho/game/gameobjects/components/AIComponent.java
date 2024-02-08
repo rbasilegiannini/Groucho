@@ -89,6 +89,7 @@ public class AIComponent extends WalkingComponent {
         for (Action action : actions)
             action.doIt();
 
+        sight.updateSightPosition(positionComponent.getPosition());
         sight.see();
     }
 
@@ -289,7 +290,7 @@ public class AIComponent extends WalkingComponent {
     @Override
     protected void walking(Spritesheet sheet, float speed) {
         super.walking(sheet, speed);
-        sight.updateSight(positionComponent.getPosition());
+        sight.updateSightPosition(positionComponent.getPosition());
         sight.setNewOrientation(positionComponent.getOrientation());
     }
 }
