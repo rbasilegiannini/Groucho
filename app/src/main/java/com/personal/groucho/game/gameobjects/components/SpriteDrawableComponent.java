@@ -39,7 +39,10 @@ public class SpriteDrawableComponent extends DrawableComponent {
         currentAnimation = animation;
     }
     public void setStep(int step) { currentStep = step;}
-    public void setDeathSpritesheet() {currentSpritesheet = deathSpritesheet;}
+    public void setDeathSpritesheet() {
+        currentSpritesheet = deathSpritesheet;
+        currentAnimation = 0;
+    }
 
     public void updateColorFilter(int currentHealth, int maxHealth) {
         int greenAndBlue = (int)(255 * (float) currentHealth /maxHealth);

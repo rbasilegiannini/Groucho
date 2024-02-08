@@ -39,8 +39,16 @@ public class AliveComponent extends Component {
     private void die() {
         currentStatus = Status.DEAD;
 
-        if (sprite != null)
+        if (sprite == null) {
+            Component component = owner.getComponent(ComponentType.DRAWABLE);
+            if (component != null) {
+                sprite = (SpriteDrawableComponent) component;
+                sprite.setDeathSpritesheet();
+            }
+        }
+        else {
             sprite.setDeathSpritesheet();
+        }
     }
 
     private void updateSprite() {
@@ -51,8 +59,9 @@ public class AliveComponent extends Component {
                 sprite.updateColorFilter(currentHealth, maxHealth);
             }
         }
-        else
+        else {
             sprite.updateColorFilter(currentHealth, maxHealth);
+        }
     }
 
     public Status getCurrentStatus() {return currentStatus;}
