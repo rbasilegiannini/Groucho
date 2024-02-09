@@ -38,24 +38,4 @@ public class GameGrid {
             }
         }
     }
-
-    public List<Node> getNeighbors(Node node) {
-        List<Node> neighbors = new ArrayList<>();
-
-        int x = node.getPosX();
-        int y = node.getPosY();
-
-        int[][] directions = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
-
-        for (int[] direction : directions) {
-            int newX = x + direction[0];
-            int newY = y + direction[1];
-
-            if (isInGrid(newX, newY)) {
-                neighbors.add(getNode(newX, newY));
-            }
-        }
-
-        return neighbors;
-    }
 }

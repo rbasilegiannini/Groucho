@@ -95,7 +95,6 @@ public class GameWorld {
 
     public synchronized void update(float elapsedTime) {
         physics.update(elapsedTime, objects);
-        player.update(graphics.getCanvas(), controller);
 
         if (!gameOver) {
             //TODO: Use a better solution
@@ -109,19 +108,22 @@ public class GameWorld {
                 }
             }
         }
-            //TODO: Use a better solution
-            for (GameObject gameObject : objects) {
-                Component component = gameObject.getComponent(ComponentType.AI);
-                if (component != null) {
-                    AIComponent ai = (AIComponent) component;
-                    ai.update(this);
 
-                    //
-                    if (sight == null) sight = ai.getSight();
-                }
+        player.update(graphics.getCanvas(), controller);
+
+        //TODO: Use a better solution
+        for (GameObject gameObject : objects) {
+            Component component = gameObject.getComponent(ComponentType.AI);
+            if (component != null) {
+                AIComponent ai = (AIComponent) component;
+                ai.update(this);
+
+                //
+                if (sight == null) sight = ai.getSight();
             }
-
+        }
     }
+
     //
     Sight sight = null;
     //

@@ -93,36 +93,34 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeWall(int posX, int posY, float dimX, float dimY, GameWorld gameWorld) {
+    public static GameObject makeWall(int posX, int centerY, float dimX, float dimY, GameWorld gameWorld) {
         GameObject gameObject = new GameObject("Wall", Role.WALL, gameWorld);
 
         Paint paint = new Paint();
         paint.setColor(Color.valueOf(188, 143, 143).toArgb());
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        gameObject.addComponent(new PositionComponent(posX, posY));
+        gameObject.addComponent(new PositionComponent(posX, centerY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
-        gameObject.addComponent(
-                new BoxDrawableComponent(dimX, dimY, paint)
-        );
+        gameObject.addComponent(new BoxDrawableComponent(dimX, dimY, paint));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY, 0f, 0f, BodyType.staticBody);
+        PhysicsProperties properties = new PhysicsProperties(posX, centerY, 0f, 0f, BodyType.staticBody);
         setFurniturePhysics(physics, properties, dimX, dimY);
 
         return gameObject;
     }
 
-    public static GameObject makeFurniture(int posX, int posY, float dimX, float dimY, GameWorld gameWorld,
+    public static GameObject makeFurniture(int centerX, int centerY, float dimX, float dimY, GameWorld gameWorld,
                                            Bitmap texture) {
         GameObject gameObject = new GameObject("Furniture", Role.FURNITURE, gameWorld);
 
-        gameObject.addComponent(new PositionComponent(posX, posY));
+        gameObject.addComponent(new PositionComponent(centerX, centerY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new TextureDrawableComponent(texture, (int)dimX, (int)dimY));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY, 5f, 0, BodyType.dynamicBody);
+        PhysicsProperties properties = new PhysicsProperties(centerX, centerY, 5f, 0, BodyType.dynamicBody);
         setFurniturePhysics(physics, properties, dimX, dimY);
 
         return gameObject;
