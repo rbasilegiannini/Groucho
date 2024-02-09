@@ -19,9 +19,10 @@ public class Graphics {
 
     public Bitmap buffer;
     private final Canvas canvas;
+    private final GameWorld gameWorld;
 
-
-    public Graphics() {
+    public Graphics(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
         this.canvas = new Canvas(buffer);
     }
@@ -30,7 +31,9 @@ public class Graphics {
         canvas.drawARGB(255,0,0,0);
         level.draw(canvas);
         drawGameObjects(objects);
-        controller.draw(canvas);
+        if (!gameWorld.isGameOver()) {
+            controller.draw(canvas);
+        }
     }
 
     private void drawGameObjects(List<GameObject> objects) {

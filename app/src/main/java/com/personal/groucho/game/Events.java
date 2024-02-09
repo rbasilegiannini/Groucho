@@ -6,6 +6,7 @@ import static com.personal.groucho.game.assets.Sounds.bulletHitEnemy;
 import static com.personal.groucho.game.assets.Sounds.bulletHitFurniture;
 import static com.personal.groucho.game.assets.Sounds.stabbing;
 import static com.personal.groucho.game.constants.CharacterProperties.grouchoPower;
+import static com.personal.groucho.game.constants.Environment.brightness;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import com.google.fpl.liquidfun.Vec2;
@@ -39,9 +40,19 @@ public class Events {
         bulletHitFurniture.play(1f);
     }
 
-    public static void enemyHitPlayerEvent(GameObject player, int power) {
+    public static void enemyHitPlayerEvent(AliveComponent alive, int power) {
         stabbing.play(1f);
-        AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.ALIVE);
-        if (alive.getCurrentStatus() != DEAD) alive.damage(power);
+        alive.damage(power);
+    }
+
+    public static void gameOverEvent(GameWorld gameWorld) {
+        brightness = 1f;
+
+        gameWorld.getPlayerGO().removeComponent(ComponentType.ALIVE);
+        gameWorld.getPlayerGO().removeComponent(ComponentType.CONTROLLABLE);
+        gameWorld.getPlayerGO().removeComponent(ComponentType.PHYSICS);
+        gameWorld.getPlayerGO().removeComponent(ComponentType.LIGHT);
+
+        gameWorld.GameOver();
     }
 }

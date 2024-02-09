@@ -29,4 +29,6 @@ public class FSM {
         currentActions.addAll(currentState.activeActions());
         return currentActions;
     }
+
+    public void setState(State newState) {currentState = newState;}
 }

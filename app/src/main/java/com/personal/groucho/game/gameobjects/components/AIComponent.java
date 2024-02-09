@@ -9,6 +9,7 @@ import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;
 import static com.personal.groucho.game.constants.System.characterDimensionsX;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
+import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
@@ -224,10 +225,26 @@ public class AIComponent extends WalkingComponent {
     public void activeAttackAction() {
         isPlayerReached = isAPlayerNeighbor();
 
-        long delay = skeletonHurt.getDelay(0)*skeletonHurt.getLength(0);
-        if (isPlayerReached && System.currentTimeMillis() - lastHitMillis > delay) {
-            enemyHitPlayerEvent(gameWorld.getPlayerGO(), skeletonPower);
-            lastHitMillis = System.currentTimeMillis();
+        AliveComponent alive = (AliveComponent) gameWorld.getPlayerGO().getComponent(ComponentType.ALIVE);
+        if (!gameWorld.isGameOver() && alive.getCurrentStatus() != DEAD) {
+            long delay = skeletonHurt.getDelay(0) * skeletonHurt.getLength(0);
+            if (isPlayerReached && System.currentTimeMillis() - lastHitMillis > delay) {
+                enemyHitPlayerEvent(alive, skeletonPower);
+                lastHitMillis = System.currentTimeMillis();
+            }
+        }
+        else {
+            isPlayerEngaged = false;
+            isPlayerReached = false;
+
+            switch (originalState) {
+                case IDLE:
+                    fsm.setState(new Idle(this));
+                    break;
+                case PATROL:
+                    fsm.setState(new Patrol(this));
+                    break;
+            }
         }
     }
 

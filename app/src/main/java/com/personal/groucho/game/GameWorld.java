@@ -1,5 +1,9 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.Events.gameOverEvent;
+import static com.personal.groucho.game.Events.playerShootEnemyEvent;
+import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
+import static com.personal.groucho.game.Events.playerShootWallEvent;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.app.Activity;
@@ -12,6 +16,7 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.gameobjects.Role;
 import com.personal.groucho.game.gameobjects.Sight;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
@@ -38,6 +43,7 @@ public class GameWorld {
     private GameGrid grid;
     private final List<GameObject> objects;
     private TouchHandler touchHandler;
+    private boolean gameOver = false;
 
     public GameWorld(Box physicalSize, Box screenSize, Activity newActivity) {
         GameWorld.physicalSize = physicalSize;
@@ -48,7 +54,7 @@ public class GameWorld {
         physics = new Physics(physicalSize);
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
 
-        graphics = new Graphics();
+        graphics = new Graphics(this);
         objects = new ArrayList<>();
         currentLevel = new FirstLevel(this);
     }
@@ -76,8 +82,14 @@ public class GameWorld {
     public synchronized void removeGameObject(GameObject gameObject) {objects.remove(gameObject);}
 
     public synchronized void processInputs(){
+
         for (Input.TouchEvent event: touchHandler.getTouchEvents()) {
-            controller.consumeTouchEvent(event);
+            if (!gameOver) {
+                controller.consumeTouchEvent(event);
+            }
+//            else {
+//                menu.consumeTouchEvent(event);
+//            }
         }
     }
 
@@ -85,27 +97,30 @@ public class GameWorld {
         physics.update(elapsedTime, objects);
         player.update(graphics.getCanvas(), controller);
 
-        //TODO: Use a better solution
-        for (GameObject gameObject : objects) {
-            Component aliveComponent = gameObject.getComponent(ComponentType.ALIVE);
-            if (aliveComponent != null){
-                AliveComponent alive = (AliveComponent) aliveComponent;
-                if (alive.getCurrentStatus() == DEAD)
-                    handleDeath(gameObject);
+        if (!gameOver) {
+            //TODO: Use a better solution
+            for (GameObject gameObject : objects) {
+                Component aliveComponent = gameObject.getComponent(ComponentType.ALIVE);
+                if (aliveComponent != null) {
+                    AliveComponent alive = (AliveComponent) aliveComponent;
+                    if (alive.getCurrentStatus() == DEAD) {
+                        handleDeath(gameObject);
+                    }
+                }
             }
         }
+            //TODO: Use a better solution
+            for (GameObject gameObject : objects) {
+                Component component = gameObject.getComponent(ComponentType.AI);
+                if (component != null) {
+                    AIComponent ai = (AIComponent) component;
+                    ai.update(this);
 
-        //TODO: Use a better solution
-        for (GameObject gameObject : objects) {
-            Component component = gameObject.getComponent(ComponentType.AI);
-            if (component != null){
-                AIComponent ai = (AIComponent) component;
-                ai.update(this);
-
-                //
-                if (sight == null) sight = ai.getSight();
+                    //
+                    if (sight == null) sight = ai.getSight();
+                }
             }
-        }
+
     }
     //
     Sight sight = null;
@@ -119,10 +134,15 @@ public class GameWorld {
     }
 
     private void handleDeath(GameObject gameObject) {
-        gameObject.removeComponent(ComponentType.AI);
-        gameObject.removeComponent(ComponentType.PHYSICS);
-        gameObject.removeComponent(ComponentType.POSITION);
-        gameObject.removeComponent(ComponentType.ALIVE);
+        if (gameObject.role == Role.PLAYER) {
+            gameOverEvent(this);
+        }
+        else {
+            gameObject.removeComponent(ComponentType.AI);
+            gameObject.removeComponent(ComponentType.PHYSICS);
+            gameObject.removeComponent(ComponentType.POSITION);
+            gameObject.removeComponent(ComponentType.ALIVE);
+        }
     }
 
     public void shootEvent(float originX, float originY, float endX, float endY) {
@@ -130,17 +150,24 @@ public class GameWorld {
         if (hitGO != null) {
             switch (hitGO.role) {
                 case ENEMY:
-                    Events.playerShootEnemyEvent(hitGO);
+                    playerShootEnemyEvent(hitGO);
                     break;
 
                 case FURNITURE:
-                    Events.playerShootFurnitureEvent(hitGO, originX, originY);
+                    playerShootFurnitureEvent(hitGO, originX, originY);
                     break;
 
                 case WALL:
-                    Events.playerShootWallEvent();
+                    playerShootWallEvent();
                     break;
             }
         }
     }
+
+    public void GameOver() {
+        this.gameOver = true;
+        // Game over menu
+    }
+
+    public boolean isGameOver() {return gameOver;}
 }
