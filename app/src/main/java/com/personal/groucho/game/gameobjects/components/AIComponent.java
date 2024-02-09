@@ -157,8 +157,6 @@ public class AIComponent extends WalkingComponent {
             }
             patrol();
         }
-        positionComponent.setOrientation(Orientation.RIGHT);
-
     }
 
     public void exitPatrolAction() {
