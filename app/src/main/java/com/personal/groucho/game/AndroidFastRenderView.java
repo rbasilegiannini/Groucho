@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -30,12 +31,14 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
 
     public void run() {
         Rect dstRect = new Rect();
-        long startTime = System.nanoTime();
+        long startTime = System.nanoTime(), fpsTime = startTime, frameCounter = 0;
         while(running) {
             if(!holder.getSurface().isValid())
                 continue;
 
             float deltaTime = (System.nanoTime()-startTime) / 1000000000.0f;
+            long currentTime = System.nanoTime();
+            float fpsDeltaTime = (currentTime-fpsTime) / 1000000000f;
             startTime = System.nanoTime();
 
             gameWorld.processInputs();
@@ -46,6 +49,14 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             canvas.getClipBounds(dstRect);
             canvas.drawBitmap(framebuffer, null, dstRect, null);
             holder.unlockCanvasAndPost(canvas);
+
+            // Measure FPS
+            frameCounter++;
+            if (fpsDeltaTime > 1) { // Print every second
+                Log.d("FastRenderView", "Current FPS = " + frameCounter);
+                frameCounter = 0;
+                fpsTime = currentTime;
+            }
         }
     }
 
