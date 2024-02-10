@@ -21,6 +21,8 @@ import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
+import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Spritesheet;
@@ -35,6 +37,8 @@ import com.personal.groucho.game.gameobjects.components.SpriteDrawableComponent;
 import com.personal.groucho.game.gameobjects.components.TextureDrawableComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.controller.states.Idle;
+
+import java.util.Set;
 
 public class GameObjectFactory {
 
@@ -87,7 +91,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new AIComponent(gameWorld, originalState));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY,100f, 1f, BodyType.dynamicBody);
+        PhysicsProperties properties = new PhysicsProperties(posX, posY,100f, 1f, BodyType.kinematicBody);
         setCharacterPhysics(physics, properties);
 
         return gameObject;
@@ -107,6 +111,7 @@ public class GameObjectFactory {
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
         PhysicsProperties properties = new PhysicsProperties(centerX, centerY, 0f, 0f, BodyType.staticBody);
         setFurniturePhysics(physics, properties, dimX, dimY);
+        setFurnitureOnGameGrid(gameWorld.getGameGrid(), properties, dimX, dimY);
 
         return gameObject;
     }
@@ -195,5 +200,25 @@ public class GameObjectFactory {
         bodyDef.delete();
         fixtureDef.delete();
     }
+
+    private static void setFurnitureOnGameGrid(GameGrid grid, PhysicsProperties properties, float dimX,
+                                               float dimY) {
+        Set<Node> nodes = grid.getNodes(properties.positionX, properties.positionY, (int)dimX, (int)dimY);
+
+        int cost = 0;
+        switch (properties.type){
+            case staticBody:
+                cost = 100000;
+                break;
+            case dynamicBody:
+                cost = (int)properties.density;
+                break;
+        }
+
+        for (Node node : nodes) {
+            grid.setDefaultCostOnNode(node, cost);
+        }
+    }
+
 }
 
