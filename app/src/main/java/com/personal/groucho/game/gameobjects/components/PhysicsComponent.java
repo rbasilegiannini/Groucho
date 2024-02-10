@@ -18,6 +18,7 @@ public class PhysicsComponent extends Component {
     private final World world;
     private PositionComponent positionComponent = null;
     private Body body;
+    private float originalPosX, originalPosY;
 
     public PhysicsComponent(World world){
         this.world = world;
@@ -35,6 +36,8 @@ public class PhysicsComponent extends Component {
     public void setBody(BodyDef bodyDef) {
         body = world.createBody(bodyDef);
         body.setUserData(this.owner);
+        originalPosX = body.getPositionX();
+        originalPosY = body.getPositionY();
     }
 
     public void addFixture(FixtureDef fixtureDef) {
@@ -85,4 +88,15 @@ public class PhysicsComponent extends Component {
 
     public float getPositionX() {return body.getPositionX();}
     public float getPositionY() {return body.getPositionY();}
+
+    public boolean hasChangedPosition() {
+        if (body.getPositionX() != originalPosX || body.getPositionY() != originalPosY) {
+            originalPosX = body.getPositionX();
+            originalPosY = body.getPositionY();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
