@@ -1,7 +1,11 @@
 package com.personal.groucho.game.AI.pathfinding;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class GameGrid {
     private final int width;
@@ -22,13 +26,45 @@ public class GameGrid {
         }
     }
 
-    public Node getNode(int posX, int posY) {return grid[posX][posY];}
     public int getWidth() {return width;}
     public int getHeight() {return height;}
     public int getCellSize() {return cellSize;}
+    public Node getNode(int posX, int posY) {return grid[posX][posY];}
+    public Set<Node> getNodes(int centerX, int centerY, int dimX, int dimY) {
+        Set<Node> nodes = new HashSet<>();
+
+        int top = (centerY + dimY/2)/cellSize;
+        int left = (centerX - dimX/2)/cellSize;
+        int right = (centerX + dimX/2)/cellSize;
+        int bottom = (centerY - dimY/2)/cellSize;
+
+        for (int y = bottom; y <= top; y++){
+            if(isInGrid(left, y)){
+                nodes.add(grid[left][y]);
+            }
+            if(isInGrid(right, y)){
+                nodes.add(grid[right][y]);
+            }
+        }
+
+        for (int x = left; x <= right; x++){
+            if(isInGrid(x, bottom)){
+                nodes.add(grid[x][bottom]);
+            }
+            if(isInGrid(x, top)) {
+                nodes.add(grid[x][top]);
+            }
+        }
+
+        return nodes;
+    }
 
     public boolean isInGrid(int x, int y) {
         return x >= 0 && x < width && y >= 0 && y < height;
+    }
+
+    public void setDefaultCostOnNode(Node node, int dCost) {
+        grid[node.posX][node.posY].setDefaultCost(dCost);
     }
 
     public void reset() {
