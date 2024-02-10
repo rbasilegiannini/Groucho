@@ -88,7 +88,7 @@ public class Sight {
             fractions.clear();
         }
 
-        if (aiComponent.isPlayerEngaged() && System.currentTimeMillis() - lastSeenMillis > 5000) {
+        if (aiComponent.isPlayerEngaged() && System.currentTimeMillis() - lastSeenMillis > maxInvisiblePlayer) {
             aiComponent.setPlayerEngaged(false);
         }
     }

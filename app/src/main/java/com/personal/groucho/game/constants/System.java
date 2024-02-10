@@ -6,5 +6,6 @@ public class System {
     public static final int characterScaleFactor = 5;
     public static float distanceOfEnemySight = 1000;
     public static int pointsOfEnemySight = 10;
+    public static int maxInvisiblePlayer = 50000;
     public static int cellSize = characterScaleFactor*(int)characterDimensionsX;
 }
