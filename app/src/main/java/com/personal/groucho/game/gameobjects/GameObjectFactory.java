@@ -93,19 +93,19 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeWall(int posX, int centerY, float dimX, float dimY, GameWorld gameWorld) {
+    public static GameObject makeWall(int centerX, int centerY, float dimX, float dimY, GameWorld gameWorld) {
         GameObject gameObject = new GameObject("Wall", Role.WALL, gameWorld);
 
         Paint paint = new Paint();
         paint.setColor(Color.valueOf(188, 143, 143).toArgb());
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        gameObject.addComponent(new PositionComponent(posX, centerY));
+        gameObject.addComponent(new PositionComponent(centerX, centerY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld()));
         gameObject.addComponent(new BoxDrawableComponent(dimX, dimY, paint));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(posX, centerY, 0f, 0f, BodyType.staticBody);
+        PhysicsProperties properties = new PhysicsProperties(centerX, centerY, 0f, 0f, BodyType.staticBody);
         setFurniturePhysics(physics, properties, dimX, dimY);
 
         return gameObject;
@@ -158,7 +158,7 @@ public class GameObjectFactory {
         box.setAsBox(
                 (characterScaleFactor*toMetersXLength(characterDimensionsX))/2,
                 (characterScaleFactor*toMetersYLength(characterDimensionsY))/2,
-                0,1.6f,0
+                0,-0.5f,0
         );
 
         fixtureDef.setShape(box);

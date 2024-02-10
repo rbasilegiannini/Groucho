@@ -46,7 +46,7 @@ public class Spritesheet {
                 srcTop + frameHeight
         );
 
-        int destTop = y-(scaleFactor*frameHeight/2);
+        int destTop = (int) (y-(0.85*scaleFactor*frameHeight));
         int destLeft = x-(scaleFactor*frameWidth/2);
         Rect dest = new Rect(
                 destLeft, destTop,
