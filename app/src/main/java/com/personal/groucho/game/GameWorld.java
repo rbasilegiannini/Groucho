@@ -131,8 +131,10 @@ public class GameWorld {
         graphics.render(objects, currentLevel, controller);
 
         //
-        if (sight != null)
+        if (sight != null) {
             sight.drawDebugRayCast(graphics.getCanvas());
+            grid.drawDebugGrid(graphics.getCanvas());
+        }
     }
 
     private void handleDeath(GameObject gameObject) {
