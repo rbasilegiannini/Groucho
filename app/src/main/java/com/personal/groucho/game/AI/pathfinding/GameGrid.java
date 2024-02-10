@@ -38,4 +38,33 @@ public class GameGrid {
             }
         }
     }
+
+    public void drawDebugGrid(Canvas canvas){
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(Color.BLUE);
+
+        int startX;
+        int startY;
+        int endX;
+        int endY;
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                startX = x * cellSize;
+                startY = y*cellSize;
+
+                // Vertical lines
+                endX = startX;
+                endY = startY + cellSize;
+                canvas.drawLine(startX, startY, endX, endY, paint);
+
+                // Horizontal lines
+                endX = startX + cellSize;
+                endY = startY;
+                canvas.drawLine(startX, startY, endX, endY, paint);
+
+            }
+        }
+    }
 }
