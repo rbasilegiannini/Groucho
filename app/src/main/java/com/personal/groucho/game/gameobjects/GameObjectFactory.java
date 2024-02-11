@@ -144,6 +144,7 @@ public class GameObjectFactory {
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
         PhysicsProperties properties = new PhysicsProperties(posX, posY, 0f, 0, BodyType.staticBody);
         setFurniturePhysics(physics, properties);
+        setFurnitureOnGameGrid(gameWorld.getGameGrid(), properties, dimX, dimY);
 
         return gameObject;
     }

@@ -72,12 +72,10 @@ public class FirstLevel extends Level{
         );
 
         // Set health
-//        gameWorld.addGameObject(GameObjectFactory.
-//                makeHealth(-253, 556, gameWorld));
-//        gameWorld.addGameObject(GameObjectFactory.
-//                makeHealth(100, 410, gameWorld));
-//        gameWorld.addGameObject(GameObjectFactory.
-//                makeHealth(453, 556, gameWorld));
+        gameWorld.addGameObject(GameObjectFactory.
+                makeHealth(100, 410, gameWorld));
+        gameWorld.addGameObject(GameObjectFactory.
+                makeHealth(453, 556, gameWorld));
     }
 
     @Override

@@ -188,14 +188,7 @@ public class Physics {
     }
 
     private void handleEnemyCollision(GameObject enemy, GameObject object) {
-        PositionComponent position = (PositionComponent) enemy.getComponent(ComponentType.POSITION);
-        switch (object.role) {
-            case WALL:
-            case HEALTH:
-            case FURNITURE:
-                position.setOrientation(position.getOrientation().getTurnOnRight());
-                break;
-        }
+
     }
 
     public World getWorld() {return world;}
