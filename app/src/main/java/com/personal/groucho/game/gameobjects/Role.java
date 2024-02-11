@@ -6,5 +6,6 @@ public enum Role {
     ENEMY,
     WALL,
     FURNITURE,
+    TRIGGER,
     HEALTH
 }

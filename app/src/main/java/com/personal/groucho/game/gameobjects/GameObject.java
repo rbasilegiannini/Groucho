@@ -25,6 +25,5 @@ public class GameObject extends Entity{
     @Override
     public void delete(){
         super.delete();
-        gameWorld.removeGameObject(this);
     }
 }

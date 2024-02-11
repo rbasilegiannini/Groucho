@@ -30,6 +30,7 @@ import com.personal.groucho.game.levels.Level;
 import com.google.fpl.liquidfun.World;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GameWorld {
@@ -51,12 +52,13 @@ public class GameWorld {
         currentView = physicalSize;
         activity = newActivity;
 
-        physics = new Physics(physicalSize);
+        physics = new Physics(this);
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
 
         graphics = new Graphics(this);
         objects = new ArrayList<>();
         currentLevel = new FirstLevel(this);
+        currentLevel.init();
     }
 
     public void setTouchHandler(TouchHandler touchHandler) {
@@ -77,6 +79,7 @@ public class GameWorld {
     }
     public Bitmap getBuffer() {return graphics.getBuffer();}
     public World getWorld() {return physics.getWorld();}
+    public Level getLevel() {return currentLevel;}
     public GameObject getPlayerGO(){return player.getGameObject();}
     public Vec2 getPlayerPosition() {return player.getPosition();}
     public GameGrid getGameGrid() {return grid;}
@@ -169,6 +172,20 @@ public class GameWorld {
                     break;
             }
         }
+    }
+
+    public synchronized void changeLevel(Level newLevel) {
+        Iterator<GameObject> iterator = objects.iterator();
+        while (iterator.hasNext()) {
+            GameObject go = iterator.next();
+            if (go.role != Role.PLAYER) {
+                go.delete();
+                iterator.remove();
+            }
+        }
+
+        currentLevel = newLevel;
+        currentLevel.init();
     }
 
     public void GameOver() {

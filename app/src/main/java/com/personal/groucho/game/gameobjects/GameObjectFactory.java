@@ -148,6 +148,22 @@ public class GameObjectFactory {
         return gameObject;
     }
 
+    public static GameObject makeTrigger(String name, int posX, int posY, GameWorld gameWorld) {
+        int dimX = 64;
+        int dimY = 128;
+
+        GameObject gameObject = new GameObject(name, Role.TRIGGER, gameWorld);
+
+        gameObject.addComponent(new PositionComponent(posX, posY));
+        gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));
+
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
+        PhysicsProperties properties = new PhysicsProperties(posX, posY, 0f, 0, BodyType.staticBody);
+        setFurniturePhysics(physics, properties);
+
+        return gameObject;
+    }
+
     private static void setCharacterPhysics(PhysicsComponent physics, PhysicsProperties properties) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setLinearDamping(10f);
@@ -176,7 +192,6 @@ public class GameObjectFactory {
         bodyDef.delete();
         fixtureDef.delete();
     }
-
 
     private static void setFurniturePhysics(PhysicsComponent physics, PhysicsProperties properties) {
         BodyDef bodyDef = new BodyDef();

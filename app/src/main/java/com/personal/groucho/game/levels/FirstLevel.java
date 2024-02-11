@@ -18,10 +18,13 @@ import android.graphics.Shader;
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.states.StateName;
+import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.assets.Textures;
+
+import java.util.Objects;
 
 public class FirstLevel extends Level{
     private final Paint floorPaint;
@@ -32,11 +35,9 @@ public class FirstLevel extends Level{
 
     public FirstLevel(GameWorld gw) {
         gameWorld = gw;
-        World world = gw.getWorld();
         floor = Textures.firstLevelFloor;
         surface = new Rect(0,0, bufferWidth, bufferHeight);
         grid = new GameGrid(2000/cellSize, 2000/cellSize, cellSize);
-        gameWorld.setGameGrid(grid);
 
         // Set floor
         BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
@@ -45,6 +46,11 @@ public class FirstLevel extends Level{
         Matrix m = new Matrix();
         m.postTranslate(surface.width(),surface.height());
         floorPaint.getShader().setLocalMatrix(m);
+    }
+
+    @Override
+    public void init() {
+        gameWorld.setGameGrid(grid);
 
         // Set furniture
         gameWorld.addGameObject(GameObjectFactory.
@@ -54,11 +60,17 @@ public class FirstLevel extends Level{
         );
         gameWorld.addGameObject(GameObjectFactory.
                 makeFurniture(
-                        bufferWidth/2 + 500,
+                        bufferWidth/2 + 800,
                         (int)(0.50*bufferHeight),
                         250, 150,
                         gameWorld,
                         Textures.table)
+        );
+        gameWorld.addGameObject(GameObjectFactory.
+                makeTrigger("changelevel",
+                        bufferWidth/2 + 500,
+                        (int)(0.50*bufferHeight),
+                        gameWorld)
         );
 
 //        gameWorld.addGameObject(GameObjectFactory.
@@ -88,5 +100,12 @@ public class FirstLevel extends Level{
     @Override
     public void draw(Canvas canvas) {
         canvas.drawRect(surface, floorPaint);
+    }
+
+    @Override
+    public void handleTrigger(GameObject trigger) {
+        if(Objects.equals(trigger.getName(), "changelevel")) {
+            gameWorld.changeLevel(new SecondLevel(gameWorld));
+        }
     }
 }

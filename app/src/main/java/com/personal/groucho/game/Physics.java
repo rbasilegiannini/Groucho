@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Physics {
-    private final Box physicalSize;
+    private final GameWorld gameWorld;
     private GameGrid gameGrid;
     private final World world;
     private final MyContactListener contactListener;
@@ -42,9 +42,9 @@ public class Physics {
     private static final int POSITION_ITERATIONS = 3;
     private static final int PARTICLE_ITERATIONS = 3;
 
-    public Physics(Box physicalSize) {
+    public Physics(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
         this.world = new World(0, 0); // No gravity
-        this.physicalSize = physicalSize;
         contactListener = new MyContactListener();
         world.setContactListener(contactListener);
     }
@@ -179,6 +179,10 @@ public class Physics {
                 alive.heal(medicalKit);
 
                 object.delete();
+                break;
+
+            case TRIGGER:
+                gameWorld.getLevel().handleTrigger(object);
                 break;
         }
     }
