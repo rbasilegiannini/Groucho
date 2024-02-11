@@ -1,4 +1,4 @@
-package com.personal.groucho.game.gameobjects;
+package com.personal.groucho.game.AI;
 
 import static com.personal.groucho.game.constants.System.distanceOfEnemySight;
 import static com.personal.groucho.game.constants.System.maxInvisiblePlayer;
@@ -18,6 +18,8 @@ import com.google.fpl.liquidfun.RayCastCallback;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.controller.Orientation;
+import com.personal.groucho.game.gameobjects.GameObject;
+import com.personal.groucho.game.gameobjects.Role;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.ArrayList;
@@ -37,26 +39,22 @@ public class Sight {
     private final List<GameObject> hitGameObjects = new ArrayList<>();
     private final List<Float> fractions = new ArrayList<>();
 
-    public Sight (AIComponent aiComponent, World world, Vec2 origin) {
+    public Sight (AIComponent aiComponent, World world, Vec2 origin, Orientation orientation) {
         this.aiComponent = aiComponent;
         this.world = world;
         this.origin = origin;
         this.numOfPoints = pointsOfEnemySight;
-        this.orientation = Orientation.UP;
+        this.orientation = orientation;
 
         phase = (float) 90 /(pointsOfEnemySight-1);
         points = new Vec2[pointsOfEnemySight];
         angles = new float[pointsOfEnemySight];
 
-        // Orientation: UP
         for (int i = 0; i<pointsOfEnemySight; i++) {
-            angles[i] = (i * phase) - 135;
             points[i] = new Vec2();
-            points[i].setX((float)(distanceOfEnemySight*cos(Math.toRadians(angles[i]))) + origin.getX());
-            points[i].setY((float)(distanceOfEnemySight*sin(Math.toRadians(angles[i]))) + origin.getY());
         }
 
-        // setNewOrientation(orientation);
+        setNewOrientation(orientation);
     }
 
     public void see() {

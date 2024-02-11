@@ -6,6 +6,6 @@ public class CharacterProperties {
     public static final int grouchoHealth = 100;
     public static final int skeletonHealth = 100;
     public static int medicalKit = 20;
-    public static int grouchoPower = 10;
-    public static int skeletonPower = 5;
+    public static int grouchoPower = 30;
+    public static int skeletonPower = 50;
 }

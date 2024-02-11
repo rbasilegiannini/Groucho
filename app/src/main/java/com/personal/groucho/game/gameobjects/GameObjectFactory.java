@@ -91,7 +91,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new AIComponent(gameWorld, originalState));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY,100f, 1f, BodyType.kinematicBody);
+        PhysicsProperties properties = new PhysicsProperties(posX, posY,100f, 1f, BodyType.dynamicBody);
         setCharacterPhysics(physics, properties);
 
         return gameObject;

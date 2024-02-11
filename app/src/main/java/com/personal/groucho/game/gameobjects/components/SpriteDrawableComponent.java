@@ -71,5 +71,11 @@ public class SpriteDrawableComponent extends DrawableComponent {
                 characterScaleFactor,
                 spriteColor
         );
+
+        // Debug
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(Color.GREEN);
+        canvas.drawCircle(position.getPosX(), position.getPosY(), 20, paint);
     }
 }

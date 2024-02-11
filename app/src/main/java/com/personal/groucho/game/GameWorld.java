@@ -17,7 +17,7 @@ import static com.personal.groucho.game.Graphics.bufferHeight;
 
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.gameobjects.Role;
-import com.personal.groucho.game.gameobjects.Sight;
+import com.personal.groucho.game.AI.Sight;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.Component;

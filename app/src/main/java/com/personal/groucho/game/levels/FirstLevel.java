@@ -4,6 +4,8 @@ import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.constants.CharacterProperties.skeletonHealth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 import static com.personal.groucho.game.Graphics.bufferWidth;
+import static com.personal.groucho.game.constants.System.characterDimensionsY;
+import static com.personal.groucho.game.constants.System.characterScaleFactor;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -46,12 +48,14 @@ public class FirstLevel extends Level{
 
         // Set furniture
         gameWorld.addGameObject(GameObjectFactory.
-                makeWall(bufferWidth-300, bufferHeight/2, 100, bufferHeight-500, gameWorld)
+                makeWall((7*cellSize), (2*cellSize)-cellSize/2,
+                        cellSize, 4*cellSize-characterScaleFactor*characterDimensionsY,
+                        gameWorld)
         );
         gameWorld.addGameObject(GameObjectFactory.
                 makeFurniture(
-                        bufferWidth/2,
-                        (int)(0.50*bufferHeight)+500,
+                        bufferWidth/2 + 500,
+                        (int)(0.50*bufferHeight),
                         250, 150,
                         gameWorld,
                         Textures.table)

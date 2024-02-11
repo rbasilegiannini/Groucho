@@ -29,7 +29,7 @@ import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.gameobjects.ComponentType;
-import com.personal.groucho.game.gameobjects.Sight;
+import com.personal.groucho.game.AI.Sight;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +92,8 @@ public class AIComponent extends WalkingComponent {
             sight = new Sight(
                     this,
                     gameWorld.getWorld(),
-                    new Vec2(positionComponent.getPosX(),positionComponent.getPosY()));
+                    new Vec2(positionComponent.getPosX(),positionComponent.getPosY()),
+                    positionComponent.getOrientation());
         }
         List<Action> actions = fsm.getActions();
         for (Action action : actions)
