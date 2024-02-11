@@ -2,7 +2,7 @@ package com.personal.groucho.game.AI.pathfinding;
 
 public class Node {
     public int posX, posY;
-    public int costToNode, heuristicCostToGoal, defaultCost;
+    protected int costToNode, heuristicCostToGoal, defaultCost;
     public Node parent;
 
     public Node(int posX, int posY) {
@@ -30,7 +30,6 @@ public class Node {
     public void setPosY(int posY) {this.posY = posY;}
     public void setCostToNode(int gCost) {this.costToNode = gCost;}
     public void setHeuristicCostToGoal(int hCost) {this.heuristicCostToGoal = hCost;}
-    public void setDefaultCost(int dCost) {this.defaultCost = dCost;}
 
     public boolean equal(Node other){
         return posX == other.getPosX() && posY == other.getPosY();

@@ -18,10 +18,13 @@ public class PhysicsComponent extends Component {
     private final World world;
     private PositionComponent positionComponent = null;
     private Body body;
-    private float originalPosX, originalPosY;
+    private float density, originalPosX, originalPosY;
+    private final float dimX, dimY;
 
-    public PhysicsComponent(World world){
+    public PhysicsComponent(World world, float dimX, float dimY){
         this.world = world;
+        this.dimX = dimX;
+        this.dimY = dimY;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class PhysicsComponent extends Component {
     }
 
     public void addFixture(FixtureDef fixtureDef) {
+        density = fixtureDef.getDensity();
         body.createFixture(fixtureDef);
     }
 
@@ -88,6 +92,11 @@ public class PhysicsComponent extends Component {
 
     public float getPositionX() {return body.getPositionX();}
     public float getPositionY() {return body.getPositionY();}
+    public float getOriginalPosX() {return originalPosX;}
+    public float getOriginalPosY() {return originalPosY;}
+    public float getDensity() {return density;}
+    public float getDimX() {return dimX;}
+    public float getDimY() {return dimY;}
 
     public boolean hasChangedPosition() {
         if (body.getPositionX() != originalPosX || body.getPositionY() != originalPosY) {

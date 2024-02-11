@@ -14,6 +14,8 @@ import com.google.fpl.liquidfun.Fixture;
 import com.google.fpl.liquidfun.RayCastCallback;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
+import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.GameObject;
@@ -26,10 +28,13 @@ import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Physics {
     private final Box physicalSize;
+    private GameGrid gameGrid;
     private final World world;
     private final MyContactListener contactListener;
 
@@ -44,6 +49,7 @@ public class Physics {
         world.setContactListener(contactListener);
     }
 
+    public void setGameGrid(GameGrid grid) {this.gameGrid = grid;}
     public synchronized void update(float elapsedTime, List<GameObject> objects) {
         world.step(elapsedTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
         updatePhysicsPosition(objects);
@@ -58,12 +64,63 @@ public class Physics {
             if (phyComponent != null && posComponent != null) {
                 PhysicsComponent physicsComponent = (PhysicsComponent) phyComponent;
                 PositionComponent positionComponent = (PositionComponent) posComponent;
-                positionComponent.setPosX(
-                        (int) fromMetersToBufferX(physicsComponent.getPositionX())
-                );
-                positionComponent.setPosY(
-                        (int) fromMetersToBufferY(physicsComponent.getPositionY())
-                );
+
+                if (go.role == Role.FURNITURE) {
+                    Vec2 originalPosition = new Vec2(
+                            fromMetersToBufferX(physicsComponent.getOriginalPosX()),
+                            fromMetersToBufferY(physicsComponent.getOriginalPosY())
+                    );
+
+                    if (physicsComponent.hasChangedPosition()) {
+                        positionComponent.setPosX(
+                                (int) fromMetersToBufferX(physicsComponent.getPositionX())
+                        );
+                        positionComponent.setPosY(
+                                (int) fromMetersToBufferY(physicsComponent.getPositionY())
+                        );
+
+                        updateGameGrid(physicsComponent, originalPosition);
+                    }
+                } else {
+                    if (physicsComponent.hasChangedPosition()) {
+                        positionComponent.setPosX(
+                                (int) fromMetersToBufferX(physicsComponent.getPositionX())
+                        );
+                        positionComponent.setPosY(
+                                (int) fromMetersToBufferY(physicsComponent.getPositionY())
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    private void updateGameGrid(PhysicsComponent physics, Vec2 oldPosition) {
+        if (gameGrid != null) {
+            int positionX = (int)fromMetersToBufferX(physics.getPositionX());
+            int positionY = (int)fromMetersToBufferY(physics.getPositionY());
+            int dimX = (int)physics.getDimX();
+            int dimY = (int)physics.getDimY();
+            int dCost = (int)(physics.getDensity()*10000);
+
+            Set<Node> oldCellsToReset = gameGrid.getNodes(
+                    (int) oldPosition.getX(), (int) oldPosition.getY(), dimX, dimY);
+            Set<Node> newCellsToChange = gameGrid.getNodes(positionX, positionY, dimX, dimY);
+
+            Set<Node> unchangedCells = new HashSet<>(newCellsToChange);
+            unchangedCells.retainAll(oldCellsToReset);
+
+            newCellsToChange.removeAll(unchangedCells);
+            oldCellsToReset.removeAll(unchangedCells);
+
+            // Update cost
+            for (Node node : newCellsToChange) {
+                gameGrid.increaseDefaultCostOnNode(node, dCost);
+            }
+
+            // Reset cost
+            for (Node node : oldCellsToReset) {
+                gameGrid.decreaseDefaultCostOnNode(node, dCost);
             }
         }
     }

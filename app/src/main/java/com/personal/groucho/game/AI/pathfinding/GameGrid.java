@@ -63,8 +63,12 @@ public class GameGrid {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
-    public void setDefaultCostOnNode(Node node, int dCost) {
-        grid[node.posX][node.posY].setDefaultCost(dCost);
+    public void increaseDefaultCostOnNode(Node node, int increase) {
+        grid[node.posX][node.posY].defaultCost += increase;
+    }
+
+    public void decreaseDefaultCostOnNode(Node node, int decrease) {
+        grid[node.posX][node.posY].defaultCost -= decrease;
     }
 
     public void reset() {
@@ -99,7 +103,6 @@ public class GameGrid {
                 endX = startX + cellSize;
                 endY = startY;
                 canvas.drawLine(startX, startY, endX, endY, paint);
-
             }
         }
     }

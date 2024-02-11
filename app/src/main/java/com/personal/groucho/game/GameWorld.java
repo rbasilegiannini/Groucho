@@ -71,7 +71,10 @@ public class GameWorld {
         }
         addGameObject(player);
     }
-    public void setGameGrid(GameGrid grid) {this.grid = grid;}
+    public void setGameGrid(GameGrid grid) {
+        this.grid = grid;
+        physics.setGameGrid(grid);
+    }
     public Bitmap getBuffer() {return graphics.getBuffer();}
     public World getWorld() {return physics.getWorld();}
     public GameObject getPlayerGO(){return player.getGameObject();}

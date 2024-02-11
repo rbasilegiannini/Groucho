@@ -292,7 +292,6 @@ public class AIComponent extends WalkingComponent {
             walkingToYCoordinate(positionOnGrid.getPosY(), currentNode.getPosY());
         }
 
-
         if (positionOnGrid.equal(currentNode)) {
             isNodeReached = true;
             currentNode = null;
