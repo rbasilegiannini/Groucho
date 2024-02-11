@@ -59,7 +59,7 @@ public class GameObjectFactory {
     }
 
     public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameworld) {
-        GameObject gameObject = new GameObject("Groucho", Role.PLAYER, gameworld);
+        GameObject gameObject = new GameObject("Groucho", Role.PLAYER);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(grouchoWalk, grouchoDeath));
@@ -82,7 +82,7 @@ public class GameObjectFactory {
 
     public static GameObject makeEnemy(int posX, int posY, int health, Spritesheet idle,
                                        StateName originalState, Spritesheet death, GameWorld gameWorld) {
-        GameObject gameObject = new GameObject("Enemy", Role.ENEMY, gameWorld);
+        GameObject gameObject = new GameObject("Enemy", Role.ENEMY);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), characterDimensionsX, characterDimensionsY));
@@ -98,7 +98,7 @@ public class GameObjectFactory {
     }
 
     public static GameObject makeWall(int centerX, int centerY, float dimX, float dimY, GameWorld gameWorld) {
-        GameObject gameObject = new GameObject("Wall", Role.WALL, gameWorld);
+        GameObject gameObject = new GameObject("Wall", Role.WALL);
 
         Paint paint = new Paint();
         paint.setColor(Color.valueOf(188, 143, 143).toArgb());
@@ -118,7 +118,7 @@ public class GameObjectFactory {
 
     public static GameObject makeFurniture(int centerX, int centerY, float dimX, float dimY, GameWorld gameWorld,
                                            Bitmap texture) {
-        GameObject gameObject = new GameObject("Furniture", Role.FURNITURE, gameWorld);
+        GameObject gameObject = new GameObject("Furniture", Role.FURNITURE);
 
         gameObject.addComponent(new PositionComponent(centerX, centerY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));
@@ -135,7 +135,7 @@ public class GameObjectFactory {
     public static GameObject makeHealth(int posX, int posY, GameWorld gameWorld) {
         int dimX = 64;
         int dimY = 64;
-        GameObject gameObject = new GameObject("Health", Role.HEALTH, gameWorld);
+        GameObject gameObject = new GameObject("Health", Role.HEALTH);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));
@@ -152,7 +152,7 @@ public class GameObjectFactory {
         int dimX = 64;
         int dimY = 128;
 
-        GameObject gameObject = new GameObject(name, Role.TRIGGER, gameWorld);
+        GameObject gameObject = new GameObject(name, Role.TRIGGER);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));

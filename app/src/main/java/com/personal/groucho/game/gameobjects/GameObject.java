@@ -3,18 +3,15 @@ package com.personal.groucho.game.gameobjects;
 import com.personal.groucho.game.GameWorld;
 
 public class GameObject extends Entity{
-    private final GameWorld gameWorld;
     protected String name;
     public Role role;
 
     GameObject(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
         this.name = "";
         this.role = Role.NEUTRAL;
     }
 
-    GameObject(String name, Role role, GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
+    GameObject(String name, Role role) {
         this.name = name;
         this.role = role;
     }
