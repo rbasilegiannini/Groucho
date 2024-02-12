@@ -50,11 +50,12 @@ public class Sight {
         points = new Vec2[pointsOfEnemySight];
         angles = new float[pointsOfEnemySight];
 
-        for (int i = 0; i<pointsOfEnemySight; i++) {
+        for (int i = 0; i<numOfPoints; i++) {
             points[i] = new Vec2();
         }
 
-        setNewOrientation(orientation);
+        changeDirection(orientation);
+        computePoints();
     }
 
     public void see() {
@@ -103,29 +104,33 @@ public class Sight {
 
     public void setNewOrientation(Orientation orientation){
         if (this.orientation != orientation) {
-            switch (orientation) {
-                case UP:
-                    for (int i = 0; i<numOfPoints; i++)
-                        angles[i] = (i * phase) - 135;
-                    break;
-
-                case DOWN:
-                    for (int i = 0; i<numOfPoints; i++)
-                        angles[i] = (i * phase) + 45;
-                    break;
-
-                case RIGHT:
-                    for (int i = 0; i<numOfPoints; i++)
-                        angles[i] = (i * phase) - 45;
-                    break;
-
-                case LEFT:
-                    for (int i = 0; i<numOfPoints; i++)
-                        angles[i] = (i * phase) - 225;
-                    break;
-            }
+            changeDirection(orientation);
             computePoints();
             this.orientation = orientation;
+        }
+    }
+
+    private void changeDirection(Orientation orientation) {
+        switch (orientation) {
+            case UP:
+                for (int i = 0; i<numOfPoints; i++)
+                    angles[i] = (i * phase) - 135;
+                break;
+
+            case DOWN:
+                for (int i = 0; i<numOfPoints; i++)
+                    angles[i] = (i * phase) + 45;
+                break;
+
+            case RIGHT:
+                for (int i = 0; i<numOfPoints; i++)
+                    angles[i] = (i * phase) - 45;
+                break;
+
+            case LEFT:
+                for (int i = 0; i<numOfPoints; i++)
+                    angles[i] = (i * phase) - 225;
+                break;
         }
     }
 
@@ -142,7 +147,8 @@ public class Sight {
         paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        for (Vec2 point : points)
+        for (Vec2 point : points) {
             canvas.drawLine(origin.getX(), origin.getY(), point.getX(), point.getY(), paint);
+        }
     }
 }
