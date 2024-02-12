@@ -107,6 +107,7 @@ public class AIComponent extends WalkingComponent {
     public StateName getOriginalState(){return originalState;}
     public boolean isPlayerEngaged() {return isPlayerEngaged;}
     public boolean isPlayerReached() {return isPlayerReached;}
+    public boolean isPlayerVisible() {return gameWorld.isPlayerVisible();}
     public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
 
     // Idle actions

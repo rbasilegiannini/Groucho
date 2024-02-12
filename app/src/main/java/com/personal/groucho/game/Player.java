@@ -15,6 +15,7 @@ public class Player {
     private final GameObject playerGO;
     private int playerPosX, playerPosY;
     private final Matrix matrix;
+    private boolean isPlayerVisible = false;
 
     public Player(GameObject playerGO, int playerPosX, int playerPosY) {
         this.playerGO = playerGO;
@@ -56,9 +57,9 @@ public class Player {
         canvas.concat(matrix);
     }
 
-    public Vec2 getPosition() {
-        return new Vec2(playerPosX, playerPosY);
-    }
-
+    public void setPlayerVisibility(boolean visibility) {isPlayerVisible = visibility;}
+    public boolean getPlayerVisibility() {return isPlayerVisible;}
+    public Vec2 getPosition() {return new Vec2(playerPosX, playerPosY);}
     public GameObject getGameObject() {return playerGO;}
+
 }

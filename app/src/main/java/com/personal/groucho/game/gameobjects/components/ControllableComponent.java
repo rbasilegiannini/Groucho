@@ -1,5 +1,7 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.Events.turnOffLightEvent;
+import static com.personal.groucho.game.Events.turnOnLightEvent;
 import static com.personal.groucho.game.constants.System.characterDimensionsX;
 import static com.personal.groucho.game.constants.System.characterDimensionsY;
 import static com.personal.groucho.game.constants.CharacterProperties.grouchoSpeed;
@@ -7,7 +9,6 @@ import static com.personal.groucho.game.constants.Environment.maxLightIntensity;
 import static com.personal.groucho.game.constants.Environment.minLightIntensity;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
-import static com.personal.groucho.game.assets.Sounds.click;
 import static com.personal.groucho.game.assets.Sounds.loading;
 import static com.personal.groucho.game.assets.Spritesheets.grouchoWalk;
 
@@ -53,12 +54,14 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     }
 
     public void switchLightEvent(boolean isTurnOn) {
-        click.play(1f);
-        if(isTurnOn)
+        if(isTurnOn) {
             lightComponent.setLightIntensity(maxLightIntensity);
-        else
+            turnOnLightEvent(gameworld);
+        }
+        else {
             lightComponent.setLightIntensity(minLightIntensity);
-
+            turnOffLightEvent(gameworld);
+        }
     }
 
     private void handleIdlePlayer() {

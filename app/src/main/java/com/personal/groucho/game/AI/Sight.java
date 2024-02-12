@@ -80,9 +80,11 @@ public class Sight {
             int indexLessFraction = fractions.indexOf(Collections.min(fractions));
             GameObject firstGO = hitGameObjects.get(indexLessFraction);
             if(firstGO.role == Role.PLAYER) {
-                Log.i("RayCast", "I see you");
-                aiComponent.setPlayerEngaged(true);
-                lastSeenMillis = System.currentTimeMillis();
+                if (aiComponent.isPlayerVisible()) {
+                    Log.i("RayCast", "I see you");
+                    aiComponent.setPlayerEngaged(true);
+                    lastSeenMillis = System.currentTimeMillis();
+                }
             }
             hitGameObjects.clear();
             fractions.clear();

@@ -4,9 +4,11 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.assets.Sounds.bulletHitEnemy;
 import static com.personal.groucho.game.assets.Sounds.bulletHitFurniture;
+import static com.personal.groucho.game.assets.Sounds.click;
 import static com.personal.groucho.game.assets.Sounds.stabbing;
 import static com.personal.groucho.game.constants.CharacterProperties.grouchoPower;
 import static com.personal.groucho.game.constants.Environment.brightness;
+import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import com.google.fpl.liquidfun.Vec2;
@@ -43,6 +45,20 @@ public class Events {
     public static void enemyHitPlayerEvent(AliveComponent alive, int power) {
         stabbing.play(1f);
         alive.damage(power);
+    }
+
+    public static void turnOnLightEvent(GameWorld gameWorld){
+        click.play(1f);
+        if (brightness == minBrightness) {
+            gameWorld.setPlayerVisibility(true);
+        }
+    }
+
+    public static void turnOffLightEvent(GameWorld gameWorld){
+        click.play(1f);
+        if (brightness == minBrightness) {
+            gameWorld.setPlayerVisibility(false);
+        }
     }
 
     public static void gameOverEvent(GameWorld gameWorld) {
