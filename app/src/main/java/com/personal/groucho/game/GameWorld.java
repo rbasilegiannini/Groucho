@@ -16,6 +16,7 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.Role;
 import com.personal.groucho.game.AI.Sight;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
@@ -42,7 +43,7 @@ public class GameWorld {
     public final Controller controller;
     private Level currentLevel;
     private GameGrid grid;
-    private final List<GameObject> objects;
+    private final List<GameObject> objects = new ArrayList<>();
     private TouchHandler touchHandler;
     private boolean gameOver = false;
 
@@ -54,9 +55,9 @@ public class GameWorld {
 
         physics = new Physics(this);
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
-
         graphics = new Graphics(this);
-        objects = new ArrayList<>();
+        setPlayer();
+
         currentLevel = new FirstLevel(this);
         currentLevel.init();
     }
@@ -65,18 +66,29 @@ public class GameWorld {
         this.touchHandler = touchHandler;
     }
 
-    public void setPlayer(GameObject player) {
+    private void setPlayer() {
+        GameObject player = GameObjectFactory.
+                makePlayer(
+                        Graphics.bufferWidth /2,
+                        Graphics.bufferHeight/2,
+                        controller,
+                        this
+                );
+
         Component component = player.getComponent(ComponentType.POSITION);
         if (component != null) {
             PositionComponent position = (PositionComponent) component;
             this.player = new Player(player, position.getPosX(), position.getPosY());
         }
+
         addGameObject(player);
     }
     public void setGameGrid(GameGrid grid) {
         this.grid = grid;
         physics.setGameGrid(grid);
     }
+    public void setPlayerVisibility(boolean visibility) {player.setPlayerVisibility(visibility);}
+    public boolean isPlayerVisible() {return player.getPlayerVisibility();}
     public Bitmap getBuffer() {return graphics.getBuffer();}
     public World getWorld() {return physics.getWorld();}
     public Level getLevel() {return currentLevel;}
@@ -194,4 +206,5 @@ public class GameWorld {
     }
 
     public boolean isGameOver() {return gameOver;}
+
 }

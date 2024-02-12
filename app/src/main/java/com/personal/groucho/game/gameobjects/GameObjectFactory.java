@@ -26,6 +26,7 @@ import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Spritesheet;
+import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.BoxDrawableComponent;
@@ -80,7 +81,7 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeEnemy(int posX, int posY, int health, Spritesheet idle,
+    public static GameObject makeEnemy(int posX, int posY, Orientation orientation, int health, Spritesheet idle,
                                        StateName originalState, Spritesheet death, GameWorld gameWorld) {
         GameObject gameObject = new GameObject("Enemy", Role.ENEMY);
 
@@ -90,6 +91,8 @@ public class GameObjectFactory {
         gameObject.addComponent(new AliveComponent(health));
         gameObject.addComponent(new AIComponent(gameWorld, originalState));
 
+        PositionComponent position = (PositionComponent) gameObject.getComponent(ComponentType.POSITION);
+        position.setOrientation(orientation);
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
         PhysicsProperties properties = new PhysicsProperties(posX, posY,100f, 1f, BodyType.dynamicBody);
         setCharacterPhysics(physics, properties);

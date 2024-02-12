@@ -54,7 +54,7 @@ public class Sight {
             points[i] = new Vec2();
         }
 
-        changeDirection(orientation);
+        changeDirection();
         computePoints();
     }
 
@@ -104,14 +104,14 @@ public class Sight {
 
     public void setNewOrientation(Orientation orientation){
         if (this.orientation != orientation) {
-            changeDirection(orientation);
-            computePoints();
             this.orientation = orientation;
+            changeDirection();
+            computePoints();
         }
     }
 
-    private void changeDirection(Orientation orientation) {
-        switch (orientation) {
+    private void changeDirection() {
+        switch (this.orientation) {
             case UP:
                 for (int i = 0; i<numOfPoints; i++)
                     angles[i] = (i * phase) - 135;

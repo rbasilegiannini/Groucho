@@ -35,17 +35,7 @@ public class MainActivity extends Activity {
 
         loadResources();
         setWindow();
-
-        // Game world
         GameWorld gameWorld = buildGameWorld();
-        gameWorld.setPlayer(GameObjectFactory.
-                makePlayer(
-                        Graphics.bufferWidth /2,
-                        Graphics.bufferHeight/2,
-                        gameWorld.controller,
-                        gameWorld
-                )
-        );
 
         // View
         renderView = new AndroidFastRenderView(this, gameWorld);
@@ -58,7 +48,6 @@ public class MainActivity extends Activity {
         // Sound
         audio = new AndroidAudio(this);
         Sounds.init(audio);
-
     }
 
     @NonNull
