@@ -1,5 +1,7 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
@@ -9,9 +11,20 @@ import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.components.DrawableComponent;
 import com.personal.groucho.game.gameobjects.components.LightComponent;
+import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.levels.Level;
 
+import java.util.Comparator;
 import java.util.List;
+
+class GameObjectComparator implements Comparator<GameObject> {
+    @Override
+    public int compare(GameObject obj1, GameObject obj2) {
+        return Integer.compare(
+                ((PositionComponent)obj1.getComponent(POSITION)).getPosY(),
+                ((PositionComponent)obj2.getComponent(POSITION)).getPosY());
+    }
+}
 
 public class Graphics {
     public final static int bufferWidth = 1920;
@@ -37,6 +50,9 @@ public class Graphics {
     }
 
     private void drawGameObjects(List<GameObject> objects) {
+        //TODO: fix crash when enemy dies
+        objects.sort(new GameObjectComparator());
+
         //TODO: use a better solution
         for (GameObject gameObject : objects) {
             Component drawComponent = gameObject.getComponent(ComponentType.DRAWABLE);
