@@ -63,6 +63,6 @@ public class Bulb extends Widget{
     }
 
     public boolean isOnLight(float x, float y) {
-        return isInCircle(x, lightPosX+64, y, lightPosY+64, distanceSqr);
+        return isInCircle(lightPosX+64, lightPosY+64, x, y, distanceSqr);
     }
 }

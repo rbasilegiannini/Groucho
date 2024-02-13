@@ -81,12 +81,12 @@ public class Trigger extends Widget{
     }
 
     public boolean isOnTrigger(float x, float y) {
-        return isInCircle(x, triggerPosX, y, triggerPosY, radiusSqr);
+        return isInCircle(triggerPosX, triggerPosY, x, y, radiusSqr);
     }
     public boolean isOnLoadingArea(float x, float y) {
-        return isInCircle(x, loadPosX +100, y, (float) (loadPosY +radius/2), radiusSqr);
+        return isInCircle(loadPosX +100, loadPosY +radius/2, x, y, radiusSqr);
     }
     public boolean isOnShootingArea(float x, float y) {
-        return isInCircle(x, shootPosX +100, y, (float) (shootPosY+3*radius), radiusSqr);
+        return isInCircle(shootPosX +100, shootPosY+3*radius, x, y, radiusSqr);
     }
 }

@@ -56,15 +56,15 @@ public class DPad extends Widget{
     }
 
     public boolean isOnRight(float x, float y) {
-        return isInCircle(x, rightPosX, y, rightPosY, radiusSqr);
+        return isInCircle(rightPosX, rightPosY, x, y, radiusSqr);
     }
     public boolean isOnLeft(float x, float y) {
-        return isInCircle(x, leftPosX, y, leftPosY, radiusSqr);
+        return isInCircle(leftPosX, leftPosY, x, y, radiusSqr);
     }
     public boolean isOnDown(float x, float y) {
-        return isInCircle(x, downPosX, y, downPosY, radiusSqr);
+        return isInCircle(downPosX, downPosY, x, y, radiusSqr);
     }
     public boolean isOnUp(float x, float y) {
-        return isInCircle(x, upPosX, y, upPosY, radiusSqr);
+        return isInCircle(upPosX, upPosY, x, y, radiusSqr);
     }
 }

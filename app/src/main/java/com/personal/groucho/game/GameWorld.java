@@ -4,6 +4,7 @@ import static com.personal.groucho.game.Events.gameOverEvent;
 import static com.personal.groucho.game.Events.playerShootEnemyEvent;
 import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
 import static com.personal.groucho.game.Events.playerShootWallEvent;
+import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.app.Activity;
@@ -158,7 +159,7 @@ public class GameWorld {
         graphics.render(objects, currentLevel, controller);
 
         //
-        if (sight != null) {
+        if (debugMode) {
             sight.drawDebugRayCast(graphics.getCanvas());
             grid.drawDebugGrid(graphics.getCanvas());
         }

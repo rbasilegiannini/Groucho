@@ -35,9 +35,9 @@ public class Utils {
     public static float toMetersXLength(float x) {return x/bufferWidth * physicalSize.width;}
     public static float toMetersYLength(float y) {return y/bufferHeight * physicalSize.height;}
 
-    public static boolean isInCircle(float x, float centerX, float y, float centerY, float distance) {
+    public static boolean isInCircle(float centerX, float centerY, float x, float y, float distSqr) {
         double pointerPositionSqr = Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2);
-        return pointerPositionSqr <= distance;
+        return pointerPositionSqr <= distSqr;
     }
 
     public static boolean isInTriangle(float originX, float originY, float x, float y, float dist, float rad) {

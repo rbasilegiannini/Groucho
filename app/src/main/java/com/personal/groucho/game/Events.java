@@ -59,26 +59,24 @@ public class Events {
 
     public static void playerCollideWithFurniture(GameObject player, GameWorld gameWorld) {
         bodyHitFurniture.play(0.7f);
-        Vec2 playerPosition = ((PositionComponent) player.getComponent(POSITION)).getPosition();
+        Vec2 playerPos = ((PositionComponent) player.getComponent(POSITION)).getPosition();
 
-        List<PositionComponent> enemiesPosition = new ArrayList<>();
-        List<Float> enemiesDistance = new ArrayList<>();
+        List<PositionComponent> enemiesPos = new ArrayList<>();
+        List<Float> enemiesDist = new ArrayList<>();
         for (GameObject enemy : gameWorld.getGOByRole(ENEMY)){
-            PositionComponent enemyPosition = (PositionComponent) enemy.getComponent(POSITION);
+            PositionComponent enemyPos = (PositionComponent) enemy.getComponent(POSITION);
             if (isInCircle(
-                    enemyPosition.getPosX(), playerPosition.getX(),
-                    enemyPosition.getPosY(), playerPosition.getY(), hearingRangeSqr)){
+                    playerPos.getX(), playerPos.getY(), enemyPos.getPosX(), enemyPos.getPosY(),
+                    hearingRangeSqr)){
 
-                float distance = distBetweenVec(
-                        playerPosition,
-                        new Vec2(enemyPosition.getPosX(), enemyPosition.getPosY()));
-                enemiesPosition.add(enemyPosition);
-                enemiesDistance.add(distance);
+                float dist = distBetweenVec(playerPos, new Vec2(enemyPos.getPosX(), enemyPos.getPosY()));
+                enemiesPos.add(enemyPos);
+                enemiesDist.add(dist);
             }
         }
-        if (!enemiesDistance.isEmpty()) {
-            int indexLessFraction = enemiesDistance.indexOf(Collections.min(enemiesDistance));
-            AIComponent aiEnemy = (AIComponent) enemiesPosition.get(indexLessFraction).getOwner().getComponent(AI);
+        if (!enemiesDist.isEmpty()) {
+            int indexLessFraction = enemiesDist.indexOf(Collections.min(enemiesDist));
+            AIComponent aiEnemy = (AIComponent) enemiesPos.get(indexLessFraction).getOwner().getComponent(AI);
             if (!aiEnemy.isPlayerEngaged()) {
                 aiEnemy.setInvestigateStatus(true);
             }
