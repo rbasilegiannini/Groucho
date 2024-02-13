@@ -1,5 +1,6 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.Debugger.getDebugger;
 import static com.personal.groucho.game.Events.gameOverEvent;
 import static com.personal.groucho.game.Events.playerShootEnemyEvent;
 import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
@@ -19,7 +20,6 @@ import static com.personal.groucho.game.Graphics.bufferHeight;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.Role;
-import com.personal.groucho.game.AI.Sight;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.Component;
@@ -145,23 +145,15 @@ public class GameWorld {
             if (component != null) {
                 AIComponent ai = (AIComponent) component;
                 ai.update(this);
-
-                //
-                if (sight == null) sight = ai.getSight();
             }
         }
     }
 
-    //
-    Sight sight = null;
-    //
     public synchronized void render() {
         graphics.render(objects, currentLevel, controller);
 
-        //
         if (debugMode) {
-            sight.drawDebugRayCast(graphics.getCanvas());
-            grid.drawDebugGrid(graphics.getCanvas());
+            getDebugger(this).draw(graphics.getCanvas());
         }
     }
 
@@ -208,6 +200,10 @@ public class GameWorld {
 
         currentLevel = newLevel;
         currentLevel.init();
+
+        if(debugMode) {
+            getDebugger(this).updateDebugger();
+        }
     }
 
     public void GameOver() {
