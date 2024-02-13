@@ -8,4 +8,6 @@ public class CharacterProperties {
     public static int medicalKit = 20;
     public static int grouchoPower = 30;
     public static int skeletonPower = 50;
+    public static int hearingRange = 1500;
+    public static int hearingRangeSqr = (int) Math.pow(hearingRange,2);
 }

@@ -5,6 +5,8 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.GameWorld.physicalSize;
 import static com.personal.groucho.game.GameWorld.screenSize;
 
+import com.google.fpl.liquidfun.Vec2;
+
 public class Utils {
 
     // Screen conversions
@@ -33,10 +35,15 @@ public class Utils {
     public static float toMetersXLength(float x) {return x/bufferWidth * physicalSize.width;}
     public static float toMetersYLength(float y) {return y/bufferHeight * physicalSize.height;}
 
-    public static boolean isInCircle(float x, float posX, float y, float posY, float distance) {
-        double pointerPositionSqr = Math.pow(x - posX, 2) + Math.pow(y - posY, 2);
+    public static boolean isInCircle(float x, float centerX, float y, float centerY, float distance) {
+        double pointerPositionSqr = Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2);
         return pointerPositionSqr <= distance;
     }
 
+    public static float distanceBetweenPosition(Vec2 position1, Vec2 position2){
+        float deltaX = position2.getX() - position1.getX();
+        float deltaY = position2.getY() - position1.getY();
+        return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
 
 }

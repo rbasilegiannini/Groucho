@@ -54,6 +54,8 @@ public class AIComponent extends WalkingComponent {
     private boolean isPlayerEngaged = false;
     private boolean isPlayerReached = false;
     private boolean isIdle = false;
+    private boolean isPatrol = false;
+    private boolean isInvestigate = false;
 
     public AIComponent(GameWorld gameWorld, StateName currentState) {
         this.gameWorld = gameWorld;
@@ -86,15 +88,9 @@ public class AIComponent extends WalkingComponent {
 
     public void update(GameWorld gameWorld) {
         if (sight == null) {
-            if (positionComponent == null) {
-                positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
-            }
-            sight = new Sight(
-                    this,
-                    gameWorld.getWorld(),
-                    new Vec2(positionComponent.getPosX(),positionComponent.getPosY()),
-                    positionComponent.getOrientation());
+            init(gameWorld);
         }
+
         List<Action> actions = fsm.getActions();
         for (Action action : actions)
             action.doIt();
@@ -103,12 +99,32 @@ public class AIComponent extends WalkingComponent {
         sight.see();
     }
 
+    private void init(GameWorld gameWorld) {
+        if (positionComponent == null) {
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        }
+
+        originalPositionOnGrid = grid.getNode(
+                positionComponent.getPositionXOnGrid(),
+                positionComponent.getPositionYOnGrid()
+        );
+        originalOrientation = positionComponent.getOrientation();
+
+        sight = new Sight(
+                this,
+                gameWorld.getWorld(),
+                new Vec2(positionComponent.getPosX(),positionComponent.getPosY()),
+                positionComponent.getOrientation());
+    }
+
     public Sight getSight() {return sight;}
     public StateName getOriginalState(){return originalState;}
     public boolean isPlayerEngaged() {return isPlayerEngaged;}
     public boolean isPlayerReached() {return isPlayerReached;}
+    public boolean isInvestigate() {return isInvestigate;}
     public boolean isPlayerVisible() {return gameWorld.isPlayerVisible();}
     public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
+    public void setInvestigateStatus(boolean isInvestigate) {this.isInvestigate = isInvestigate;}
 
     // Idle actions
     public void entryIdleAction() {
@@ -124,18 +140,14 @@ public class AIComponent extends WalkingComponent {
         if (!currentPath.isEmpty() || !isNodeReached)
             walkingToDestination();
         else if (!isIdle){
-            if (originalOrientation != null) {
-                positionComponent.setOrientation(originalOrientation);
-                sight.setNewOrientation(originalOrientation);
-                originalOrientation = null;
-            }
+            positionComponent.setOrientation(originalOrientation);
+            sight.setNewOrientation(originalOrientation);
             updateSprite(skeletonIdle);
             isIdle = true;
         }
     }
 
     public void exitIdleAction() {
-        originalOrientation = positionComponent.getOrientation();
         isIdle = false;
     }
 
@@ -153,17 +165,17 @@ public class AIComponent extends WalkingComponent {
         if (!currentPath.isEmpty() || !isNodeReached)
             walkingToDestination();
         else {
-            if (originalOrientation != null) {
+            if (!isPatrol) {
                 positionComponent.setOrientation(originalOrientation);
                 sight.setNewOrientation(originalOrientation);
-                originalOrientation = null;
+                isPatrol = true;
             }
             patrol();
         }
     }
 
     public void exitPatrolAction() {
-        originalOrientation = positionComponent.getOrientation();
+        isPatrol = false;
         currentSteps = 0;
     }
 
@@ -177,6 +189,34 @@ public class AIComponent extends WalkingComponent {
         walking(skeletonWalk, skeletonSpeed);
     }
 
+    // Investigate actions
+    public void entryInvestigateAction() {
+        if (positionComponent == null) {
+            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        }
+        positionOnGrid = grid.getNode(
+                positionComponent.getPositionXOnGrid(),
+                positionComponent.getPositionYOnGrid()
+        );
+        setPathToPlayer();
+        isNodeReached = true;
+        isInvestigate = true;
+    }
+
+    public void activeInvestigateAction() {
+        if (!currentPath.isEmpty() || !isNodeReached) {
+            walkingToDestination();
+        }
+        else {
+            isInvestigate = false;
+        }
+    }
+
+    public void exitInvestigateAction() {
+        currentPath.clear();
+        currentPath = aStar.findPath(positionOnGrid, originalPositionOnGrid);
+    }
+
     // Engage actions
     public void entryEngageAction(){
         if (positionComponent == null) {
@@ -186,7 +226,6 @@ public class AIComponent extends WalkingComponent {
                 positionComponent.getPositionXOnGrid(),
                 positionComponent.getPositionYOnGrid()
         );
-        originalPositionOnGrid = positionOnGrid;
 
         setPathToPlayer();
         isNodeReached = true;

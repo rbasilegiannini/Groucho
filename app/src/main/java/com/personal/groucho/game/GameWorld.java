@@ -95,6 +95,15 @@ public class GameWorld {
     public GameObject getPlayerGO(){return player.getGameObject();}
     public Vec2 getPlayerPosition() {return player.getPosition();}
     public GameGrid getGameGrid() {return grid;}
+    public List<GameObject> getGOByRole(Role role) {
+        List<GameObject> gameObjects = new ArrayList<>();
+        for (GameObject go : objects) {
+            if (go.role == role) {
+                gameObjects.add(go);
+            }
+        }
+        return gameObjects;
+    }
 
     public synchronized void addGameObject(GameObject obj) {objects.add(obj);}
     public synchronized void removeGameObject(GameObject gameObject) {objects.remove(gameObject);}

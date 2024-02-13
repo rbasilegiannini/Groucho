@@ -6,6 +6,7 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.State;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
+import com.personal.groucho.game.AI.transitions.InvestigateTransition;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class Patrol extends State {
     public List<Transition> outgoingTransitions() {
         transitions.clear();
         transitions.add(new EngageTransition(owner));
+        transitions.add(new InvestigateTransition(owner));
 
         return transitions;
     }

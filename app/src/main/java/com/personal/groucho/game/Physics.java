@@ -1,12 +1,11 @@
 package com.personal.groucho.game;
 
-import static com.personal.groucho.game.constants.CharacterProperties.medicalKit;
+import static com.personal.groucho.game.Events.playerCollideWithFurniture;
+import static com.personal.groucho.game.Events.playerCollideWithHealth;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
-import static com.personal.groucho.game.assets.Sounds.bodyHitFurniture;
-import static com.personal.groucho.game.assets.Sounds.healing;
 
 import android.util.Log;
 
@@ -20,7 +19,6 @@ import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.Role;
-import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
@@ -170,15 +168,11 @@ public class Physics {
     private void handlePlayerCollision(GameObject player, GameObject object) {
         switch (object.role) {
             case FURNITURE:
-                bodyHitFurniture.play(0.7f);
+                playerCollideWithFurniture(player, gameWorld);
                 break;
 
             case HEALTH:
-                healing.play(0.7f);
-                AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.ALIVE);
-                alive.heal(medicalKit);
-
-                object.delete();
+                playerCollideWithHealth(player, object);
                 break;
 
             case TRIGGER:
@@ -188,7 +182,7 @@ public class Physics {
     }
 
     private void handleEnemyCollision(GameObject enemy, GameObject object) {
-
+        // What happen if enemy collides with player?
     }
 
     public World getWorld() {return world;}
