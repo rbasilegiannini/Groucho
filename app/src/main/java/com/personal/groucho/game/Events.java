@@ -1,6 +1,6 @@
 package com.personal.groucho.game;
 
-import static com.personal.groucho.game.Utils.distanceBetweenPosition;
+import static com.personal.groucho.game.Utils.distBetweenVec;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.isInCircle;
@@ -69,7 +69,7 @@ public class Events {
                     enemyPosition.getPosX(), playerPosition.getX(),
                     enemyPosition.getPosY(), playerPosition.getY(), hearingRangeSqr)){
 
-                float distance = distanceBetweenPosition(
+                float distance = distBetweenVec(
                         playerPosition,
                         new Vec2(enemyPosition.getPosX(), enemyPosition.getPosY()));
                 enemiesPosition.add(enemyPosition);

@@ -1,8 +1,8 @@
 package com.personal.groucho.game.AI;
 
-import static com.personal.groucho.game.constants.System.distanceOfEnemySight;
+import static com.personal.groucho.game.Utils.isInTriangle;
+import static com.personal.groucho.game.constants.System.distSight;
 import static com.personal.groucho.game.constants.System.maxInvisiblePlayer;
-import static com.personal.groucho.game.constants.System.pointsOfEnemySight;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static java.lang.Math.cos;
@@ -11,12 +11,12 @@ import static java.lang.Math.sin;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.google.fpl.liquidfun.Fixture;
 import com.google.fpl.liquidfun.RayCastCallback;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
+import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.Role;
@@ -30,36 +30,29 @@ public class Sight {
     private final AIComponent aiComponent;
     private final World world;
     private Orientation orientation;
-    private final Vec2 origin;
-    private final Vec2[] points;
-    private final float[] angles;
-    private final float phase;
-    private final int numOfPoints;
+    private float originX, originY;
+    private float playerPosX, playerPosY;
+    private float phase;
     private long lastSeenMillis;
     private final List<GameObject> hitGameObjects = new ArrayList<>();
     private final List<Float> fractions = new ArrayList<>();
 
-    public Sight (AIComponent aiComponent, World world, Vec2 origin, Orientation orientation) {
+    public Sight (AIComponent aiComponent, World world , Vec2 origin, Orientation orientation) {
         this.aiComponent = aiComponent;
         this.world = world;
-        this.origin = origin;
-        this.numOfPoints = pointsOfEnemySight;
         this.orientation = orientation;
 
-        phase = (float) 90 /(pointsOfEnemySight-1);
-        points = new Vec2[pointsOfEnemySight];
-        angles = new float[pointsOfEnemySight];
-
-        for (int i = 0; i<numOfPoints; i++) {
-            points[i] = new Vec2();
-        }
+        originX = origin.getX();
+        originY = origin.getY();
 
         changeDirection();
-        computePoints();
     }
 
-    public void see() {
-        for (Vec2 point : points) {
+    public void see(GameWorld gameWorld) {
+        playerPosX = gameWorld.getPlayerPosition().getX();
+        playerPosY = gameWorld.getPlayerPosition().getY();
+
+        if(isInTriangle(originX, originY, playerPosX, playerPosY, distSight, phase)){
             world.rayCast(
                     new RayCastCallback() {
                         public float reportFixture(Fixture fixture, Vec2 i, Vec2 n, float fraction) {
@@ -71,8 +64,8 @@ public class Sight {
                             return fraction;
                         }
                     },
-                    fromBufferToMetersX(origin.getX()), fromBufferToMetersY(origin.getY()),
-                    fromBufferToMetersX(point.getX()), fromBufferToMetersY(point.getY())
+                    fromBufferToMetersX(originX), fromBufferToMetersY(originY),
+                    fromBufferToMetersX(playerPosX), fromBufferToMetersY(playerPosY)
             );
         }
 
@@ -81,7 +74,6 @@ public class Sight {
             GameObject firstGO = hitGameObjects.get(indexLessFraction);
             if(firstGO.role == Role.PLAYER) {
                 if (aiComponent.isPlayerVisible()) {
-                    Log.i("RayCast", "I see you");
                     aiComponent.setPlayerEngaged(true);
                     lastSeenMillis = System.currentTimeMillis();
                 }
@@ -96,50 +88,34 @@ public class Sight {
     }
 
     public void updateSightPosition(Vec2 origin) {
-        for (Vec2 point : points) {
-            point.setX(point.getX() + origin.getX()-this.origin.getX());
-            point.setY(point.getY() + origin.getY()-this.origin.getY());
-        }
-        this.origin.setX(origin.getX());
-        this.origin.setY(origin.getY());
+        originX = origin.getX();
+        originY = origin.getY();
     }
 
     public void setNewOrientation(Orientation orientation){
         if (this.orientation != orientation) {
             this.orientation = orientation;
             changeDirection();
-            computePoints();
         }
     }
 
     private void changeDirection() {
         switch (this.orientation) {
             case UP:
-                for (int i = 0; i<numOfPoints; i++)
-                    angles[i] = (i * phase) - 135;
+                phase = -0.785398f; // degree = -45
                 break;
 
             case DOWN:
-                for (int i = 0; i<numOfPoints; i++)
-                    angles[i] = (i * phase) + 45;
+                phase = 2.35619f; // degree = 135
                 break;
 
             case RIGHT:
-                for (int i = 0; i<numOfPoints; i++)
-                    angles[i] = (i * phase) - 45;
+                phase = 0.785398f; // degree = 45
                 break;
 
             case LEFT:
-                for (int i = 0; i<numOfPoints; i++)
-                    angles[i] = (i * phase) - 225;
+                phase = -2.35619f; // degree = -135
                 break;
-        }
-    }
-
-    private void computePoints() {
-        for (int i = 0; i<numOfPoints; i++) {
-            points[i].setX((float)(distanceOfEnemySight *cos(Math.toRadians(angles[i]))) + origin.getX());
-            points[i].setY((float)(distanceOfEnemySight *sin(Math.toRadians(angles[i]))) + origin.getY());
         }
     }
 
@@ -149,8 +125,19 @@ public class Sight {
         paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        for (Vec2 point : points) {
-            canvas.drawLine(origin.getX(), origin.getY(), point.getX(), point.getY(), paint);
+        canvas.drawLine(originX, originY,
+                originX + (float)(distSight* cos(phase)), originY+(float)(distSight * sin(phase)),
+                paint);
+        canvas.drawLine(originX, originY,
+                originX+(float)(distSight *cos(phase -1.5708)), originY+(float)(distSight *sin(phase -1.5708)),
+                paint);
+        canvas.drawLine(
+                originX+(float)(distSight *cos(phase -1.5708)), originY+(float)(distSight *sin(phase -1.5708)),
+                originX + (float)(distSight * cos(phase)), originY+(float)(distSight * sin(phase)), paint);
+
+        if(isInTriangle(originX, originY, playerPosX, playerPosY, distSight, phase)){
+            paint.setColor(Color.GREEN);
+            canvas.drawLine(originX, originY, playerPosX, playerPosY, paint);
         }
     }
 }

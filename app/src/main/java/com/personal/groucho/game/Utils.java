@@ -40,10 +40,26 @@ public class Utils {
         return pointerPositionSqr <= distance;
     }
 
-    public static float distanceBetweenPosition(Vec2 position1, Vec2 position2){
-        float deltaX = position2.getX() - position1.getX();
-        float deltaY = position2.getY() - position1.getY();
-        return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    public static boolean isInTriangle(float originX, float originY, float x, float y, float dist, float rad) {
+        float[] vecO = new float[]{originX - x, originY - y};
+        float[] vecA = new float[]{
+                (float)(originX + dist*Math.cos(rad) - x),
+                (float)(originY + dist*Math.sin(rad) - y)};
+        float[] vecB = new float[]{
+                (float)(originX + dist*Math.cos(rad-1.5708) - x),
+                (float)(originY + dist*Math.sin(rad-1.5708) - y)};
+
+        double crossProduct1 = vecO[0] * vecA[1] - vecO[1] * vecA[0];
+        double crossProduct2 = vecA[0] * vecB[1] - vecA[1] * vecB[0];
+        double crossProduct3 = vecB[0] * vecO[1] - vecB[1] * vecO[0];
+
+        return (crossProduct1 >= 0 && crossProduct2 >= 0 && crossProduct3 >= 0)
+                || (crossProduct1 <= 0 && crossProduct2 <= 0 && crossProduct3 <= 0);
     }
 
+    public static float distBetweenVec(Vec2 vec1, Vec2 vec2){
+        float deltaX = vec2.getX() - vec1.getX();
+        float deltaY = vec2.getY() - vec1.getY();
+        return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
 }

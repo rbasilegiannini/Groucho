@@ -96,7 +96,7 @@ public class AIComponent extends WalkingComponent {
             action.doIt();
 
         sight.updateSightPosition(positionComponent.getPosition());
-        sight.see();
+        sight.see(gameWorld);
     }
 
     private void init(GameWorld gameWorld) {
