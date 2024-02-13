@@ -1,21 +1,24 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
+import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
+
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.gameobjects.Component;
-import com.personal.groucho.game.gameobjects.ComponentType;
 
 public abstract class WalkingComponent extends Component {
-    protected PositionComponent positionComponent = null;
+    protected PositionComponent posComponent = null;
     protected SpriteDrawableComponent spriteComponent = null;
-    protected PhysicsComponent physicsComponent = null;
+    protected PhysicsComponent phyComponent = null;
     protected float increaseX, increaseY;
 
 
     protected void walking(Spritesheet sheet, float speed) {
-        if (positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if (posComponent == null)
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
 
-        switch (positionComponent.getOrientation()) {
+        switch (posComponent.getOrientation()) {
             case UP:
                 increaseX = 0;
                 increaseY = -1;
@@ -38,20 +41,21 @@ public abstract class WalkingComponent extends Component {
     }
 
     protected void updateSprite(Spritesheet sheet) {
-        if (spriteComponent == null)
-            spriteComponent = (SpriteDrawableComponent) owner.getComponent(ComponentType.DRAWABLE);
-        if (positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
-
+        if (spriteComponent == null) {
+            spriteComponent = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
+        }
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
         spriteComponent.setCurrentSpritesheet(sheet);
-        spriteComponent.setAnimation(positionComponent.getOrientation().getValue());
+        spriteComponent.setAnim(posComponent.getOrientation().getValue());
     }
 
     private void updatePosition(float increaseX, float increaseY) {
-        if(physicsComponent == null)
-            physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.PHYSICS);
-
-        physicsComponent.updatePosX(increaseX);
-        physicsComponent.updatePosY(increaseY);
+        if(phyComponent == null) {
+            phyComponent = (PhysicsComponent) owner.getComponent(PHYSICS);
+        }
+        phyComponent.updatePosX(increaseX);
+        phyComponent.updatePosY(increaseY);
     }
 }

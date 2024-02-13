@@ -6,6 +6,8 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
+import static com.personal.groucho.game.gameobjects.Role.FURNITURE;
 
 import android.util.Log;
 
@@ -19,8 +21,6 @@ import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.Role;
-import com.personal.groucho.game.gameobjects.Component;
-import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
@@ -48,62 +48,55 @@ public class Physics {
     }
 
     public void setGameGrid(GameGrid grid) {this.gameGrid = grid;}
-    public synchronized void update(float elapsedTime, List<GameObject> objects) {
+    public synchronized void update(float elapsedTime) {
         world.step(elapsedTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
-        updatePhysicsPosition(objects);
+        updatePhysicsPosition();
         handleCollisions();
     }
 
-    private void updatePhysicsPosition(List<GameObject> objects) {
-        // TODO: use a better solution
-        for (GameObject go : objects) {
-            Component phyComponent = go.getComponent(ComponentType.PHYSICS);
-            Component posComponent = go.getComponent(ComponentType.POSITION);
-            if (phyComponent != null && posComponent != null) {
-                PhysicsComponent physicsComponent = (PhysicsComponent) phyComponent;
-                PositionComponent positionComponent = (PositionComponent) posComponent;
+    private void updatePhysicsPosition() {
+        for (PhysicsComponent phyComponent : gameWorld.phyComponents) {
+            GameObject go = (GameObject)(phyComponent.getOwner());
+            PositionComponent posComponent = (PositionComponent) go.getComponent(POSITION);
 
-                if (go.role == Role.FURNITURE) {
-                    Vec2 originalPosition = new Vec2(
-                            fromMetersToBufferX(physicsComponent.getOriginalPosX()),
-                            fromMetersToBufferY(physicsComponent.getOriginalPosY())
-                    );
-
-                    if (physicsComponent.hasChangedPosition()) {
-                        positionComponent.setPosX(
-                                (int) fromMetersToBufferX(physicsComponent.getPositionX())
-                        );
-                        positionComponent.setPosY(
-                                (int) fromMetersToBufferY(physicsComponent.getPositionY())
-                        );
-
-                        updateGameGrid(physicsComponent, originalPosition);
-                    }
-                } else {
-                    if (physicsComponent.hasChangedPosition()) {
-                        positionComponent.setPosX(
-                                (int) fromMetersToBufferX(physicsComponent.getPositionX())
-                        );
-                        positionComponent.setPosY(
-                                (int) fromMetersToBufferY(physicsComponent.getPositionY())
-                        );
-                    }
+            if (go.role == FURNITURE) {
+                handleFurnitureCollision(phyComponent, posComponent);
+            }
+            else {
+                if (phyComponent.hasChangedPosition()) {
+                    posComponent.setPosX((int) fromMetersToBufferX(phyComponent.getPosX()));
+                    posComponent.setPosY((int) fromMetersToBufferY(phyComponent.getPosY()));
                 }
             }
         }
     }
 
-    private void updateGameGrid(PhysicsComponent physics, Vec2 oldPosition) {
+    private void handleFurnitureCollision(PhysicsComponent phyComponent, PositionComponent posComponent) {
+        Vec2 originalPos = new Vec2(
+                fromMetersToBufferX(phyComponent.getOriginalPosX()),
+                fromMetersToBufferY(phyComponent.getOriginalPosY())
+        );
+
+        if (phyComponent.hasChangedPosition()) {
+            posComponent.setPosX((int) fromMetersToBufferX(phyComponent.getPosX()));
+            posComponent.setPosY((int) fromMetersToBufferY(phyComponent.getPosY()));
+
+            updateGameGrid(phyComponent, originalPos);
+        }
+    }
+
+    private void updateGameGrid(PhysicsComponent physics, Vec2 oldPos) {
         if (gameGrid != null) {
-            int positionX = (int)fromMetersToBufferX(physics.getPositionX());
-            int positionY = (int)fromMetersToBufferY(physics.getPositionY());
+            int oldPosX = (int) oldPos.getX();
+            int oldPosY = (int) oldPos.getY();
+            int posX = (int)fromMetersToBufferX(physics.getPosX());
+            int posY = (int)fromMetersToBufferY(physics.getPosY());
             int dimX = (int)physics.getDimX();
             int dimY = (int)physics.getDimY();
             int dCost = (int)(physics.getDensity()*10000);
 
-            Set<Node> oldCellsToReset = gameGrid.getNodes(
-                    (int) oldPosition.getX(), (int) oldPosition.getY(), dimX, dimY);
-            Set<Node> newCellsToChange = gameGrid.getNodes(positionX, positionY, dimX, dimY);
+            Set<Node> oldCellsToReset = gameGrid.getNodes(oldPosX, oldPosY, dimX, dimY);
+            Set<Node> newCellsToChange = gameGrid.getNodes(posX, posY, dimX, dimY);
 
             Set<Node> unchangedCells = new HashSet<>(newCellsToChange);
             unchangedCells.retainAll(oldCellsToReset);
@@ -167,6 +160,10 @@ public class Physics {
 
     private void handlePlayerCollision(GameObject player, GameObject object) {
         switch (object.role) {
+            case ENEMY:
+                // Enemy alert
+                break;
+
             case FURNITURE:
                 playerCollideWithFurniture(player, gameWorld);
                 break;

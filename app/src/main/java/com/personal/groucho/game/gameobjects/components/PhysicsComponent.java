@@ -4,6 +4,8 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
+import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.BodyDef;
@@ -16,7 +18,7 @@ import com.personal.groucho.game.gameobjects.ComponentType;
 public class PhysicsComponent extends Component {
 
     private final World world;
-    private PositionComponent positionComponent = null;
+    private PositionComponent posComponent = null;
     private Body body;
     private float density, originalPosX, originalPosY;
     private final float dimX, dimY;
@@ -28,7 +30,7 @@ public class PhysicsComponent extends Component {
     }
 
     @Override
-    public ComponentType type() {return ComponentType.PHYSICS;}
+    public ComponentType type() {return PHYSICS;}
 
     @Override
     public void delete() {
@@ -38,7 +40,7 @@ public class PhysicsComponent extends Component {
 
     public void setBody(BodyDef bodyDef) {
         body = world.createBody(bodyDef);
-        body.setUserData(this.owner);
+        body.setUserData(owner);
         originalPosX = body.getPositionX();
         originalPosY = body.getPositionY();
     }
@@ -49,49 +51,52 @@ public class PhysicsComponent extends Component {
     }
 
     public void applyForce(Vec2 force) {
-        if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if(posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
 
         body.setLinearVelocity(new Vec2(0,0));
         body.applyLinearImpulse(force,body.getPosition(),true);
 
-        positionComponent.setPosX((int) fromMetersToBufferX(body.getPositionX()));
-        positionComponent.setPosY((int) fromMetersToBufferY(body.getPositionY()));
+        posComponent.setPosX((int) fromMetersToBufferX(body.getPositionX()));
+        posComponent.setPosY((int) fromMetersToBufferY(body.getPositionY()));
     }
 
     public void setBullet(boolean isBullet) {
         body.setBullet(isBullet);
     }
 
-    public void setPosition(int posX, int posY) {
-        if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+    public void setPos(int posX, int posY) {
+        if(posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
 
         body.setTransform(new Vec2(fromBufferToMetersX(posX), fromBufferToMetersY(posY)),0);
-        positionComponent.setPosX((int) fromMetersToBufferX(body.getPositionX()));
-        positionComponent.setPosY((int) fromMetersToBufferY(body.getPositionY()));
+        posComponent.setPosX((int) fromMetersToBufferX(body.getPositionX()));
+        posComponent.setPosY((int) fromMetersToBufferY(body.getPositionY()));
     }
 
     public void updatePosX(float  increase) {
-        if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if(posComponent == null)
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
 
         float newPosX = body.getPositionX() + increase;
         body.setTransform(newPosX, body.getPositionY(), 0);
-        positionComponent.updatePosX((int)increase);
+        posComponent.updatePosX((int)increase);
     }
 
     public void updatePosY(float increase) {
-        if(positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if(posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
 
         float newPosY = body.getPositionY() + increase;
         body.setTransform(body.getPositionX(),newPosY, 0);
-        positionComponent.updatePosY((int)increase);
+        posComponent.updatePosY((int)increase);
     }
 
-    public float getPositionX() {return body.getPositionX();}
-    public float getPositionY() {return body.getPositionY();}
+    public float getPosX() {return body.getPositionX();}
+    public float getPosY() {return body.getPositionY();}
     public float getOriginalPosX() {return originalPosX;}
     public float getOriginalPosY() {return originalPosY;}
     public float getDensity() {return density;}

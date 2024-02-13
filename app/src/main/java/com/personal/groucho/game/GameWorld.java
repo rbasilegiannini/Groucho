@@ -6,6 +6,13 @@ import static com.personal.groucho.game.Events.playerShootEnemyEvent;
 import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
 import static com.personal.groucho.game.Events.playerShootWallEvent;
 import static com.personal.groucho.game.constants.System.debugMode;
+import static com.personal.groucho.game.gameobjects.ComponentType.AI;
+import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
+import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
+import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
+import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
+import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.app.Activity;
@@ -23,7 +30,9 @@ import com.personal.groucho.game.gameobjects.Role;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.Component;
-import com.personal.groucho.game.gameobjects.ComponentType;
+import com.personal.groucho.game.gameobjects.components.DrawableComponent;
+import com.personal.groucho.game.gameobjects.components.LightComponent;
+import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
@@ -43,8 +52,14 @@ public class GameWorld {
     private Player player;
     public final Controller controller;
     private Level currentLevel;
-    private GameGrid grid;
+    protected GameGrid grid;
     private final List<GameObject> objects = new ArrayList<>();
+    protected final List<PositionComponent> posComponents = new ArrayList<>();
+    protected final List<PhysicsComponent> phyComponents = new ArrayList<>();
+    protected final List<DrawableComponent> drawComponents = new ArrayList<>();
+    protected final List<AIComponent> aiComponents = new ArrayList<>();
+    protected final List<AliveComponent> aliveComponents = new ArrayList<>();
+    protected final List<LightComponent> lightComponents = new ArrayList<>();
     private TouchHandler touchHandler;
     private boolean gameOver = false;
 
@@ -68,21 +83,12 @@ public class GameWorld {
     }
 
     private void setPlayer() {
-        GameObject player = GameObjectFactory.
-                makePlayer(
-                        Graphics.bufferWidth /2,
-                        Graphics.bufferHeight/2,
-                        controller,
-                        this
-                );
+        GameObject playerGO = GameObjectFactory.
+                makePlayer(bufferWidth /2, bufferHeight/2, controller, this);
+        PositionComponent posComponent = (PositionComponent) playerGO.getComponent(POSITION);
 
-        Component component = player.getComponent(ComponentType.POSITION);
-        if (component != null) {
-            PositionComponent position = (PositionComponent) component;
-            this.player = new Player(player, position.getPosX(), position.getPosY());
-        }
-
-        addGameObject(player);
+        player = new Player(playerGO, posComponent.getPosX(), posComponent.getPosY());
+        addGameObject(playerGO);
     }
     public void setGameGrid(GameGrid grid) {
         this.grid = grid;
@@ -94,7 +100,7 @@ public class GameWorld {
     public World getWorld() {return physics.getWorld();}
     public Level getLevel() {return currentLevel;}
     public GameObject getPlayerGO(){return player.getGameObject();}
-    public Vec2 getPlayerPosition() {return player.getPosition();}
+    public Vec2 getPlayerPosition() {return player.getPos();}
     public GameGrid getGameGrid() {return grid;}
     public List<GameObject> getGOByRole(Role role) {
         List<GameObject> gameObjects = new ArrayList<>();
@@ -106,8 +112,23 @@ public class GameWorld {
         return gameObjects;
     }
 
-    public synchronized void addGameObject(GameObject obj) {objects.add(obj);}
-    public synchronized void removeGameObject(GameObject gameObject) {objects.remove(gameObject);}
+    public synchronized void addGameObject(GameObject go) {
+        objects.add(go);
+
+        Component posComponent = go.getComponent(POSITION);
+        Component drawComponent = go.getComponent(DRAWABLE);
+        Component phyComponent = go.getComponent(PHYSICS);
+        Component aliveComponent = go.getComponent(ALIVE);
+        Component aiComponent = go.getComponent(AI);
+        Component lightComponent = go.getComponent(LIGHT);
+
+        if (posComponent != null) posComponents.add((PositionComponent) posComponent);
+        if (drawComponent != null) drawComponents.add((DrawableComponent) drawComponent);
+        if (phyComponent != null) phyComponents.add((PhysicsComponent) phyComponent);
+        if (aliveComponent != null) aliveComponents.add((AliveComponent) aliveComponent);
+        if (aiComponent != null) aiComponents.add((AIComponent) aiComponent);
+        if (lightComponent != null) lightComponents.add((LightComponent) lightComponent);
+    }
 
     public synchronized void processInputs(){
 
@@ -122,30 +143,20 @@ public class GameWorld {
     }
 
     public synchronized void update(float elapsedTime) {
-        physics.update(elapsedTime, objects);
+        physics.update(elapsedTime);
 
         if (!gameOver) {
-            //TODO: Use a better solution
-            for (GameObject gameObject : objects) {
-                Component aliveComponent = gameObject.getComponent(ComponentType.ALIVE);
-                if (aliveComponent != null) {
-                    AliveComponent alive = (AliveComponent) aliveComponent;
-                    if (alive.getCurrentStatus() == DEAD) {
-                        handleDeath(gameObject);
-                    }
+            for (AliveComponent aliveComponent : aliveComponents) {
+                if (aliveComponent.getCurrentStatus() == DEAD) {
+                    handleDeath((GameObject)aliveComponent.getOwner());
                 }
             }
         }
 
         player.update(graphics.getCanvas(), controller);
 
-        //TODO: Use a better solution
-        for (GameObject gameObject : objects) {
-            Component component = gameObject.getComponent(ComponentType.AI);
-            if (component != null) {
-                AIComponent ai = (AIComponent) component;
-                ai.update(this);
-            }
+        for (AIComponent aiComponent : aiComponents) {
+            aiComponent.update(this);
         }
     }
 
@@ -158,14 +169,15 @@ public class GameWorld {
     }
 
     private void handleDeath(GameObject gameObject) {
-        if (gameObject.role == Role.PLAYER) {
+        if (gameObject.role == PLAYER) {
             gameOverEvent(this);
         }
         else {
-            gameObject.removeComponent(ComponentType.AI);
-            gameObject.removeComponent(ComponentType.PHYSICS);
-            gameObject.removeComponent(ComponentType.POSITION);
-            gameObject.removeComponent(ComponentType.ALIVE);
+            gameObject.removeComponent(AI);
+            gameObject.removeComponent(PHYSICS);
+            gameObject.removeComponent(POSITION);
+            gameObject.removeComponent(ALIVE);
+            gameObject.removeComponent(LIGHT);
         }
     }
 
@@ -189,10 +201,15 @@ public class GameWorld {
     }
 
     public synchronized void changeLevel(Level newLevel) {
+        posComponents.clear();
+        phyComponents.clear();
+        aliveComponents.clear();
+        aiComponents.clear();
+
         Iterator<GameObject> iterator = objects.iterator();
         while (iterator.hasNext()) {
             GameObject go = iterator.next();
-            if (go.role != Role.PLAYER) {
+            if (go.role != PLAYER) {
                 go.delete();
                 iterator.remove();
             }
@@ -208,7 +225,7 @@ public class GameWorld {
 
     public void GameOver() {
         this.gameOver = true;
-        // Game over menu
+        // Game over menu... and level?
     }
 
     public boolean isGameOver() {return gameOver;}

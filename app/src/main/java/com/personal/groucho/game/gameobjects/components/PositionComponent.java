@@ -25,9 +25,9 @@ public class PositionComponent extends Component {
 
     public int getPosX() {return posX;}
     public int getPosY() {return posY;}
-    public Vec2 getPosition() { return new Vec2(posX, posY);}
-    public int getPositionXOnGrid() {return posX /cellSize;}
-    public int getPositionYOnGrid() {return posY /cellSize;}
+    public Vec2 getPos() { return new Vec2(posX, posY);}
+    public int getPosXOnGrid() {return posX /cellSize;}
+    public int getPosYOnGrid() {return posY /cellSize;}
     public Orientation getOrientation() {return orientation;}
 
     public void setPosX(int newPosX) {this.posX = newPosX;}

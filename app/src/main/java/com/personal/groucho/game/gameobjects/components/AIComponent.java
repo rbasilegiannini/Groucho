@@ -7,7 +7,7 @@ import static com.personal.groucho.game.constants.CharacterProperties.skeletonSp
 import static com.personal.groucho.game.assets.Spritesheets.skeletonHurt;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;
-import static com.personal.groucho.game.constants.System.characterDimensionsX;
+import static com.personal.groucho.game.constants.System.characterDimX;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
@@ -42,9 +42,9 @@ public class AIComponent extends WalkingComponent {
     private final GameWorld gameWorld;
     private final AStar aStar;
     private Orientation originalOrientation;
-    private Node originalPositionOnGrid;
-    private Node positionOnGrid;
-    private Node playerPositionOnGrid;
+    private Node originalPosOnGrid;
+    private Node posOnGrid;
+    private Node playerPosOnGrid;
     private List<Node> currentPath;
     private Node currentNode;
     private final int maxSteps;
@@ -95,26 +95,26 @@ public class AIComponent extends WalkingComponent {
         for (Action action : actions)
             action.doIt();
 
-        sight.updateSightPosition(positionComponent.getPosition());
+        sight.updateSightPosition(posComponent.getPos());
         sight.see(gameWorld);
     }
 
     private void init(GameWorld gameWorld) {
-        if (positionComponent == null) {
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
         }
 
-        originalPositionOnGrid = grid.getNode(
-                positionComponent.getPositionXOnGrid(),
-                positionComponent.getPositionYOnGrid()
+        originalPosOnGrid = grid.getNode(
+                posComponent.getPosXOnGrid(),
+                posComponent.getPosYOnGrid()
         );
-        originalOrientation = positionComponent.getOrientation();
+        originalOrientation = posComponent.getOrientation();
 
         sight = new Sight(
                 this,
                 gameWorld.getWorld(),
-                new Vec2(positionComponent.getPosX(),positionComponent.getPosY()),
-                positionComponent.getOrientation());
+                new Vec2(posComponent.getPosX(), posComponent.getPosY()),
+                posComponent.getOrientation());
     }
 
     public Sight getSight() {return sight;}
@@ -140,7 +140,7 @@ public class AIComponent extends WalkingComponent {
         if (!currentPath.isEmpty() || !isNodeReached)
             walkingToDestination();
         else if (!isIdle){
-            positionComponent.setOrientation(originalOrientation);
+            posComponent.setOrientation(originalOrientation);
             sight.setNewOrientation(originalOrientation);
             updateSprite(skeletonIdle);
             isIdle = true;
@@ -154,19 +154,19 @@ public class AIComponent extends WalkingComponent {
     // Patrol actions
     public void entryPatrolAction() {
         updateSprite(skeletonWalk);
-        Orientation newOrientation = positionComponent.getOrientation().getOpposite();
-        positionComponent.setOrientation(newOrientation);
+        Orientation newOrientation = posComponent.getOrientation().getOpposite();
+        posComponent.setOrientation(newOrientation);
     }
 
     public void activePatrolAction() {
-        if (positionComponent == null) {
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
         }
         if (!currentPath.isEmpty() || !isNodeReached)
             walkingToDestination();
         else {
             if (!isPatrol) {
-                positionComponent.setOrientation(originalOrientation);
+                posComponent.setOrientation(originalOrientation);
                 sight.setNewOrientation(originalOrientation);
                 isPatrol = true;
             }
@@ -182,8 +182,8 @@ public class AIComponent extends WalkingComponent {
     private void patrol() {
         if (currentSteps == maxSteps) {
             currentSteps = 0;
-            Orientation newOrientation = positionComponent.getOrientation().getOpposite();
-            positionComponent.setOrientation(newOrientation);
+            Orientation newOrientation = posComponent.getOrientation().getOpposite();
+            posComponent.setOrientation(newOrientation);
         }
         currentSteps++;
         walking(skeletonWalk, skeletonSpeed);
@@ -191,12 +191,12 @@ public class AIComponent extends WalkingComponent {
 
     // Investigate actions
     public void entryInvestigateAction() {
-        if (positionComponent == null) {
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
         }
-        positionOnGrid = grid.getNode(
-                positionComponent.getPositionXOnGrid(),
-                positionComponent.getPositionYOnGrid()
+        posOnGrid = grid.getNode(
+                posComponent.getPosXOnGrid(),
+                posComponent.getPosYOnGrid()
         );
         setPathToPlayer();
         isNodeReached = true;
@@ -214,17 +214,17 @@ public class AIComponent extends WalkingComponent {
 
     public void exitInvestigateAction() {
         currentPath.clear();
-        currentPath = aStar.findPath(positionOnGrid, originalPositionOnGrid);
+        currentPath = aStar.findPath(posOnGrid, originalPosOnGrid);
     }
 
     // Engage actions
     public void entryEngageAction(){
-        if (positionComponent == null) {
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
         }
-        positionOnGrid = grid.getNode(
-                positionComponent.getPositionXOnGrid(),
-                positionComponent.getPositionYOnGrid()
+        posOnGrid = grid.getNode(
+                posComponent.getPosXOnGrid(),
+                posComponent.getPosYOnGrid()
         );
 
         setPathToPlayer();
@@ -247,11 +247,11 @@ public class AIComponent extends WalkingComponent {
 
     public void exitEngageAction() {
         currentPath.clear();
-        currentPath = aStar.findPath(positionOnGrid, originalPositionOnGrid);
+        currentPath = aStar.findPath(posOnGrid, originalPosOnGrid);
     }
 
     private boolean hasPlayerChangedPosition() {
-        return !playerPositionOnGrid.equal(grid.getNode(
+        return !playerPosOnGrid.equal(grid.getNode(
                 (int) gameWorld.getPlayerPosition().getX() / cellSize,
                 (int) gameWorld.getPlayerPosition().getY() / cellSize));
     }
@@ -259,7 +259,7 @@ public class AIComponent extends WalkingComponent {
     // Attack actions
     public void entryAttackAction() {
         lastHitMillis = System.currentTimeMillis();
-        sight.setNewOrientation(positionComponent.getOrientation());
+        sight.setNewOrientation(posComponent.getOrientation());
         updateSprite(skeletonHurt);
     }
 
@@ -290,29 +290,29 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void setPathToPlayer() {
-        positionOnGrid = grid.getNode(
-                positionComponent.getPositionXOnGrid(),
-                positionComponent.getPositionYOnGrid()
+        posOnGrid = grid.getNode(
+                posComponent.getPosXOnGrid(),
+                posComponent.getPosYOnGrid()
         );
 
-        playerPositionOnGrid = grid.getNode(
+        playerPosOnGrid = grid.getNode(
                 (int) gameWorld.getPlayerPosition().getX()/cellSize,
                 (int) gameWorld.getPlayerPosition().getY()/cellSize
         );
 
         currentPath.clear();
-        currentPath = aStar.findPath(positionOnGrid, playerPositionOnGrid);
+        currentPath = aStar.findPath(posOnGrid, playerPosOnGrid);
     }
 
     public boolean isAPlayerNeighbor() {
         float distanceFromPlayerX =
-                (float)positionComponent.getPosX() - gameWorld.getPlayerPosition().getX();
+                (float) posComponent.getPosX() - gameWorld.getPlayerPosition().getX();
         float distanceFromPlayerY =
-                (float)positionComponent.getPosY() - gameWorld.getPlayerPosition().getY();
+                (float) posComponent.getPosY() - gameWorld.getPlayerPosition().getY();
 
         float distanceFromPlayer = (float)sqrt(pow(distanceFromPlayerX,2) + pow(distanceFromPlayerY,2));
 
-        return distanceFromPlayer < 1.2*characterScaleFactor*characterDimensionsX;
+        return distanceFromPlayer < 1.2*characterScaleFactor* characterDimX;
     }
 
     private void walkingToDestination() {
@@ -321,19 +321,19 @@ public class AIComponent extends WalkingComponent {
             isNodeReached = false;
         }
 
-        positionOnGrid = grid.getNode(
-                positionComponent.getPositionXOnGrid(),
-                positionComponent.getPositionYOnGrid()
+        posOnGrid = grid.getNode(
+                posComponent.getPosXOnGrid(),
+                posComponent.getPosYOnGrid()
         );
 
-        if (positionOnGrid.getPosX() != currentNode.getPosX()) {
-            walkingToXCoordinate(positionOnGrid.getPosX(), currentNode.getPosX());
+        if (posOnGrid.getPosX() != currentNode.getPosX()) {
+            walkingToXCoordinate(posOnGrid.getPosX(), currentNode.getPosX());
         }
-        else if (positionOnGrid.getPosY() != currentNode.getPosY()) {
-            walkingToYCoordinate(positionOnGrid.getPosY(), currentNode.getPosY());
+        else if (posOnGrid.getPosY() != currentNode.getPosY()) {
+            walkingToYCoordinate(posOnGrid.getPosY(), currentNode.getPosY());
         }
 
-        if (positionOnGrid.equal(currentNode)) {
+        if (posOnGrid.equal(currentNode)) {
             isNodeReached = true;
             currentNode = null;
         }
@@ -341,20 +341,20 @@ public class AIComponent extends WalkingComponent {
 
     private void walkingToXCoordinate(int startX, int targetPosX){
         if (startX < targetPosX) {
-            positionComponent.setOrientation(Orientation.RIGHT);
+            posComponent.setOrientation(Orientation.RIGHT);
         }
         if (startX > targetPosX) {
-            positionComponent.setOrientation(Orientation.LEFT);
+            posComponent.setOrientation(Orientation.LEFT);
         }
         walking(skeletonWalk, skeletonSpeed);
     }
 
     private void walkingToYCoordinate(int startY, int targetPosY){
         if (startY < targetPosY) {
-            positionComponent.setOrientation(Orientation.DOWN);
+            posComponent.setOrientation(Orientation.DOWN);
         }
         if (startY > targetPosY) {
-            positionComponent.setOrientation(Orientation.UP);
+            posComponent.setOrientation(Orientation.UP);
         }
         walking(skeletonWalk, skeletonSpeed);
     }
@@ -362,7 +362,7 @@ public class AIComponent extends WalkingComponent {
     @Override
     protected void walking(Spritesheet sheet, float speed) {
         super.walking(sheet, speed);
-        sight.updateSightPosition(positionComponent.getPosition());
-        sight.setNewOrientation(positionComponent.getOrientation());
+        sight.updateSightPosition(posComponent.getPos());
+        sight.setNewOrientation(posComponent.getOrientation());
     }
 }

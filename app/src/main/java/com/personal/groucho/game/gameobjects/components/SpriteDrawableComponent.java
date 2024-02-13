@@ -1,6 +1,7 @@
 package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,33 +16,28 @@ public class SpriteDrawableComponent extends DrawableComponent {
     private Spritesheet currentSpritesheet;
     private final Spritesheet deathSpritesheet;
     private final Paint spriteColor;
-    private PositionComponent position = null;
-
-    private int currentAnimation;
-    private int currentStep;
-    private long lastTimestamp;
+    private PositionComponent posComponent = null;
+    private int currentAnim = 0;
+    private int currentStep = 0;
+    private long lastTimestamp = 0;
 
 
     public SpriteDrawableComponent (Spritesheet currentSpritesheet, Spritesheet deathSpritesheet) {
         this.currentSpritesheet = currentSpritesheet;
         this.deathSpritesheet = deathSpritesheet;
 
-        this.spriteColor = new Paint();
+        spriteColor = new Paint();
         spriteColor.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY));
-
-        this.currentAnimation = 0;
-        this.currentStep = 0;
-        this.lastTimestamp = 0;
     }
 
-    public void setCurrentSpritesheet(Spritesheet sheet) { currentSpritesheet = sheet;}
-    public void setAnimation(int animation) {
-        currentAnimation = animation;
+    public void setCurrentSpritesheet(Spritesheet sprite) { currentSpritesheet = sprite;}
+    public void setAnim(int anim) {
+        currentAnim = anim;
     }
     public void setStep(int step) { currentStep = step;}
     public void setDeathSpritesheet() {
         currentSpritesheet = deathSpritesheet;
-        currentAnimation = 0;
+        currentAnim = 0;
     }
 
     public void updateColorFilter(int currentHealth, int maxHealth) {
@@ -52,30 +48,24 @@ public class SpriteDrawableComponent extends DrawableComponent {
 
     @Override
     public void draw(Canvas canvas) {
-        if (position == null)
-            position = (PositionComponent) owner.getComponent(ComponentType.POSITION);
-
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
         long currentTimeMillis = System.currentTimeMillis();
         long delay = currentTimeMillis - lastTimestamp;
 
-        if (delay > currentSpritesheet.getDelay(currentAnimation)) {
+        if (delay > currentSpritesheet.getDelay(currentAnim)) {
             currentStep = currentStep + 1;
             lastTimestamp = currentTimeMillis;
         }
 
         currentStep = currentSpritesheet.drawAnimation(
                 canvas,
-                currentAnimation,
+                currentAnim,
                 currentStep,
-                position.getPosX(), position.getPosY(),
+                posComponent.getPosX(), posComponent.getPosY(),
                 characterScaleFactor,
                 spriteColor
         );
-
-        // Debug
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setColor(Color.GREEN);
-        canvas.drawCircle(position.getPosX(), position.getPosY(), 20, paint);
     }
 }

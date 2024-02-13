@@ -1,6 +1,6 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.constants.System.characterDimensionsY;
+import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.Environment.brightness;
 import static com.personal.groucho.game.constants.Environment.minLightIntensity;
 
@@ -58,7 +58,7 @@ public class LightComponent extends Component {
         canvas.drawBitmap(
                 maskBitmap,
                 position.getPosX() - (float)maskBitmap.getWidth() /2,
-                (position.getPosY() - (float)maskBitmap.getHeight() /2)+characterDimensionsY,
+                (position.getPosY() - (float)maskBitmap.getHeight() /2)+ characterDimY,
                 null
         );
     }

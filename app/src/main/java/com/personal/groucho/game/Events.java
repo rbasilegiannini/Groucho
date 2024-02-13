@@ -42,8 +42,8 @@ public class Events {
     public static void playerShootFurnitureEvent(GameObject furniture, float originX, float originY) {
         bulletHitFurniture.play(1f);
         PhysicsComponent physics = (PhysicsComponent) furniture.getComponent(ComponentType.PHYSICS);
-        float goPosX = physics.getPositionX();
-        float goPosY = physics.getPositionY();
+        float goPosX = physics.getPosX();
+        float goPosY = physics.getPosY();
         float forceX = goPosX - fromBufferToMetersX(originX);
         float forceY = goPosY - fromBufferToMetersY(originY);
         float module = (float) Math.sqrt(Math.pow(forceX,2) + Math.pow(forceY, 2));
@@ -59,7 +59,7 @@ public class Events {
 
     public static void playerCollideWithFurniture(GameObject player, GameWorld gameWorld) {
         bodyHitFurniture.play(0.7f);
-        Vec2 playerPos = ((PositionComponent) player.getComponent(POSITION)).getPosition();
+        Vec2 playerPos = ((PositionComponent) player.getComponent(POSITION)).getPos();
 
         List<PositionComponent> enemiesPos = new ArrayList<>();
         List<Float> enemiesDist = new ArrayList<>();

@@ -1,7 +1,7 @@
 package com.personal.groucho.game.levels;
 
 import static com.personal.groucho.game.constants.System.cellSize;
-import static com.personal.groucho.game.constants.System.characterDimensionsY;
+import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
 
 import android.graphics.Bitmap;
@@ -34,7 +34,7 @@ public class SecondLevel extends Level {
         // Set furniture
         gameWorld.addGameObject(GameObjectFactory.
                 makeWall((9 * cellSize), (2 * cellSize) - cellSize / 2,
-                        cellSize, 4 * cellSize - characterScaleFactor * characterDimensionsY,
+                        cellSize, 4 * cellSize - characterScaleFactor * characterDimY,
                         gameWorld)
         );
 

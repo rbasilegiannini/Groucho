@@ -1,7 +1,7 @@
 package com.personal.groucho.game.gameobjects;
 
-import static com.personal.groucho.game.constants.System.characterDimensionsX;
-import static com.personal.groucho.game.constants.System.characterDimensionsY;
+import static com.personal.groucho.game.constants.System.characterDimX;
+import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
 import static com.personal.groucho.game.constants.CharacterProperties.grouchoHealth;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
@@ -65,7 +65,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(grouchoWalk, grouchoDeath));
         gameObject.addComponent(new ControllableComponent(controller, gameworld));
-        gameObject.addComponent(new PhysicsComponent(gameworld.getWorld(), characterDimensionsX, characterDimensionsY));
+        gameObject.addComponent(new PhysicsComponent(gameworld.getWorld(), characterDimX, characterDimY));
         gameObject.addComponent(new AliveComponent(grouchoHealth));
         gameObject.addComponent(new LightComponent(gameworld));
 
@@ -86,7 +86,7 @@ public class GameObjectFactory {
         GameObject gameObject = new GameObject("Enemy", Role.ENEMY);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
-        gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), characterDimensionsX, characterDimensionsY));
+        gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), characterDimX, characterDimY));
         gameObject.addComponent(new SpriteDrawableComponent(idle, death));
         gameObject.addComponent(new AliveComponent(health));
         gameObject.addComponent(new AIComponent(gameWorld, originalState));
@@ -182,8 +182,8 @@ public class GameObjectFactory {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape box = new PolygonShape();
         box.setAsBox(
-                (characterScaleFactor*toMetersXLength(characterDimensionsX))/2,
-                (characterScaleFactor*toMetersYLength(characterDimensionsY))/2,
+                (characterScaleFactor*toMetersXLength(characterDimX))/2,
+                (characterScaleFactor*toMetersYLength(characterDimY))/2,
                 0,-0.5f,0
         );
 

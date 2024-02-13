@@ -2,8 +2,11 @@ package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.Events.turnOffLightEvent;
 import static com.personal.groucho.game.Events.turnOnLightEvent;
-import static com.personal.groucho.game.constants.System.characterDimensionsX;
-import static com.personal.groucho.game.constants.System.characterDimensionsY;
+import static com.personal.groucho.game.assets.Spritesheets.grouchoAim;
+import static com.personal.groucho.game.assets.Spritesheets.grouchoFire;
+import static com.personal.groucho.game.assets.Spritesheets.grouchoIdle;
+import static com.personal.groucho.game.constants.System.characterDimX;
+import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.CharacterProperties.grouchoSpeed;
 import static com.personal.groucho.game.constants.Environment.maxLightIntensity;
 import static com.personal.groucho.game.constants.Environment.minLightIntensity;
@@ -11,14 +14,18 @@ import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.loading;
 import static com.personal.groucho.game.assets.Spritesheets.grouchoWalk;
+import static com.personal.groucho.game.controller.states.NameState.AIMING;
+import static com.personal.groucho.game.controller.states.NameState.WALKING;
+import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
+import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
+import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import com.personal.groucho.game.controller.ControllerObserver;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Sounds;
-import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.controller.states.ControllerState;
-import com.personal.groucho.game.controller.states.NameState;
 import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class ControllableComponent extends WalkingComponent implements ControllerObserver {
@@ -36,19 +43,20 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     }
 
     @Override
-    public ComponentType type() { return ComponentType.CONTROLLABLE;}
+    public ComponentType type() { return CONTROLLABLE;}
 
     public void updatePlayerState() {
-        if (lightComponent == null)
-            lightComponent = (LightComponent) owner.getComponent(ComponentType.LIGHT);
+        if (lightComponent == null) {
+            lightComponent = (LightComponent) owner.getComponent(LIGHT);
+        }
 
-        if (controller.getPlayerState().getName() == NameState.WALKING)
+        if (controller.getPlayerState().getName() == WALKING)
             handleWalkingPlayer();
-        else if (controller.getPlayerState().getName() == NameState.AIMING)
+        else if (controller.getPlayerState().getName() == AIMING)
             handleAimingPlayer();
 
         if (playShotAnimation) {
-            updateSprite(Spritesheets.grouchoFire);
+            updateSprite(grouchoFire);
             playShotAnimation = false;
         }
     }
@@ -66,7 +74,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
 
     private void handleIdlePlayer() {
         playLoadingSound = true;
-        updateSprite(Spritesheets.grouchoIdle);
+        updateSprite(grouchoIdle);
     }
 
     private void handleWalkingPlayer() {
@@ -75,7 +83,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     }
 
     private void handleAimingPlayer() {
-        updateSprite(Spritesheets.grouchoAim);
+        updateSprite(grouchoAim);
     }
 
     private void handleLoadingPlayer() {
@@ -83,7 +91,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
             loading.play(0.4f);
             playLoadingSound = false;
         }
-        updateSprite(Spritesheets.grouchoAim);
+        updateSprite(grouchoAim);
     }
 
     private void handleShootingPlayer() {
@@ -96,32 +104,33 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     }
 
     private void shoot() {
-        if(physicsComponent == null)
-            physicsComponent = (PhysicsComponent) owner.getComponent(ComponentType.PHYSICS);
+        if(phyComponent == null) {
+            phyComponent = (PhysicsComponent) owner.getComponent(PHYSICS);
+        }
 
-        float originX = fromMetersToBufferX(physicsComponent.getPositionX());
-        float originY = fromMetersToBufferY(physicsComponent.getPositionY());
+        float originX = fromMetersToBufferX(phyComponent.getPosX());
+        float originY = fromMetersToBufferY(phyComponent.getPosY());
         float endX = 0;
         float endY = 0;
 
-        switch (positionComponent.getOrientation()) {
+        switch (posComponent.getOrientation()) {
             case UP:
-                originY = originY - characterDimensionsY;
+                originY = originY - characterDimY;
                 endX = originX;
                 endY = originY - 2000;
                 break;
             case DOWN:
-                originY = originY + characterDimensionsY;
+                originY = originY + characterDimY;
                 endX = originX;
                 endY = originY + 2000;
                 break;
             case LEFT:
-                originX = originX - characterDimensionsX;
+                originX = originX - characterDimX;
                 endX = originX - 2000;
                 endY = originY;
                 break;
             case RIGHT:
-                originX = originX + characterDimensionsX;
+                originX = originX + characterDimX;
                 endX = originX + 2000;
                 endY = originY;
                 break;
@@ -131,10 +140,11 @@ public class ControllableComponent extends WalkingComponent implements Controlle
 
     @Override
     public void update(ControllerState currentState) {
-        if (positionComponent == null)
-            positionComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
 
-        positionComponent.setOrientation(controller.getOrientation());
+        posComponent.setOrientation(controller.getOrientation());
 
         switch (currentState.getName()) {
             case IDLE:
