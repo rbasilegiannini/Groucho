@@ -47,7 +47,7 @@ public class LightComponent extends Component {
         maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         maskCanvas.drawCircle(
                 (float)maskBitmap.getWidth() / 2,
-                (float)maskBitmap.getHeight() / 2,
+                (float)(maskBitmap.getHeight() / 2) - characterDimY,
                 intensity,
                 maskPaint
         );

@@ -25,6 +25,7 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.Role;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
@@ -51,7 +52,7 @@ public class GameWorld {
     private final Graphics graphics;
     private Player player;
     public final Controller controller;
-    private Level currentLevel;
+    protected Level currentLevel;
     protected GameGrid grid;
     private final List<GameObject> objects = new ArrayList<>();
     protected final List<PositionComponent> posComponents = new ArrayList<>();
@@ -161,7 +162,7 @@ public class GameWorld {
     }
 
     public synchronized void render() {
-        graphics.render(objects, currentLevel, controller);
+        graphics.render();
 
         if (debugMode) {
             getDebugger(this).draw(graphics.getCanvas());
@@ -173,12 +174,39 @@ public class GameWorld {
             gameOverEvent(this);
         }
         else {
-            gameObject.removeComponent(AI);
-            gameObject.removeComponent(PHYSICS);
-            gameObject.removeComponent(POSITION);
-            gameObject.removeComponent(ALIVE);
-            gameObject.removeComponent(LIGHT);
+            removeComponent(gameObject, AI);
+            removeComponent(gameObject, PHYSICS);
+            removeComponent(gameObject, ALIVE);
+            removeComponent(gameObject, LIGHT);
         }
+    }
+
+    private void removeComponent(GameObject go, ComponentType type){
+        Component component = go.getComponent(type);
+
+        // TODO: Use a map
+        switch (type) {
+            case AI:
+                aiComponents.remove((AIComponent)component);
+                break;
+            case ALIVE:
+                aliveComponents.remove((AliveComponent)component);
+                break;
+            case LIGHT:
+                lightComponents.remove((LightComponent)component);
+                break;
+            case PHYSICS:
+                phyComponents.remove((PhysicsComponent)component);
+                break;
+            case DRAWABLE:
+                drawComponents.remove((DrawableComponent)component);
+                break;
+            case POSITION:
+                posComponents.remove((PositionComponent)component);
+                break;
+        }
+
+        go.removeComponent(type);
     }
 
     public void shootEvent(float originX, float originY, float endX, float endY) {
@@ -201,9 +229,11 @@ public class GameWorld {
     }
 
     public synchronized void changeLevel(Level newLevel) {
-        posComponents.clear();
-        phyComponents.clear();
-        aliveComponents.clear();
+        posComponents.removeIf(component -> ((GameObject) component.getOwner()).role != PLAYER);
+        phyComponents.removeIf(component -> ((GameObject) component.getOwner()).role != PLAYER);
+        aliveComponents.removeIf(component -> ((GameObject) component.getOwner()).role != PLAYER);
+        lightComponents.removeIf(component -> ((GameObject) component.getOwner()).role != PLAYER);
+        drawComponents.removeIf(component -> ((GameObject) component.getOwner()).role != PLAYER);
         aiComponents.clear();
 
         Iterator<GameObject> iterator = objects.iterator();

@@ -5,22 +5,18 @@ import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import com.personal.groucho.game.controller.Controller;
-import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.components.DrawableComponent;
 import com.personal.groucho.game.gameobjects.components.LightComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
-import com.personal.groucho.game.levels.Level;
 
 import java.util.Comparator;
-import java.util.List;
 
-class GameObjectComparator implements Comparator<GameObject> {
+class DrawableComparator implements Comparator<DrawableComponent> {
     @Override
-    public int compare(GameObject obj1, GameObject obj2) {
+    public int compare(DrawableComponent obj1, DrawableComponent obj2) {
         return Integer.compare(
-                ((PositionComponent)obj1.getComponent(POSITION)).getPosY(),
-                ((PositionComponent)obj2.getComponent(POSITION)).getPosY());
+                ((PositionComponent)obj1.getOwner().getComponent(POSITION)).getPosY(),
+                ((PositionComponent)obj2.getOwner().getComponent(POSITION)).getPosY());
     }
 }
 
@@ -38,18 +34,17 @@ public class Graphics {
         this.canvas = new Canvas(buffer);
     }
 
-    public synchronized void render(List<GameObject> objects, Level level, Controller controller) {
+    public synchronized void render() {
         canvas.drawARGB(255,0,0,0);
-        level.draw(canvas);
-        drawGameObjects(objects);
+        gameWorld.currentLevel.draw(canvas);
+        drawGameObjects();
         if (!gameWorld.isGameOver()) {
-            controller.draw(canvas);
+            gameWorld.controller.draw(canvas);
         }
     }
 
-    private void drawGameObjects(List<GameObject> objects) {
-        //TODO: fix crash when enemy dies
-//        objects.sort(new GameObjectComparator());
+    private void drawGameObjects() {
+        gameWorld.drawComponents.sort(new DrawableComparator());
 
         for (DrawableComponent drawComponent : gameWorld.drawComponents) {
             drawComponent.draw(canvas);

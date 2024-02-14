@@ -22,9 +22,10 @@ public class AliveComponent extends Component {
     public void damage(int power) {
         currentHealth -= power;
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0) {
+            currentHealth = 0;
             die();
-
+        }
         updateSprite();
     }
 
