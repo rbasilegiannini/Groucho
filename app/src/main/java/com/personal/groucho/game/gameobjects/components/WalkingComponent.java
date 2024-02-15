@@ -15,8 +15,9 @@ public abstract class WalkingComponent extends Component {
 
 
     protected void walking(Spritesheet sheet, float speed) {
-        if (posComponent == null)
+        if (posComponent == null) {
             posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
 
         switch (posComponent.getOrientation()) {
             case UP:

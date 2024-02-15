@@ -10,6 +10,9 @@ import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Level {
 
     protected final GameWorld gameWorld;
@@ -36,40 +39,34 @@ public abstract class Level {
 
     private void makeBorders() {
         // Upper border
-        gameWorld.addGameObject(GameObjectFactory.
-                makeWall(surface.width()/2,
-                        -cellSize/4,
+        List<GameObject> borders = new ArrayList<>(GameObjectFactory.
+                makeHorizontalBorder(surface.width() / 2,
+                        -cellSize / 4,
                         surface.width() + cellSize,
-                        (float)cellSize /2,
                         gameWorld
-                )
-        );
+                ));
+
         // Bottom border
-        gameWorld.addGameObject(GameObjectFactory.
-                makeWall(surface.width()/2,
-                        surface.height() + cellSize/4,
-                        surface.width() + cellSize,
-                        (float)cellSize/2,
+        borders.addAll(GameObjectFactory.
+                makeHorizontalBorder(surface.width()/2,
+                        surface.height()-cellSize/4,
+                        surface.height() + cellSize,
                         gameWorld
-                )
-        );
+                ));
+
         // Left border
-        gameWorld.addGameObject(GameObjectFactory.
-                makeWall(-cellSize/4,
-                        surface.height()/2,
-                        (float)cellSize/2,
-                        surface.height(),
-                        gameWorld
-                )
-        );
+        borders.add(GameObjectFactory.makeVerticalBorder(
+                cellSize/4, (int) (surface.height()/2 - 1.5f*cellSize),
+                surface.height(), gameWorld));
+
         // Right border
-        gameWorld.addGameObject(GameObjectFactory.
-                makeWall(surface.width()+cellSize/4,
-                        surface.height()/2,
-                        (float)cellSize/2,
-                        surface.height(),
-                        gameWorld
-                )
-        );
+        borders.add(GameObjectFactory.makeVerticalBorder(
+                (int) (surface.width() + (0.75f)*cellSize),
+                (int) (surface.height()/2 - 1.5f*cellSize), surface.height(), gameWorld));
+
+
+        for (GameObject go : borders) {
+            gameWorld.addGameObject(go);
+        }
     }
 }

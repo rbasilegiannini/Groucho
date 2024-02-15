@@ -1,5 +1,6 @@
 package com.personal.groucho.game.gameobjects;
 
+import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.constants.System.characterDimX;
 import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
@@ -13,8 +14,10 @@ import static com.personal.groucho.game.assets.Spritesheets.grouchoWalk;
 import static com.personal.groucho.game.assets.Textures.health;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Shader;
 
 import com.google.fpl.liquidfun.BodyDef;
 import com.google.fpl.liquidfun.BodyType;
@@ -26,6 +29,7 @@ import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Spritesheet;
+import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
@@ -39,6 +43,8 @@ import com.personal.groucho.game.gameobjects.components.TextureDrawableComponent
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.controller.states.Idle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class GameObjectFactory {
@@ -118,6 +124,65 @@ public class GameObjectFactory {
 
         return gameObject;
     }
+
+    public static List<GameObject> makeHorizontalBorder(int centerX, int centerY,
+                                                        float length, GameWorld gameWorld) {
+        GameObject roof = new GameObject("Roof", Role.WALL);
+        GameObject wall = new GameObject("Wall", Role.WALL);
+
+        Paint paintRoof = new Paint();
+        Paint paintWall = new Paint();
+
+        Shader wallShader = new BitmapShader(Textures.wall, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        Shader roofShader = new BitmapShader(Textures.roof, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        paintWall.setShader(wallShader);
+        paintRoof.setShader(roofShader);
+
+        int dimX = (int) length;
+        int dimRoofY = cellSize;
+        int dimWallY = (int) (2*characterScaleFactor*characterDimY);
+
+        wall.addComponent(new PositionComponent(centerX, centerY));
+        roof.addComponent(new PositionComponent(centerX, centerY-cellSize));
+
+        wall.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimWallY));
+        wall.addComponent(new BoxDrawableComponent(dimX, dimWallY, paintWall));
+        roof.addComponent(new BoxDrawableComponent(dimX, dimRoofY, paintRoof));
+
+        PhysicsComponent physics = (PhysicsComponent) wall.getComponent(ComponentType.PHYSICS);
+        PhysicsProperties properties = new PhysicsProperties(centerX, centerY, 0f, 0f, BodyType.staticBody);
+        setFurniturePhysics(physics, properties);
+        setFurnitureOnGameGrid(gameWorld.getGameGrid(), properties, dimX, dimWallY);
+
+        List<GameObject> gameObjects = new ArrayList<>();
+        gameObjects.add(roof);
+        gameObjects.add(wall);
+
+        return gameObjects;
+    }
+
+
+    public static GameObject makeVerticalBorder(int centerX, int centerY, float length, GameWorld gameWorld){
+        GameObject border = new GameObject("Wall", Role.WALL);
+        Paint paintRoof = new Paint();
+        Shader roofShader = new BitmapShader(Textures.roof, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        paintRoof.setShader(roofShader);
+
+        int dimY = (int) length;
+        int dimX = cellSize/2;
+
+        border.addComponent(new PositionComponent(centerX-cellSize/2, centerY));
+        border.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));
+        border.addComponent(new BoxDrawableComponent(dimX, dimY, paintRoof));
+
+        PhysicsComponent physics = (PhysicsComponent) border.getComponent(ComponentType.PHYSICS);
+        PhysicsProperties properties = new PhysicsProperties(centerX-cellSize/2, centerY, 0f, 0f, BodyType.staticBody);
+        setFurniturePhysics(physics, properties);
+        setFurnitureOnGameGrid(gameWorld.getGameGrid(), properties, dimX, dimY);
+
+        return border;
+    }
+
 
     public static GameObject makeFurniture(int centerX, int centerY, float dimX, float dimY, GameWorld gameWorld,
                                            Bitmap texture) {
