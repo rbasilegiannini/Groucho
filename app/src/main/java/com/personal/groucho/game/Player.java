@@ -1,6 +1,7 @@
 package com.personal.groucho.game;
 
 import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
+import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.components.ControllableComponent;
+import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
 public class Player {
@@ -54,5 +56,10 @@ public class Player {
     public void setPlayerVisibility(boolean visibility) {isPlayerVisible = visibility;}
     public boolean getPlayerVisibility() {return isPlayerVisible;}
     public Vec2 getPos() {return new Vec2(playerPosX, playerPosY);}
+    public void setPos(int posX, int posY) {
+        PhysicsComponent phyComponent = (PhysicsComponent) playerGO.getComponent(PHYSICS);
+        phyComponent.setPos(posX, posY);
+    }
+
     public GameObject getGameObject() {return playerGO;}
 }

@@ -98,6 +98,7 @@ public class GameWorld {
         physics.setGameGrid(grid);
     }
     public void setPlayerVisibility(boolean visibility) {player.setPlayerVisibility(visibility);}
+    public void setPlayerPosition(int posX, int posY) {player.setPos(posX, posY);}
     public boolean isPlayerVisible() {return player.getPlayerVisibility();}
     public Bitmap getBuffer() {return graphics.getBuffer();}
     public World getWorld() {return physics.getWorld();}
