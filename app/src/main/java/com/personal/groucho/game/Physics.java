@@ -1,13 +1,15 @@
 package com.personal.groucho.game;
 
-import static com.personal.groucho.game.Events.playerCollideWithFurniture;
-import static com.personal.groucho.game.Events.playerCollideWithHealth;
+import static com.personal.groucho.game.Events.playerCollideWithEnemyEvent;
+import static com.personal.groucho.game.Events.playerCollideWithFurnitureEvent;
+import static com.personal.groucho.game.Events.playerCollideWithHealthEvent;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Role.FURNITURE;
+import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 
 import android.util.Log;
 
@@ -161,15 +163,15 @@ public class Physics {
     private void handlePlayerCollision(GameObject player, GameObject object) {
         switch (object.role) {
             case ENEMY:
-                // Enemy alert
+                playerCollideWithEnemyEvent(gameWorld, object);
                 break;
 
             case FURNITURE:
-                playerCollideWithFurniture(player, gameWorld);
+                playerCollideWithFurnitureEvent(player, gameWorld);
                 break;
 
             case HEALTH:
-                playerCollideWithHealth(player, object);
+                playerCollideWithHealthEvent(player, object);
                 break;
 
             case TRIGGER:
@@ -179,7 +181,9 @@ public class Physics {
     }
 
     private void handleEnemyCollision(GameObject enemy, GameObject object) {
-        // What happen if enemy collides with player?
+        if (object.role == PLAYER) {
+            playerCollideWithEnemyEvent(gameWorld, enemy);
+        }
     }
 
     public World getWorld() {return world;}

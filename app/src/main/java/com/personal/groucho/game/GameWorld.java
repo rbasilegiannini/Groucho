@@ -1,6 +1,7 @@
 package com.personal.groucho.game;
 
 import static com.personal.groucho.game.Debugger.getDebugger;
+import static com.personal.groucho.game.Events.alertEnemiesEvent;
 import static com.personal.groucho.game.Events.gameOverEvent;
 import static com.personal.groucho.game.Events.playerShootEnemyEvent;
 import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
@@ -8,6 +9,7 @@ import static com.personal.groucho.game.Events.playerShootWallEvent;
 import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
+import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
@@ -176,7 +178,6 @@ public class GameWorld {
         else {
             removeComponent(gameObject, AI);
             removeComponent(gameObject, PHYSICS);
-            removeComponent(gameObject, ALIVE);
             removeComponent(gameObject, LIGHT);
         }
     }
@@ -210,6 +211,7 @@ public class GameWorld {
     }
 
     public void shootEvent(float originX, float originY, float endX, float endY) {
+        alertEnemiesEvent(this, player.getPos());
         GameObject hitGO = physics.reportGameObject(originX, originY, endX, endY);
         if (hitGO != null) {
             switch (hitGO.role) {
@@ -255,6 +257,10 @@ public class GameWorld {
 
     public void GameOver() {
         this.gameOver = true;
+
+        removeComponent(player.getGameObject(), CONTROLLABLE);
+        removeComponent(player.getGameObject(), PHYSICS);
+        removeComponent(player.getGameObject(), LIGHT);
         // Game over menu... and level?
     }
 

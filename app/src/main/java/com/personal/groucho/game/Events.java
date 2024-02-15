@@ -1,5 +1,6 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.Utils.directionBetweenGO;
 import static com.personal.groucho.game.Utils.distBetweenVec;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
@@ -16,6 +17,7 @@ import static com.personal.groucho.game.constants.CharacterProperties.medicalKit
 import static com.personal.groucho.game.constants.Environment.brightness;
 import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
+import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Role.ENEMY;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
@@ -57,21 +59,26 @@ public class Events {
         bulletHitFurniture.play(1f);
     }
 
-    public static void playerCollideWithFurniture(GameObject player, GameWorld gameWorld) {
+    public static void playerCollideWithFurnitureEvent(GameObject player, GameWorld gameWorld) {
         bodyHitFurniture.play(0.7f);
         Vec2 playerPos = ((PositionComponent) player.getComponent(POSITION)).getPos();
+        alertEnemiesEvent(gameWorld, playerPos);
+    }
 
+    public static void alertEnemiesEvent(GameWorld gameWorld, Vec2 playerPos) {
         List<PositionComponent> enemiesPos = new ArrayList<>();
         List<Float> enemiesDist = new ArrayList<>();
         for (GameObject enemy : gameWorld.getGOByRole(ENEMY)){
-            PositionComponent enemyPos = (PositionComponent) enemy.getComponent(POSITION);
-            if (isInCircle(
-                    playerPos.getX(), playerPos.getY(), enemyPos.getPosX(), enemyPos.getPosY(),
-                    hearingRangeSqr)){
+            if (((AliveComponent) enemy.getComponent(ALIVE)).getCurrentStatus() != DEAD) {
+                PositionComponent enemyPos = (PositionComponent) enemy.getComponent(POSITION);
+                if (isInCircle(
+                        playerPos.getX(), playerPos.getY(), enemyPos.getPosX(), enemyPos.getPosY(),
+                        hearingRangeSqr)) {
 
-                float dist = distBetweenVec(playerPos, new Vec2(enemyPos.getPosX(), enemyPos.getPosY()));
-                enemiesPos.add(enemyPos);
-                enemiesDist.add(dist);
+                    float dist = distBetweenVec(playerPos, new Vec2(enemyPos.getPosX(), enemyPos.getPosY()));
+                    enemiesPos.add(enemyPos);
+                    enemiesDist.add(dist);
+                }
             }
         }
         if (!enemiesDist.isEmpty()) {
@@ -83,12 +90,20 @@ public class Events {
         }
     }
 
-    public static void playerCollideWithHealth(GameObject player, GameObject health) {
+    public static void playerCollideWithHealthEvent(GameObject player, GameObject health) {
         healing.play(0.7f);
         AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.ALIVE);
         alive.heal(medicalKit);
 
         health.delete();
+    }
+
+    public static void playerCollideWithEnemyEvent(GameWorld gameWorld, GameObject enemy) {
+        AIComponent aiEnemy = (AIComponent) enemy.getComponent(AI);
+        if (!aiEnemy.isPlayerEngaged()) {
+            aiEnemy.updateDirection(directionBetweenGO(gameWorld.getPlayerGO(), enemy));
+            aiEnemy.setPlayerEngaged(true);
+        }
     }
 
     public static void enemyHitPlayerEvent(AliveComponent alive, int power) {
@@ -112,12 +127,6 @@ public class Events {
 
     public static void gameOverEvent(GameWorld gameWorld) {
         brightness = 1f;
-
-        gameWorld.getPlayerGO().removeComponent(ComponentType.ALIVE);
-        gameWorld.getPlayerGO().removeComponent(ComponentType.CONTROLLABLE);
-        gameWorld.getPlayerGO().removeComponent(ComponentType.PHYSICS);
-        gameWorld.getPlayerGO().removeComponent(ComponentType.LIGHT);
-
         gameWorld.GameOver();
     }
 }

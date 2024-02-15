@@ -7,7 +7,8 @@ public class CharacterProperties {
     public static final int skeletonHealth = 100;
     public static int medicalKit = 20;
     public static int grouchoPower = 30;
-    public static int skeletonPower = 50;
+    public static int skeletonPower = 5;
     public static int hearingRange = 1500;
     public static int hearingRangeSqr = (int) Math.pow(hearingRange,2);
+    public static float enemyFovInRad = (float) Math.toRadians(120);
 }

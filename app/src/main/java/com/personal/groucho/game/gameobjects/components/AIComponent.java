@@ -1,6 +1,7 @@
 package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.Events.enemyHitPlayerEvent;
+import static com.personal.groucho.game.Utils.directionBetweenGO;
 import static com.personal.groucho.game.constants.CharacterProperties.skeletonPower;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.constants.CharacterProperties.skeletonSpeed;
@@ -9,6 +10,9 @@ import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;
 import static com.personal.groucho.game.constants.System.characterDimX;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
+import static com.personal.groucho.game.constants.System.maxInvisiblePlayer;
+import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import static java.lang.Math.pow;
@@ -30,6 +34,7 @@ import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.AI.Sight;
+import com.personal.groucho.game.gameobjects.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +61,8 @@ public class AIComponent extends WalkingComponent {
     private boolean isIdle = false;
     private boolean isPatrol = false;
     private boolean isInvestigate = false;
+    private long lastSeenMills;
+
 
     public AIComponent(GameWorld gameWorld, StateName currentState) {
         this.gameWorld = gameWorld;
@@ -101,7 +108,7 @@ public class AIComponent extends WalkingComponent {
 
     private void init(GameWorld gameWorld) {
         if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
 
         originalPosOnGrid = grid.getNode(
@@ -124,6 +131,7 @@ public class AIComponent extends WalkingComponent {
     public boolean isInvestigate() {return isInvestigate;}
     public boolean isPlayerVisible() {return gameWorld.isPlayerVisible();}
     public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
+    public void setPlayerReached(boolean isPlayerReached) {this.isPlayerReached = isPlayerReached;}
     public void setInvestigateStatus(boolean isInvestigate) {this.isInvestigate = isInvestigate;}
 
     // Idle actions
@@ -160,7 +168,7 @@ public class AIComponent extends WalkingComponent {
 
     public void activePatrolAction() {
         if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
         if (!currentPath.isEmpty() || !isNodeReached)
             walkingToDestination();
@@ -192,7 +200,7 @@ public class AIComponent extends WalkingComponent {
     // Investigate actions
     public void entryInvestigateAction() {
         if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
         posOnGrid = grid.getNode(
                 posComponent.getPosXOnGrid(),
@@ -213,6 +221,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     public void exitInvestigateAction() {
+        isInvestigate = false;
         currentPath.clear();
         currentPath = aStar.findPath(posOnGrid, originalPosOnGrid);
     }
@@ -220,13 +229,13 @@ public class AIComponent extends WalkingComponent {
     // Engage actions
     public void entryEngageAction(){
         if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
         posOnGrid = grid.getNode(
                 posComponent.getPosXOnGrid(),
                 posComponent.getPosYOnGrid()
         );
-
+        lastSeenMills = System.currentTimeMillis();
         setPathToPlayer();
         isNodeReached = true;
     }
@@ -242,6 +251,15 @@ public class AIComponent extends WalkingComponent {
         }
         else {
             isPlayerReached = false;
+        }
+
+        if (!gameWorld.isPlayerVisible()) {
+            if (System.currentTimeMillis() - lastSeenMills > maxInvisiblePlayer){
+                isPlayerEngaged = false;
+            }
+        }
+        else {
+            lastSeenMills = System.currentTimeMillis();
         }
     }
 
@@ -270,6 +288,7 @@ public class AIComponent extends WalkingComponent {
         if (!gameWorld.isGameOver() && alive.getCurrentStatus() != DEAD) {
             long delay = skeletonHurt.getDelay(0) * skeletonHurt.getLength(0);
             if (isPlayerReached && System.currentTimeMillis() - lastHitMillis > delay) {
+                updateDirection(directionBetweenGO(gameWorld.getPlayerGO(), (GameObject)owner));
                 enemyHitPlayerEvent(alive, skeletonPower);
                 lastHitMillis = System.currentTimeMillis();
             }
@@ -287,6 +306,10 @@ public class AIComponent extends WalkingComponent {
                     break;
             }
         }
+    }
+
+    public void exitAttackAction() {
+        isPlayerReached = false;
     }
 
     private void setPathToPlayer() {
@@ -363,6 +386,13 @@ public class AIComponent extends WalkingComponent {
     protected void walking(Spritesheet sheet, float speed) {
         super.walking(sheet, speed);
         sight.updateSightPosition(posComponent.getPos());
+        sight.setNewOrientation(posComponent.getOrientation());
+    }
+
+    public void updateDirection(Orientation orientation){
+        posComponent.setOrientation(orientation);
+        ((SpriteDrawableComponent)
+                owner.getComponent(DRAWABLE)).setAnim(posComponent.getOrientation().getValue());
         sight.setNewOrientation(posComponent.getOrientation());
     }
 }

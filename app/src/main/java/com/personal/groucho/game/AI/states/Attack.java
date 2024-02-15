@@ -8,7 +8,6 @@ import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Attack extends State {
@@ -46,7 +45,15 @@ public class Attack extends State {
 
     @Override
     public List<Action> exitActions() {
-        return Collections.emptyList();
+        actions.clear();
+        actions.add(new Action() {
+            @Override
+            public void doIt() {
+                owner.exitAttackAction();
+            }
+        });
+
+        return actions;
     }
 
     @Override
