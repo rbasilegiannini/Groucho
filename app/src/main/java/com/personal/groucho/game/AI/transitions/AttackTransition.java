@@ -17,7 +17,7 @@ public class AttackTransition extends Transition {
 
     @Override
     public Condition guard() {
-        return owner::isPlayerReached;
+        return () -> owner.isPlayerReached;
     }
 
     @Override

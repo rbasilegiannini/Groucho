@@ -1,5 +1,8 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
+import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
+
 import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.Status;
@@ -7,7 +10,7 @@ import com.personal.groucho.game.gameobjects.Status;
 public class AliveComponent extends Component {
     private final int maxHealth;
     private int currentHealth;
-    private Status currentStatus;
+    public Status currentStatus;
     private SpriteDrawableComponent sprite = null;
 
     public AliveComponent (int health) {
@@ -17,7 +20,7 @@ public class AliveComponent extends Component {
     }
 
     @Override
-    public ComponentType type() {return ComponentType.ALIVE;}
+    public ComponentType type() {return ALIVE;}
 
     public void damage(int power) {
         currentHealth -= power;
@@ -41,7 +44,7 @@ public class AliveComponent extends Component {
         currentStatus = Status.DEAD;
 
         if (sprite == null) {
-            Component component = owner.getComponent(ComponentType.DRAWABLE);
+            Component component = owner.getComponent(DRAWABLE);
             if (component != null) {
                 sprite = (SpriteDrawableComponent) component;
                 sprite.setDeathSpritesheet();
@@ -54,7 +57,7 @@ public class AliveComponent extends Component {
 
     private void updateSprite() {
         if (sprite == null) {
-            Component component = owner.getComponent(ComponentType.DRAWABLE);
+            Component component = owner.getComponent(DRAWABLE);
             if (component != null) {
                 sprite = (SpriteDrawableComponent) component;
                 sprite.updateColorFilter(currentHealth, maxHealth);
@@ -64,6 +67,4 @@ public class AliveComponent extends Component {
             sprite.updateColorFilter(currentHealth, maxHealth);
         }
     }
-
-    public Status getCurrentStatus() {return currentStatus;}
 }

@@ -1,5 +1,7 @@
 package com.personal.groucho.game.AI.pathfinding;
 
+import static com.personal.groucho.game.constants.System.cellSize;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,13 +12,11 @@ import java.util.Set;
 public class GameGrid {
     private final int width;
     private final int height;
-    private final int cellSize;
     private final Node[][] grid;
 
-    public GameGrid(int width, int height, int cellSize) {
+    public GameGrid(int width, int height) {
         this.width = width;
         this.height = height;
-        this.cellSize = cellSize;
         this.grid = new Node[width][height];
 
         for (int posX = 0; posX < width; posX++) {
@@ -26,9 +26,6 @@ public class GameGrid {
         }
     }
 
-    public int getWidth() {return width;}
-    public int getHeight() {return height;}
-    public int getCellSize() {return cellSize;}
     public Node getNode(int posX, int posY) {return grid[posX][posY];}
     public Set<Node> getNodes(int centerX, int centerY, int dimX, int dimY) {
         Set<Node> nodes = new HashSet<>();

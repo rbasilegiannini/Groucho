@@ -19,7 +19,7 @@ public abstract class WalkingComponent extends Component {
             posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
 
-        switch (posComponent.getOrientation()) {
+        switch (posComponent.orientation) {
             case UP:
                 increaseX = 0;
                 increaseY = -1;
@@ -49,7 +49,7 @@ public abstract class WalkingComponent extends Component {
             posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
         spriteComponent.setCurrentSpritesheet(sheet);
-        spriteComponent.setAnim(posComponent.getOrientation().getValue());
+        spriteComponent.setAnim(posComponent.orientation.getValue());
     }
 
     private void updatePosition(float increaseX, float increaseY) {

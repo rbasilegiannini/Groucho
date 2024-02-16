@@ -9,10 +9,18 @@ import com.personal.groucho.game.Spritesheet;
 
 public class Spritesheets {
 
-    public static Spritesheet grouchoIdle, grouchoWalk, grouchoShoot, grouchoAim,
-            grouchoFire, grouchoDoor, grouchoDeath;
+    public static Spritesheet grouchoIdle;
+    public static Spritesheet grouchoWalk;
+    public static Spritesheet grouchoShoot;
+    public static Spritesheet grouchoAim;
+    public static Spritesheet grouchoFire;
+    public static Spritesheet grouchoDoor;
+    public static Spritesheet grouchoDeath;
 
-    public static Spritesheet skeletonIdle, skeletonWalk, skeletonHurt, skeletonDeath;
+    public static Spritesheet skeletonIdle;
+    public static Spritesheet skeletonWalk;
+    public static Spritesheet skeletonHurt;
+    public static Spritesheet skeletonDeath;
 
     public static int directions = 4;
 

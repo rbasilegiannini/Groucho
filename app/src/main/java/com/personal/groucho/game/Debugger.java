@@ -17,9 +17,14 @@ public class Debugger {
     private final List<Sight> sights = new ArrayList<>();
     private GameGrid grid;
     private static Debugger instance = null;
+    private Paint paint;
 
     private Debugger(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
+        paint = new Paint();
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(Color.GREEN);
+
         updateDebugger();
     }
 
@@ -40,13 +45,8 @@ public class Debugger {
     }
 
     private void drawPositions(Canvas canvas) {
-        // Debug
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setColor(Color.GREEN);
-
         for (PositionComponent posComponent : gameWorld.posComponents) {
-            canvas.drawCircle(posComponent.getPosX(), posComponent.getPosY(), 20, paint);
+            canvas.drawCircle(posComponent.posX, posComponent.posY, 20, paint);
         }
     }
 

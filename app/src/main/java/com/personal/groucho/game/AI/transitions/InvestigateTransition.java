@@ -14,7 +14,7 @@ public class InvestigateTransition extends Transition {
     public InvestigateTransition(AIComponent aiComponent) {super(aiComponent);}
 
     @Override
-    public Condition guard() {return owner::isInvestigate;}
+    public Condition guard() {return () -> owner.isInvestigate;}
 
     @Override
     public List<Action> actions() { return Collections.emptyList(); }

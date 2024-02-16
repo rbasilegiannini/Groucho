@@ -20,7 +20,6 @@ import static com.personal.groucho.game.gameobjects.Status.DEAD;
 import android.app.Activity;
 import android.graphics.Bitmap;
 
-import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
 import static com.personal.groucho.game.Graphics.bufferWidth;
@@ -90,7 +89,7 @@ public class GameWorld {
                 makePlayer(bufferWidth /2, bufferHeight/2, controller, this);
         PositionComponent posComponent = (PositionComponent) playerGO.getComponent(POSITION);
 
-        player = new Player(playerGO, posComponent.getPosX(), posComponent.getPosY());
+        player = new Player(playerGO, posComponent.posX, posComponent.posY);
         addGameObject(playerGO);
     }
     public void setGameGrid(GameGrid grid) {
@@ -99,12 +98,14 @@ public class GameWorld {
     }
     public void setPlayerVisibility(boolean visibility) {player.setPlayerVisibility(visibility);}
     public void setPlayerPosition(int posX, int posY) {player.setPos(posX, posY);}
-    public boolean isPlayerVisible() {return player.getPlayerVisibility();}
-    public Bitmap getBuffer() {return graphics.getBuffer();}
-    public World getWorld() {return physics.getWorld();}
+    public boolean isPlayerVisible() {return player.isPlayerVisible;}
+    public Bitmap getBuffer() {return graphics.buffer;}
+    public World getWorld() {return physics.world;}
     public Level getLevel() {return currentLevel;}
-    public GameObject getPlayerGO(){return player.getGameObject();}
-    public Vec2 getPlayerPosition() {return player.getPos();}
+    public GameObject getPlayerGO(){return player.gameObject;}
+    public float getPlayerPositionX() {return player.posX;}
+    public float getPlayerPositionY() {return player.posY;}
+
     public GameGrid getGameGrid() {return grid;}
     public List<GameObject> getGOByRole(Role role) {
         List<GameObject> gameObjects = new ArrayList<>();
@@ -151,13 +152,13 @@ public class GameWorld {
 
         if (!gameOver) {
             for (AliveComponent aliveComponent : aliveComponents) {
-                if (aliveComponent.getCurrentStatus() == DEAD) {
+                if (aliveComponent.currentStatus == DEAD) {
                     handleDeath((GameObject)aliveComponent.getOwner());
                 }
             }
         }
 
-        player.update(graphics.getCanvas(), controller);
+        player.update(graphics.canvas, controller);
 
         for (AIComponent aiComponent : aiComponents) {
             aiComponent.update(this);
@@ -168,7 +169,7 @@ public class GameWorld {
         graphics.render();
 
         if (debugMode) {
-            getDebugger(this).draw(graphics.getCanvas());
+            getDebugger(this).draw(graphics.canvas);
         }
     }
 
@@ -212,7 +213,7 @@ public class GameWorld {
     }
 
     public void shootEvent(float originX, float originY, float endX, float endY) {
-        alertEnemiesEvent(this, player.getPos());
+        alertEnemiesEvent(this);
         GameObject hitGO = physics.reportGameObject(originX, originY, endX, endY);
         if (hitGO != null) {
             switch (hitGO.role) {
@@ -259,9 +260,9 @@ public class GameWorld {
     public void GameOver() {
         this.gameOver = true;
 
-        removeComponent(player.getGameObject(), CONTROLLABLE);
-        removeComponent(player.getGameObject(), PHYSICS);
-        removeComponent(player.getGameObject(), LIGHT);
+        removeComponent(player.gameObject, CONTROLLABLE);
+        removeComponent(player.gameObject, PHYSICS);
+        removeComponent(player.gameObject, LIGHT);
         // Game over menu... and level?
     }
 

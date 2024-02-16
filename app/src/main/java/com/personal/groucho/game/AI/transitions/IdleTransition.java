@@ -1,5 +1,7 @@
 package com.personal.groucho.game.AI.transitions;
 
+import static com.personal.groucho.game.AI.states.StateName.IDLE;
+
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
 import com.personal.groucho.game.AI.State;
@@ -18,7 +20,7 @@ public class IdleTransition extends Transition {
     @Override
     public Condition guard() {
         return () ->
-                !owner.isPlayerEngaged() && !owner.isInvestigate() && owner.getOriginalState() == StateName.IDLE;
+                !owner.isPlayerEngaged && !owner.isInvestigate && owner.originalState == IDLE;
     }
 
     @Override

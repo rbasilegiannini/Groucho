@@ -7,6 +7,10 @@ import static com.personal.groucho.game.GameWorld.screenSize;
 import static com.personal.groucho.game.constants.CharacterProperties.enemyFovInRad;
 import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
+import static com.personal.groucho.game.controller.Orientation.DOWN;
+import static com.personal.groucho.game.controller.Orientation.LEFT;
+import static com.personal.groucho.game.controller.Orientation.RIGHT;
+import static com.personal.groucho.game.controller.Orientation.UP;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import com.google.fpl.liquidfun.Vec2;
@@ -43,8 +47,10 @@ public class Utils {
     public static float toMetersYLength(float y) {return y/bufferHeight * physicalSize.height;}
 
     public static boolean isInCircle(float centerX, float centerY, float x, float y, float distSqr) {
-        double pointerPositionSqr = Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2);
-        return pointerPositionSqr <= distSqr;
+        float dx = x - centerX;
+        float dy = y - centerY;
+        float distanceSqr = dx * dx + dy * dy;
+        return distanceSqr <= distSqr;
     }
 
     public static boolean isInTriangle(float originX, float originY, float x, float y, float dist, float rad) {
@@ -71,28 +77,28 @@ public class Utils {
     }
 
     public static Orientation directionBetweenGO(GameObject go, GameObject goToTurn) {
-        Vec2 posGO = ((PositionComponent) go.getComponent(POSITION)).getPos();
-        Vec2 posGOToTurn = ((PositionComponent) goToTurn.getComponent(POSITION)).getPos();
+        PositionComponent _posGO = (PositionComponent) go.getComponent(POSITION);
+        PositionComponent _posGOToTurn = (PositionComponent) goToTurn.getComponent(POSITION);
 
-        if (posGO.getY() > posGOToTurn.getY() - characterScaleFactor*characterDimY &&
-            posGO.getY() < posGOToTurn.getY() + characterScaleFactor*characterDimY
+        if (_posGO.posY > _posGOToTurn.posY - characterScaleFactor*characterDimY &&
+            _posGO.posY < _posGOToTurn.posY + characterScaleFactor*characterDimY
         ) {
-            if (posGO.getX() < posGOToTurn.getX()) {
-                return Orientation.LEFT;
+            if (_posGO.posX < _posGOToTurn.posX) {
+                return LEFT;
             }
-            if (posGO.getX() > posGOToTurn.getX()) {
-                return Orientation.RIGHT;
+            if (_posGO.posX > _posGOToTurn.posX) {
+                return RIGHT;
             }
         }
         else {
-            if (posGO.getY() > posGOToTurn.getY()) {
-                return Orientation.DOWN;
+            if (_posGO.posY > _posGOToTurn.posY) {
+                return DOWN;
             }
-            if (posGO.getY() < posGOToTurn.getY()) {
-                return Orientation.UP;
+            if (_posGO.posY < _posGOToTurn.posY) {
+                return UP;
             }
         }
 
-        return ((PositionComponent)goToTurn.getComponent(POSITION)).getOrientation();
+        return UP;
     }
 }

@@ -12,15 +12,16 @@ public class Spritesheet {
     private int frameWidth;
     private int frameHeight;
 
-    private final int[] start;
-    private final int[] length;
-    private final int[] delay;
+    private final int[] start, length, delay;
+    private final Rect src, dest;
 
     public Spritesheet(Bitmap sheet, int numberOfAnimations) {
         this.sheet = sheet;
         this.start = new int[numberOfAnimations];
         this.length = new int[numberOfAnimations];
         this.delay = new int[numberOfAnimations];
+        this.src = new Rect();
+        this.dest = new Rect();
     }
 
     public void setFrameSize(int width, int height) {
@@ -34,27 +35,22 @@ public class Spritesheet {
         this.delay[animation] = delay;
     }
 
-    public int drawAnimation(Canvas canvas, int animation, int step, int x, int y, int scaleFactor, Paint paint) {
-        if (step > length[animation] - 1)
+    public int drawAnimation(Canvas canvas, int anim, int step, int x, int y, int scale, Paint paint) {
+        if (step > length[anim] - 1)
             step = 0;
 
-        int srcTop = animation * frameHeight;
-        int srcLeft = step * frameWidth;
-        Rect src = new Rect(
-                srcLeft, srcTop,
-                srcLeft + frameWidth,
-                srcTop + frameHeight
-        );
+        src.left = step * frameWidth;
+        src.top = anim * frameHeight;
+        src.right = src.left + frameWidth;
+        src.bottom = src.top + frameHeight;
 
-        int destTop = (int) (y-(0.85*scaleFactor*frameHeight));
-        int destLeft = x-(scaleFactor*frameWidth/2);
-        Rect dest = new Rect(
-                destLeft, destTop,
-                destLeft + scaleFactor*frameWidth - 1,
-                destTop + scaleFactor*frameHeight -1
-        );
+        dest.left = x-(scale*frameWidth/2);
+        dest.top = (int) (y-(0.85*scale*frameHeight));
+        dest.right = dest.left + scale*frameWidth - 1;
+        dest.bottom = dest.top + scale*frameHeight -1;
 
         canvas.drawBitmap(sheet, src, dest, paint);
+
         return step;
     }
 

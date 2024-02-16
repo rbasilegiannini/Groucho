@@ -15,8 +15,9 @@ public class Aiming extends ControllerState{
     }
 
     public static ControllerState getInstance(Controller controller) {
-        if (state == null)
+        if (state == null) {
             state = new Aiming(controller);
+        }
         return state;
     }
 

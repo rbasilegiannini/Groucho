@@ -51,8 +51,8 @@ public class Sight {
     }
 
     public void see(GameWorld gameWorld) {
-        playerPosX = gameWorld.getPlayerPosition().getX();
-        playerPosY = gameWorld.getPlayerPosition().getY();
+        playerPosX = gameWorld.getPlayerPositionX();
+        playerPosY = gameWorld.getPlayerPositionY();
 
         if(isInTriangle(originX, originY, playerPosX, playerPosY, distSight, phase)){
             world.rayCast(
@@ -84,9 +84,9 @@ public class Sight {
         }
     }
 
-    public void updateSightPosition(Vec2 origin) {
-        originX = origin.getX();
-        originY = origin.getY();
+    public void updateSightPosition(float originX, float originY) {
+        this.originX = originX;
+        this.originY = originY;
     }
 
     public void setNewOrientation(Orientation orientation){
@@ -117,7 +117,7 @@ public class Sight {
     }
 
     public void drawDebugSight(Canvas canvas) {
-        if(((AliveComponent)aiComponent.getOwner().getComponent(ALIVE)).getCurrentStatus() != DEAD) {
+        if(((AliveComponent)aiComponent.getOwner().getComponent(ALIVE)).currentStatus != DEAD) {
             Paint paint = new Paint();
             paint.setColor(Color.RED);
             paint.setStyle(Paint.Style.FILL_AND_STROKE);

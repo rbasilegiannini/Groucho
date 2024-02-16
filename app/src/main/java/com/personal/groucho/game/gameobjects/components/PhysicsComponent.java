@@ -20,8 +20,8 @@ public class PhysicsComponent extends Component {
     private final World world;
     private PositionComponent posComponent = null;
     private Body body;
-    private float density, originalPosX, originalPosY;
-    private final float dimX, dimY;
+    public float density, originalPosX, originalPosY;
+    public final float dimX, dimY;
 
     public PhysicsComponent(World world, float dimX, float dimY){
         this.world = world;
@@ -77,11 +77,11 @@ public class PhysicsComponent extends Component {
     }
 
     public void updatePosX(float  increase) {
-        if(posComponent == null)
+        if(posComponent == null) {
             posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
 
-        float newPosX = body.getPositionX() + increase;
-        body.setTransform(newPosX, body.getPositionY(), 0);
+        body.setTransform(body.getPositionX() + increase, body.getPositionY(), 0);
         posComponent.updatePosX((int)increase);
     }
 
@@ -90,18 +90,12 @@ public class PhysicsComponent extends Component {
             posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
 
-        float newPosY = body.getPositionY() + increase;
-        body.setTransform(body.getPositionX(),newPosY, 0);
+        body.setTransform(body.getPositionX(),body.getPositionY() + increase, 0);
         posComponent.updatePosY((int)increase);
     }
 
     public float getPosX() {return body.getPositionX();}
     public float getPosY() {return body.getPositionY();}
-    public float getOriginalPosX() {return originalPosX;}
-    public float getOriginalPosY() {return originalPosY;}
-    public float getDensity() {return density;}
-    public float getDimX() {return dimX;}
-    public float getDimY() {return dimY;}
 
     public boolean hasChangedPosition() {
         if (body.getPositionX() != originalPosX || body.getPositionY() != originalPosY) {

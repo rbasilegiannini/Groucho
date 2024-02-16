@@ -3,10 +3,10 @@ package com.personal.groucho.game.gameobjects;
 import com.personal.groucho.game.GameWorld;
 
 public class GameObject extends Entity{
-    protected String name;
+    public String name;
     public Role role;
 
-    GameObject(GameWorld gameWorld) {
+    public GameObject(GameWorld gameWorld) {
         this.name = "";
         this.role = Role.NEUTRAL;
     }
@@ -16,7 +16,6 @@ public class GameObject extends Entity{
         this.role = role;
     }
 
-    public String getName() {return name;}
     public void setName(String name) {this.name = name;}
 
     @Override

@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class MyContactListener extends ContactListener {
-
     private final Collection<Collision> collisions = new HashSet<>();
+    private Body ba, bb;
 
     public Collection<Collision> getCollisions() {
         Collection<Collision> result = new HashSet<>(collisions);
@@ -20,15 +20,14 @@ public class MyContactListener extends ContactListener {
     }
 
     @Override
+    // TODO: use an object pool instead
     public void beginContact(Contact contact) {
-        Fixture fa = contact.getFixtureA(),
-                fb = contact.getFixtureB();
-        Body ba = fa.getBody(), bb = fb.getBody();
-        Object userdataA = ba.getUserData(), userdataB = bb.getUserData();
-        GameObject a = (GameObject)userdataA,
-                b = (GameObject)userdataB;
+        ba = contact.getFixtureA().getBody();
+        bb = contact.getFixtureB().getBody();
 
-        // TO DO: use an object pool instead
+        GameObject a = (GameObject) ba.getUserData();
+        GameObject b = (GameObject) bb.getUserData();
+
         collisions.add(new Collision(a, b));
     }
 }

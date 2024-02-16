@@ -30,19 +30,4 @@ public enum Orientation {
                 return this;
         }
     }
-
-    public Orientation getTurnOnRight() {
-        switch (this) {
-            case UP:
-                return RIGHT;
-            case DOWN:
-                return LEFT;
-            case LEFT:
-                return UP;
-            case RIGHT:
-                return DOWN;
-            default:
-                return this;
-        }
-    }
 }

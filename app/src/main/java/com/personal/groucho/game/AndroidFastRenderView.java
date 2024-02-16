@@ -31,14 +31,15 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
 
     public void run() {
         Rect dstRect = new Rect();
-        long startTime = System.nanoTime(), fpsTime = startTime, frameCounter = 0;
+        long startTime = System.nanoTime(), fpsTime = startTime, frameCounter = 0, currentTime;
+        float deltaTime, fpsDeltaTime;
         while(running) {
             if(!holder.getSurface().isValid())
                 continue;
 
-            float deltaTime = (System.nanoTime()-startTime) / 1000000000.0f;
-            long currentTime = System.nanoTime();
-            float fpsDeltaTime = (currentTime-fpsTime) / 1000000000f;
+            deltaTime = (System.nanoTime()-startTime) / 1000000000.0f;
+            currentTime = System.nanoTime();
+            fpsDeltaTime = (currentTime-fpsTime) / 1000000000f;
             startTime = System.nanoTime();
 
             gameWorld.processInputs();

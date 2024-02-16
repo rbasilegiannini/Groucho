@@ -3,6 +3,8 @@ package com.personal.groucho.game.gameobjects.components;
 import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.Environment.brightness;
 import static com.personal.groucho.game.constants.Environment.minLightIntensity;
+import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,14 +25,15 @@ public class LightComponent extends Component {
 
     @Override
     public ComponentType type() {
-        return ComponentType.LIGHT;
+        return LIGHT;
     }
 
     public LightComponent(GameWorld gameWorld) {this.gameWorld = gameWorld;}
 
     public void draw(Canvas canvas) {
-        if (position == null)
-            position = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if (position == null) {
+            position = (PositionComponent) owner.getComponent(POSITION);
+        }
         Bitmap buffer = gameWorld.getBuffer();
 
         Bitmap maskBitmap = Bitmap.createBitmap(
@@ -57,8 +60,8 @@ public class LightComponent extends Component {
 
         canvas.drawBitmap(
                 maskBitmap,
-                position.getPosX() - (float)maskBitmap.getWidth() /2,
-                (position.getPosY() - (float)maskBitmap.getHeight() /2)+ characterDimY,
+                position.posX - (float)maskBitmap.getWidth() /2,
+                (position.posY - (float)maskBitmap.getHeight() /2)+ characterDimY,
                 null
         );
     }

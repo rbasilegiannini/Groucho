@@ -20,12 +20,7 @@ public class Attack extends State {
     public List<Action> entryActions() {
         Log.i("State", "I'm entering in Attack state....");
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.entryAttackAction();
-            }
-        });
+        actions.add(() -> owner.entryAttackAction());
 
         return actions;
     }
@@ -46,12 +41,7 @@ public class Attack extends State {
     @Override
     public List<Action> exitActions() {
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.exitAttackAction();
-            }
-        });
+        actions.add(() -> owner.exitAttackAction());
 
         return actions;
     }

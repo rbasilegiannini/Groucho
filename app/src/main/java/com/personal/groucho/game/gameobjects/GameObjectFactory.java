@@ -70,7 +70,7 @@ public class GameObjectFactory {
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(grouchoWalk, grouchoDeath));
-        gameObject.addComponent(new ControllableComponent(controller, gameworld));
+        gameObject.addComponent(new ControllableComponent(gameworld));
         gameObject.addComponent(new PhysicsComponent(gameworld.getWorld(), characterDimX, characterDimY));
         gameObject.addComponent(new AliveComponent(grouchoHealth));
         gameObject.addComponent(new LightComponent(gameworld));
@@ -275,7 +275,7 @@ public class GameObjectFactory {
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape box = new PolygonShape();
-        box.setAsBox(toMetersXLength(physics.getDimX())/2, toMetersYLength(physics.getDimY())/2);
+        box.setAsBox(toMetersXLength(physics.dimX)/2, toMetersYLength(physics.dimY)/2);
         fixtureDef.setShape(box);
         fixtureDef.setFriction(properties.friction);
         fixtureDef.setDensity(properties.density);

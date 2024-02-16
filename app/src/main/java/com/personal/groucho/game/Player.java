@@ -7,7 +7,6 @@ import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 
-import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.components.ControllableComponent;
@@ -15,19 +14,22 @@ import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
 public class Player {
-    private final GameObject playerGO;
+    protected final GameObject gameObject;
     private final PositionComponent posComponent;
     private final ControllableComponent ctrlComponent;
-    private int playerPosX, playerPosY;
+    protected int posX, posY;
+    private float cameraX, cameraY;
     private final Matrix matrix;
-    private boolean isPlayerVisible = false;
+    protected boolean isPlayerVisible = false;
 
-    public Player(GameObject playerGO, int playerPosX, int playerPosY) {
-        this.playerGO = playerGO;
-        posComponent = (PositionComponent) playerGO.getComponent(POSITION);
-        ctrlComponent = (ControllableComponent) playerGO.getComponent(CONTROLLABLE);
-        this.playerPosX = playerPosX;
-        this.playerPosY = playerPosY;
+    public Player(GameObject gameObject, int posX, int posY) {
+        this.gameObject = gameObject;
+        posComponent = (PositionComponent) gameObject.getComponent(POSITION);
+        ctrlComponent = (ControllableComponent) gameObject.getComponent(CONTROLLABLE);
+        this.posX = posX;
+        this.posY = posY;
+        this.cameraX = 0;
+        this.cameraY = 0;
         matrix = new Matrix();
     }
 
@@ -37,14 +39,14 @@ public class Player {
     }
 
     private void updateCamera(Canvas canvas, Controller controller) {
-        float cameraX = playerPosX - posComponent.getPosX();
-        float cameraY = playerPosY - posComponent.getPosY();
+        cameraX = posX - posComponent.posX;
+        cameraY = posY - posComponent.posY;
 
         moveCamera(canvas, cameraX, cameraY);
         controller.updateControllerPosition(-cameraX, -cameraY);
 
-        playerPosX = posComponent.getPosX();
-        playerPosY =  posComponent.getPosY();
+        posX = posComponent.posX;
+        posY =  posComponent.posY;
     }
 
     private void moveCamera(Canvas canvas, float cameraX, float cameraY) {
@@ -54,12 +56,8 @@ public class Player {
     }
 
     public void setPlayerVisibility(boolean visibility) {isPlayerVisible = visibility;}
-    public boolean getPlayerVisibility() {return isPlayerVisible;}
-    public Vec2 getPos() {return new Vec2(playerPosX, playerPosY);}
     public void setPos(int posX, int posY) {
-        PhysicsComponent phyComponent = (PhysicsComponent) playerGO.getComponent(PHYSICS);
+        PhysicsComponent phyComponent = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         phyComponent.setPos(posX, posY);
     }
-
-    public GameObject getGameObject() {return playerGO;}
 }

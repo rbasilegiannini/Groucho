@@ -1,5 +1,7 @@
 package com.personal.groucho.game.AI.transitions;
 
+import static com.personal.groucho.game.AI.states.StateName.PATROL;
+
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
 import com.personal.groucho.game.AI.State;
@@ -20,7 +22,7 @@ public class PatrolTransition extends Transition {
     @Override
     public Condition guard() {
         return () ->
-                !owner.isPlayerEngaged() && !owner.isInvestigate() && owner.getOriginalState() == StateName.PATROL;
+                !owner.isPlayerEngaged && !owner.isInvestigate && owner.originalState == PATROL;
     }
 
     @Override

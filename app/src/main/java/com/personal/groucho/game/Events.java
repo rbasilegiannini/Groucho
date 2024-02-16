@@ -38,7 +38,7 @@ public class Events {
     public static void playerShootEnemyEvent(GameObject enemy) {
         bulletHitEnemy.play(1f);
         AliveComponent alive = (AliveComponent) enemy.getComponent(ComponentType.ALIVE);
-        if (alive.getCurrentStatus() != DEAD) alive.damage(grouchoPower);
+        if (alive.currentStatus != DEAD) alive.damage(grouchoPower);
     }
 
     public static void playerShootFurnitureEvent(GameObject furniture, float originX, float originY) {
@@ -59,23 +59,25 @@ public class Events {
         bulletHitFurniture.play(1f);
     }
 
-    public static void playerCollideWithFurnitureEvent(GameObject player, GameWorld gameWorld) {
+    public static void playerCollideWithFurnitureEvent(GameWorld gameWorld) {
         bodyHitFurniture.play(0.7f);
-        Vec2 playerPos = ((PositionComponent) player.getComponent(POSITION)).getPos();
-        alertEnemiesEvent(gameWorld, playerPos);
+        alertEnemiesEvent(gameWorld);
     }
 
-    public static void alertEnemiesEvent(GameWorld gameWorld, Vec2 playerPos) {
+    public static void alertEnemiesEvent(GameWorld gameWorld) {
         List<PositionComponent> enemiesPos = new ArrayList<>();
         List<Float> enemiesDist = new ArrayList<>();
         for (GameObject enemy : gameWorld.getGOByRole(ENEMY)){
-            if (((AliveComponent) enemy.getComponent(ALIVE)).getCurrentStatus() != DEAD) {
+            if (((AliveComponent) enemy.getComponent(ALIVE)).currentStatus != DEAD) {
                 PositionComponent enemyPos = (PositionComponent) enemy.getComponent(POSITION);
                 if (isInCircle(
-                        playerPos.getX(), playerPos.getY(), enemyPos.getPosX(), enemyPos.getPosY(),
+                        gameWorld.getPlayerPositionX(), gameWorld.getPlayerPositionY(), enemyPos.posX, enemyPos.posY,
                         hearingRangeSqr)) {
 
-                    float dist = distBetweenVec(playerPos, new Vec2(enemyPos.getPosX(), enemyPos.getPosY()));
+                    float dist = distBetweenVec(
+                            new Vec2(gameWorld.getPlayerPositionX(), gameWorld.getPlayerPositionY()),
+                            new Vec2(enemyPos.posX, enemyPos.posY));
+
                     enemiesPos.add(enemyPos);
                     enemiesDist.add(dist);
                 }
@@ -84,7 +86,7 @@ public class Events {
         if (!enemiesDist.isEmpty()) {
             int indexLessFraction = enemiesDist.indexOf(Collections.min(enemiesDist));
             AIComponent aiEnemy = (AIComponent) enemiesPos.get(indexLessFraction).getOwner().getComponent(AI);
-            if (!aiEnemy.isPlayerEngaged()) {
+            if (!aiEnemy.isPlayerEngaged) {
                 aiEnemy.setInvestigateStatus(true);
             }
         }
@@ -100,7 +102,7 @@ public class Events {
 
     public static void playerCollideWithEnemyEvent(GameWorld gameWorld, GameObject enemy) {
         AIComponent aiEnemy = (AIComponent) enemy.getComponent(AI);
-        if (!aiEnemy.isPlayerEngaged()) {
+        if (!aiEnemy.isPlayerEngaged) {
             aiEnemy.updateDirection(directionBetweenGO(gameWorld.getPlayerGO(), enemy));
             aiEnemy.setPlayerEngaged(true);
         }

@@ -37,22 +37,22 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     private boolean playShotAnimation = false;
     private boolean playLoadingSound = true;
 
-    public ControllableComponent(Controller controller, GameWorld gameworld) {
-        this.controller = controller;
+    public ControllableComponent(GameWorld gameworld) {
         this.gameworld = gameworld;
+        this.controller = gameworld.controller;
     }
 
     @Override
-    public ComponentType type() { return CONTROLLABLE;}
+    public ComponentType type() {return CONTROLLABLE;}
 
     public void updatePlayerState() {
         if (lightComponent == null) {
             lightComponent = (LightComponent) owner.getComponent(LIGHT);
         }
 
-        if (controller.getPlayerState().getName() == WALKING)
+        if (controller.currentState.getName() == WALKING)
             handleWalkingPlayer();
-        else if (controller.getPlayerState().getName() == AIMING)
+        else if (controller.currentState.getName() == AIMING)
             handleAimingPlayer();
 
         if (playShotAnimation) {
@@ -113,7 +113,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
         float endX = 0;
         float endY = 0;
 
-        switch (posComponent.getOrientation()) {
+        switch (posComponent.orientation) {
             case UP:
                 originY = originY - characterDimY;
                 endX = originX;
@@ -144,7 +144,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
             posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
 
-        posComponent.setOrientation(controller.getOrientation());
+        posComponent.setOrientation(controller.orientation);
 
         switch (currentState.getName()) {
             case IDLE:

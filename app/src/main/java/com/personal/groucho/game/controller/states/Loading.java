@@ -13,8 +13,9 @@ public class Loading extends ControllerState{
     }
 
     public static ControllerState getInstance(Controller controller) {
-        if (state == null)
+        if (state == null) {
             state = new Loading(controller);
+        }
         return state;
     }
 
@@ -25,8 +26,9 @@ public class Loading extends ControllerState{
 
     @Override
     public void handleTriggerTouchDragged(float x, float y) {
-        if (controller.isOnShootingArea(x, y))
+        if (controller.isOnShootingArea(x, y)) {
             controller.setCurrentState(Shooting.getInstance(controller));
+        }
     }
 
     @Override

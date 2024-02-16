@@ -2,6 +2,7 @@ package com.personal.groucho.game.levels;
 
 import static com.personal.groucho.game.constants.System.cellSize;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -24,7 +25,7 @@ public abstract class Level {
         this.gameWorld = gameWorld;
         int widthGrid = levelDimX/cellSize;
         int heightGrid = levelDimY/cellSize;
-        grid = new GameGrid(widthGrid, heightGrid, cellSize);
+        grid = new GameGrid(widthGrid, heightGrid);
         surface = new Rect(0,0, widthGrid*cellSize, heightGrid*cellSize);
         floorPaint = new Paint();
     }
@@ -35,6 +36,7 @@ public abstract class Level {
     }
 
     public void draw(Canvas canvas){canvas.drawRect(surface, floorPaint);}
+
     public abstract void handleTrigger(GameObject trigger);
 
     private void makeBorders() {

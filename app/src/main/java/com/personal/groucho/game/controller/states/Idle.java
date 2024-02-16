@@ -13,8 +13,9 @@ public class Idle extends ControllerState{
     }
 
     public static ControllerState getInstance(Controller controller) {
-        if (state == null)
+        if (state == null) {
             state = new Idle(controller);
+        }
         return state;
     }
 

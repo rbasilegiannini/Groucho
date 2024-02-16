@@ -14,7 +14,7 @@ public class Textures {
     public static Bitmap health;
 
     public static void load(Resources res) {
-        firstLevelFloor = setBitmap(res, R.drawable.wooden_floor,512, 512);
+        firstLevelFloor = setBitmap(res, R.drawable.wooden_floor,128, 128);
         table = setBitmap(res, R.drawable.table, 128, 124);
         wall = setBitmap(res, R.drawable.wall, 256, 256);
         roof = setBitmap(res, R.drawable.roof, 256, 256);

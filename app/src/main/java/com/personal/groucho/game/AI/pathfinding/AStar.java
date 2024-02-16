@@ -1,5 +1,7 @@
 package com.personal.groucho.game.AI.pathfinding;
 
+import static com.personal.groucho.game.constants.System.cellSize;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +14,9 @@ public class AStar {
     private final GameGrid grid;
     private final PriorityQueue<Node> openSet;
     private final Set<Node> closedSet;
+    private final List<Node> neighbors = new ArrayList<>();
+    private final List<Node> path = new ArrayList<>();
+
 
     public AStar(GameGrid grid) {
         this.grid = grid;
@@ -55,20 +60,19 @@ public class AStar {
     }
 
     private int manhattan(Node node1, Node node2) {
-        int cellSize = grid.getCellSize();
-        int x1 = node1.getPosX() * cellSize;
-        int y1 = node1.getPosY() * cellSize;
-        int x2 = node2.getPosX() * cellSize;
-        int y2 = node2.getPosY() * cellSize;
+        int x1 = node1.posX * cellSize;
+        int y1 = node1.posY * cellSize;
+        int x2 = node2.posX * cellSize;
+        int y2 = node2.posY * cellSize;
 
         return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     }
 
     private List<Node> getNeighbors(Node node) {
-        List<Node> neighbors = new ArrayList<>();
+        neighbors.clear();
 
-        int x = node.getPosX();
-        int y = node.getPosY();
+        int x = node.posX;
+        int y = node.posY;
 
         int[][] directions = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
 
@@ -85,10 +89,10 @@ public class AStar {
     }
 
     private List<Node> buildPath(Node node) {
-        List<Node> path = new ArrayList<>();
+        path.clear();
         while (node != null) {
             path.add(node);
-            node = node.getParent();
+            node = node.parent;
         }
         Collections.reverse(path);
 

@@ -18,7 +18,7 @@ public class EngageTransition extends Transition {
 
     @Override
     public Condition guard() {
-        return () -> owner.isPlayerEngaged() && !owner.isPlayerReached();
+        return () -> owner.isPlayerEngaged && !owner.isPlayerReached;
     }
 
     @Override

@@ -3,6 +3,10 @@ package com.personal.groucho.game.controller;
 import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Utils.fromScreenToBufferX;
 import static com.personal.groucho.game.Utils.fromScreenToBufferY;
+import static com.personal.groucho.game.controller.Orientation.DOWN;
+import static com.personal.groucho.game.controller.Orientation.LEFT;
+import static com.personal.groucho.game.controller.Orientation.RIGHT;
+import static com.personal.groucho.game.controller.Orientation.UP;
 
 import android.graphics.Canvas;
 
@@ -16,22 +20,20 @@ import java.util.List;
 public class Controller implements ControllerSubject {
 
     private final List<ControllerObserver> controllerObservers = new ArrayList<>();
-    private ControllerState currentState;
-    private Orientation orientation;
-
+    public ControllerState currentState;
+    public Orientation orientation;
     private final DPad dpad;
     private final Trigger trigger;
     private final Bulb bulb;
-
     private float offsetX, offsetY;
-
+    private float touchX, touchY;
     private int dpadPointer, triggerPointer;
 
     public Controller(float controllerCenterX, float controllerCenterY) {
         offsetX = 0;
         offsetY = 0;
 
-        orientation = Orientation.DOWN;
+        orientation = DOWN;
         dpad = new DPad(controllerCenterX - (float) 0.40*bufferWidth, controllerCenterY);
         trigger = new Trigger(controllerCenterX + (float) bufferWidth /2, controllerCenterY);
         bulb = new Bulb(controllerCenterX + (float) bufferWidth/2, controllerCenterY);
@@ -53,8 +55,9 @@ public class Controller implements ControllerSubject {
 
     @Override
     public void notifyToListeners() {
-        for (ControllerObserver observer : controllerObservers)
+        for (ControllerObserver observer : controllerObservers) {
             observer.update(currentState);
+        }
     }
 
     public void setCurrentState(ControllerState state) {
@@ -65,8 +68,6 @@ public class Controller implements ControllerSubject {
         this.orientation = orientation;
         notifyToListeners();
     }
-    public ControllerState getPlayerState() {return currentState;}
-    public Orientation getOrientation() {return orientation;}
 
     // Handle widgets
     public void draw(Canvas canvas) {
@@ -104,29 +105,30 @@ public class Controller implements ControllerSubject {
     }
 
     private void consumeTouchDown(Input.TouchEvent event) {
-        float x = fromScreenToBufferX(event.x) + offsetX;
-        float y = fromScreenToBufferY(event.y) + offsetY;
+        touchX = fromScreenToBufferX(event.x) + offsetX;
+        touchY = fromScreenToBufferY(event.y) + offsetY;
 
-        if (bulb.isOnLight(x, y))
+        if (bulb.isOnLight(touchX, touchY))
             handleLightTouchDown();
 
-        if (dpad.isOnUp(x, y))
-            handleDPadTouchDown(event.pointer, Orientation.UP);
-        else if (dpad.isOnDown(x, y))
-            handleDPadTouchDown(event.pointer, Orientation.DOWN);
-        else if (dpad.isOnLeft(x, y))
-            handleDPadTouchDown(event.pointer, Orientation.LEFT);
-        else if (dpad.isOnRight(x, y))
-            handleDPadTouchDown(event.pointer, Orientation.RIGHT);
-        else if(trigger.isOnTrigger(x,y)) {
+        if (dpad.isOnUp(touchX, touchY))
+            handleDPadTouchDown(event.pointer, UP);
+        else if (dpad.isOnDown(touchX, touchY))
+            handleDPadTouchDown(event.pointer, DOWN);
+        else if (dpad.isOnLeft(touchX, touchY))
+            handleDPadTouchDown(event.pointer, LEFT);
+        else if (dpad.isOnRight(touchX, touchY))
+            handleDPadTouchDown(event.pointer, RIGHT);
+        else if(trigger.isOnTrigger(touchX,touchY)) {
             triggerPointer = event.pointer;
             setCurrentState(Aiming.getInstance(this));
         }
     }
 
     private void handleLightTouchDown() {
-        for (ControllerObserver observer : controllerObservers)
+        for (ControllerObserver observer : controllerObservers) {
             observer.switchLightEvent(bulb.switchLight());
+        }
     }
 
     private void handleDPadTouchDown(int pointer, Orientation orientation){
@@ -147,22 +149,22 @@ public class Controller implements ControllerSubject {
     }
 
     private void consumeTouchDragged(Input.TouchEvent event) {
-        float x = fromScreenToBufferX(event.x) + offsetX;
-        float y = fromScreenToBufferY(event.y) + offsetY;
+        touchX = fromScreenToBufferX(event.x) + offsetX;
+        touchY = fromScreenToBufferY(event.y) + offsetY;
 
         if (event.pointer == dpadPointer) {
-            if (dpad.isOnUp(x, y))
-                currentState.handleDPadTouchDragged(Orientation.UP);
-            else if (dpad.isOnDown(x, y))
-                currentState.handleDPadTouchDragged(Orientation.DOWN);
-            else if (dpad.isOnLeft(x, y))
-                currentState.handleDPadTouchDragged(Orientation.LEFT);
-            else if (dpad.isOnRight(x, y))
-                currentState.handleDPadTouchDragged(Orientation.RIGHT);
+            if (dpad.isOnUp(touchX, touchY))
+                currentState.handleDPadTouchDragged(UP);
+            else if (dpad.isOnDown(touchX, touchY))
+                currentState.handleDPadTouchDragged(DOWN);
+            else if (dpad.isOnLeft(touchX, touchY))
+                currentState.handleDPadTouchDragged(LEFT);
+            else if (dpad.isOnRight(touchX, touchY))
+                currentState.handleDPadTouchDragged(RIGHT);
         }
         else if (event.pointer == triggerPointer){
-            trigger.setPositionTrigger(x, y);
-            currentState.handleTriggerTouchDragged(x, y);
+            trigger.setPositionTrigger(touchX, touchY);
+            currentState.handleTriggerTouchDragged(touchX, touchY);
         }
     }
 

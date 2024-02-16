@@ -29,7 +29,7 @@ public class TextureDrawableComponent extends DrawableComponent{
             position = (PositionComponent) owner.getComponent(ComponentType.POSITION);
         }
 
-        dest.offsetTo(position.getPosX()-dimX/2, position.getPosY()-dimY/2);
+        dest.offsetTo(position.posX-dimX/2, position.posY-dimY/2);
         canvas.drawBitmap(texture, src, dest, null);
     }
 }

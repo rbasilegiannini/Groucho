@@ -1,9 +1,9 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
-import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class BoxDrawableComponent extends DrawableComponent{
 
@@ -19,13 +19,13 @@ public class BoxDrawableComponent extends DrawableComponent{
 
     @Override
     public void draw(Canvas canvas){
-        PositionComponent pos = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        PositionComponent posComponent = (PositionComponent) owner.getComponent(POSITION);
 
         canvas.drawRect(
-                (float)pos.getPosX() - dimensionX/2,
-                (float)pos.getPosY() - dimensionY/2,
-                pos.getPosX() + dimensionX/2,
-                pos.getPosY() + dimensionY/2,
+                (float)posComponent.posX - dimensionX/2,
+                (float)posComponent.posY - dimensionY/2,
+                posComponent.posX + dimensionX/2,
+                posComponent.posY + dimensionY/2,
                 paint
         );
     }

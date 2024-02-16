@@ -1,7 +1,7 @@
 package com.personal.groucho.game.constants;
 
 public class System {
-    public static final boolean debugMode = true;
+    public static final boolean debugMode = false;
     public static final float characterDimX = 32;
     public static final float characterDimY = 32;
     public static final int characterScaleFactor = 5;

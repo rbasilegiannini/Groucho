@@ -8,10 +8,9 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
+import static com.personal.groucho.game.gameobjects.Role.ENEMY;
 import static com.personal.groucho.game.gameobjects.Role.FURNITURE;
 import static com.personal.groucho.game.gameobjects.Role.PLAYER;
-
-import android.util.Log;
 
 import com.google.fpl.liquidfun.Fixture;
 import com.google.fpl.liquidfun.RayCastCallback;
@@ -22,7 +21,6 @@ import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.gameobjects.Role;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
@@ -35,12 +33,19 @@ import java.util.Set;
 public class Physics {
     private final GameWorld gameWorld;
     private GameGrid gameGrid;
-    private final World world;
+    protected final World world;
     private final MyContactListener contactListener;
 
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
     private static final int PARTICLE_ITERATIONS = 3;
+
+    // To avoid further allocations
+    private GameObject currentGO = null;
+    private final List<GameObject> hitGameObjects = new ArrayList<>();
+    private final List<Float> fractions = new ArrayList<>();
+    private Set<Node> oldCellsToReset, newCellsToChange, unchangedCells;
+
 
     public Physics(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
@@ -50,6 +55,7 @@ public class Physics {
     }
 
     public void setGameGrid(GameGrid grid) {this.gameGrid = grid;}
+
     public synchronized void update(float elapsedTime) {
         world.step(elapsedTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
         updatePhysicsPosition();
@@ -58,10 +64,10 @@ public class Physics {
 
     private void updatePhysicsPosition() {
         for (PhysicsComponent phyComponent : gameWorld.phyComponents) {
-            GameObject go = (GameObject)(phyComponent.getOwner());
-            PositionComponent posComponent = (PositionComponent) go.getComponent(POSITION);
+            currentGO = (GameObject)(phyComponent.getOwner());
+            PositionComponent posComponent = (PositionComponent) currentGO.getComponent(POSITION);
 
-            if (go.role == FURNITURE) {
+            if (currentGO.role == FURNITURE) {
                 handleFurnitureCollision(phyComponent, posComponent);
             }
             else {
@@ -74,33 +80,36 @@ public class Physics {
     }
 
     private void handleFurnitureCollision(PhysicsComponent phyComponent, PositionComponent posComponent) {
-        Vec2 originalPos = new Vec2(
-                fromMetersToBufferX(phyComponent.getOriginalPosX()),
-                fromMetersToBufferY(phyComponent.getOriginalPosY())
-        );
-
         if (phyComponent.hasChangedPosition()) {
             posComponent.setPosX((int) fromMetersToBufferX(phyComponent.getPosX()));
             posComponent.setPosY((int) fromMetersToBufferY(phyComponent.getPosY()));
 
-            updateGameGrid(phyComponent, originalPos);
+            updateGameGrid(
+                    phyComponent,
+                    fromMetersToBufferX(phyComponent.originalPosX),
+                    fromMetersToBufferY(phyComponent.originalPosY)
+            );
         }
     }
 
-    private void updateGameGrid(PhysicsComponent physics, Vec2 oldPos) {
+    private void updateGameGrid(PhysicsComponent phyComponent, float originalPosX, float originalPosY) {
         if (gameGrid != null) {
-            int oldPosX = (int) oldPos.getX();
-            int oldPosY = (int) oldPos.getY();
-            int posX = (int)fromMetersToBufferX(physics.getPosX());
-            int posY = (int)fromMetersToBufferY(physics.getPosY());
-            int dimX = (int)physics.getDimX();
-            int dimY = (int)physics.getDimY();
-            int dCost = (int)(physics.getDensity()*10000);
+            int dCost = (int)(phyComponent.density*10000);
 
-            Set<Node> oldCellsToReset = gameGrid.getNodes(oldPosX, oldPosY, dimX, dimY);
-            Set<Node> newCellsToChange = gameGrid.getNodes(posX, posY, dimX, dimY);
+            oldCellsToReset = gameGrid.getNodes(
+                    (int)originalPosX,
+                    (int)originalPosY,
+                    (int)phyComponent.dimX,
+                    (int)phyComponent.dimY
+            );
+            newCellsToChange = gameGrid.getNodes(
+                    (int)fromMetersToBufferX(phyComponent.getPosX()),
+                    (int)fromMetersToBufferY(phyComponent.getPosY()),
+                    (int)phyComponent.dimX,
+                    (int)phyComponent.dimY
+            );
 
-            Set<Node> unchangedCells = new HashSet<>(newCellsToChange);
+            unchangedCells = new HashSet<>(newCellsToChange);
             unchangedCells.retainAll(oldCellsToReset);
 
             newCellsToChange.removeAll(unchangedCells);
@@ -119,14 +128,14 @@ public class Physics {
     }
 
     public GameObject reportGameObject(float originX, float originY, float endX, float endY) {
-        List<GameObject> hitGameObjects = new ArrayList<>();
-        List<Float> fractions = new ArrayList<>();
-        GameObject firstGO = null;
+        hitGameObjects.clear();
+        fractions.clear();
+
+        currentGO = null;
 
         world.rayCast(
                 new RayCastCallback() {
                     public float reportFixture(Fixture fixture, Vec2 i, Vec2 n, float fraction) {
-                        Log.i("RayCast", "hit");
                         GameObject hitGO = (GameObject) fixture.getBody().getUserData();
                         hitGameObjects.add(hitGO);
                         fractions.add(fraction);
@@ -141,21 +150,21 @@ public class Physics {
         );
         if (!fractions.isEmpty()) {
             int indexLessFraction = fractions.indexOf(Collections.min(fractions));
-            firstGO = hitGameObjects.get(indexLessFraction);
+            currentGO = hitGameObjects.get(indexLessFraction);
         }
 
-        return firstGO;
+        return currentGO;
     }
 
     private void handleCollisions() {
         for (Collision event: contactListener.getCollisions()) {
-            if (event.GO1.role == Role.PLAYER)
+            if (event.GO1.role == PLAYER)
                 handlePlayerCollision(event.GO1, event.GO2);
-            else if (event.GO2.role == Role.PLAYER)
+            else if (event.GO2.role == PLAYER)
                 handlePlayerCollision(event.GO2, event.GO1);
-            else if (event.GO1.role == Role.ENEMY)
+            else if (event.GO1.role == ENEMY)
                 handleEnemyCollision(event.GO1, event.GO2);
-            else if (event.GO2.role == Role.ENEMY)
+            else if (event.GO2.role == ENEMY)
                 handleEnemyCollision(event.GO2, event.GO1);
         }
     }
@@ -167,7 +176,7 @@ public class Physics {
                 break;
 
             case FURNITURE:
-                playerCollideWithFurnitureEvent(player, gameWorld);
+                playerCollideWithFurnitureEvent(gameWorld);
                 break;
 
             case HEALTH:
@@ -185,6 +194,4 @@ public class Physics {
             playerCollideWithEnemyEvent(gameWorld, enemy);
         }
     }
-
-    public World getWorld() {return world;}
 }

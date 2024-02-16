@@ -13,8 +13,9 @@ public class Shooting extends ControllerState{
     }
 
     public static ControllerState getInstance(Controller controller) {
-        if (state == null)
+        if (state == null) {
             state = new Shooting(controller);
+        }
         return state;
     }
 
