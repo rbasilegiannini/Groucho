@@ -4,19 +4,26 @@ import static com.personal.groucho.game.AI.states.StateName.PATROL;
 
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
-import com.personal.groucho.game.AI.State;
+import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.states.Patrol;
-import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.Collections;
 import java.util.List;
 
 public class PatrolTransition extends Transition {
+    private static PatrolTransition transition = null;
 
-    public PatrolTransition(AIComponent aiComponent) {
+    private PatrolTransition(AIComponent aiComponent) {
         super(aiComponent);
+    }
+
+    public static Transition getInstance(AIComponent aiComponent) {
+        if (transition == null) {
+            transition = new PatrolTransition(aiComponent);
+        }
+        return transition;
     }
 
     @Override
@@ -31,7 +38,7 @@ public class PatrolTransition extends Transition {
     }
 
     @Override
-    public State targetState() {
-        return new Patrol(owner);
+    public AIState targetState() {
+        return Patrol.getInstance(owner);
     }
 }

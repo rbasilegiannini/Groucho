@@ -3,7 +3,7 @@ package com.personal.groucho.game.AI.states;
 import android.util.Log;
 
 import com.personal.groucho.game.AI.Action;
-import com.personal.groucho.game.AI.State;
+import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
 import com.personal.groucho.game.AI.transitions.InvestigateTransition;
@@ -11,10 +11,18 @@ import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
 
-public class Patrol extends State {
+public class Patrol extends AIState {
+    private static Patrol state = null;
 
-    public Patrol(AIComponent aiComponent) {
+    private Patrol(AIComponent aiComponent) {
         super(aiComponent);
+    }
+
+    public static AIState getInstance(AIComponent aiComponent) {
+        if (state == null) {
+            state = new Patrol(aiComponent);
+        }
+        return state;
     }
 
     @Override
@@ -46,8 +54,8 @@ public class Patrol extends State {
     @Override
     public List<Transition> outgoingTransitions() {
         transitions.clear();
-        transitions.add(new EngageTransition(owner));
-        transitions.add(new InvestigateTransition(owner));
+        transitions.add(EngageTransition.getInstance(owner));
+        transitions.add(InvestigateTransition.getInstance(owner));
 
         return transitions;
     }

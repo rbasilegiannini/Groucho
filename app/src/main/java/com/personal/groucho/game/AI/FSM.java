@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FSM {
-    private State currentState;
+    private AIState currentState;
     private final List<Action> currentActions;
 
-    public FSM (State initialState) {
+    public FSM (AIState initialState) {
         currentState = initialState;
         currentActions = new ArrayList<>();
     }
@@ -30,5 +30,5 @@ public class FSM {
         return currentActions;
     }
 
-    public void setState(State newState) {currentState = newState;}
+    public void setState(AIState newState) {currentState = newState;}
 }

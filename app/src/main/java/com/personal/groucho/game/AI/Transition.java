@@ -10,5 +10,5 @@ public abstract class Transition {
 
     public abstract Condition guard();
     public abstract List<Action> actions();
-    public abstract State targetState();
+    public abstract AIState targetState();
 }

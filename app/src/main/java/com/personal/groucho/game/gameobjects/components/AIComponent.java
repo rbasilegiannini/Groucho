@@ -81,16 +81,16 @@ public class AIComponent extends WalkingComponent {
         originalState = currentState;
         switch (originalState) {
             case PATROL:
-                fsm = new FSM(new Patrol(this));
+                fsm = new FSM(Patrol.getInstance(this));
                 break;
             case ENGAGE:
-                fsm = new FSM(new Engage(this));
+                fsm = new FSM(Engage.getInstance(this));
                 break;
             case ATTACK:
-                fsm = new FSM(new Attack(this));
+                fsm = new FSM(Attack.getInstance(this));
                 break;
             default:
-                fsm = new FSM(new Idle(this));
+                fsm = new FSM(Idle.getInstance(this));
                 break;
         }
 
@@ -305,10 +305,10 @@ public class AIComponent extends WalkingComponent {
 
             switch (originalState) {
                 case IDLE:
-                    fsm.setState(new Idle(this));
+                    fsm.setState(Idle.getInstance(this));
                     break;
                 case PATROL:
-                    fsm.setState(new Patrol(this));
+                    fsm.setState(Patrol.getInstance(this));
                     break;
             }
         }

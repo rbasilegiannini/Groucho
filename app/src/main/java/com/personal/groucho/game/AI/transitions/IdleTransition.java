@@ -4,18 +4,25 @@ import static com.personal.groucho.game.AI.states.StateName.IDLE;
 
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
-import com.personal.groucho.game.AI.State;
+import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.states.Idle;
-import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.Collections;
 import java.util.List;
 
 public class IdleTransition extends Transition {
+    private static IdleTransition transition = null;
 
-    public IdleTransition(AIComponent aiComponent) { super(aiComponent); }
+    private IdleTransition(AIComponent aiComponent) { super(aiComponent); }
+
+    public static Transition getInstance(AIComponent aiComponent) {
+        if (transition == null) {
+            transition = new IdleTransition(aiComponent);
+        }
+        return transition;
+    }
 
     @Override
     public Condition guard() {
@@ -27,6 +34,6 @@ public class IdleTransition extends Transition {
     public List<Action> actions() { return Collections.emptyList(); }
 
     @Override
-    public State targetState() { return new Idle(owner); }
+    public AIState targetState() { return Idle.getInstance(owner); }
 }
 

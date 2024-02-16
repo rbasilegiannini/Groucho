@@ -3,17 +3,25 @@ package com.personal.groucho.game.AI.states;
 import android.util.Log;
 
 import com.personal.groucho.game.AI.Action;
-import com.personal.groucho.game.AI.State;
+import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
 
-public class Attack extends State {
+public class Attack extends AIState {
+    private static Attack state = null;
 
-    public Attack(AIComponent aiComponent) {
+    private Attack(AIComponent aiComponent) {
         super(aiComponent);
+    }
+
+    public static AIState getInstance(AIComponent aiComponent) {
+        if (state == null) {
+            state = new Attack(aiComponent);
+        }
+        return state;
     }
 
     @Override
@@ -28,12 +36,7 @@ public class Attack extends State {
     @Override
     public List<Action> activeActions() {
         actions.clear();
-        actions.add(new Action() {
-            @Override
-            public void doIt() {
-                owner.activeAttackAction();
-            }
-        });
+        actions.add(() -> owner.activeAttackAction());
 
         return actions;
     }
@@ -49,7 +52,7 @@ public class Attack extends State {
     @Override
     public List<Transition> outgoingTransitions() {
         transitions.clear();
-        transitions.add(new EngageTransition(owner));
+        transitions.add(EngageTransition.getInstance(owner));
 
         return transitions;
     }

@@ -5,12 +5,12 @@ import com.personal.groucho.game.gameobjects.components.AIComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class State {
+public abstract class AIState {
     protected AIComponent owner;
     protected final List<Action> actions = new ArrayList<>();
     protected final List<Transition> transitions = new ArrayList<>();
 
-    protected State(AIComponent aiComponent) {owner = aiComponent;}
+    protected AIState(AIComponent aiComponent) {owner = aiComponent;}
 
     public abstract List<Action> entryActions();
     public abstract List<Action> activeActions();
