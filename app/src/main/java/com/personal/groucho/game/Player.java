@@ -19,7 +19,6 @@ public class Player {
     private final ControllableComponent ctrlComponent;
     protected int posX, posY;
     private float cameraX, cameraY;
-    private final Matrix matrix;
     protected boolean isPlayerVisible = false;
 
     public Player(GameObject gameObject, int posX, int posY) {
@@ -30,7 +29,6 @@ public class Player {
         this.posY = posY;
         this.cameraX = 0;
         this.cameraY = 0;
-        matrix = new Matrix();
     }
 
     public void update(Canvas canvas, Controller controller){
@@ -42,17 +40,11 @@ public class Player {
         cameraX = posX - posComponent.posX;
         cameraY = posY - posComponent.posY;
 
-        moveCamera(canvas, cameraX, cameraY);
+        canvas.translate(cameraX, cameraY);
         controller.updateControllerPosition(-cameraX, -cameraY);
 
         posX = posComponent.posX;
         posY =  posComponent.posY;
-    }
-
-    private void moveCamera(Canvas canvas, float cameraX, float cameraY) {
-        matrix.reset();
-        matrix.postTranslate(cameraX, cameraY);
-        canvas.concat(matrix);
     }
 
     public void setPlayerVisibility(boolean visibility) {isPlayerVisible = visibility;}
