@@ -80,6 +80,7 @@ public class GameGrid {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setColor(Color.BLUE);
+        paint.setTextSize(20);
 
         int startX;
         int startY;
@@ -100,6 +101,11 @@ public class GameGrid {
                 endX = startX + cellSize;
                 endY = startY;
                 canvas.drawLine(startX, startY, endX, endY, paint);
+
+                String cost = String.valueOf(grid[x][y].defaultCost);
+                paint.setColor(Color.WHITE);
+                canvas.drawText(cost, startX+cellSize/4, startY+cellSize/2, paint);
+
             }
         }
     }
