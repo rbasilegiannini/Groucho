@@ -80,15 +80,14 @@ public class Physics {
     }
 
     private void handleFurnitureCollision(PhysicsComponent phyComponent, PositionComponent posComponent) {
+        float originalPosX = fromMetersToBufferX(phyComponent.originalPosX);
+        float originalPosY = fromMetersToBufferY(phyComponent.originalPosY);
+
         if (phyComponent.hasChangedPosition()) {
             posComponent.setPosX((int) fromMetersToBufferX(phyComponent.getPosX()));
             posComponent.setPosY((int) fromMetersToBufferY(phyComponent.getPosY()));
 
-            updateGameGrid(
-                    phyComponent,
-                    fromMetersToBufferX(phyComponent.originalPosX),
-                    fromMetersToBufferY(phyComponent.originalPosY)
-            );
+            updateGameGrid(phyComponent, originalPosX, originalPosY);
         }
     }
 
