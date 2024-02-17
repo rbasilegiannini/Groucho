@@ -57,7 +57,7 @@ public abstract class Level {
     private void makeBorders() {
         // Upper border
         List<GameObject> borders = new ArrayList<>(GameObjectFactory.
-                makeHorizontalBorder(surface.width() / 2,
+                makeHorBorder(surface.width() / 2,
                         -cellSize,
                         surface.width(),
                         gameWorld
@@ -65,21 +65,21 @@ public abstract class Level {
 
         // Bottom border
         borders.addAll(GameObjectFactory.
-                makeHorizontalBorder(surface.width()/2,
+                makeHorBorder(surface.width()/2,
                         (int) (surface.height()+(1.5f)*cellSize),
                         surface.width() + cellSize,
                         gameWorld
                 ));
 
         // Left border
-        borders.add(GameObjectFactory.makeVerticalBorder(
+        borders.add(GameObjectFactory.makeVerBorder(
                 cellSize/4,
                 (int) ((surface.height()/2)-(1.25f * cellSize)),
                 surface.height()+(2.5f*cellSize),
                 gameWorld));
 
         // Right border
-        borders.add(GameObjectFactory.makeVerticalBorder(
+        borders.add(GameObjectFactory.makeVerBorder(
                 (int) (surface.width() + (0.75f)*cellSize),
                 (int) ((surface.height()/2)-(1.25f * cellSize)),
                 surface.height()+(2.5f*cellSize),

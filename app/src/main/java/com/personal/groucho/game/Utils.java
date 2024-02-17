@@ -38,8 +38,8 @@ public class Utils {
         return (yGlobal / bufferHeight) * (physicalSize.ymax - physicalSize.ymin) + physicalSize.ymin;
     }
 
-    public static float toPixelsXLength(float x) {return x/physicalSize.width*bufferWidth;}
-    public static float toPixelsYLength(float y)
+    public static float toBufferXLength(float x) {return x/physicalSize.width*bufferWidth;}
+    public static float toBufferYLength(float y)
     {
         return y/physicalSize.height*bufferHeight;
     }

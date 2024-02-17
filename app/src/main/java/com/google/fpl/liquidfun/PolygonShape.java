@@ -48,11 +48,12 @@ public class PolygonShape extends Shape {
   }
 
   public void setAsBox(float hx, float hy, float centerX, float centerY, float angle) {
+    this.centerX = centerX;
+    this.centerY = centerY;
     liquidfunJNI.PolygonShape_setAsBox__SWIG_1(swigCPtr, this, hx, hy, centerX, centerY, angle);
   }
 
   public void setAsTriangle(float x1, float y1, float x2, float y2, float x3, float y3) {
     liquidfunJNI.PolygonShape_setAsTriangle(swigCPtr, this, x1, y1, x2, y2, x3, y3);
   }
-
 }
