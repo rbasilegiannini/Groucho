@@ -19,9 +19,10 @@ public class PhysicsComponent extends Component {
 
     private final World world;
     private PositionComponent posComponent = null;
-    private Body body;
+    public Body body;
     public float density, originalPosX, originalPosY;
     public final float dimX, dimY;
+    public float fixtureCenterX, fixtureCenterY;
 
     public PhysicsComponent(World world, float dimX, float dimY){
         this.world = world;
@@ -48,6 +49,8 @@ public class PhysicsComponent extends Component {
     public void addFixture(FixtureDef fixtureDef) {
         density = fixtureDef.getDensity();
         body.createFixture(fixtureDef);
+        fixtureCenterX = fixtureDef.getCenterX();
+        fixtureCenterY = fixtureDef.getCenterY();
     }
 
     public void applyForce(Vec2 force) {

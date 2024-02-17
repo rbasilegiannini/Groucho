@@ -11,6 +11,7 @@ package com.google.fpl.liquidfun;
 public class FixtureDef {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
+  private float centerX, centerY;
 
   protected FixtureDef(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
@@ -36,6 +37,8 @@ public class FixtureDef {
   }
 
   public void setShape(Shape value) {
+    centerX = value.getCenterX();
+    centerY = value.getCenterY();
     liquidfunJNI.FixtureDef_shape_set(swigCPtr, this, Shape.getCPtr(value), value);
   }
 
@@ -67,6 +70,9 @@ public class FixtureDef {
   public float getDensity() {
     return liquidfunJNI.FixtureDef_density_get(swigCPtr, this);
   }
+
+  public float getCenterX() {return centerX;}
+  public float getCenterY() {return centerY;}
 
   public FixtureDef() {
     this(liquidfunJNI.new_FixtureDef(), true);

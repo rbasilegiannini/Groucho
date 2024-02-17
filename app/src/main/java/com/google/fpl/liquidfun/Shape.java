@@ -11,6 +11,7 @@ package com.google.fpl.liquidfun;
 public class Shape {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
+  protected float centerX, centerY;
 
   protected Shape(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
@@ -54,6 +55,9 @@ public class Shape {
   public Shape.Type getType() {
     return Shape.Type.swigToEnum(liquidfunJNI.Shape_type_get(swigCPtr, this));
   }
+
+  public float getCenterX() {return centerX;}
+  public float getCenterY() {return centerY;}
 
   public void setRadius(float value) {
     liquidfunJNI.Shape_radius_set(swigCPtr, this, value);
