@@ -9,10 +9,12 @@ import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class PositionComponent extends Component {
-    public int posX, posY;
+    public int originalPosX, originalPosY, posX, posY;
     protected Orientation orientation;
 
     public PositionComponent(int posX, int posY) {
+        this.originalPosX = posX;
+        this.originalPosY = posY;
         this.posX = posX;
         this.posY = posY;
         orientation = UP;
@@ -32,4 +34,14 @@ public class PositionComponent extends Component {
     public void updatePosX(int increase) {this.posX += increase;}
     public void updatePosY(int increase) {this.posY += increase;}
 
+    public boolean hasChangedPosition() {
+        if (posX != originalPosX || posY != originalPosY) {
+            originalPosX = posX;
+            originalPosY = posY;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

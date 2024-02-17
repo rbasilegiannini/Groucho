@@ -4,29 +4,34 @@ import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 public class BoxDrawableComponent extends DrawableComponent{
 
     private final Paint paint;
     private final float dimensionX;
     private final float dimensionY;
+    private PositionComponent posComponent = null;
+    private final Rect surface;
 
     public BoxDrawableComponent(float dimensionX, float dimensionY, Paint paint) {
         this.dimensionX = dimensionX;
         this.dimensionY = dimensionY;
         this.paint = paint;
+        this.surface = new Rect();
     }
 
     @Override
-    public void draw(Canvas canvas){
-        PositionComponent posComponent = (PositionComponent) owner.getComponent(POSITION);
+    public void draw(Canvas canvas) {
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
 
-        canvas.drawRect(
-                (float)posComponent.posX - dimensionX/2,
-                (float)posComponent.posY - dimensionY/2,
-                posComponent.posX + dimensionX/2,
-                posComponent.posY + dimensionY/2,
-                paint
-        );
+            surface.left = (int) (posComponent.posX - dimensionX/2);
+            surface.top = (int) (posComponent.posY - dimensionY/2);
+            surface.right = (int) (surface.left + dimensionX);
+            surface.bottom = (int) (surface.top + dimensionY);
+        }
+
+        canvas.drawRect(surface, paint);
     }
 }

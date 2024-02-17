@@ -5,7 +5,6 @@ import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
@@ -33,7 +32,10 @@ public class Player {
 
     public void update(Canvas canvas, Controller controller){
         ctrlComponent.updatePlayerState();
-        updateCamera(canvas, controller);
+
+        if (posComponent.hasChangedPosition()) {
+            updateCamera(canvas, controller);
+        }
     }
 
     private void updateCamera(Canvas canvas, Controller controller) {

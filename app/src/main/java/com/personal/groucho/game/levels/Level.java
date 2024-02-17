@@ -2,7 +2,6 @@ package com.personal.groucho.game.levels;
 
 import static com.personal.groucho.game.constants.System.cellSize;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -35,7 +34,9 @@ public abstract class Level {
         makeBorders();
     }
 
-    public void draw(Canvas canvas){canvas.drawRect(surface, floorPaint);}
+    public void draw(Canvas canvas){
+        canvas.drawRect(surface, floorPaint);
+    }
 
     public abstract void handleTrigger(GameObject trigger);
 
@@ -43,29 +44,32 @@ public abstract class Level {
         // Upper border
         List<GameObject> borders = new ArrayList<>(GameObjectFactory.
                 makeHorizontalBorder(surface.width() / 2,
-                        -cellSize / 4,
-                        surface.width() + cellSize,
+                        -cellSize,
+                        surface.width(),
                         gameWorld
                 ));
 
         // Bottom border
         borders.addAll(GameObjectFactory.
                 makeHorizontalBorder(surface.width()/2,
-                        surface.height()-cellSize/4,
-                        surface.height() + cellSize,
+                        (int) (surface.height()+(1.5f)*cellSize),
+                        surface.width() + cellSize,
                         gameWorld
                 ));
 
         // Left border
         borders.add(GameObjectFactory.makeVerticalBorder(
-                cellSize/4, (int) (surface.height()/2 - 1.5f*cellSize),
-                surface.height(), gameWorld));
+                cellSize/4,
+                (int) ((surface.height()/2)-(1.25f * cellSize)),
+                surface.height()+(2.5f*cellSize),
+                gameWorld));
 
         // Right border
         borders.add(GameObjectFactory.makeVerticalBorder(
                 (int) (surface.width() + (0.75f)*cellSize),
-                (int) (surface.height()/2 - 1.5f*cellSize), surface.height(), gameWorld));
-
+                (int) ((surface.height()/2)-(1.25f * cellSize)),
+                surface.height()+(2.5f*cellSize),
+                gameWorld));
 
         for (GameObject go : borders) {
             gameWorld.addGameObject(go);

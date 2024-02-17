@@ -132,11 +132,13 @@ public class GameObjectFactory {
 
         Paint paintRoof = new Paint();
         Paint paintWall = new Paint();
+        Bitmap wallTexture = Bitmap.createScaledBitmap(Textures.wall,256, 256, false);
 
-        Shader wallShader = new BitmapShader(Textures.wall, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        Shader roofShader = new BitmapShader(Textures.roof, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        Shader wallShader = new BitmapShader(wallTexture, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         paintWall.setShader(wallShader);
-        paintRoof.setShader(roofShader);
+
+        paintRoof.setColor(Color.argb(255, 92,64,51));
+        paintRoof.setStyle(Paint.Style.FILL_AND_STROKE);
 
         int dimX = (int) length;
         int dimRoofY = cellSize;
@@ -145,7 +147,7 @@ public class GameObjectFactory {
         wall.addComponent(new PositionComponent(centerX, centerY));
         roof.addComponent(new PositionComponent(centerX, centerY-cellSize));
 
-        wall.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimWallY));
+        wall.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX-cellSize, dimWallY));
         wall.addComponent(new BoxDrawableComponent(dimX, dimWallY, paintWall));
         roof.addComponent(new BoxDrawableComponent(dimX, dimRoofY, paintRoof));
 
@@ -161,12 +163,12 @@ public class GameObjectFactory {
         return gameObjects;
     }
 
-
     public static GameObject makeVerticalBorder(int centerX, int centerY, float length, GameWorld gameWorld){
         GameObject border = new GameObject("Wall", Role.WALL);
         Paint paintRoof = new Paint();
-        Shader roofShader = new BitmapShader(Textures.roof, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        paintRoof.setShader(roofShader);
+
+        paintRoof.setColor(Color.argb(255, 92,64,51));
+        paintRoof.setStyle(Paint.Style.FILL_AND_STROKE);
 
         int dimY = (int) length;
         int dimX = cellSize/2;
