@@ -1,5 +1,8 @@
 package com.personal.groucho.game.levels;
 
+import static com.personal.groucho.game.constants.Environment.brightness;
+import static com.personal.groucho.game.constants.Environment.maxBrightness;
+import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 
 import android.graphics.Canvas;
@@ -39,6 +42,17 @@ public abstract class Level {
     }
 
     public abstract void handleTrigger(GameObject trigger);
+
+    protected void setBrightness(float intensity) {
+        if (intensity >= maxBrightness) {
+            brightness = maxBrightness;
+            gameWorld.setPlayerVisibility(true);
+        }
+        else {
+            brightness = minBrightness;
+            gameWorld.setPlayerVisibility(false);
+        }
+    }
 
     private void makeBorders() {
         // Upper border
