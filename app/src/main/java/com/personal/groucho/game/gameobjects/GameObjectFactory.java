@@ -73,7 +73,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new ControllableComponent(gameworld));
         gameObject.addComponent(new PhysicsComponent(gameworld.getWorld(), characterDimX, characterDimY));
         gameObject.addComponent(new AliveComponent(grouchoHealth));
-        gameObject.addComponent(new LightComponent(gameworld));
+        gameObject.addComponent(new LightComponent(gameworld.getBuffer()));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
         PhysicsProperties properties = new PhysicsProperties(posX, posY, 1f, 1f, BodyType.dynamicBody);

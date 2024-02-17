@@ -80,8 +80,8 @@ public class Graphics {
             drawComponent.draw(canvas);
         }
 
-//        for (LightComponent lightComponent : gameWorld.lightComponents) {
-//            lightComponent.draw(canvas);
-//        }
+        for (LightComponent lightComponent : gameWorld.lightComponents) {
+            lightComponent.draw(canvas);
+        }
     }
 }

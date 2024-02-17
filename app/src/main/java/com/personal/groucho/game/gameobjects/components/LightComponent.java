@@ -6,6 +6,7 @@ import static com.personal.groucho.game.constants.Environment.minLightIntensity;
 import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,57 +14,56 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 
-import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class LightComponent extends Component {
-    private final GameWorld gameWorld;
     private PositionComponent position = null;
+    private final Paint maskPaint;
+    private Bitmap maskBitmap, defaultBitmap;
+    private final Bitmap buffer;
+    private final Canvas maskCanvas ;
+    private final PorterDuffXfermode porterCLEAR;
     private float intensity = minLightIntensity;
-
+    private final float centerX, centerY;
 
     @Override
     public ComponentType type() {
         return LIGHT;
     }
 
-    public LightComponent(GameWorld gameWorld) {this.gameWorld = gameWorld;}
+    public LightComponent(Bitmap buffer) {
+        this.maskPaint = new Paint();
+        porterCLEAR = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
 
-    public void draw(Canvas canvas) {
-        if (position == null) {
-            position = (PositionComponent) owner.getComponent(POSITION);
-        }
-        Bitmap buffer = gameWorld.getBuffer();
+        this.buffer = buffer;
 
-        Bitmap maskBitmap = Bitmap.createBitmap(
+        defaultBitmap = Bitmap.createBitmap(
                 buffer.getWidth()+100,
                 buffer.getHeight()+100,
                 Bitmap.Config.ARGB_8888
         );
-        Canvas maskCanvas = new Canvas(maskBitmap);
+
+        maskCanvas = new Canvas(defaultBitmap);
+        centerX = (float)defaultBitmap.getWidth() / 2;
+        centerY = (float)(defaultBitmap.getHeight() / 2) - characterDimY;
+    }
+
+    @SuppressLint("NewApi")
+    public void draw(Canvas canvas) {
+        if (position == null) {
+            position = (PositionComponent) owner.getComponent(POSITION);
+        }
+
+        maskBitmap = Bitmap.createBitmap(defaultBitmap);
+        maskCanvas.setBitmap(maskBitmap);
 
         maskCanvas.drawColor(Color.valueOf(0,0,0, 1-brightness).toArgb());
 
-        Paint maskPaint = new Paint();
-        maskPaint.setAntiAlias(true);
-        maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        maskCanvas.drawCircle(
-                (float)maskBitmap.getWidth() / 2,
-                (float)(maskBitmap.getHeight() / 2) - characterDimY,
-                intensity,
-                maskPaint
-        );
+        maskPaint.setXfermode(porterCLEAR);
+        maskCanvas.drawCircle(centerX, centerY, intensity, maskPaint);
 
-        maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        maskCanvas.drawBitmap(buffer, 0, 0, maskPaint);
-
-        canvas.drawBitmap(
-                maskBitmap,
-                position.posX - (float)maskBitmap.getWidth() /2,
-                (position.posY - (float)maskBitmap.getHeight() /2)+ characterDimY,
-                null
-        );
+        canvas.drawBitmap(maskBitmap, position.posX - centerX, position.posY - centerY, null);
     }
 
     public void setLightIntensity(float intensity) {this.intensity = intensity;}
