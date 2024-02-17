@@ -20,8 +20,8 @@ import com.personal.groucho.game.gameobjects.ComponentType;
 public class LightComponent extends Component {
     private PositionComponent position = null;
     private final Paint maskPaint;
-    private Bitmap maskBitmap, defaultBitmap;
-    private final Bitmap buffer;
+    private Bitmap maskBitmap;
+    private final Bitmap defaultBitmap;
     private final Canvas maskCanvas ;
     private final PorterDuffXfermode porterCLEAR;
     private float intensity = minLightIntensity;
@@ -35,8 +35,6 @@ public class LightComponent extends Component {
     public LightComponent(Bitmap buffer) {
         this.maskPaint = new Paint();
         porterCLEAR = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
-
-        this.buffer = buffer;
 
         defaultBitmap = Bitmap.createBitmap(
                 buffer.getWidth()+100,

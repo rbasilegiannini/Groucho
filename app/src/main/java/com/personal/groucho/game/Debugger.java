@@ -17,7 +17,7 @@ public class Debugger {
     private final List<Sight> sights = new ArrayList<>();
     private GameGrid grid;
     private static Debugger instance = null;
-    private Paint paint;
+    private final Paint paint;
 
     private Debugger(GameWorld gameWorld) {
         this.gameWorld = gameWorld;

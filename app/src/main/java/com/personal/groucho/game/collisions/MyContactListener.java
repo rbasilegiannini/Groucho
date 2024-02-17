@@ -3,7 +3,6 @@ package com.personal.groucho.game.collisions;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
 import com.google.fpl.liquidfun.ContactListener;
-import com.google.fpl.liquidfun.Fixture;
 import com.personal.groucho.game.gameobjects.GameObject;
 
 import java.util.Collection;

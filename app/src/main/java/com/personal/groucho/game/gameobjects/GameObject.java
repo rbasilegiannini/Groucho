@@ -6,7 +6,7 @@ public class GameObject extends Entity{
     public String name;
     public Role role;
 
-    public GameObject(GameWorld gameWorld) {
+    public GameObject() {
         this.name = "";
         this.role = Role.NEUTRAL;
     }
