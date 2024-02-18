@@ -17,12 +17,7 @@ public abstract class WalkingComponent extends Component {
 
 
     protected void walking() {
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
-        if (character == null){
-            character = (CharacterComponent) owner.getComponent(CHARACTER);
-        }
+        initComponents();
 
         switch (posComponent.orientation) {
             case UP:
@@ -49,21 +44,31 @@ public abstract class WalkingComponent extends Component {
     }
 
     protected void updateSprite(Spritesheet sheet) {
-        if (spriteComponent == null) {
-            spriteComponent = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
-        }
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
+        initComponents();
+
         spriteComponent.setCurrentSpritesheet(sheet);
         spriteComponent.setAnim(posComponent.orientation.getValue());
     }
 
     private void updatePosition(float increaseX, float increaseY) {
+        initComponents();
+
+        phyComponent.updatePosX(increaseX);
+        phyComponent.updatePosY(increaseY);
+    }
+
+    private void initComponents() {
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
         if(phyComponent == null) {
             phyComponent = (PhysicsComponent) owner.getComponent(PHYSICS);
         }
-        phyComponent.updatePosX(increaseX);
-        phyComponent.updatePosY(increaseY);
+        if (spriteComponent == null) {
+            spriteComponent = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
+        }
+        if (character == null){
+            character = (CharacterComponent) owner.getComponent(CHARACTER);
+        }
     }
 }

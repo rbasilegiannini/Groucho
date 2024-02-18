@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AIComponent extends WalkingComponent {
+    private CharacterComponent character = null;
     public final StateName originalState;
     private final FSM fsm;
     private final GameGrid grid;
@@ -63,14 +64,10 @@ public class AIComponent extends WalkingComponent {
     private boolean isPatrol = false;
     private long lastSeenMills;
 
-
     // To avoid further allocations
     private List<Action> actions;
     private List<Node> currentPath;
     private AliveComponent playerAliveComponent = null;
-
-    // Character attributes
-    private CharacterComponent character = null;
 
 
     public AIComponent(GameWorld gameWorld, StateName currentState) {
@@ -121,18 +118,26 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void init(GameWorld gameWorld) {
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
-        if (character == null) {
-            character = (CharacterComponent) owner.getComponent(CHARACTER);
-        }
+        initComponents();
+
         if (sight == null) {
             sight = new Sight(
                     this,
                     gameWorld.getWorld(),
                     new Vec2(posComponent.posX, posComponent.posY),
                     posComponent.orientation);
+        }
+    }
+
+    private void initComponents() {
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
+        if (character == null) {
+            character = (CharacterComponent) owner.getComponent(CHARACTER);
+        }
+        if (playerAliveComponent == null) {
+            playerAliveComponent = (AliveComponent) gameWorld.getPlayerGO().getComponent(ALIVE);
         }
     }
 
@@ -173,9 +178,8 @@ public class AIComponent extends WalkingComponent {
     }
 
     public void activePatrolAction() {
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
+        initComponents();
+
         if (!currentPath.isEmpty() || !isNodeReached)
             walkingToDestination();
         else {
@@ -204,9 +208,8 @@ public class AIComponent extends WalkingComponent {
 
     // Investigate actions
     public void entryInvestigateAction() {
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
+        initComponents();
+
         posOnGrid = grid.getNode(
                 posComponent.getPosXOnGrid(),
                 posComponent.getPosYOnGrid()
@@ -233,9 +236,8 @@ public class AIComponent extends WalkingComponent {
 
     // Engage actions
     public void entryEngageAction(){
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
+        initComponents();
+
         posOnGrid = grid.getNode(
                 posComponent.getPosXOnGrid(),
                 posComponent.getPosYOnGrid()
@@ -287,9 +289,8 @@ public class AIComponent extends WalkingComponent {
     }
 
     public void activeAttackAction() {
-        if (playerAliveComponent == null) {
-            playerAliveComponent = (AliveComponent) gameWorld.getPlayerGO().getComponent(ALIVE);
-        }
+        initComponents();
+
         isPlayerReached = isAPlayerNeighbor();
 
         if (!gameWorld.isGameOver() && playerAliveComponent.currentStatus != DEAD) {

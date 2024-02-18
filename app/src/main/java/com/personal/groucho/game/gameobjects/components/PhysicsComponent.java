@@ -4,6 +4,8 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
+import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
+import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
@@ -54,9 +56,7 @@ public class PhysicsComponent extends Component {
     }
 
     public void applyForce(Vec2 force) {
-        if(posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
+        initComponents();
 
         body.setLinearVelocity(new Vec2(0,0));
         body.applyLinearImpulse(force,body.getPosition(),true);
@@ -70,9 +70,7 @@ public class PhysicsComponent extends Component {
     }
 
     public void setPos(int posX, int posY) {
-        if(posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
+        initComponents();
 
         body.setTransform(new Vec2(fromBufferToMetersX(posX), fromBufferToMetersY(posY)),0);
         posComponent.setPosX((int) fromMetersToBufferX(body.getPositionX()));
@@ -80,18 +78,14 @@ public class PhysicsComponent extends Component {
     }
 
     public void updatePosX(float  increase) {
-        if(posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
+        initComponents();
 
         body.setTransform(body.getPositionX() + increase, body.getPositionY(), 0);
         posComponent.updatePosX((int)increase);
     }
 
     public void updatePosY(float increase) {
-        if(posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
+        initComponents();
 
         body.setTransform(body.getPositionX(),body.getPositionY() + increase, 0);
         posComponent.updatePosY((int)increase);
@@ -110,4 +104,11 @@ public class PhysicsComponent extends Component {
             return false;
         }
     }
+
+    private void initComponents() {
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
+    }
 }
+

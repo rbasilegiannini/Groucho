@@ -43,6 +43,7 @@ public class SpriteDrawableComponent extends DrawableComponent {
         if (posComponent == null) {
             posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
+
         currentTimeMillis = System.currentTimeMillis();
         delay = currentTimeMillis - lastTimestamp;
 

@@ -24,14 +24,9 @@ public class AliveComponent extends Component {
     public ComponentType type() {return ALIVE;}
 
     public void damage(int power) {
-        if (character == null) {
-            character = (CharacterComponent) owner.getComponent(CHARACTER);
-            maxHealth = character.properties.health;
-            currentHealth = character.properties.health;
-        }
+        initComponents();
 
         currentHealth -= power;
-
         if (currentHealth <= 0) {
             currentHealth = 0;
             die();
@@ -40,11 +35,7 @@ public class AliveComponent extends Component {
     }
 
     public void heal(int medicalKit) {
-        if (character == null) {
-            character = (CharacterComponent) owner.getComponent(CHARACTER);
-            maxHealth = character.properties.health;
-            currentHealth = character.properties.health;
-        }
+        initComponents();
 
         if (currentHealth+medicalKit <= maxHealth)
             currentHealth += medicalKit;
@@ -54,36 +45,24 @@ public class AliveComponent extends Component {
     }
 
     private void die() {
-        if (character == null) {
-            character = (CharacterComponent) owner.getComponent(CHARACTER);
-        }
-
         currentStatus = DEAD;
-
-        if (sprite == null) {
-            Component component = owner.getComponent(DRAWABLE);
-            if (component != null) {
-                sprite = (SpriteDrawableComponent) component;
-                sprite.setCurrentSpritesheet(character.properties.sheetDeath);
-                sprite.setAnim(0);
-            }
-        }
-        else {
-            sprite.setCurrentSpritesheet(character.properties.sheetDeath);
-            sprite.setAnim(0);
-        }
+        sprite.setCurrentSpritesheet(character.properties.sheetDeath);
+        sprite.setAnim(0);
     }
 
     private void updateSprite() {
-        if (sprite == null) {
-            Component component = owner.getComponent(DRAWABLE);
-            if (component != null) {
-                sprite = (SpriteDrawableComponent) component;
-                sprite.updateColorFilter(currentHealth, maxHealth);
-            }
+        initComponents();
+        sprite.updateColorFilter(currentHealth, maxHealth);
+    }
+
+    private void initComponents(){
+        if (character == null) {
+            character = (CharacterComponent) owner.getComponent(CHARACTER);
+            maxHealth = character.properties.health;
+            currentHealth = character.properties.health;
         }
-        else {
-            sprite.updateColorFilter(currentHealth, maxHealth);
+        if (sprite == null) {
+            sprite = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
         }
     }
 }
