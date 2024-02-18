@@ -1,6 +1,6 @@
 package com.personal.groucho.game.constants;
 
-public class CharacterProperties {
+public class Character {
     public static float grouchoSpeed = 0.2f;
     public static float skeletonSpeed = 0.05f;
     public static final int grouchoHealth = 100;
