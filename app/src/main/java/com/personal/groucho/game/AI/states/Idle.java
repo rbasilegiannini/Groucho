@@ -7,6 +7,7 @@ import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
 import com.personal.groucho.game.AI.transitions.InvestigateTransition;
+import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class Idle extends AIState {
 
     private Idle(AIComponent aiComponent) {
         super(aiComponent);
+        name = StateName.IDLE;
     }
 
     public static AIState getInstance(AIComponent aiComponent) {

@@ -9,7 +9,7 @@ public class Loading extends ControllerState{
 
     private Loading(Controller controller) {
         super(controller);
-        name = NameState.LOADING;
+        name = StateName.LOADING;
     }
 
     public static ControllerState getInstance(Controller controller) {

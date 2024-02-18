@@ -8,6 +8,7 @@ import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.AttackTransition;
 import com.personal.groucho.game.AI.transitions.IdleTransition;
 import com.personal.groucho.game.AI.transitions.PatrolTransition;
+import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class Engage extends AIState {
 
     private Engage(AIComponent aiComponent) {
         super(aiComponent);
+        name = StateName.ENGAGE;
     }
 
     public static AIState getInstance(AIComponent aiComponent) {

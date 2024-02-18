@@ -6,7 +6,7 @@ import com.personal.groucho.game.controller.Controller;
 public abstract class ControllerState {
 
     protected Controller controller;
-    protected NameState name;
+    protected StateName name;
 
     protected ControllerState(Controller controller) {this.controller = controller;}
 
@@ -16,5 +16,5 @@ public abstract class ControllerState {
     public void handleDPadTouchUp(){}
     public void handleTriggerTouchUp(){}
 
-    public NameState getName() {return name;}
+    public StateName getName() {return name;}
 }

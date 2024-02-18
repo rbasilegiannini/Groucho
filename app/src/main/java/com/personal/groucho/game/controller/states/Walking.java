@@ -9,7 +9,7 @@ public class Walking extends ControllerState{
 
     private Walking(Controller controller) {
         super(controller);
-        name = NameState.WALKING;
+        name = StateName.WALKING;
     }
 
     public static ControllerState getInstance(Controller controller) {

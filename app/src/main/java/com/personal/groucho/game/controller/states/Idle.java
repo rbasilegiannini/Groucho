@@ -9,7 +9,7 @@ public class Idle extends ControllerState{
 
     private Idle(Controller controller) {
         super(controller);
-        name = NameState.IDLE;
+        name = StateName.IDLE;
     }
 
     public static ControllerState getInstance(Controller controller) {

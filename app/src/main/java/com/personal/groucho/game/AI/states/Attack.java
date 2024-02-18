@@ -6,6 +6,7 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
+import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Attack extends AIState {
 
     private Attack(AIComponent aiComponent) {
         super(aiComponent);
+        name = StateName.ATTACK;
     }
 
     public static AIState getInstance(AIComponent aiComponent) {

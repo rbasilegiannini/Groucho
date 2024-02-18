@@ -1,6 +1,6 @@
 package com.personal.groucho.game.AI.transitions;
 
-import static com.personal.groucho.game.AI.states.StateName.PATROL;
+import static com.personal.groucho.game.controller.states.StateName.PATROL;
 
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
