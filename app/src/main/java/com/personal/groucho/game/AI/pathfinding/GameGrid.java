@@ -79,7 +79,6 @@ public class GameGrid {
     public void drawDebugGrid(Canvas canvas){
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setColor(Color.BLUE);
         paint.setTextSize(20);
 
         int startX;

@@ -1,5 +1,6 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
@@ -28,6 +29,11 @@ public class Player {
         this.posY = posY;
         this.cameraX = 0;
         this.cameraY = 0;
+
+        if (debugMode) {
+            FPSCounter.getInstance().posX = posX - (float) Graphics.bufferWidth /2;
+            FPSCounter.getInstance().posY = posY - (float) Graphics.bufferHeight /2+50;
+        }
     }
 
     public void update(Canvas canvas, Controller controller){
@@ -36,6 +42,7 @@ public class Player {
         if (posComponent.hasChangedPosition()) {
             updateCamera(canvas, controller);
         }
+
     }
 
     private void updateCamera(Canvas canvas, Controller controller) {
@@ -47,6 +54,10 @@ public class Player {
 
         posX = posComponent.posX;
         posY =  posComponent.posY;
+
+        if (debugMode) {
+            FPSCounter.getInstance().updateWidgetPosition(-cameraX, -cameraY);
+        }
     }
 
     public void setPlayerVisibility(boolean visibility) {isPlayerVisible = visibility;}

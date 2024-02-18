@@ -1,5 +1,6 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
@@ -70,6 +71,10 @@ public class Graphics {
         drawGameObjects();
         if (!gameWorld.isGameOver()) {
             gameWorld.controller.draw(canvas);
+        }
+
+        if (debugMode){
+            FPSCounter.getInstance().draw(canvas);
         }
     }
 
