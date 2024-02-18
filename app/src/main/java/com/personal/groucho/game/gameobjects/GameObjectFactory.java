@@ -23,6 +23,7 @@ import static com.personal.groucho.game.gameobjects.Role.FURNITURE;
 import static com.personal.groucho.game.gameobjects.Role.HEALTH;
 import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 import static com.personal.groucho.game.gameobjects.Role.TRIGGER;
+import static com.personal.groucho.game.gameobjects.Role.WALL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -124,7 +125,7 @@ public class GameObjectFactory {
         PositionComponent position = (PositionComponent) gameObject.getComponent(ComponentType.POSITION);
         position.setOrientation(orientation);
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
-        PhysicsProp prop = new PhysicsProp(posX, posY,0f, 1f,
+        PhysicsProp prop = new PhysicsProp(posX, posY,0f, -1f,
                 100f, 1f, dynamicBody);
         setCharacterPhysics(physics, prop);
 
@@ -132,8 +133,8 @@ public class GameObjectFactory {
     }
 
     public static List<GameObject> makeWall(int centerX, int centerY, float length, GameWorld gameWorld) {
-        GameObject roof = new GameObject("Roof", Role.WALL);
-        GameObject wall = new GameObject("Wall", Role.WALL);
+        GameObject roof = new GameObject("Roof", WALL);
+        GameObject wall = new GameObject("Wall", WALL);
 
         Paint paintRoof = new Paint();
         Paint paintWall = new Paint();
@@ -157,11 +158,10 @@ public class GameObjectFactory {
         PhysicsComponent physics = (PhysicsComponent) roof.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(
                 centerX,
-                centerY-dimRoofY/2,
+                centerY + dimWallY/2,
                 0f,
-                toMetersYLength(length/2),
+                0,
                 0f, 0f, staticBody);
-
         setFurniturePhysics(physics, prop);
         setFurnitureOnGameGrid(gameWorld.getGameGrid(), prop, dimX, length);
 
@@ -173,8 +173,8 @@ public class GameObjectFactory {
     }
 
     public static List<GameObject> makeHorBorder(int centerX, int centerY, float length, GameWorld gameWorld) {
-        GameObject roof = new GameObject("Roof", Role.WALL);
-        GameObject wall = new GameObject("Wall", Role.WALL);
+        GameObject roof = new GameObject("Roof", WALL);
+        GameObject wall = new GameObject("Wall", WALL);
 
         Paint paintRoof = new Paint();
         Paint paintWall = new Paint();
@@ -211,7 +211,7 @@ public class GameObjectFactory {
     }
 
     public static GameObject makeVerBorder(int centerX, int centerY, float length, GameWorld gameWorld){
-        GameObject border = new GameObject("Wall", Role.WALL);
+        GameObject border = new GameObject("Wall", WALL);
         Paint paintRoof = new Paint();
 
         paintRoof.setColor(Color.argb(255, 92,64,51));

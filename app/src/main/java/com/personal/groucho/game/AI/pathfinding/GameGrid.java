@@ -104,7 +104,7 @@ public class GameGrid {
 
                 String cost = String.valueOf(grid[x][y].defaultCost);
                 paint.setColor(Color.WHITE);
-                canvas.drawText(cost, startX+cellSize/4, startY+cellSize/2, paint);
+                canvas.drawText(cost, startX+(float)cellSize /4, startY+ (float)cellSize /2, paint);
 
             }
         }
