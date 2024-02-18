@@ -1,5 +1,9 @@
 package com.personal.groucho.game.gameobjects;
 
+import static android.graphics.Paint.Style.FILL_AND_STROKE;
+import static android.graphics.Shader.TileMode.REPEAT;
+import static com.google.fpl.liquidfun.BodyType.dynamicBody;
+import static com.google.fpl.liquidfun.BodyType.staticBody;
 import static com.personal.groucho.game.CharacterFactory.getGroucho;
 import static com.personal.groucho.game.CharacterFactory.getSkeleton;
 import static com.personal.groucho.game.constants.System.cellSize;
@@ -12,7 +16,13 @@ import static com.personal.groucho.game.Utils.toMetersXLength;
 import static com.personal.groucho.game.Utils.toMetersYLength;
 import static com.personal.groucho.game.assets.Spritesheets.grouchoWalk;
 import static com.personal.groucho.game.assets.Textures.health;
+import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
+import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.Role.ENEMY;
+import static com.personal.groucho.game.gameobjects.Role.FURNITURE;
+import static com.personal.groucho.game.gameobjects.Role.HEALTH;
+import static com.personal.groucho.game.gameobjects.Role.PLAYER;
+import static com.personal.groucho.game.gameobjects.Role.TRIGGER;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -51,19 +61,19 @@ import java.util.Set;
 
 public class GameObjectFactory {
 
-    private static class PhysicsProperties {
-        int positionX;
-        int positionY;
+    private static class PhysicsProp {
+        int posX;
+        int posY;
         float phyCenterX;
         float phyCenterY;
         float density;
         float friction;
         BodyType type;
 
-        PhysicsProperties(int positionX, int positionY, float phyCenterX, float phyCenterY,
-                          float density, float friction, BodyType type) {
-            this.positionX = positionX;
-            this.positionY = positionY;
+        PhysicsProp(int positionX, int positionY, float phyCenterX, float phyCenterY,
+                    float density, float friction, BodyType type) {
+            this.posX = positionX;
+            this.posY = positionY;
             this.phyCenterX = phyCenterX;
             this.phyCenterY = phyCenterY;
             this.density = density;
@@ -73,7 +83,7 @@ public class GameObjectFactory {
     }
 
     public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameworld) {
-        GameObject gameObject = new GameObject("Groucho", Role.PLAYER);
+        GameObject gameObject = new GameObject("Groucho", PLAYER);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(grouchoWalk));
@@ -84,12 +94,12 @@ public class GameObjectFactory {
         gameObject.addComponent(new CharacterComponent(getGroucho()));
         gameObject.addComponent(new LightComponent(gameworld.getBuffer()));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY, 0f, -1f,
-                1f, 1f, BodyType.dynamicBody);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsProp properties = new PhysicsProp(posX, posY, 0f, -1f,
+                1f, 1f, dynamicBody);
         setCharacterPhysics(physics, properties);
 
-        ControllableComponent controllable = (ControllableComponent) gameObject.getComponent(ComponentType.CONTROLLABLE);
+        ControllableComponent controllable = (ControllableComponent) gameObject.getComponent(CONTROLLABLE);
 
         gameworld.controller.addControllerListener(controllable);
         controller.setCurrentState(Idle.getInstance(controller));
@@ -98,7 +108,7 @@ public class GameObjectFactory {
     }
 
     public static GameObject makeEnemy(
-            int posX, int posY, Orientation orientation,Spritesheet idle,
+            int posX, int posY, Orientation orientation, Spritesheet idle,
             StateName state, GameWorld gameWorld) {
 
         GameObject gameObject = new GameObject("Enemy", ENEMY);
@@ -113,10 +123,10 @@ public class GameObjectFactory {
 
         PositionComponent position = (PositionComponent) gameObject.getComponent(ComponentType.POSITION);
         position.setOrientation(orientation);
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties phyProperties = new PhysicsProperties(posX, posY,0f, 1f,
-                100f, 1f, BodyType.dynamicBody);
-        setCharacterPhysics(physics, phyProperties);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsProp prop = new PhysicsProp(posX, posY,0f, 1f,
+                100f, 1f, dynamicBody);
+        setCharacterPhysics(physics, prop);
 
         return gameObject;
     }
@@ -129,10 +139,10 @@ public class GameObjectFactory {
         Paint paintWall = new Paint();
         Bitmap wallTexture = Bitmap.createScaledBitmap(Textures.wall,256, 256, false);
 
-        Shader wallShader = new BitmapShader(wallTexture, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        Shader wallShader = new BitmapShader(wallTexture, REPEAT, REPEAT);
         paintWall.setShader(wallShader);
         paintRoof.setColor(Color.argb(255, 92,64,51));
-        paintRoof.setStyle(Paint.Style.FILL_AND_STROKE);
+        paintRoof.setStyle(FILL_AND_STROKE);
 
         int dimX = cellSize/2;
         int dimWallY = (int) (2*characterScaleFactor*characterDimY);
@@ -144,13 +154,16 @@ public class GameObjectFactory {
         roof.addComponent(new BoxDrawableComponent(dimX, dimRoofY, paintRoof));
         roof.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, length-dimWallY));
 
-        PhysicsComponent physics = (PhysicsComponent) roof.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(
-                centerX, centerY-dimRoofY/2, 0f,
-                toMetersYLength(length/2), 0f, 0f, BodyType.staticBody);
+        PhysicsComponent physics = (PhysicsComponent) roof.getComponent(PHYSICS);
+        PhysicsProp prop = new PhysicsProp(
+                centerX,
+                centerY-dimRoofY/2,
+                0f,
+                toMetersYLength(length/2),
+                0f, 0f, staticBody);
 
-        setFurniturePhysics(physics, properties);
-        setFurnitureOnGameGrid(gameWorld.getGameGrid(), properties, dimX, length);
+        setFurniturePhysics(physics, prop);
+        setFurnitureOnGameGrid(gameWorld.getGameGrid(), prop, dimX, length);
 
         List<GameObject> gameObjects = new ArrayList<>();
         gameObjects.add(roof);
@@ -167,11 +180,11 @@ public class GameObjectFactory {
         Paint paintWall = new Paint();
         Bitmap wallTexture = Bitmap.createScaledBitmap(Textures.wall,256, 256, false);
 
-        Shader wallShader = new BitmapShader(wallTexture, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        Shader wallShader = new BitmapShader(wallTexture, REPEAT, REPEAT);
         paintWall.setShader(wallShader);
 
         paintRoof.setColor(Color.argb(255, 92,64,51));
-        paintRoof.setStyle(Paint.Style.FILL_AND_STROKE);
+        paintRoof.setStyle(FILL_AND_STROKE);
 
         int dimX = (int) length;
         int dimRoofY = cellSize;
@@ -184,11 +197,11 @@ public class GameObjectFactory {
         wall.addComponent(new BoxDrawableComponent(dimX, dimWallY, paintWall));
         roof.addComponent(new BoxDrawableComponent(dimX, dimRoofY, paintRoof));
 
-        PhysicsComponent physics = (PhysicsComponent) wall.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(centerX, centerY, 0f, 0f,
-                0f, 0f, BodyType.staticBody);
-        setFurniturePhysics(physics, properties);
-        setFurnitureOnGameGrid(gameWorld.getGameGrid(), properties, dimX, dimWallY);
+        PhysicsComponent physics = (PhysicsComponent) wall.getComponent(PHYSICS);
+        PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f, 0f,
+                0f, 0f, staticBody);
+        setFurniturePhysics(physics, prop);
+        setFurnitureOnGameGrid(gameWorld.getGameGrid(), prop, dimX, dimWallY);
 
         List<GameObject> gameObjects = new ArrayList<>();
         gameObjects.add(roof);
@@ -202,7 +215,7 @@ public class GameObjectFactory {
         Paint paintRoof = new Paint();
 
         paintRoof.setColor(Color.argb(255, 92,64,51));
-        paintRoof.setStyle(Paint.Style.FILL_AND_STROKE);
+        paintRoof.setStyle(FILL_AND_STROKE);
 
         int dimY = (int) length;
         int dimX = cellSize/2;
@@ -211,12 +224,12 @@ public class GameObjectFactory {
         border.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));
         border.addComponent(new BoxDrawableComponent(dimX, dimY, paintRoof));
 
-        PhysicsComponent physics = (PhysicsComponent) border.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(
+        PhysicsComponent physics = (PhysicsComponent) border.getComponent(PHYSICS);
+        PhysicsProp prop = new PhysicsProp(
                 centerX-cellSize/2, centerY, 0f, 0f,
-                0f, 0f, BodyType.staticBody);
-        setFurniturePhysics(physics, properties);
-        setFurnitureOnGameGrid(gameWorld.getGameGrid(), properties, dimX, dimY);
+                0f, 0f, staticBody);
+        setFurniturePhysics(physics, prop);
+        setFurnitureOnGameGrid(gameWorld.getGameGrid(), prop, dimX, dimY);
 
         return border;
     }
@@ -224,17 +237,17 @@ public class GameObjectFactory {
 
     public static GameObject makeFurniture(int centerX, int centerY, float dimX, float dimY, GameWorld gameWorld,
                                            Bitmap texture) {
-        GameObject gameObject = new GameObject("Furniture", Role.FURNITURE);
+        GameObject gameObject = new GameObject("Furniture", FURNITURE);
 
         gameObject.addComponent(new PositionComponent(centerX, centerY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY/2));
         gameObject.addComponent(new TextureDrawableComponent(texture, (int)dimX, (int)dimY));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(centerX, centerY, 0f,0f,
-                5f, 0, BodyType.dynamicBody);
-        setFurniturePhysics(physics, properties);
-        setFurnitureOnGameGrid(gameWorld.getGameGrid(), properties, dimX, dimY);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f,0f,
+                5f, 0, dynamicBody);
+        setFurniturePhysics(physics, prop);
+        setFurnitureOnGameGrid(gameWorld.getGameGrid(), prop, dimX, dimY);
 
         return gameObject;
     }
@@ -242,17 +255,17 @@ public class GameObjectFactory {
     public static GameObject makeHealth(int posX, int posY, GameWorld gameWorld) {
         int dimX = 64;
         int dimY = 64;
-        GameObject gameObject = new GameObject("Health", Role.HEALTH);
+        GameObject gameObject = new GameObject("Health", HEALTH);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));
         gameObject.addComponent(new TextureDrawableComponent(health, dimX, dimY));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY, 0f, 0f,
-                0f, 0, BodyType.staticBody);
-        setFurniturePhysics(physics, properties);
-        setFurnitureOnGameGrid(gameWorld.getGameGrid(), properties, dimX, dimY);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsProp prop = new PhysicsProp(posX, posY, 0f, 0f,
+                0f, 0, staticBody);
+        setFurniturePhysics(physics, prop);
+        setFurnitureOnGameGrid(gameWorld.getGameGrid(), prop, dimX, dimY);
 
         return gameObject;
     }
@@ -261,27 +274,27 @@ public class GameObjectFactory {
         int dimX = 64;
         int dimY = 128;
 
-        GameObject gameObject = new GameObject(name, Role.TRIGGER);
+        GameObject gameObject = new GameObject(name, TRIGGER);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY, 0f, 0f,
-                0f, 0, BodyType.staticBody);
-        setFurniturePhysics(physics, properties);
+        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsProp prop = new PhysicsProp(posX, posY, 0f, 0f,
+                0f, 0, staticBody);
+        setFurniturePhysics(physics, prop);
 
         return gameObject;
     }
 
-    private static void setCharacterPhysics(PhysicsComponent physics, PhysicsProperties properties) {
+    private static void setCharacterPhysics(PhysicsComponent physics, PhysicsProp prop) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setLinearDamping(10f);
         bodyDef.setPosition(new Vec2(
-                fromBufferToMetersX(properties.positionX),
-                fromBufferToMetersY(properties.positionY))
+                fromBufferToMetersX(prop.posX),
+                fromBufferToMetersY(prop.posY))
         );
-        bodyDef.setType(properties.type);
+        bodyDef.setType(prop.type);
         bodyDef.setAllowSleep(false);
         physics.setBody(bodyDef);
 
@@ -290,12 +303,12 @@ public class GameObjectFactory {
         box.setAsBox(
                 toMetersXLength(physics.dimX)/2,
                 toMetersYLength(physics.dimY)/2,
-                properties.phyCenterX,
-                properties.phyCenterY
+                prop.phyCenterX,
+                prop.phyCenterY
                 ,0);
         fixtureDef.setShape(box);
-        fixtureDef.setDensity(properties.density);
-        fixtureDef.setFriction(properties.friction);
+        fixtureDef.setDensity(prop.density);
+        fixtureDef.setFriction(prop.friction);
         physics.addFixture(fixtureDef);
 
         box.delete();
@@ -303,15 +316,15 @@ public class GameObjectFactory {
         fixtureDef.delete();
     }
 
-    private static void setFurniturePhysics(PhysicsComponent physics, PhysicsProperties properties) {
+    private static void setFurniturePhysics(PhysicsComponent physics, PhysicsProp prop) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setLinearDamping(1f);
 
         bodyDef.setPosition(new Vec2(
-                fromBufferToMetersX(properties.positionX),
-                fromBufferToMetersY(properties.positionY))
+                fromBufferToMetersX(prop.posX),
+                fromBufferToMetersY(prop.posY))
         );
-        bodyDef.setType(properties.type);
+        bodyDef.setType(prop.type);
         physics.setBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
@@ -319,29 +332,28 @@ public class GameObjectFactory {
         box.setAsBox(
                 toMetersXLength(physics.dimX)/2,
                 toMetersYLength(physics.dimY)/2,
-                properties.phyCenterX,
-                properties.phyCenterY,
+                prop.phyCenterX,
+                prop.phyCenterY,
                 0);
         fixtureDef.setShape(box);
-        fixtureDef.setFriction(properties.friction);
-        fixtureDef.setDensity(properties.density);
+        fixtureDef.setFriction(prop.friction);
+        fixtureDef.setDensity(prop.density);
         physics.addFixture(fixtureDef);
         box.delete();
         bodyDef.delete();
         fixtureDef.delete();
     }
 
-    private static void setFurnitureOnGameGrid(GameGrid grid, PhysicsProperties properties, float dimX,
-                                               float dimY) {
-        Set<Node> nodes = grid.getNodes(properties.positionX, properties.positionY, (int)dimX, (int)dimY);
+    private static void setFurnitureOnGameGrid(GameGrid grid, PhysicsProp prop, float dimX, float dimY) {
+        Set<Node> nodes = grid.getNodes(prop.posX, prop.posY, (int)dimX, (int)dimY);
 
         int cost = 0;
-        switch (properties.type){
+        switch (prop.type){
             case staticBody:
                 cost = 10000000;
                 break;
             case dynamicBody:
-                cost = 10000*(int)properties.density;
+                cost = 10000*(int)prop.density;
                 break;
         }
 

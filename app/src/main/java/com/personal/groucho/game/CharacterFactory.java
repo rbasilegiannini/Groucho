@@ -18,7 +18,7 @@ import static com.personal.groucho.game.constants.Character.skeletonPower;
 import static com.personal.groucho.game.constants.Character.skeletonSpeed;
 
 public class CharacterFactory {
-    public static class CharacterProperties {
+    public static class CharacterProp {
         public int health = 0;
         public int power = 0;
         public float speed = 0;
@@ -32,8 +32,8 @@ public class CharacterFactory {
         public Spritesheet sheetDeath = null;
     }
 
-    public static CharacterProperties getSkeleton() {
-        CharacterProperties skeleton = new CharacterProperties();
+    public static CharacterProp getSkeleton() {
+        CharacterProp skeleton = new CharacterProp();
 
         skeleton.health = skeletonHealth;
         skeleton.speed = skeletonSpeed;
@@ -46,8 +46,8 @@ public class CharacterFactory {
         return skeleton;
     }
 
-    public static CharacterProperties getGroucho(){
-        CharacterProperties groucho = new CharacterProperties();
+    public static CharacterProp getGroucho(){
+        CharacterProp groucho = new CharacterProp();
 
         groucho.health = grouchoHealth;
         groucho.power = grouchoPower;

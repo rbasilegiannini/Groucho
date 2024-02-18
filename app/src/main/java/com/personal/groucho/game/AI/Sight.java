@@ -1,7 +1,7 @@
 package com.personal.groucho.game.AI;
 
 import static com.personal.groucho.game.Utils.isInTriangle;
-import static com.personal.groucho.game.constants.CharacterProperties.enemyFovInRad;
+import static com.personal.groucho.game.constants.Character.enemyFovInRad;
 import static com.personal.groucho.game.constants.System.distSight;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;

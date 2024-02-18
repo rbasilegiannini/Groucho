@@ -4,7 +4,7 @@ import static com.personal.groucho.game.Graphics.bufferHeight;
 import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.GameWorld.physicalSize;
 import static com.personal.groucho.game.GameWorld.screenSize;
-import static com.personal.groucho.game.constants.CharacterProperties.enemyFovInRad;
+import static com.personal.groucho.game.constants.Character.enemyFovInRad;
 import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
@@ -77,24 +77,24 @@ public class Utils {
     }
 
     public static Orientation directionBetweenGO(GameObject go, GameObject goToTurn) {
-        PositionComponent _posGO = (PositionComponent) go.getComponent(POSITION);
-        PositionComponent _posGOToTurn = (PositionComponent) goToTurn.getComponent(POSITION);
+        PositionComponent posGO = (PositionComponent) go.getComponent(POSITION);
+        PositionComponent posGOToTurn = (PositionComponent) goToTurn.getComponent(POSITION);
 
-        if (_posGO.posY > _posGOToTurn.posY - characterScaleFactor*characterDimY &&
-            _posGO.posY < _posGOToTurn.posY + characterScaleFactor*characterDimY
+        if (posGO.posY > posGOToTurn.posY - characterScaleFactor*characterDimY &&
+            posGO.posY < posGOToTurn.posY + characterScaleFactor*characterDimY
         ) {
-            if (_posGO.posX < _posGOToTurn.posX) {
+            if (posGO.posX < posGOToTurn.posX) {
                 return LEFT;
             }
-            if (_posGO.posX > _posGOToTurn.posX) {
+            if (posGO.posX > posGOToTurn.posX) {
                 return RIGHT;
             }
         }
         else {
-            if (_posGO.posY > _posGOToTurn.posY) {
+            if (posGO.posY > posGOToTurn.posY) {
                 return DOWN;
             }
-            if (_posGO.posY < _posGOToTurn.posY) {
+            if (posGO.posY < posGOToTurn.posY) {
                 return UP;
             }
         }
