@@ -13,16 +13,14 @@ import com.personal.groucho.game.Spritesheet;
 
 public class SpriteDrawableComponent extends DrawableComponent {
     private Spritesheet currentSpritesheet;
-    private final Spritesheet deathSpritesheet;
     private final Paint spriteColor;
     private PositionComponent posComponent = null;
     private int currentAnim = 0, currentStep = 0;
     private long currentTimeMillis = 0,lastTimestamp = 0, delay = 0;
 
 
-    public SpriteDrawableComponent (Spritesheet currentSpritesheet, Spritesheet deathSpritesheet) {
+    public SpriteDrawableComponent (Spritesheet currentSpritesheet) {
         this.currentSpritesheet = currentSpritesheet;
-        this.deathSpritesheet = deathSpritesheet;
 
         spriteColor = new Paint();
         spriteColor.setColorFilter(new PorterDuffColorFilter(Color.WHITE, MULTIPLY));
@@ -33,10 +31,6 @@ public class SpriteDrawableComponent extends DrawableComponent {
         currentAnim = anim;
     }
     public void setStep(int step) { currentStep = step;}
-    public void setDeathSpritesheet() {
-        currentSpritesheet = deathSpritesheet;
-        currentAnim = 0;
-    }
 
     public void updateColorFilter(int currentHealth, int maxHealth) {
         int greenAndBlue = (int)(255 * (float) currentHealth /maxHealth);

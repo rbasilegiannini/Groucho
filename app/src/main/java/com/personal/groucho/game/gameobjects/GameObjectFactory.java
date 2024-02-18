@@ -1,17 +1,18 @@
 package com.personal.groucho.game.gameobjects;
 
+import static com.personal.groucho.game.CharacterFactory.getGroucho;
+import static com.personal.groucho.game.CharacterFactory.getSkeleton;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.constants.System.characterDimX;
 import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
-import static com.personal.groucho.game.constants.CharacterProperties.grouchoHealth;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.toMetersXLength;
 import static com.personal.groucho.game.Utils.toMetersYLength;
-import static com.personal.groucho.game.assets.Spritesheets.grouchoDeath;
 import static com.personal.groucho.game.assets.Spritesheets.grouchoWalk;
 import static com.personal.groucho.game.assets.Textures.health;
+import static com.personal.groucho.game.gameobjects.Role.ENEMY;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -26,14 +27,15 @@ import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.pathfinding.Node;
-import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.controller.Orientation;
+import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.BoxDrawableComponent;
+import com.personal.groucho.game.gameobjects.components.CharacterComponent;
 import com.personal.groucho.game.gameobjects.components.ControllableComponent;
 import com.personal.groucho.game.gameobjects.components.LightComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
@@ -74,11 +76,12 @@ public class GameObjectFactory {
         GameObject gameObject = new GameObject("Groucho", Role.PLAYER);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
-        gameObject.addComponent(new SpriteDrawableComponent(grouchoWalk, grouchoDeath));
+        gameObject.addComponent(new SpriteDrawableComponent(grouchoWalk));
         gameObject.addComponent(new ControllableComponent(gameworld));
         gameObject.addComponent(new PhysicsComponent(gameworld.getWorld(),
                 characterScaleFactor*characterDimX, characterScaleFactor*characterDimY));
-        gameObject.addComponent(new AliveComponent(grouchoHealth));
+        gameObject.addComponent(new AliveComponent());
+        gameObject.addComponent(new CharacterComponent(getGroucho()));
         gameObject.addComponent(new LightComponent(gameworld.getBuffer()));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
@@ -94,23 +97,26 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeEnemy(int posX, int posY, Orientation orientation, int health, Spritesheet idle,
-                                       StateName originalState, Spritesheet death, GameWorld gameWorld) {
-        GameObject gameObject = new GameObject("Enemy", Role.ENEMY);
+    public static GameObject makeEnemy(
+            int posX, int posY, Orientation orientation,Spritesheet idle,
+            StateName state, GameWorld gameWorld) {
+
+        GameObject gameObject = new GameObject("Enemy", ENEMY);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(),
                 characterScaleFactor*characterDimX, characterScaleFactor*characterDimY));
-        gameObject.addComponent(new SpriteDrawableComponent(idle, death));
-        gameObject.addComponent(new AliveComponent(health));
-        gameObject.addComponent(new AIComponent(gameWorld, originalState));
+        gameObject.addComponent(new SpriteDrawableComponent(idle));
+        gameObject.addComponent(new AliveComponent());
+        gameObject.addComponent(new CharacterComponent(getSkeleton()));
+        gameObject.addComponent(new AIComponent(gameWorld, state));
 
         PositionComponent position = (PositionComponent) gameObject.getComponent(ComponentType.POSITION);
         position.setOrientation(orientation);
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(ComponentType.PHYSICS);
-        PhysicsProperties properties = new PhysicsProperties(posX, posY,0f, 1f,
+        PhysicsProperties phyProperties = new PhysicsProperties(posX, posY,0f, 1f,
                 100f, 1f, BodyType.dynamicBody);
-        setCharacterPhysics(physics, properties);
+        setCharacterPhysics(physics, phyProperties);
 
         return gameObject;
     }

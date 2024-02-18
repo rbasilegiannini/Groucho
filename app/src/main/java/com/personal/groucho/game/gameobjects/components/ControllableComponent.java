@@ -2,20 +2,16 @@ package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.Events.turnOffLightEvent;
 import static com.personal.groucho.game.Events.turnOnLightEvent;
-import static com.personal.groucho.game.assets.Spritesheets.grouchoAim;
-import static com.personal.groucho.game.assets.Spritesheets.grouchoFire;
-import static com.personal.groucho.game.assets.Spritesheets.grouchoIdle;
 import static com.personal.groucho.game.constants.System.characterDimX;
 import static com.personal.groucho.game.constants.System.characterDimY;
-import static com.personal.groucho.game.constants.CharacterProperties.grouchoSpeed;
 import static com.personal.groucho.game.constants.Environment.maxLightIntensity;
 import static com.personal.groucho.game.constants.Environment.minLightIntensity;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.loading;
-import static com.personal.groucho.game.assets.Spritesheets.grouchoWalk;
-import static com.personal.groucho.game.controller.states.NameState.AIMING;
-import static com.personal.groucho.game.controller.states.NameState.WALKING;
+import static com.personal.groucho.game.controller.states.StateName.AIMING;
+import static com.personal.groucho.game.controller.states.StateName.WALKING;
+import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
 import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
@@ -33,7 +29,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     private final Controller controller;
     private final GameWorld gameworld;
     private LightComponent lightComponent = null;
-
+    private CharacterComponent character = null;
     private boolean playShotAnimation = false;
     private boolean playLoadingSound = true;
 
@@ -46,9 +42,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     public ComponentType type() {return CONTROLLABLE;}
 
     public void updatePlayerState() {
-        if (lightComponent == null) {
-            lightComponent = (LightComponent) owner.getComponent(LIGHT);
-        }
+        initComponents();
 
         if (controller.currentState.getName() == WALKING)
             handleWalkingPlayer();
@@ -56,8 +50,23 @@ public class ControllableComponent extends WalkingComponent implements Controlle
             handleAimingPlayer();
 
         if (playShotAnimation) {
-            updateSprite(grouchoFire);
+            updateSprite(character.properties.sheetFire);
             playShotAnimation = false;
+        }
+    }
+
+    private void initComponents() {
+        if (posComponent == null) {
+            posComponent = (PositionComponent) owner.getComponent(POSITION);
+        }
+        if(phyComponent == null) {
+            phyComponent = (PhysicsComponent) owner.getComponent(PHYSICS);
+        }
+        if (lightComponent == null) {
+            lightComponent = (LightComponent) owner.getComponent(LIGHT);
+        }
+        if (character == null) {
+            character = (CharacterComponent) owner.getComponent(CHARACTER);
         }
     }
 
@@ -74,16 +83,16 @@ public class ControllableComponent extends WalkingComponent implements Controlle
 
     private void handleIdlePlayer() {
         playLoadingSound = true;
-        updateSprite(grouchoIdle);
+        updateSprite(character.properties.sheetIdle);
     }
 
     private void handleWalkingPlayer() {
         playLoadingSound = true;
-        walking(grouchoWalk, grouchoSpeed);
+        walking();
     }
 
     private void handleAimingPlayer() {
-        updateSprite(grouchoAim);
+        updateSprite(character.properties.sheetAim);
     }
 
     private void handleLoadingPlayer() {
@@ -91,7 +100,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
             loading.play(0.4f);
             playLoadingSound = false;
         }
-        updateSprite(grouchoAim);
+        updateSprite(character.properties.sheetAim);
     }
 
     private void handleShootingPlayer() {
@@ -104,9 +113,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     }
 
     private void shoot() {
-        if(phyComponent == null) {
-            phyComponent = (PhysicsComponent) owner.getComponent(PHYSICS);
-        }
+        initComponents();
 
         float originX = fromMetersToBufferX(phyComponent.getPosX());
         float originY = fromMetersToBufferY(phyComponent.getPosY());
@@ -140,9 +147,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
 
     @Override
     public void update(ControllerState currentState) {
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
+        initComponents();
 
         posComponent.setOrientation(controller.orientation);
 

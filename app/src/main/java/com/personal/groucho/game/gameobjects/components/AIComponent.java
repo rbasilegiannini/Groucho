@@ -2,12 +2,7 @@ package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.Events.enemyHitPlayerEvent;
 import static com.personal.groucho.game.Utils.directionBetweenGO;
-import static com.personal.groucho.game.constants.CharacterProperties.skeletonPower;
 import static com.personal.groucho.game.constants.System.cellSize;
-import static com.personal.groucho.game.constants.CharacterProperties.skeletonSpeed;
-import static com.personal.groucho.game.assets.Spritesheets.skeletonHurt;
-import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
-import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;
 import static com.personal.groucho.game.constants.System.characterDimX;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
 import static com.personal.groucho.game.constants.System.maxInvisiblePlayer;
@@ -17,6 +12,7 @@ import static com.personal.groucho.game.controller.Orientation.RIGHT;
 import static com.personal.groucho.game.controller.Orientation.UP;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
+import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
 import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
@@ -34,10 +30,9 @@ import com.personal.groucho.game.AI.states.Attack;
 import com.personal.groucho.game.AI.states.Engage;
 import com.personal.groucho.game.AI.states.Idle;
 import com.personal.groucho.game.AI.states.Patrol;
-import com.personal.groucho.game.AI.states.StateName;
 import com.personal.groucho.game.GameWorld;
-import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.controller.Orientation;
+import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.AI.Sight;
 import com.personal.groucho.game.gameobjects.GameObject;
@@ -68,10 +63,14 @@ public class AIComponent extends WalkingComponent {
     private boolean isPatrol = false;
     private long lastSeenMills;
 
+
     // To avoid further allocations
     private List<Action> actions;
     private List<Node> currentPath;
     private AliveComponent playerAliveComponent = null;
+
+    // Character attributes
+    private CharacterComponent character = null;
 
 
     public AIComponent(GameWorld gameWorld, StateName currentState) {
@@ -104,9 +103,13 @@ public class AIComponent extends WalkingComponent {
     public ComponentType type() { return AI; }
 
     public void update(GameWorld gameWorld) {
-        if (sight == null) {
-            init(gameWorld);
-        }
+        init(gameWorld);
+
+        originalPosOnGrid = grid.getNode(
+                posComponent.getPosXOnGrid(),
+                posComponent.getPosYOnGrid()
+        );
+        originalOrientation = posComponent.orientation;
 
         actions = fsm.getActions();
         for (Action action : actions) {
@@ -121,18 +124,16 @@ public class AIComponent extends WalkingComponent {
         if (posComponent == null) {
             posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
-
-        originalPosOnGrid = grid.getNode(
-                posComponent.getPosXOnGrid(),
-                posComponent.getPosYOnGrid()
-        );
-        originalOrientation = posComponent.orientation;
-
-        sight = new Sight(
-                this,
-                gameWorld.getWorld(),
-                new Vec2(posComponent.posX, posComponent.posY),
-                posComponent.orientation);
+        if (character == null) {
+            character = (CharacterComponent) owner.getComponent(CHARACTER);
+        }
+        if (sight == null) {
+            sight = new Sight(
+                    this,
+                    gameWorld.getWorld(),
+                    new Vec2(posComponent.posX, posComponent.posY),
+                    posComponent.orientation);
+        }
     }
 
     public Sight getSight() {return sight;}
@@ -143,10 +144,10 @@ public class AIComponent extends WalkingComponent {
     // Idle actions
     public void entryIdleAction() {
         if (!currentPath.isEmpty() || !isNodeReached) {
-            updateSprite(skeletonWalk);
+            updateSprite(character.properties.sheetWalk);
         }
         else {
-            updateSprite(skeletonIdle);
+            updateSprite(character.properties.sheetIdle);
         }
     }
 
@@ -156,7 +157,7 @@ public class AIComponent extends WalkingComponent {
         else if (!isIdle){
             posComponent.setOrientation(originalOrientation);
             sight.setNewOrientation(originalOrientation);
-            updateSprite(skeletonIdle);
+            updateSprite(character.properties.sheetIdle);
             isIdle = true;
         }
     }
@@ -167,7 +168,7 @@ public class AIComponent extends WalkingComponent {
 
     // Patrol actions
     public void entryPatrolAction() {
-        updateSprite(skeletonWalk);
+        updateSprite(character.properties.sheetWalk);
         posComponent.setOrientation(posComponent.orientation.getOpposite());
     }
 
@@ -198,7 +199,7 @@ public class AIComponent extends WalkingComponent {
             posComponent.setOrientation(posComponent.orientation.getOpposite());
         }
         currentSteps++;
-        walking(skeletonWalk, skeletonSpeed);
+        walking();
     }
 
     // Investigate actions
@@ -282,7 +283,7 @@ public class AIComponent extends WalkingComponent {
     public void entryAttackAction() {
         lastHitMillis = System.currentTimeMillis();
         sight.setNewOrientation(posComponent.orientation);
-        updateSprite(skeletonHurt);
+        updateSprite(character.properties.sheetHurt);
     }
 
     public void activeAttackAction() {
@@ -292,10 +293,11 @@ public class AIComponent extends WalkingComponent {
         isPlayerReached = isAPlayerNeighbor();
 
         if (!gameWorld.isGameOver() && playerAliveComponent.currentStatus != DEAD) {
-            long delay = skeletonHurt.getDelay(0) * skeletonHurt.getLength(0);
+            long delay =
+                    character.properties.sheetHurt.getDelay(0) * character.properties.sheetHurt.getLength(0);
             if (isPlayerReached && System.currentTimeMillis() - lastHitMillis > delay) {
                 updateDirection(directionBetweenGO(gameWorld.getPlayerGO(), (GameObject)owner));
-                enemyHitPlayerEvent(playerAliveComponent, skeletonPower);
+                enemyHitPlayerEvent(playerAliveComponent, character.properties.power);
                 lastHitMillis = System.currentTimeMillis();
             }
         }
@@ -376,7 +378,7 @@ public class AIComponent extends WalkingComponent {
         if (startX > targetPosX) {
             posComponent.setOrientation(LEFT);
         }
-        walking(skeletonWalk, skeletonSpeed);
+        walking();
     }
 
     private void walkingToYCoordinate(int startY, int targetPosY){
@@ -386,12 +388,12 @@ public class AIComponent extends WalkingComponent {
         if (startY > targetPosY) {
             posComponent.setOrientation(UP);
         }
-        walking(skeletonWalk, skeletonSpeed);
+        walking();
     }
 
     @Override
-    protected void walking(Spritesheet sheet, float speed) {
-        super.walking(sheet, speed);
+    protected void walking() {
+        super.walking();
         sight.updateSightPosition(posComponent.posX, posComponent.posY);
         sight.setNewOrientation(posComponent.orientation);
     }

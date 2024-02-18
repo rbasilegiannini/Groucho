@@ -1,21 +1,22 @@
 package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
+import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
 import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
+import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.Status;
 
 public class AliveComponent extends Component {
-    private final int maxHealth;
+    private int maxHealth;
     private int currentHealth;
     public Status currentStatus;
     private SpriteDrawableComponent sprite = null;
+    private CharacterComponent character = null;
 
-    public AliveComponent (int health) {
-        maxHealth = health;
-        currentHealth = health;
+    public AliveComponent() {
         currentStatus = Status.ALIVE;
     }
 
@@ -23,6 +24,12 @@ public class AliveComponent extends Component {
     public ComponentType type() {return ALIVE;}
 
     public void damage(int power) {
+        if (character == null) {
+            character = (CharacterComponent) owner.getComponent(CHARACTER);
+            maxHealth = character.properties.health;
+            currentHealth = character.properties.health;
+        }
+
         currentHealth -= power;
 
         if (currentHealth <= 0) {
@@ -33,6 +40,12 @@ public class AliveComponent extends Component {
     }
 
     public void heal(int medicalKit) {
+        if (character == null) {
+            character = (CharacterComponent) owner.getComponent(CHARACTER);
+            maxHealth = character.properties.health;
+            currentHealth = character.properties.health;
+        }
+
         if (currentHealth+medicalKit <= maxHealth)
             currentHealth += medicalKit;
         else
@@ -41,17 +54,23 @@ public class AliveComponent extends Component {
     }
 
     private void die() {
-        currentStatus = Status.DEAD;
+        if (character == null) {
+            character = (CharacterComponent) owner.getComponent(CHARACTER);
+        }
+
+        currentStatus = DEAD;
 
         if (sprite == null) {
             Component component = owner.getComponent(DRAWABLE);
             if (component != null) {
                 sprite = (SpriteDrawableComponent) component;
-                sprite.setDeathSpritesheet();
+                sprite.setCurrentSpritesheet(character.properties.sheetDeath);
+                sprite.setAnim(0);
             }
         }
         else {
-            sprite.setDeathSpritesheet();
+            sprite.setCurrentSpritesheet(character.properties.sheetDeath);
+            sprite.setAnim(0);
         }
     }
 
