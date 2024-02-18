@@ -7,5 +7,6 @@ public enum ComponentType {
     POSITION,
     CONTROLLABLE,
     LIGHT,
+    CHARACTER,
     ALIVE
 }
