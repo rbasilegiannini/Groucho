@@ -19,6 +19,7 @@ import java.util.List;
 public abstract class Level {
 
     protected final GameWorld gameWorld;
+    protected final List<GameObject> gameObjects = new ArrayList<>();
     protected final GameGrid grid;
     protected final Rect surface;
     protected final Paint floorPaint;

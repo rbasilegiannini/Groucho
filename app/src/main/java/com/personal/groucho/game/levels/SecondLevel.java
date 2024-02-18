@@ -30,14 +30,6 @@ public class SecondLevel extends Level {
     @Override
     public void init() {
         super.init();
-
-        // Set furniture
-        gameWorld.addGameObject(GameObjectFactory.
-                makeWall((9 * cellSize), (2 * cellSize) - cellSize / 2,
-                        cellSize, 4 * cellSize - characterScaleFactor * characterDimY,
-                        gameWorld)
-        );
-
     }
 
     @Override
