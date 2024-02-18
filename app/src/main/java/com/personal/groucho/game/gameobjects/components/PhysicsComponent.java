@@ -4,8 +4,6 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
-import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
-import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
@@ -77,7 +75,21 @@ public class PhysicsComponent extends Component {
         posComponent.setPosY((int) fromMetersToBufferY(body.getPositionY()));
     }
 
-    public void updatePosX(float  increase) {
+    public void setPosX(int posX) {
+        initComponents();
+
+        body.setTransform(fromBufferToMetersX(posX), body.getPositionY(), 0);
+        posComponent.setPosX(posX);
+    }
+
+    public void setPosY(int posY) {
+        initComponents();
+
+        body.setTransform(body.getPositionX(), fromBufferToMetersY(posY), 0);
+        posComponent.setPosY(posY);
+    }
+
+    public void updatePosX(float increase) {
         initComponents();
 
         body.setTransform(body.getPositionX() + increase, body.getPositionY(), 0);

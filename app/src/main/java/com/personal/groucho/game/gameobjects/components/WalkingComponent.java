@@ -1,5 +1,6 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.Utils.toMetersXLength;
 import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
 import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
@@ -38,8 +39,8 @@ public abstract class WalkingComponent extends Component {
                 break;
         }
         updatePosition(
-                character.properties.speed * increaseX,
-                character.properties.speed * increaseY);
+                toMetersXLength(character.properties.speed) * increaseX,
+                toMetersXLength(character.properties.speed) * increaseY);
         updateSprite(character.properties.sheetWalk);
     }
 

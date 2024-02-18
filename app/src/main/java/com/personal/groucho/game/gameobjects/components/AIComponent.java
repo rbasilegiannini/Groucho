@@ -17,8 +17,13 @@ import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
+
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.AI.Action;
@@ -359,11 +364,11 @@ public class AIComponent extends WalkingComponent {
                 posComponent.getPosYOnGrid()
         );
 
-        if (posOnGrid.posX != currentNode.posX) {
-            walkingToXCoordinate(posOnGrid.posX, currentNode.posX);
+        if (posComponent.posX != (currentNode.posX*cellSize)+0.5*cellSize) {
+            walkingToXCoordinate(posComponent.posX, (int)((currentNode.posX*cellSize)+0.5*cellSize));
         }
-        else if (posOnGrid.posY != currentNode.posY) {
-            walkingToYCoordinate(posOnGrid.posY, currentNode.posY);
+        else if (posComponent.posY != (currentNode.posY*cellSize)+0.5*cellSize) {
+            walkingToYCoordinate(posComponent.posY, (int)((currentNode.posY*cellSize)+0.5*cellSize));
         }
 
         if (posOnGrid.equal(currentNode)) {
@@ -373,6 +378,11 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void walkingToXCoordinate(int startX, int targetPosX){
+        if (abs(startX - targetPosX) < abs(character.properties.speed*increaseX)) {
+            phyComponent.setPosX(targetPosX);
+            return;
+        }
+
         if (startX < targetPosX) {
             posComponent.setOrientation(RIGHT);
         }
@@ -383,6 +393,11 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void walkingToYCoordinate(int startY, int targetPosY){
+        if (abs(startY - targetPosY) < abs(character.properties.speed*increaseY)) {
+            phyComponent.setPosY(targetPosY);
+            return;
+        }
+
         if (startY < targetPosY) {
             posComponent.setOrientation(DOWN);
         }
