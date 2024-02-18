@@ -405,4 +405,17 @@ public class AIComponent extends WalkingComponent {
                 owner.getComponent(DRAWABLE)).setAnim(posComponent.orientation.getValue());
         sight.setNewOrientation(posComponent.orientation);
     }
+
+    public void drawDebugPath(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(Color.BLUE);
+
+        int startX, startY;
+        for (Node node : currentPath) {
+            startX = node.posX*cellSize;
+            startY = node.posY*cellSize;
+            canvas.drawCircle(startX, startY, 20, paint);
+        }
+    }
 }

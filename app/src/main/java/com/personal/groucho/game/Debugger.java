@@ -45,10 +45,12 @@ public class Debugger {
     }
 
     public void draw(Canvas canvas) {
-        for (Sight sight : sights) {
-            sight.drawDebugSight(canvas);
-        }
         grid.drawDebugGrid(canvas);
+
+        for (AIComponent aiComponent : gameWorld.aiComponents) {
+            aiComponent.getSight().drawDebugSight(canvas);
+            aiComponent.drawDebugPath(canvas);
+        }
 
         drawPositions(canvas);
         drawColliders(canvas);
