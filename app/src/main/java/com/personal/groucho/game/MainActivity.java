@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 
@@ -16,6 +21,7 @@ import com.personal.groucho.badlogic.androidgames.framework.Audio;
 import com.personal.groucho.game.assets.Sounds;
 import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.assets.Textures;
+import com.personal.groucho.game.menu.MenuView;
 
 public class MainActivity extends Activity {
 
@@ -37,8 +43,9 @@ public class MainActivity extends Activity {
         GameWorld gameWorld = buildGameWorld();
 
         // View
+        setContentView(R.layout.menu);
         renderView = new AndroidFastRenderView(this, gameWorld);
-        setContentView(renderView);
+        handleMainMenu();
 
         // Touch
         touch = new MultiTouchHandler(renderView, 1, 1);
@@ -47,6 +54,15 @@ public class MainActivity extends Activity {
         // Sound
         audio = new AndroidAudio(this);
         Sounds.init(audio);
+    }
+
+    private void handleMainMenu() {
+        ImageButton newGameButton = findViewById(R.id.newGame);
+        ImageButton optionsButton = findViewById(R.id.options);
+        ImageButton exitButton = findViewById(R.id.exit);
+        newGameButton.setOnClickListener(v -> setContentView(renderView));
+//        optionsButton.setOnClickListener(v -> setContentView(R.layout.options));
+        exitButton.setOnClickListener(v -> finish());
     }
 
     @NonNull
@@ -71,6 +87,13 @@ public class MainActivity extends Activity {
         Spritesheets.load(getResources());
         Textures.load(getResources());
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.layout.menu, menu);
+//        return true;
+//    }
 
     @Override
     public void onPause() {
