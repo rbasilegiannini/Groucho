@@ -25,6 +25,7 @@ public class Controller implements ControllerSubject {
     private final DPad dpad;
     private final Trigger trigger;
     private final Bulb bulb;
+    private final Pause pause;
     private float offsetX, offsetY;
     private float touchX, touchY;
     private int dpadPointer, triggerPointer;
@@ -37,6 +38,7 @@ public class Controller implements ControllerSubject {
         dpad = new DPad(controllerCenterX - (float) 0.40*bufferWidth, controllerCenterY);
         trigger = new Trigger(controllerCenterX + (float) bufferWidth /2, controllerCenterY);
         bulb = new Bulb(controllerCenterX + (float) bufferWidth/2, controllerCenterY);
+        pause = new Pause(controllerCenterX - (float) 0.40*bufferWidth, controllerCenterY);
 
         triggerPointer = -1;
         dpadPointer = -1;
@@ -74,6 +76,7 @@ public class Controller implements ControllerSubject {
         dpad.draw(canvas);
         trigger.draw(canvas);
         bulb.draw(canvas);
+        pause.draw(canvas);
     }
 
     public void setAimColor(int color) {trigger.setAimColor(color);}
@@ -87,6 +90,7 @@ public class Controller implements ControllerSubject {
         dpad.updateWidgetPosition(increaseX, increaseY);
         trigger.updateWidgetPosition(increaseX, increaseY);
         bulb.updateWidgetPosition(increaseX, increaseY);
+        pause.updateWidgetPosition(increaseX, increaseY);
     }
 
     // Handle touch events

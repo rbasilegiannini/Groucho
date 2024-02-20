@@ -1,36 +1,32 @@
 package com.personal.groucho.game.controller;
 
 import static com.personal.groucho.game.Utils.isInCircle;
-import static com.personal.groucho.game.assets.Textures.lightBulb;
+import static com.personal.groucho.game.assets.Textures.pause;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class Bulb extends Widget{
+public class Pause extends Widget{
     private float posX, posY;
     private final float distanceSqr;
     private final Rect src, dest;
-    private final int minAlpha, maxAlpha;
     private final Paint paint;
-    private boolean turnOn;
 
-    public Bulb(float cx, float cy){
-        super(cx, cy);
+    protected Pause(float centerX, float centerY) {
+        super(centerX, centerY);
+
         float distance = 50;
         distanceSqr = (float) Math.pow(distance, 2);
-        turnOn = false;
 
-        posX = (float) (centerX - 300 + 0.75*distance);
-        posY = centerY - 500;
+        posX = centerX - 70;
+        posY = centerY + 350;
 
-        src = new Rect(0, 0, lightBulb.getWidth(), lightBulb.getHeight());
+        src = new Rect(0, 0, pause.getWidth(), pause.getHeight());
         dest = new Rect();
 
-        minAlpha = 75;
-        maxAlpha = 255;
         paint = new Paint();
-        paint.setAlpha(minAlpha);
+        paint.setAlpha(150);
     }
 
     @Override
@@ -46,23 +42,10 @@ public class Bulb extends Widget{
         dest.right = (int) posX + 128;
         dest.bottom = (int) posY + 128;
 
-        canvas.drawBitmap(lightBulb, src, dest, paint);
+        canvas.drawBitmap(pause, src, dest, paint);
     }
 
-    public boolean switchLight(){
-        if (!turnOn) {
-            turnOn = true;
-            paint.setAlpha(maxAlpha);
-        }
-        else {
-            turnOn = false;
-            paint.setAlpha(minAlpha);
-        }
-
-        return turnOn;
-    }
-
-    public boolean isOnLight(float x, float y) {
+    public boolean isOnPause(float x, float y) {
         return isInCircle(posX +64, posY +64, x, y, distanceSqr);
     }
 }

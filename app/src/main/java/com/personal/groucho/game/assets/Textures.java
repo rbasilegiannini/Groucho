@@ -11,6 +11,7 @@ public class Textures {
     public static Bitmap table;
     public static Bitmap wall;
     public static Bitmap lightBulb;
+    public static Bitmap pause;
     public static Bitmap health;
 
     public static void load(Resources res) {
@@ -18,6 +19,7 @@ public class Textures {
         table = setBitmap(res, R.drawable.table, 128, 124);
         wall = setBitmap(res, R.drawable.wall, 256, 256);
         lightBulb = setBitmap(res, R.drawable.lightbulb, 128, 128);
+        pause =  setBitmap(res, R.drawable.pause, 128, 128);
         health = setBitmap(res, R.drawable.health, 128, 128);
     }
 
