@@ -34,8 +34,9 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
         long startTime = System.nanoTime(), fpsTime = startTime, frameCounter = 0, currentTime;
         float deltaTime, fpsDeltaTime;
         while(running) {
-            if(!holder.getSurface().isValid())
+            if(!holder.getSurface().isValid()) {
                 continue;
+            }
 
             deltaTime = (System.nanoTime()-startTime) / 1000000000.0f;
             currentTime = System.nanoTime();
@@ -47,9 +48,11 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             gameWorld.render();
 
             Canvas canvas = holder.lockCanvas();
-            canvas.getClipBounds(dstRect);
-            canvas.drawBitmap(framebuffer, null, dstRect, null);
-            holder.unlockCanvasAndPost(canvas);
+            if (canvas != null) {
+                canvas.getClipBounds(dstRect);
+                canvas.drawBitmap(framebuffer, null, dstRect, null);
+                holder.unlockCanvasAndPost(canvas);
+            }
 
             // Measure FPS
             frameCounter++;

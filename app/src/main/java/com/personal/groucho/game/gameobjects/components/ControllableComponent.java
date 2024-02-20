@@ -1,5 +1,6 @@
 package com.personal.groucho.game.gameobjects.components;
 
+import static com.personal.groucho.game.Events.pauseEvent;
 import static com.personal.groucho.game.Events.turnOffLightEvent;
 import static com.personal.groucho.game.Events.turnOnLightEvent;
 import static com.personal.groucho.game.constants.System.characterDimX;
@@ -27,14 +28,14 @@ import com.personal.groucho.game.gameobjects.ComponentType;
 public class ControllableComponent extends WalkingComponent implements ControllerObserver {
 
     private final Controller controller;
-    private final GameWorld gameworld;
+    private final GameWorld gameWorld;
     private LightComponent lightComponent = null;
     private CharacterComponent character = null;
     private boolean playShotAnimation = false;
     private boolean playLoadingSound = true;
 
     public ControllableComponent(GameWorld gameworld) {
-        this.gameworld = gameworld;
+        this.gameWorld = gameworld;
         this.controller = gameworld.controller;
     }
 
@@ -70,15 +71,21 @@ public class ControllableComponent extends WalkingComponent implements Controlle
         }
     }
 
-    public void switchLightEvent(boolean isTurnOn) {
+    @Override
+    public void switchLight(boolean isTurnOn) {
         if(isTurnOn) {
             lightComponent.setLightIntensity(maxLightIntensity);
-            turnOnLightEvent(gameworld);
+            turnOnLightEvent(gameWorld);
         }
         else {
             lightComponent.setLightIntensity(minLightIntensity);
-            turnOffLightEvent(gameworld);
+            turnOffLightEvent(gameWorld);
         }
+    }
+
+    @Override
+    public void pressPause() {
+        pauseEvent(gameWorld);
     }
 
     private void handleIdlePlayer() {
@@ -142,7 +149,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
                 endY = originY;
                 break;
         }
-        gameworld.shootEvent(originX, originY, endX, endY);
+        gameWorld.shootEvent(originX, originY, endX, endY);
     }
 
     @Override

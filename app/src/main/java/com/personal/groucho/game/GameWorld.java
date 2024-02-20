@@ -48,7 +48,7 @@ import java.util.List;
 
 public class GameWorld {
     static Box physicalSize, screenSize, currentView;
-    final Activity activity;
+    final MainActivity activity;
     private final Physics physics;
     private final Graphics graphics;
     private Player player;
@@ -63,9 +63,10 @@ public class GameWorld {
     protected final List<AliveComponent> aliveComponents = new ArrayList<>();
     protected final List<LightComponent> lightComponents = new ArrayList<>();
     private TouchHandler touchHandler;
+    private boolean pause = false;
     private boolean gameOver = false;
 
-    public GameWorld(Box physicalSize, Box screenSize, Activity newActivity) {
+    public GameWorld(Box physicalSize, Box screenSize, MainActivity newActivity) {
         GameWorld.physicalSize = physicalSize;
         GameWorld.screenSize = screenSize;
         currentView = physicalSize;
@@ -136,40 +137,45 @@ public class GameWorld {
     }
 
     public synchronized void processInputs(){
-
-        for (Input.TouchEvent event: touchHandler.getTouchEvents()) {
-            if (!gameOver) {
-                controller.consumeTouchEvent(event);
-            }
+        if (!pause) {
+            for (Input.TouchEvent event : touchHandler.getTouchEvents()) {
+                if (!gameOver) {
+                    controller.consumeTouchEvent(event);
+                }
 //            else {
 //                menu.consumeTouchEvent(event);
 //            }
+            }
         }
     }
 
     public synchronized void update(float elapsedTime) {
-        physics.update(elapsedTime);
+        if (!pause) {
+            physics.update(elapsedTime);
 
-        if (!gameOver) {
-            for (AliveComponent aliveComponent : aliveComponents) {
-                if (aliveComponent.currentStatus == DEAD) {
-                    handleDeath((GameObject)aliveComponent.getOwner());
+            if (!gameOver) {
+                for (AliveComponent aliveComponent : aliveComponents) {
+                    if (aliveComponent.currentStatus == DEAD) {
+                        handleDeath((GameObject) aliveComponent.getOwner());
+                    }
                 }
             }
-        }
 
-        player.update(graphics.canvas, controller);
+            player.update(graphics.canvas, controller);
 
-        for (AIComponent aiComponent : aiComponents) {
-            aiComponent.update(this);
+            for (AIComponent aiComponent : aiComponents) {
+                aiComponent.update(this);
+            }
         }
     }
 
     public synchronized void render() {
-        graphics.render();
+        if (!pause) {
+            graphics.render();
 
-        if (debugMode) {
-            getDebugger(this).draw(graphics.canvas);
+            if (debugMode) {
+                getDebugger(this).draw(graphics.canvas);
+            }
         }
     }
 
@@ -257,6 +263,18 @@ public class GameWorld {
         }
     }
 
+    public void resume() {
+        pause = false;
+    }
+
+    public void pause() {
+        pause = true;
+    }
+
+    protected void finalize() {
+        physics.finalize();
+    }
+
     public void GameOver() {
         this.gameOver = true;
 
@@ -267,5 +285,4 @@ public class GameWorld {
     }
 
     public boolean isGameOver() {return gameOver;}
-
 }

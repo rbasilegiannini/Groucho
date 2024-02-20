@@ -4,5 +4,6 @@ import com.personal.groucho.game.controller.states.ControllerState;
 
 public interface ControllerObserver {
     void update(ControllerState currentState);
-    void switchLightEvent(boolean isTurnOn);
+    void switchLight(boolean isTurnOn);
+    void pressPause();
 }

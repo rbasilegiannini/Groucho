@@ -193,4 +193,8 @@ public class Physics {
             playerCollideWithEnemyEvent(gameWorld, enemy);
         }
     }
+
+    protected void finalize() {
+        world.delete();
+    }
 }

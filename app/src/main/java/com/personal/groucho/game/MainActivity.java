@@ -19,7 +19,7 @@ import com.personal.groucho.game.assets.Textures;
 
 public class MainActivity extends Activity {
 
-    private AndroidFastRenderView renderView;
+    protected AndroidFastRenderView renderView;
     private Audio audio;
     private MultiTouchHandler touch;
 
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 
         // View
         renderView = new AndroidFastRenderView(this, gameWorld);
-        MenuHandler.handleMainMenu(this, renderView);
+        MenuHandler.handleMainMenu(gameWorld);
 
         // Touch
         touch = new MultiTouchHandler(renderView, 1, 1);

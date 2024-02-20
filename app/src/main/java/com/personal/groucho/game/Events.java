@@ -131,4 +131,9 @@ public class Events {
         brightness = 1f;
         gameWorld.GameOver();
     }
+
+    public static void pauseEvent(GameWorld gameWorld) {
+        gameWorld.pause();
+        MenuHandler.handlePauseMenu(gameWorld);
+    }
 }

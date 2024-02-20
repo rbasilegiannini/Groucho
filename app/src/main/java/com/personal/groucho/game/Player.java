@@ -38,11 +38,14 @@ public class Player {
 
     public void update(Canvas canvas, Controller controller){
         ctrlComponent.updatePlayerState();
-
         if (posComponent.hasChangedPosition()) {
             updateCamera(canvas, controller);
         }
 
+        if (fpsCounter) {
+            FPSCounter.getInstance().posX = posX - (float) Graphics.bufferWidth /2;
+            FPSCounter.getInstance().posY = posY - (float) Graphics.bufferHeight /2+50;
+        }
     }
 
     private void updateCamera(Canvas canvas, Controller controller) {
@@ -54,10 +57,6 @@ public class Player {
 
         posX = posComponent.posX;
         posY =  posComponent.posY;
-
-        if (fpsCounter) {
-            FPSCounter.getInstance().updateWidgetPosition(-cameraX, -cameraY);
-        }
     }
 
     public void setPlayerVisibility(boolean visibility) {isPlayerVisible = visibility;}

@@ -112,26 +112,40 @@ public class Controller implements ControllerSubject {
         touchX = fromScreenToBufferX(event.x) + offsetX;
         touchY = fromScreenToBufferY(event.y) + offsetY;
 
-        if (bulb.isOnLight(touchX, touchY))
+        if (pause.isOnPause(touchX, touchY)) {
+            handlePauseTouchDown();
+        }
+        if (bulb.isOnLight(touchX, touchY)) {
             handleLightTouchDown();
+        }
 
-        if (dpad.isOnUp(touchX, touchY))
+        if (dpad.isOnUp(touchX, touchY)) {
             handleDPadTouchDown(event.pointer, UP);
-        else if (dpad.isOnDown(touchX, touchY))
+        }
+        else if (dpad.isOnDown(touchX, touchY)) {
             handleDPadTouchDown(event.pointer, DOWN);
-        else if (dpad.isOnLeft(touchX, touchY))
+        }
+        else if (dpad.isOnLeft(touchX, touchY)) {
             handleDPadTouchDown(event.pointer, LEFT);
-        else if (dpad.isOnRight(touchX, touchY))
+        }
+        else if (dpad.isOnRight(touchX, touchY)) {
             handleDPadTouchDown(event.pointer, RIGHT);
+        }
         else if(trigger.isOnTrigger(touchX,touchY)) {
             triggerPointer = event.pointer;
             setCurrentState(Aiming.getInstance(this));
         }
     }
 
+    private void handlePauseTouchDown() {
+        for (ControllerObserver observer : controllerObservers) {
+            observer.pressPause();
+        }
+    }
+
     private void handleLightTouchDown() {
         for (ControllerObserver observer : controllerObservers) {
-            observer.switchLightEvent(bulb.switchLight());
+            observer.switchLight(bulb.switchLight());
         }
     }
 
@@ -157,14 +171,18 @@ public class Controller implements ControllerSubject {
         touchY = fromScreenToBufferY(event.y) + offsetY;
 
         if (event.pointer == dpadPointer) {
-            if (dpad.isOnUp(touchX, touchY))
+            if (dpad.isOnUp(touchX, touchY)) {
                 currentState.handleDPadTouchDragged(UP);
-            else if (dpad.isOnDown(touchX, touchY))
+            }
+            else if (dpad.isOnDown(touchX, touchY)) {
                 currentState.handleDPadTouchDragged(DOWN);
-            else if (dpad.isOnLeft(touchX, touchY))
+            }
+            else if (dpad.isOnLeft(touchX, touchY)) {
                 currentState.handleDPadTouchDragged(LEFT);
-            else if (dpad.isOnRight(touchX, touchY))
+            }
+            else if (dpad.isOnRight(touchX, touchY)) {
                 currentState.handleDPadTouchDragged(RIGHT);
+            }
         }
         else if (event.pointer == triggerPointer){
             trigger.setPositionTrigger(touchX, touchY);
