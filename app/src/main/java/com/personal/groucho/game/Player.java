@@ -1,6 +1,6 @@
 package com.personal.groucho.game;
 
-import static com.personal.groucho.game.constants.System.debugMode;
+import static com.personal.groucho.game.constants.System.fpsCounter;
 import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
@@ -30,7 +30,7 @@ public class Player {
         this.cameraX = 0;
         this.cameraY = 0;
 
-        if (debugMode) {
+        if (fpsCounter) {
             FPSCounter.getInstance().posX = posX - (float) Graphics.bufferWidth /2;
             FPSCounter.getInstance().posY = posY - (float) Graphics.bufferHeight /2+50;
         }
@@ -55,7 +55,7 @@ public class Player {
         posX = posComponent.posX;
         posY =  posComponent.posY;
 
-        if (debugMode) {
+        if (fpsCounter) {
             FPSCounter.getInstance().updateWidgetPosition(-cameraX, -cameraY);
         }
     }
