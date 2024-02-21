@@ -1,6 +1,7 @@
 package com.personal.groucho.game;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.personal.groucho.R;
 import com.personal.groucho.badlogic.androidgames.framework.impl.AndroidAudio;
@@ -16,6 +18,8 @@ import com.personal.groucho.badlogic.androidgames.framework.Audio;
 import com.personal.groucho.game.assets.Sounds;
 import com.personal.groucho.game.assets.Spritesheets;
 import com.personal.groucho.game.assets.Textures;
+import com.personal.groucho.game.constants.Character;
+import com.personal.groucho.game.constants.Environment;
 
 public class MainActivity extends Activity {
 
@@ -33,6 +37,8 @@ public class MainActivity extends Activity {
         TAG = getString(R.string.app_name);
 
         loadResources();
+        initConstants();
+
         setWindow();
         GameWorld gameWorld = buildGameWorld();
 
@@ -47,6 +53,11 @@ public class MainActivity extends Activity {
         // Sound
         audio = new AndroidAudio(this);
         Sounds.init(audio);
+    }
+
+    private void initConstants() {
+        Character.init(this);
+        Environment.init(this);
     }
 
     @NonNull
