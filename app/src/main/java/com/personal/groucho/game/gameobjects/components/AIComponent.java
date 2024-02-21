@@ -178,6 +178,7 @@ public class AIComponent extends WalkingComponent {
 
     // Patrol actions
     public void entryPatrolAction() {
+        currentSteps = 0;
         updateSprite(character.properties.sheetWalk);
         posComponent.setOrientation(posComponent.orientation.getOpposite());
     }

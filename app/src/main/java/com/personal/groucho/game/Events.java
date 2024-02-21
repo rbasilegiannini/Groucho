@@ -128,7 +128,6 @@ public class Events {
     }
 
     public static void gameOverEvent(GameWorld gameWorld) {
-        brightness = 1f;
         gameWorld.GameOver();
     }
 
