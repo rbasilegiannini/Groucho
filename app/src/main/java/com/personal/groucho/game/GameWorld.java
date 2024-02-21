@@ -73,6 +73,11 @@ public class GameWorld {
         activity = newActivity;
 
         physics = new Physics(this);
+        graphics = Graphics.getInstance(this);
+    }
+
+    public void init(Level level) {
+        graphics.reset();
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
         graphics = new Graphics(this);
         setPlayer();

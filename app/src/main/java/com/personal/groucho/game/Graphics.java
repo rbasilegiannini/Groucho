@@ -56,13 +56,21 @@ public class Graphics {
     public final static int bufferHeight = 1080;
 
     protected Bitmap buffer;
-    protected final Canvas canvas;
+    protected Canvas canvas;
     private final GameWorld gameWorld;
+    private static Graphics instance = null;
 
-    public Graphics(GameWorld gameWorld) {
+    private Graphics(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
         this.canvas = new Canvas(buffer);
+    }
+
+    public static Graphics getInstance(GameWorld gameWorld){
+        if (instance == null) {
+            instance = new Graphics(gameWorld);
+        }
+        return instance;
     }
 
     public synchronized void render() {
@@ -88,5 +96,22 @@ public class Graphics {
         for (LightComponent lightComponent : gameWorld.lightComponents) {
             lightComponent.draw(canvas);
         }
+    }
+
+    int fadeOut = 0;
+    public void fadeOut() {
+        fadeOut += 5;
+        render();
+        canvas.drawARGB(Math.min(fadeOut, 255),0,0,0);
+
+        if (fadeOut >= 255){
+            gameWorld.gameOver = false;
+            MenuHandler.handleGameOverMenu(gameWorld);
+            fadeOut = 0;
+        }
+    }
+
+    public void reset() {
+        this.canvas = new Canvas(buffer);
     }
 }
