@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="groucho_speed">15f</dimen>
+    <integer name="groucho_health">100</integer>
+    <integer name="groucho_power">30</integer>
+
+    <dimen name="skeleton_speed">5f</dimen>
+    <integer name="skeleton_health">100</integer>
+    <integer name="skeleton_power">30</integer>
+
+    <integer name="medical_kit">20</integer>
+
+    <integer name="hearing_range">1500</integer>
+    <integer name="hearing_range_sqr">2250000</integer>
+    <dimen name="enemy_fov_in_rad">2.094395f</dimen>
+</resources>

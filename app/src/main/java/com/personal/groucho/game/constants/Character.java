@@ -1,14 +1,39 @@
 package com.personal.groucho.game.constants;
 
+import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
+import com.personal.groucho.R;
+
 public class Character {
-    public static float grouchoSpeed = 0.2f;
-    public static float skeletonSpeed = 0.05f;
-    public static final int grouchoHealth = 100;
-    public static final int skeletonHealth = 100;
-    public static int medicalKit = 20;
-    public static int grouchoPower = 30;
-    public static int skeletonPower = 5;
-    public static int hearingRange = 1500;
-    public static int hearingRangeSqr = (int) Math.pow(hearingRange,2);
-    public static float enemyFovInRad = (float) Math.toRadians(120);
+
+    public static float grouchoSpeed;
+    public static float skeletonSpeed;
+    public static int grouchoHealth;
+    public static int skeletonHealth;
+    public static int medicalKit;
+    public static int grouchoPower;
+    public static int skeletonPower;
+    public static int hearingRange;
+    public static int hearingRangeSqr;
+    public static float enemyFovInRad;
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public static void init(Context context){
+        grouchoSpeed = context.getResources().getFloat(R.dimen.groucho_speed);
+        grouchoHealth = context.getResources().getInteger(R.integer.groucho_health);
+        grouchoPower = context.getResources().getInteger(R.integer.groucho_power);
+
+        skeletonSpeed = context.getResources().getFloat(R.dimen.skeleton_speed);
+        skeletonHealth = context.getResources().getInteger(R.integer.skeleton_health);
+        skeletonPower = context.getResources().getInteger(R.integer.skeleton_power);
+
+        medicalKit = context.getResources().getInteger(R.integer.medical_kit);
+
+        hearingRange = context.getResources().getInteger(R.integer.hearing_range);
+        hearingRangeSqr = context.getResources().getInteger(R.integer.hearing_range_sqr);
+        enemyFovInRad = context.getResources().getFloat(R.dimen.enemy_fov_in_rad);
+    }
 }
