@@ -15,15 +15,16 @@ import java.util.List;
 public class Idle extends AIState {
     private static Idle state = null;
 
-    private Idle(AIComponent aiComponent) {
-        super(aiComponent);
+    private Idle() {
+        super();
         name = StateName.IDLE;
     }
 
     public static AIState getInstance(AIComponent aiComponent) {
         if (state == null) {
-            state = new Idle(aiComponent);
+            state = new Idle();
         }
+        state.owner = aiComponent;
         return state;
     }
 

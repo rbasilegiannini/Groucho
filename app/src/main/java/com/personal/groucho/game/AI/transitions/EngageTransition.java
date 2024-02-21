@@ -13,14 +13,15 @@ import java.util.List;
 public class EngageTransition extends Transition {
     private static EngageTransition transition = null;
 
-    private EngageTransition(AIComponent aiComponent) {
-        super(aiComponent);
+    private EngageTransition() {
+        super();
     }
 
     public static Transition getInstance(AIComponent aiComponent) {
         if (transition == null) {
-            transition = new EngageTransition(aiComponent);
+            transition = new EngageTransition();
         }
+        transition.owner = aiComponent;
         return transition;
     }
 

@@ -16,15 +16,16 @@ import java.util.List;
 public class Investigate extends AIState {
     private static Investigate state = null;
 
-    private Investigate(AIComponent aiComponent) {
-        super(aiComponent);
+    private Investigate() {
+        super();
         name = StateName.INVESTIGATE;
     }
 
     public static AIState getInstance(AIComponent aiComponent) {
         if (state == null) {
-            state = new Investigate(aiComponent);
+            state = new Investigate();
         }
+        state.owner = aiComponent;
         return state;
     }
 

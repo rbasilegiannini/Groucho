@@ -14,12 +14,13 @@ import java.util.List;
 public class IdleTransition extends Transition {
     private static IdleTransition transition = null;
 
-    private IdleTransition(AIComponent aiComponent) { super(aiComponent); }
+    private IdleTransition() { super(); }
 
     public static Transition getInstance(AIComponent aiComponent) {
         if (transition == null) {
-            transition = new IdleTransition(aiComponent);
+            transition = new IdleTransition();
         }
+        transition.owner = aiComponent;
         return transition;
     }
 

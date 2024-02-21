@@ -15,15 +15,16 @@ import java.util.List;
 public class Patrol extends AIState {
     private static Patrol state = null;
 
-    private Patrol(AIComponent aiComponent) {
-        super(aiComponent);
+    private Patrol() {
+        super();
         name = StateName.PATROL;
     }
 
     public static AIState getInstance(AIComponent aiComponent) {
         if (state == null) {
-            state = new Patrol(aiComponent);
+            state = new Patrol();
         }
+        state.owner = aiComponent;
         return state;
     }
 

@@ -7,15 +7,16 @@ public class Loading extends ControllerState{
 
     private static Loading state = null;
 
-    private Loading(Controller controller) {
-        super(controller);
+    private Loading() {
+        super();
         name = StateName.LOADING;
     }
 
     public static ControllerState getInstance(Controller controller) {
         if (state == null) {
-            state = new Loading(controller);
+            state = new Loading();
         }
+        state.controller = controller;
         return state;
     }
 

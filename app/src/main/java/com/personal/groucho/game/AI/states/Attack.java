@@ -14,15 +14,16 @@ import java.util.List;
 public class Attack extends AIState {
     private static Attack state = null;
 
-    private Attack(AIComponent aiComponent) {
-        super(aiComponent);
+    private Attack() {
+        super();
         name = StateName.ATTACK;
     }
 
     public static AIState getInstance(AIComponent aiComponent) {
         if (state == null) {
-            state = new Attack(aiComponent);
+            state = new Attack();
         }
+        state.owner = aiComponent;
         return state;
     }
 

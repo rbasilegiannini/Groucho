@@ -7,15 +7,16 @@ public class Idle extends ControllerState{
 
     private static Idle state = null;
 
-    private Idle(Controller controller) {
-        super(controller);
+    private Idle() {
+        super();
         name = StateName.IDLE;
     }
 
     public static ControllerState getInstance(Controller controller) {
         if (state == null) {
-            state = new Idle(controller);
+            state = new Idle();
         }
+        state.controller = controller;
         return state;
     }
 

@@ -15,14 +15,15 @@ import java.util.List;
 public class PatrolTransition extends Transition {
     private static PatrolTransition transition = null;
 
-    private PatrolTransition(AIComponent aiComponent) {
-        super(aiComponent);
+    private PatrolTransition() {
+        super();
     }
 
     public static Transition getInstance(AIComponent aiComponent) {
         if (transition == null) {
-            transition = new PatrolTransition(aiComponent);
+            transition = new PatrolTransition();
         }
+        transition.owner = aiComponent;
         return transition;
     }
 

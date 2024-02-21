@@ -9,15 +9,17 @@ public class Aiming extends ControllerState{
 
     private static Aiming state = null;
 
-    private Aiming(Controller controller) {
-        super(controller);
+    private Aiming() {
+        super();
         name = StateName.AIMING;
     }
 
     public static ControllerState getInstance(Controller controller) {
         if (state == null) {
-            state = new Aiming(controller);
+            state = new Aiming();
         }
+
+        state.controller = controller;
         return state;
     }
 

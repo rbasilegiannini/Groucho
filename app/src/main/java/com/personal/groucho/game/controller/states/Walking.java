@@ -7,15 +7,16 @@ public class Walking extends ControllerState{
 
     private static Walking state = null;
 
-    private Walking(Controller controller) {
-        super(controller);
+    private Walking() {
+        super();
         name = StateName.WALKING;
     }
 
     public static ControllerState getInstance(Controller controller) {
         if (state == null) {
-            state = new Walking(controller);
+            state = new Walking();
         }
+        state.controller = controller;
         return state;
     }
 

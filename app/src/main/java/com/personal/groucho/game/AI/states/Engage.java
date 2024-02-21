@@ -16,15 +16,16 @@ import java.util.List;
 public class Engage extends AIState {
     private static Engage state = null;
 
-    private Engage(AIComponent aiComponent) {
-        super(aiComponent);
+    private Engage() {
+        super();
         name = StateName.ENGAGE;
     }
 
     public static AIState getInstance(AIComponent aiComponent) {
         if (state == null) {
-            state = new Engage(aiComponent);
+            state = new Engage();
         }
+        state.owner = aiComponent;
         return state;
     }
 

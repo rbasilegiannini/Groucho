@@ -8,7 +8,7 @@ public abstract class ControllerState {
     protected Controller controller;
     protected StateName name;
 
-    protected ControllerState(Controller controller) {this.controller = controller;}
+    protected ControllerState() {}
 
     public void handleDPadTouchDown(Orientation orientation){}
     public void handleTriggerTouchDragged(float x, float y){}

@@ -4,9 +4,7 @@ import com.personal.groucho.game.gameobjects.components.AIComponent;
 import java.util.List;
 
 public abstract class Transition {
-    protected final AIComponent owner;
-
-    protected Transition(AIComponent aiComponent) {owner = aiComponent;}
+    protected AIComponent owner;
 
     public abstract Condition guard();
     public abstract List<Action> actions();

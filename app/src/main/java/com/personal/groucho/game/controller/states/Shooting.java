@@ -7,15 +7,16 @@ public class Shooting extends ControllerState{
 
     private static Shooting state = null;
 
-    private Shooting(Controller controller) {
-        super(controller);
+    private Shooting() {
+        super();
         name = StateName.SHOOTING;
     }
 
     public static ControllerState getInstance(Controller controller) {
         if (state == null) {
-            state = new Shooting(controller);
+            state = new Shooting();
         }
+        state.controller = controller;
         return state;
     }
 

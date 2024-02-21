@@ -13,12 +13,13 @@ import java.util.List;
 public class InvestigateTransition extends Transition {
     private static InvestigateTransition transition = null;
 
-    private InvestigateTransition(AIComponent aiComponent) {super(aiComponent);}
+    private InvestigateTransition() {super();}
 
     public static Transition getInstance(AIComponent aiComponent) {
         if (transition == null) {
-            transition = new InvestigateTransition(aiComponent);
+            transition = new InvestigateTransition();
         }
+        transition.owner = aiComponent;
         return transition;
     }
 

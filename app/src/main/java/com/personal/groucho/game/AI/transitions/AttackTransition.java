@@ -13,14 +13,15 @@ import java.util.List;
 public class AttackTransition extends Transition {
     private static AttackTransition transition = null;
 
-    private AttackTransition(AIComponent aiComponent) {
-        super(aiComponent);
+    private AttackTransition() {
+        super();
     }
 
     public static Transition getInstance(AIComponent aiComponent) {
         if (transition == null) {
-            transition = new AttackTransition(aiComponent);
+            transition = new AttackTransition();
         }
+        transition.owner = aiComponent;
         return transition;
     }
 
