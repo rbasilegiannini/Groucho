@@ -8,28 +8,37 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 
 import com.personal.groucho.R;
+import com.personal.groucho.game.levels.FirstLevel;
 
 public class MenuHandler {
 
     public static void handleMainMenu(GameWorld gameWorld) {
-        gameWorld.activity.setContentView(R.layout.menu);
+        gameWorld.activity.runOnUiThread(
+                () -> {
+                    gameWorld.activity.setContentView(R.layout.menu);
 
-        ImageButton newGameButton = gameWorld.activity.findViewById(R.id.newGame);
-        ImageButton optionsButton = gameWorld.activity.findViewById(R.id.options);
-        ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
-        newGameButton.setOnClickListener(v -> gameWorld.activity.setContentView(gameWorld.activity.renderView));
-        optionsButton.setOnClickListener(v -> handleOptionsMainMenu(gameWorld));
-        exitButton.setOnClickListener(v -> gameWorld.activity.finish());
+                    ImageButton newGameButton = gameWorld.activity.findViewById(R.id.newGame);
+                    ImageButton optionsButton = gameWorld.activity.findViewById(R.id.options);
+                    ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
+                    newGameButton.setOnClickListener(v -> {
+                        gameWorld.init(new FirstLevel(gameWorld));
+                        gameWorld.activity.setContentView(gameWorld.activity.renderView);
+                    });
+                    optionsButton.setOnClickListener(v -> handleOptionsMainMenu(gameWorld));
+                    exitButton.setOnClickListener(v -> gameWorld.activity.finish());
+                });
     }
 
     private static void handleOptionsMainMenu(GameWorld gameWorld){
-        gameWorld.activity.setContentView(R.layout.options);
+        gameWorld.activity.runOnUiThread(
+                () -> {
+                    gameWorld.activity.setContentView(R.layout.options);
 
-        ImageButton undoButton = gameWorld.activity.findViewById(R.id.undoButton);
-        handleOptionsSwitches(gameWorld.activity);
+                    ImageButton undoButton = gameWorld.activity.findViewById(R.id.undoButton);
+                    handleOptionsSwitches(gameWorld.activity);
 
-        undoButton.setOnClickListener(v -> handleMainMenu(gameWorld));
-
+                    undoButton.setOnClickListener(v -> handleMainMenu(gameWorld));
+                });
     }
 
     public static void handlePauseMenu(GameWorld gameWorld) {
@@ -75,5 +84,13 @@ public class MenuHandler {
 
         fpsCounterSwitch.setChecked(fpsCounter);
         fpsCounterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> fpsCounter = isChecked);
+    }
+
+    public static void handleGameOverMenu(GameWorld gameWorld) {
+        gameWorld.activity.runOnUiThread(
+                () -> {
+                    gameWorld.activity.setContentView(R.layout.menu);
+                    handleMainMenu(gameWorld);
+                });
     }
 }

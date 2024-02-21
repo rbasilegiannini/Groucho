@@ -17,7 +17,6 @@ import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
@@ -38,7 +37,6 @@ import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.levels.FirstLevel;
 import com.personal.groucho.game.levels.Level;
 import com.google.fpl.liquidfun.World;
 
@@ -52,7 +50,7 @@ public class GameWorld {
     private final Physics physics;
     private final Graphics graphics;
     private Player player;
-    public final Controller controller;
+    public Controller controller;
     protected Level currentLevel;
     protected GameGrid grid;
     private final List<GameObject> objects = new ArrayList<>();
@@ -64,7 +62,7 @@ public class GameWorld {
     protected final List<LightComponent> lightComponents = new ArrayList<>();
     private TouchHandler touchHandler;
     private boolean pause = false;
-    private boolean gameOver = false;
+    protected boolean gameOver = false;
 
     public GameWorld(Box physicalSize, Box screenSize, MainActivity newActivity) {
         GameWorld.physicalSize = physicalSize;
@@ -79,10 +77,22 @@ public class GameWorld {
     public void init(Level level) {
         graphics.reset();
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
-        graphics = new Graphics(this);
-        setPlayer();
 
-        currentLevel = new FirstLevel(this);
+        posComponents.clear();
+        phyComponents.clear();
+        aliveComponents.clear();
+        lightComponents.clear();
+        drawComponents.clear();
+        aiComponents.clear();
+
+        Iterator<GameObject> iterator = objects.iterator();
+        while (iterator.hasNext()) {
+            GameObject go = iterator.next();
+            go.delete();
+            iterator.remove();
+        }
+
+        currentLevel = level;
         currentLevel.init();
     }
 
@@ -90,12 +100,15 @@ public class GameWorld {
         this.touchHandler = touchHandler;
     }
 
-    private void setPlayer() {
+    public void setPlayer(int posX, int posY) {
+        this.gameOver = false;
         GameObject playerGO = GameObjectFactory.
                 makePlayer(bufferWidth /2, bufferHeight/2, controller, this);
         PositionComponent posComponent = (PositionComponent) playerGO.getComponent(POSITION);
 
         player = new Player(playerGO, posComponent.posX, posComponent.posY);
+        player.setPos(posX, posY);
+
         addGameObject(playerGO);
     }
     public void setGameGrid(GameGrid grid) {
@@ -103,7 +116,6 @@ public class GameWorld {
         physics.setGameGrid(grid);
     }
     public void setPlayerVisibility(boolean visibility) {player.setPlayerVisibility(visibility);}
-    public void setPlayerPosition(int posX, int posY) {player.setPos(posX, posY);}
     public boolean isPlayerVisible() {return player.isPlayerVisible;}
     public Bitmap getBuffer() {return graphics.buffer;}
     public World getWorld() {return physics.world;}
@@ -147,9 +159,6 @@ public class GameWorld {
                 if (!gameOver) {
                     controller.consumeTouchEvent(event);
                 }
-//            else {
-//                menu.consumeTouchEvent(event);
-//            }
             }
         }
     }
@@ -177,10 +186,12 @@ public class GameWorld {
     public synchronized void render() {
         if (!pause) {
             graphics.render();
-
             if (debugMode) {
                 getDebugger(this).draw(graphics.canvas);
             }
+        }
+        if (gameOver) {
+            graphics.fadeOut();
         }
     }
 
@@ -286,7 +297,6 @@ public class GameWorld {
         removeComponent(player.gameObject, CONTROLLABLE);
         removeComponent(player.gameObject, PHYSICS);
         removeComponent(player.gameObject, LIGHT);
-        // Game over menu... and level?
     }
 
     public boolean isGameOver() {return gameOver;}
