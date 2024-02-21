@@ -70,7 +70,7 @@ public class GameWorld {
         currentView = physicalSize;
         activity = newActivity;
 
-        physics = new Physics(this);
+        physics = Physics.getInstance(this);
         graphics = Graphics.getInstance(this);
     }
 

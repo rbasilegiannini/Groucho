@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Physics {
+    private static Physics instance = null;
     private final GameWorld gameWorld;
     private GameGrid gameGrid;
     protected final World world;
@@ -47,11 +48,18 @@ public class Physics {
     private Set<Node> oldCellsToReset, newCellsToChange, unchangedCells;
 
 
-    public Physics(GameWorld gameWorld) {
+    private Physics(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
         this.world = new World(0, 0); // No gravity
         contactListener = new MyContactListener();
         world.setContactListener(contactListener);
+    }
+
+    public static Physics getInstance(GameWorld gameWorld){
+        if (instance == null) {
+            instance = new Physics(gameWorld);
+        }
+        return instance;
     }
 
     public void setGameGrid(GameGrid grid) {this.gameGrid = grid;}
