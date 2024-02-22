@@ -2,11 +2,11 @@ package com.personal.groucho.game;
 
 import static com.personal.groucho.game.Graphics.bufferHeight;
 import static com.personal.groucho.game.Graphics.bufferWidth;
-import static com.personal.groucho.game.assets.Textures.bubble;
 import static com.personal.groucho.game.constants.System.characterDimX;
 import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -22,34 +22,55 @@ public class BubbleSpeech {
     private ArrayList<String> lines = new ArrayList<>();
     private int posX;
     private int posY;
-    private final int width;
+    private int width;
     private int height;
+    private Bitmap bubble;
 
     public BubbleSpeech() {
+        paint = new TextPaint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(50);
+        paint.setTypeface(Typeface.create("serif", Typeface.NORMAL));
+
+        src = new Rect();
+        dest = new Rect();
+    }
+
+    public BubbleSpeech(Bitmap texture) {
+        bubble = texture;
         width = bubble.getWidth();
         height = bubble.getHeight();
 
-        posX = bufferWidth/2 - width/2;
-        posY = (int) (bufferHeight/2 + height/2 + characterScaleFactor * characterDimY);
         paint = new TextPaint();
         paint.setColor(Color.BLACK);
-        paint.setTextSize(48);
+        paint.setTextSize(50);
         paint.setTypeface(Typeface.DEFAULT);
 
         src = new Rect(0, 0, bubble.getWidth(), bubble.getHeight());
-        dest = new Rect(posX, posY, posX + width, posY + height);
+        dest = new Rect();
+    }
+
+    public void setBubbleTexture(Bitmap texture) {
+        bubble = texture;
+        width = bubble.getWidth();
+        height = bubble.getHeight();
+
+        src.top = 0;
+        src.left = 0;
+        src.bottom = bubble.getHeight();
+        src.right = bubble.getWidth();
     }
 
     public void draw(Canvas canvas) {
-        dest.left = posX;
-        dest.top = posY;
-        dest.right = posX + width;
-        dest.bottom = posY + height;
+        dest.left = posX-width/2;
+        dest.top = (int) (posY - 0.75*height);
+        dest.right = posX + width/2;
+        dest.bottom = (int) (posY + 0.25*height);
 
         canvas.drawBitmap(bubble, src, dest, paint);
 
-        float x = posX + 60;
-        float y = posY + height/2;
+        float x = dest.left + 50;
+        float y = dest.top + paint.getTextSize();
         for (String line : lines) {
             canvas.drawText(line, x, y, paint);
             y += paint.getTextSize() + lineSpacing;

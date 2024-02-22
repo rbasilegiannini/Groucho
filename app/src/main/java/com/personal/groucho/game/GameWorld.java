@@ -6,6 +6,7 @@ import static com.personal.groucho.game.Events.gameOverEvent;
 import static com.personal.groucho.game.Events.playerShootEnemyEvent;
 import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
 import static com.personal.groucho.game.Events.playerShootWallEvent;
+import static com.personal.groucho.game.assets.Textures.bubble;
 import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
@@ -18,6 +19,7 @@ import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
@@ -63,6 +65,7 @@ public class GameWorld {
     private TouchHandler touchHandler;
     private boolean pause = false;
     protected boolean gameOver = false;
+    private final BubbleSpeech grouchoBubble;
 
     public GameWorld(Box physicalSize, Box screenSize, MainActivity newActivity) {
         GameWorld.physicalSize = physicalSize;
@@ -72,6 +75,7 @@ public class GameWorld {
 
         physics = Physics.getInstance(this);
         graphics = Graphics.getInstance(this);
+        grouchoBubble = new BubbleSpeech();
     }
 
     public void init(Level level) {
@@ -108,6 +112,11 @@ public class GameWorld {
 
         player = new Player(playerGO, posComponent.posX, posComponent.posY);
         player.setPos(posX, posY);
+
+        grouchoBubble.setBubbleTexture(bubble);
+        grouchoBubble.setPosX(player.posX);
+        grouchoBubble.setPosY(player.posY);
+        grouchoBubble.setText("sada asdi qweji sjdfjs  eiur kljdsf woiur sdkjlf wieour jkh.");
 
         addGameObject(playerGO);
     }
@@ -183,13 +192,20 @@ public class GameWorld {
         }
     }
 
+    boolean grouchoIsTalking = true;
     public synchronized void render() {
         if (!pause) {
             graphics.render();
+
+            if (grouchoIsTalking) {
+                grouchoBubble.draw(graphics.canvas);
+            }
+
             if (debugMode) {
                 getDebugger(this).draw(graphics.canvas);
             }
         }
+
         if (gameOver) {
             graphics.fadeOut();
         }
