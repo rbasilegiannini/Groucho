@@ -75,7 +75,7 @@ public class GameWorld {
 
         physics = Physics.getInstance(this);
         graphics = Graphics.getInstance(this);
-        grouchoBubble = new BubbleSpeech();
+        grouchoBubble = new BubbleSpeech(this);
     }
 
     public void init(Level level) {
@@ -116,7 +116,7 @@ public class GameWorld {
         grouchoBubble.setBubbleTexture(bubble);
         grouchoBubble.setPosX(player.posX);
         grouchoBubble.setPosY(player.posY);
-        grouchoBubble.setText("sada asdi qweji sjdfjs  eiur kljdsf woiur sdkjlf wieour jkh.");
+        grouchoBubble.setText("sada asdi qweji sjdfjs  eijh hg h jh jhg hjg hj jhk ur kljdsf woiur sdkjlf wieour jkh.jhg gjhg hj hjg g jhgg j gjh gh hjfg  fgh hg k uy u gf gh");
 
         addGameObject(playerGO);
     }
@@ -165,8 +165,13 @@ public class GameWorld {
     public synchronized void processInputs(){
         if (!pause) {
             for (Input.TouchEvent event : touchHandler.getTouchEvents()) {
-                if (!gameOver) {
+                if (!gameOver && !grouchoIsTalking) {
                     controller.consumeTouchEvent(event);
+                }
+                else {
+                    if (grouchoIsTalking) {
+                        grouchoBubble.consumeTouchEvent(event);
+                    }
                 }
             }
         }
