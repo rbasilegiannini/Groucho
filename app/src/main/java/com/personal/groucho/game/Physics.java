@@ -201,7 +201,7 @@ public class Physics {
                 break;
 
             case HEALTH:
-                playerCollideWithHealthEvent(player, object);
+                playerCollideWithHealthEvent(player, object, gameWorld);
                 break;
 
             case TRIGGER:

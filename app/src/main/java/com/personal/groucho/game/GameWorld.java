@@ -19,7 +19,6 @@ import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
@@ -160,6 +159,25 @@ public class GameWorld {
         if (aliveComponent != null) aliveComponents.add((AliveComponent) aliveComponent);
         if (aiComponent != null) aiComponents.add((AIComponent) aiComponent);
         if (lightComponent != null) lightComponents.add((LightComponent) lightComponent);
+    }
+
+    public void removeGameObject(GameObject go){
+        Component posComponent = go.getComponent(POSITION);
+        Component drawComponent = go.getComponent(DRAWABLE);
+        Component phyComponent = go.getComponent(PHYSICS);
+        Component aliveComponent = go.getComponent(ALIVE);
+        Component aiComponent = go.getComponent(AI);
+        Component lightComponent = go.getComponent(LIGHT);
+
+        if (posComponent != null) posComponents.remove((PositionComponent) posComponent);
+        if (drawComponent != null) drawComponents.remove((DrawableComponent) drawComponent);
+        if (phyComponent != null) phyComponents.remove((PhysicsComponent) phyComponent);
+        if (aliveComponent != null) aliveComponents.remove((AliveComponent) aliveComponent);
+        if (aiComponent != null) aiComponents.remove((AIComponent) aiComponent);
+        if (lightComponent != null) lightComponents.remove((LightComponent) lightComponent);
+
+        objects.remove(go);
+        go.delete();
     }
 
     public synchronized void processInputs(){

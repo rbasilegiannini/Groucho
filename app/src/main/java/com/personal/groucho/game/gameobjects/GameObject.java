@@ -1,7 +1,5 @@
 package com.personal.groucho.game.gameobjects;
 
-import com.personal.groucho.game.GameWorld;
-
 public class GameObject extends Entity{
     public String name;
     public Role role;
@@ -18,8 +16,4 @@ public class GameObject extends Entity{
 
     public void setName(String name) {this.name = name;}
 
-    @Override
-    public void delete(){
-        super.delete();
-    }
 }

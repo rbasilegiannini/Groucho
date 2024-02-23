@@ -92,12 +92,12 @@ public class Events {
         }
     }
 
-    public static void playerCollideWithHealthEvent(GameObject player, GameObject health) {
+    public static void playerCollideWithHealthEvent(GameObject player, GameObject health, GameWorld gameWorld) {
         healing.play(0.7f);
         AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.ALIVE);
         alive.heal(medicalKit);
 
-        health.delete();
+        gameWorld.removeGameObject(health);
     }
 
     public static void playerCollideWithEnemyEvent(GameWorld gameWorld, GameObject enemy) {
