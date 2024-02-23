@@ -2,18 +2,19 @@ package com.personal.groucho.game.AI.pathfinding;
 
 import static com.personal.groucho.game.constants.System.cellSize;
 
+import android.annotation.SuppressLint;
+import android.util.SparseArray;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 public class AStar {
     private final GameGrid grid;
     private final PriorityQueue<Node> openSet;
-    private final Set<Node> closedSet;
+    private final SparseArray<Node> closedSet = new SparseArray<>();
     private final List<Node> neighbors = new ArrayList<>();
     private final List<Node> path = new ArrayList<>();
 
@@ -21,7 +22,6 @@ public class AStar {
     public AStar(GameGrid grid) {
         this.grid = grid;
         this.openSet = new PriorityQueue<>(Comparator.comparingInt(Node::getTotalCost));
-        this.closedSet = new HashSet<>();
     }
 
     public List<Node> findPath(Node start, Node goal) {
@@ -39,10 +39,11 @@ public class AStar {
         return Collections.emptyList(); // No path found
     }
 
+    @SuppressLint("NewApi")
     private void processNeighbors(Node current, Node goal) {
-        closedSet.add(current);
+        closedSet.put(current.hashCode(), current);
         for (Node neighbor : getNeighbors(current)) {
-            if (closedSet.contains(neighbor))
+            if (closedSet.contains(neighbor.hashCode()))
                 continue; // Ignore already evaluated neighbor
 
             int tentativeGCost = current.getCostToNode() + manhattan(current, neighbor);
