@@ -12,6 +12,8 @@ import static com.personal.groucho.game.gameobjects.Role.ENEMY;
 import static com.personal.groucho.game.gameobjects.Role.FURNITURE;
 import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 
+import android.util.SparseArray;
+
 import com.google.fpl.liquidfun.Fixture;
 import com.google.fpl.liquidfun.RayCastCallback;
 import com.google.fpl.liquidfun.Vec2;
@@ -26,9 +28,7 @@ import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Physics {
     private static Physics instance = null;
@@ -45,8 +45,9 @@ public class Physics {
     private GameObject currentGO = null;
     private final List<GameObject> hitGameObjects = new ArrayList<>();
     private final List<Float> fractions = new ArrayList<>();
-    private Set<Node> oldCellsToReset, newCellsToChange, unchangedCells;
-
+    private SparseArray<Node> oldCellsToReset = new SparseArray<>();
+    private SparseArray<Node> newCellsToChange = new SparseArray<>();
+    private SparseArray<Node> unchangedCells = new SparseArray<>();
 
     private Physics(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
@@ -101,35 +102,49 @@ public class Physics {
 
     private void updateGameGrid(PhysicsComponent phyComponent, float originalPosX, float originalPosY) {
         if (gameGrid != null) {
-            int dCost = (int)(phyComponent.density*10000);
+            int dCost = (int) (phyComponent.density * 10000);
 
-            oldCellsToReset = gameGrid.getNodes(
+            oldCellsToReset = gameGrid._getNodes(
                     (int)originalPosX,
                     (int)originalPosY,
                     (int)phyComponent.dimX,
                     (int)phyComponent.dimY
             );
-            newCellsToChange = gameGrid.getNodes(
+
+            newCellsToChange = gameGrid._getNodes(
                     (int)fromMetersToBufferX(phyComponent.getPosX()),
                     (int)fromMetersToBufferY(phyComponent.getPosY()),
                     (int)phyComponent.dimX,
                     (int)phyComponent.dimY
             );
 
-            unchangedCells = new HashSet<>(newCellsToChange);
-            unchangedCells.retainAll(oldCellsToReset);
+            setUnchangedCells();
 
-            newCellsToChange.removeAll(unchangedCells);
-            oldCellsToReset.removeAll(unchangedCells);
+            for (int i = 0; i < unchangedCells.size(); i++) {
+                int key = unchangedCells.keyAt(i);
+                newCellsToChange.remove(key);
+                oldCellsToReset.remove(key);
+            }
 
             // Update cost
-            for (Node node : newCellsToChange) {
-                gameGrid.increaseDefaultCostOnNode(node, dCost);
+            for (int i = 0; i < newCellsToChange.size(); i++) {
+                gameGrid.increaseDefaultCostOnNode(newCellsToChange.valueAt(i), dCost);
             }
 
             // Reset cost
-            for (Node node : oldCellsToReset) {
-                gameGrid.decreaseDefaultCostOnNode(node, dCost);
+            for (int i = 0; i < oldCellsToReset.size(); i++) {
+                gameGrid.decreaseDefaultCostOnNode(oldCellsToReset.valueAt(i), dCost);
+            }
+        }
+    }
+
+    private void setUnchangedCells() {
+        unchangedCells.clear();
+        for (int i = 0; i < newCellsToChange.size(); i++) {
+            int key = newCellsToChange.keyAt(i);
+            Node value = newCellsToChange.valueAt(i);
+            if (oldCellsToReset.indexOfKey(key) >= 0) {
+                unchangedCells.put(key, value);
             }
         }
     }

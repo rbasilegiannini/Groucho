@@ -5,6 +5,7 @@ import static com.personal.groucho.game.constants.System.cellSize;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.SparseArray;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -54,6 +55,34 @@ public class GameGrid {
         }
 
         return nodes;
+    }
+    public SparseArray<Node> _getNodes(int centerX, int centerY, int dimX, int dimY) {
+        SparseArray<Node> nodes = new SparseArray<>();
+
+        int top = (centerY + dimY/2)/cellSize;
+        int left = (centerX - dimX/2)/cellSize;
+        int right = (centerX + dimX/2)/cellSize;
+        int bottom = (centerY - dimY/2)/cellSize;
+
+        for (int y = bottom; y <= top; y++){
+            if(isInGrid(left, y)){
+                nodes.put(grid[left][y].hashCode(), grid[left][y]);
+            }
+            if(isInGrid(right, y)){
+                nodes.put(grid[right][y].hashCode(), grid[right][y]);
+            }
+        }
+
+        for (int x = left; x <= right; x++){
+            if(isInGrid(x, bottom)){
+                nodes.put(grid[x][bottom].hashCode(), grid[x][bottom]);
+            }
+            if(isInGrid(x, top)) {
+                nodes.put(grid[x][top].hashCode(), grid[x][top]);
+            }
+        }
+
+        return  nodes;
     }
 
     public boolean isInGrid(int x, int y) {
