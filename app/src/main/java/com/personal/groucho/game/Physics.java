@@ -47,7 +47,7 @@ public class Physics {
     private final List<Float> fractions = new ArrayList<>();
     private SparseArray<Node> oldCellsToReset = new SparseArray<>();
     private SparseArray<Node> newCellsToChange = new SparseArray<>();
-    private SparseArray<Node> unchangedCells = new SparseArray<>();
+    private final SparseArray<Node> unchangedCells = new SparseArray<>();
 
     private Physics(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
@@ -104,14 +104,14 @@ public class Physics {
         if (gameGrid != null) {
             int dCost = (int) (phyComponent.density * 10000);
 
-            oldCellsToReset = gameGrid._getNodes(
+            oldCellsToReset = gameGrid.getNodes(
                     (int)originalPosX,
                     (int)originalPosY,
                     (int)phyComponent.dimX,
                     (int)phyComponent.dimY
             );
 
-            newCellsToChange = gameGrid._getNodes(
+            newCellsToChange = gameGrid.getNodes(
                     (int)fromMetersToBufferX(phyComponent.getPosX()),
                     (int)fromMetersToBufferY(phyComponent.getPosY()),
                     (int)phyComponent.dimX,
@@ -142,9 +142,8 @@ public class Physics {
         unchangedCells.clear();
         for (int i = 0; i < newCellsToChange.size(); i++) {
             int key = newCellsToChange.keyAt(i);
-            Node value = newCellsToChange.valueAt(i);
             if (oldCellsToReset.indexOfKey(key) >= 0) {
-                unchangedCells.put(key, value);
+                unchangedCells.put(key, newCellsToChange.valueAt(i));
             }
         }
     }

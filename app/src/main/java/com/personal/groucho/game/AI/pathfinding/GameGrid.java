@@ -7,9 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.SparseArray;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class GameGrid {
     private final int width;
     private final int height;
@@ -28,35 +25,8 @@ public class GameGrid {
     }
 
     public Node getNode(int posX, int posY) {return grid[posX][posY];}
-    public Set<Node> getNodes(int centerX, int centerY, int dimX, int dimY) {
-        Set<Node> nodes = new HashSet<>();
 
-        int top = (centerY + dimY/2)/cellSize;
-        int left = (centerX - dimX/2)/cellSize;
-        int right = (centerX + dimX/2)/cellSize;
-        int bottom = (centerY - dimY/2)/cellSize;
-
-        for (int y = bottom; y <= top; y++){
-            if(isInGrid(left, y)){
-                nodes.add(grid[left][y]);
-            }
-            if(isInGrid(right, y)){
-                nodes.add(grid[right][y]);
-            }
-        }
-
-        for (int x = left; x <= right; x++){
-            if(isInGrid(x, bottom)){
-                nodes.add(grid[x][bottom]);
-            }
-            if(isInGrid(x, top)) {
-                nodes.add(grid[x][top]);
-            }
-        }
-
-        return nodes;
-    }
-    public SparseArray<Node> _getNodes(int centerX, int centerY, int dimX, int dimY) {
+    public SparseArray<Node> getNodes(int centerX, int centerY, int dimX, int dimY) {
         SparseArray<Node> nodes = new SparseArray<>();
 
         int top = (centerY + dimY/2)/cellSize;

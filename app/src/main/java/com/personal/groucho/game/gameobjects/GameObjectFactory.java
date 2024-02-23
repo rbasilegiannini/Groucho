@@ -30,6 +30,7 @@ import android.graphics.BitmapShader;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.util.SparseArray;
 
 import com.google.fpl.liquidfun.BodyDef;
 import com.google.fpl.liquidfun.BodyType;
@@ -58,7 +59,6 @@ import com.personal.groucho.game.controller.states.Idle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class GameObjectFactory {
 
@@ -345,7 +345,7 @@ public class GameObjectFactory {
     }
 
     private static void setFurnitureOnGameGrid(GameGrid grid, PhysicsProp prop, float dimX, float dimY) {
-        Set<Node> nodes = grid.getNodes(prop.posX, prop.posY, (int)dimX, (int)dimY);
+        SparseArray<Node>  nodes= grid.getNodes(prop.posX, prop.posY, (int)dimX, (int)dimY);
 
         int cost = 0;
         switch (prop.type){
@@ -357,8 +357,8 @@ public class GameObjectFactory {
                 break;
         }
 
-        for (Node node : nodes) {
-            grid.increaseDefaultCostOnNode(node, cost);
+        for (int i = 0; i < nodes.size(); i++) {
+            grid.increaseDefaultCostOnNode(nodes.valueAt(i), cost);
         }
     }
 
