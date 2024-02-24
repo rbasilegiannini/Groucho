@@ -1,9 +1,15 @@
 package com.personal.groucho.game.collisions;
 
 import com.personal.groucho.game.gameobjects.GameObject;
+import com.personal.groucho.game.gameobjects.Resettable;
 
-public class Collision {
+public class Collision implements Resettable {
     public GameObject GO1, GO2;
+
+    public Collision() {
+        GO1 = null;
+        GO2 = null;
+    }
 
     public Collision(GameObject GO1, GameObject GO2) {
         this.GO1 = GO1;
@@ -20,5 +26,11 @@ public class Collision {
         Collision otherCollision = (Collision) other;
         return (GO1.equals(otherCollision.GO1) && GO2.equals(otherCollision.GO2)) ||
                 (GO1.equals(otherCollision.GO2) && GO2.equals(otherCollision.GO1));
+    }
+
+    @Override
+    public void reset() {
+        GO1 = null;
+        GO2 = null;
     }
 }

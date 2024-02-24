@@ -3,6 +3,7 @@ package com.personal.groucho.game.collisions;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
 import com.google.fpl.liquidfun.ContactListener;
+import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.GameObject;
 
 import java.util.Collection;
@@ -11,6 +12,9 @@ import java.util.HashSet;
 public class MyContactListener extends ContactListener {
     private final Collection<Collision> collisions = new HashSet<>();
     private Body ba, bb;
+    private final GameWorld gameWorld;
+
+    public MyContactListener(GameWorld gameWorld) {this.gameWorld = gameWorld;}
 
     public Collection<Collision> getCollisions() {
         Collection<Collision> result = new HashSet<>(collisions);
@@ -19,7 +23,6 @@ public class MyContactListener extends ContactListener {
     }
 
     @Override
-    // TODO: use an object pool instead
     public void beginContact(Contact contact) {
         ba = contact.getFixtureA().getBody();
         bb = contact.getFixtureB().getBody();
@@ -27,6 +30,10 @@ public class MyContactListener extends ContactListener {
         GameObject a = (GameObject) ba.getUserData();
         GameObject b = (GameObject) bb.getUserData();
 
-        collisions.add(new Collision(a, b));
+        Collision collision = gameWorld.collisionsPool.acquire();
+        collision.GO1 = a;
+        collision.GO2 = b;
+
+        collisions.add(collision);
     }
 }

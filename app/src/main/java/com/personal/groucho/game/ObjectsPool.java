@@ -2,11 +2,11 @@ package com.personal.groucho.game;
 
 import androidx.annotation.NonNull;
 
-import com.personal.groucho.game.gameobjects.Init;
+import com.personal.groucho.game.gameobjects.Resettable;
 
 import java.lang.reflect.Array;
 
-public class ObjectsPool<T extends Init> {
+public class ObjectsPool<T extends Resettable> {
     private final T[] mPool;
     private int mPoolSize;
 

@@ -52,7 +52,7 @@ public class Physics {
     private Physics(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
         this.world = new World(0, 0); // No gravity
-        contactListener = new MyContactListener();
+        contactListener = new MyContactListener(gameWorld);
         world.setContactListener(contactListener);
     }
 
@@ -187,6 +187,8 @@ public class Physics {
                 handleEnemyCollision(event.GO1, event.GO2);
             else if (event.GO2.role == ENEMY)
                 handleEnemyCollision(event.GO2, event.GO1);
+
+            gameWorld.collisionsPool.release(event);
         }
     }
 

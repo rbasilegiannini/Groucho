@@ -26,6 +26,7 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.Role;
@@ -67,6 +68,7 @@ public class GameWorld {
 
     // Pools to reduce allocation and de-allocation
     public final ObjectsPool<GameObject> objectsPool = new ObjectsPool<>(100, GameObject.class);
+    public final ObjectsPool<Collision> collisionsPool = new ObjectsPool<>(30, Collision.class);
 
     public GameWorld(Box physicalSize, Box screenSize, MainActivity newActivity) {
         GameWorld.physicalSize = physicalSize;

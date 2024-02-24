@@ -1,6 +1,5 @@
 package com.personal.groucho.game.gameobjects;
 
-public interface Init {
-    void init(String name, Role role);
+public interface Resettable {
     void reset();
 }
