@@ -16,4 +16,10 @@ public class GameObject extends Entity{
 
     public void setName(String name) {this.name = name;}
 
+    @Override
+    public void init(Entity object) {
+        super.init(object);
+        name = ((GameObject)object).name;
+        role = ((GameObject)object).role;
+    }
 }

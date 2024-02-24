@@ -42,7 +42,6 @@ import com.personal.groucho.game.levels.Level;
 import com.google.fpl.liquidfun.World;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class GameWorld {
@@ -66,6 +65,9 @@ public class GameWorld {
     protected boolean gameOver = false;
     private final BubbleSpeech grouchoBubble;
 
+    // Pools to reduce allocation and de-allocation
+    private final ObjectsPool<GameObject> objectsPool = new ObjectsPool<>(100, GameObject.class);
+
     public GameWorld(Box physicalSize, Box screenSize, MainActivity newActivity) {
         GameWorld.physicalSize = physicalSize;
         GameWorld.screenSize = screenSize;
@@ -79,6 +81,7 @@ public class GameWorld {
 
     public void init(Level level) {
         graphics.reset();
+        // TODO: Use a singleton
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
 
         posComponents.clear();
@@ -88,12 +91,10 @@ public class GameWorld {
         drawComponents.clear();
         aiComponents.clear();
 
-        Iterator<GameObject> iterator = objects.iterator();
-        while (iterator.hasNext()) {
-            GameObject go = iterator.next();
-            go.delete();
-            iterator.remove();
+        for (int i = 0; i < objects.size(); i++) {
+            objectsPool.release(objects.get(i));
         }
+        objects.clear();
 
         currentLevel = level;
         currentLevel.init();
@@ -144,7 +145,9 @@ public class GameWorld {
     }
 
     public synchronized void addGameObject(GameObject go) {
-        objects.add(go);
+        GameObject newGameObject = objectsPool.acquire();
+        newGameObject.init(go);
+        objects.add(newGameObject);
 
         Component posComponent = go.getComponent(POSITION);
         Component drawComponent = go.getComponent(DRAWABLE);
@@ -176,6 +179,7 @@ public class GameWorld {
         if (aiComponent != null) aiComponents.remove((AIComponent) aiComponent);
         if (lightComponent != null) lightComponents.remove((LightComponent) lightComponent);
 
+        objectsPool.release(go);
         objects.remove(go);
         go.delete();
     }
@@ -301,14 +305,10 @@ public class GameWorld {
         drawComponents.removeIf(component -> ((GameObject) component.getOwner()).role != PLAYER);
         aiComponents.clear();
 
-        Iterator<GameObject> iterator = objects.iterator();
-        while (iterator.hasNext()) {
-            GameObject go = iterator.next();
-            if (go.role != PLAYER) {
-                go.delete();
-                iterator.remove();
-            }
+        for (int i = 0; i < objects.size(); i++) {
+            objectsPool.release(objects.get(i));
         }
+        objects.clear();
 
         currentLevel = newLevel;
         currentLevel.init();
