@@ -1,6 +1,6 @@
 package com.personal.groucho.game.gameobjects;
 
-public class GameObject extends Entity{
+public class GameObject extends Entity implements Resettable {
     public String name;
     public Role role;
 
@@ -14,7 +14,6 @@ public class GameObject extends Entity{
         this.role = role;
     }
 
-    @Override
     public void init(String name, Role role) {
         this.name = name;
         this.role = role;

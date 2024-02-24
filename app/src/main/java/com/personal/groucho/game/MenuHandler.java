@@ -2,6 +2,7 @@ package com.personal.groucho.game;
 
 import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.constants.System.fpsCounter;
+import static com.personal.groucho.game.constants.System.memoryUsage;
 
 import android.app.Activity;
 import android.widget.ImageButton;
@@ -78,12 +79,16 @@ public class MenuHandler {
     private static void handleOptionsSwitches(Activity activity) {
         Switch debugModeSwitch = activity.findViewById(R.id.debugMode);
         Switch fpsCounterSwitch = activity.findViewById(R.id.fpsCounter);
+        Switch memoryUsageSwitch = activity.findViewById(R.id.memoryUsage);
 
         debugModeSwitch.setChecked(debugMode);
         debugModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> debugMode = isChecked);
 
         fpsCounterSwitch.setChecked(fpsCounter);
         fpsCounterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> fpsCounter = isChecked);
+
+        memoryUsageSwitch.setChecked(memoryUsage);
+        memoryUsageSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> memoryUsage = isChecked);
     }
 
     public static void handleGameOverMenu(GameWorld gameWorld) {

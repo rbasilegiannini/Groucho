@@ -56,6 +56,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <Switch
+        android:id="@+id/memoryUsage"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="168dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="300dp"
+        android:alpha="1"
+        android:contentDescription="Turn on/off memory usage"
+        android:fontFamily="@font/dd_font"
+        android:switchMinWidth="100dp"
+        android:text="Memory usage"
+        android:textColor="#FFEB3B"
+        android:textSize="34sp"
+        android:thumbTint="#E10000"
+        android:trackTint="@drawable/switch_track_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <ImageButton
         android:id="@+id/undoButton"
         android:layout_width="108dp"
