@@ -83,17 +83,19 @@ public class GameObjectFactory {
         }
     }
 
-    public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameworld) {
-        GameObject gameObject = new GameObject("Groucho", PLAYER);
+    public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameWorld) {
+        GameObject gameObject = gameWorld.objectsPool.acquire();
+        gameObject.init("Player", PLAYER);
+
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new SpriteDrawableComponent(grouchoWalk));
-        gameObject.addComponent(new ControllableComponent(gameworld));
-        gameObject.addComponent(new PhysicsComponent(gameworld.getWorld(),
+        gameObject.addComponent(new ControllableComponent(gameWorld));
+        gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(),
                 characterScaleFactor*characterDimX, characterScaleFactor*characterDimY));
         gameObject.addComponent(new AliveComponent());
         gameObject.addComponent(new CharacterComponent(getGroucho()));
-        gameObject.addComponent(new LightComponent(gameworld.getBuffer()));
+        gameObject.addComponent(new LightComponent(gameWorld.getBuffer()));
 
         PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         PhysicsProp properties = new PhysicsProp(posX, posY, 0f, -1f,
@@ -102,7 +104,7 @@ public class GameObjectFactory {
 
         ControllableComponent controllable = (ControllableComponent) gameObject.getComponent(CONTROLLABLE);
 
-        gameworld.controller.addControllerListener(controllable);
+        gameWorld.controller.addControllerListener(controllable);
         controller.setCurrentState(Idle.getInstance(controller));
 
         return gameObject;
@@ -112,7 +114,8 @@ public class GameObjectFactory {
             int posX, int posY, Orientation orientation, Spritesheet idle,
             StateName state, GameWorld gameWorld) {
 
-        GameObject gameObject = new GameObject("Enemy", ENEMY);
+        GameObject gameObject = gameWorld.objectsPool.acquire();
+        gameObject.init("Enemy", ENEMY);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(),
@@ -133,8 +136,11 @@ public class GameObjectFactory {
     }
 
     public static List<GameObject> makeWall(int centerX, int centerY, float length, GameWorld gameWorld) {
-        GameObject roof = new GameObject("Roof", WALL);
-        GameObject wall = new GameObject("Wall", WALL);
+        GameObject roof = gameWorld.objectsPool.acquire();
+        GameObject wall = gameWorld.objectsPool.acquire();
+
+        roof.init("Roof", WALL);
+        wall.init("Wall", WALL);
 
         Paint paintRoof = new Paint();
         Paint paintWall = new Paint();
@@ -173,8 +179,11 @@ public class GameObjectFactory {
     }
 
     public static List<GameObject> makeHorBorder(int centerX, int centerY, float length, GameWorld gameWorld) {
-        GameObject roof = new GameObject("Roof", WALL);
-        GameObject wall = new GameObject("Wall", WALL);
+        GameObject roof = gameWorld.objectsPool.acquire();
+        GameObject wall = gameWorld.objectsPool.acquire();
+
+        roof.init("Roof", WALL);
+        wall.init("Wall", WALL);
 
         Paint paintRoof = new Paint();
         Paint paintWall = new Paint();
@@ -211,7 +220,9 @@ public class GameObjectFactory {
     }
 
     public static GameObject makeVerBorder(int centerX, int centerY, float length, GameWorld gameWorld){
-        GameObject border = new GameObject("Wall", WALL);
+        GameObject border = gameWorld.objectsPool.acquire();
+        border.init("Wall", WALL);
+
         Paint paintRoof = new Paint();
 
         paintRoof.setColor(Color.argb(255, 92,64,51));
@@ -237,7 +248,8 @@ public class GameObjectFactory {
 
     public static GameObject makeFurniture(int centerX, int centerY, float dimX, float dimY, GameWorld gameWorld,
                                            Bitmap texture) {
-        GameObject gameObject = new GameObject("Furniture", FURNITURE);
+        GameObject gameObject = gameWorld.objectsPool.acquire();
+        gameObject.init("Furniture", FURNITURE);
 
         gameObject.addComponent(new PositionComponent(centerX, centerY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY/2));
@@ -255,7 +267,8 @@ public class GameObjectFactory {
     public static GameObject makeHealth(int posX, int posY, GameWorld gameWorld) {
         int dimX = 64;
         int dimY = 64;
-        GameObject gameObject = new GameObject("Health", HEALTH);
+        GameObject gameObject = gameWorld.objectsPool.acquire();
+        gameObject.init("Health", HEALTH);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));
@@ -274,7 +287,8 @@ public class GameObjectFactory {
         int dimX = 64;
         int dimY = 128;
 
-        GameObject gameObject = new GameObject(name, TRIGGER);
+        GameObject gameObject = gameWorld.objectsPool.acquire();
+        gameObject.init(name, TRIGGER);
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.getWorld(), dimX, dimY));

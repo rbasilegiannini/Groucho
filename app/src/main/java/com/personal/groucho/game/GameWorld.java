@@ -66,7 +66,7 @@ public class GameWorld {
     private final BubbleSpeech grouchoBubble;
 
     // Pools to reduce allocation and de-allocation
-    private final ObjectsPool<GameObject> objectsPool = new ObjectsPool<>(100, GameObject.class);
+    public final ObjectsPool<GameObject> objectsPool = new ObjectsPool<>(100, GameObject.class);
 
     public GameWorld(Box physicalSize, Box screenSize, MainActivity newActivity) {
         GameWorld.physicalSize = physicalSize;
@@ -145,9 +145,7 @@ public class GameWorld {
     }
 
     public synchronized void addGameObject(GameObject go) {
-        GameObject newGameObject = objectsPool.acquire();
-        newGameObject.init(go);
-        objects.add(newGameObject);
+        objects.add(go);
 
         Component posComponent = go.getComponent(POSITION);
         Component drawComponent = go.getComponent(DRAWABLE);
