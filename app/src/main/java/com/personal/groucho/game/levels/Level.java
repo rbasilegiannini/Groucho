@@ -85,9 +85,5 @@ public abstract class Level {
                 (int) ((surface.height()/2)-(1.75f * cellSize)),
                 surface.height()+(1.5f*cellSize),
                 gameWorld));
-
-        for (GameObject go : gameObjects) {
-            gameWorld.addGameObject(go);
-        }
     }
 }

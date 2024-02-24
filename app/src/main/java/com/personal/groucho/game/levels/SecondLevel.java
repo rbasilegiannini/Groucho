@@ -30,6 +30,10 @@ public class SecondLevel extends Level {
     @Override
     public void init() {
         super.init();
+
+        for (GameObject go : gameObjects) {
+            gameWorld.addGameObject(go);
+        }
     }
 
     @Override

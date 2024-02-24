@@ -2,21 +2,20 @@ package com.personal.groucho.game;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
-
 public class ObjectsPool<T> {
-    private final ArrayList<T> mPool;
+    private final T[] mPool;
     private int mPoolSize;
 
+    @SuppressWarnings("unchecked")
     public ObjectsPool(int maxPoolSize, Class<T> tClass) {
         if (maxPoolSize <= 0) {
             throw new IllegalArgumentException("The max pool size must be > 0");
         }
-        mPool = new ArrayList<>();
         mPoolSize = maxPoolSize;
+        mPool = (T[]) new Object[mPoolSize];
 
         for (int i = 0; i < mPoolSize; i++) {
-            mPool.add(createObject(tClass));
+            mPool[i] = createObject(tClass);
         }
     }
 
@@ -33,27 +32,13 @@ public class ObjectsPool<T> {
             throw new IllegalStateException("Empty pool");
         }
         mPoolSize--;
-        return mPool.get(mPoolSize);
+        return mPool[mPoolSize];
     }
 
-    public boolean release(@NonNull T instance) {
-        if (isInPool(instance)) {
-            throw new IllegalStateException("Already in the pool!");
-        }
-        if (mPoolSize < mPool.size()) {
-            mPool.add(mPoolSize, instance);
+    public void release(@NonNull T instance) {
+        if (mPoolSize < mPool.length) {
+            mPool[mPoolSize] = instance;
             mPoolSize++;
-            return true;
         }
-        return false;
-    }
-
-    private boolean isInPool(@NonNull T instance) {
-        for (int i = 0; i < mPoolSize; i++) {
-            if (mPool.get(i) == instance) {
-                return true;
-            }
-        }
-        return false;
     }
 }
