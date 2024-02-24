@@ -422,11 +422,7 @@ public class AIComponent extends WalkingComponent {
         sight.setNewOrientation(posComponent.orientation);
     }
 
-    public void drawDebugPath(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setColor(Color.BLUE);
-
+    public void drawDebugPath(Canvas canvas, Paint paint) {
         int startX, startY;
         for (Node node : currentPath) {
             startX = node.posX*cellSize;

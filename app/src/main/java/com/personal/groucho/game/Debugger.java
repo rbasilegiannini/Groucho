@@ -8,9 +8,11 @@ import static com.personal.groucho.game.Utils.toBufferYLength;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 import com.personal.groucho.game.AI.Sight;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
@@ -23,16 +25,30 @@ public class Debugger {
     private final List<Sight> sights = new ArrayList<>();
     private GameGrid grid;
     private static Debugger instance = null;
-    private final Paint paint, colliderPaint;
+    private final Paint positionPaint, colliderPaint, gameGridPaint, sightPaint, pathPaint;
 
     private Debugger(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
-        paint = new Paint();
+
         colliderPaint = new Paint();
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
         colliderPaint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.GREEN);
         colliderPaint.setColor(Color.RED);
+
+        gameGridPaint = new Paint();
+        gameGridPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        gameGridPaint.setTextSize(20);
+
+        positionPaint = new Paint();
+        positionPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        positionPaint.setColor(Color.GREEN);
+
+        sightPaint = new Paint();
+        sightPaint.setColor(Color.RED);
+        sightPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        pathPaint = new Paint();
+        pathPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        pathPaint.setColor(Color.BLUE);
 
         updateDebugger();
     }
@@ -45,20 +61,21 @@ public class Debugger {
     }
 
     public void draw(Canvas canvas) {
-        grid.drawDebugGrid(canvas);
+        grid.drawDebugGrid(canvas, gameGridPaint);
 
         for (AIComponent aiComponent : gameWorld.aiComponents) {
-            aiComponent.getSight().drawDebugSight(canvas);
-            aiComponent.drawDebugPath(canvas);
+            aiComponent.getSight().drawDebugSight(canvas, sightPaint);
+            aiComponent.drawDebugPath(canvas, pathPaint);
         }
 
         drawPositions(canvas);
         drawColliders(canvas);
+        Log.i("GO", String.valueOf(Node.counter));
     }
 
     private void drawPositions(Canvas canvas) {
         for (PositionComponent posComponent : gameWorld.posComponents) {
-            canvas.drawCircle(posComponent.posX, posComponent.posY, 20, paint);
+            canvas.drawCircle(posComponent.posX, posComponent.posY, 20, positionPaint);
         }
     }
 

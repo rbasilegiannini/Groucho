@@ -116,12 +116,8 @@ public class Sight {
         }
     }
 
-    public void drawDebugSight(Canvas canvas) {
+    public void drawDebugSight(Canvas canvas, Paint paint) {
         if(((AliveComponent)aiComponent.getOwner().getComponent(ALIVE)).currentStatus != DEAD) {
-            Paint paint = new Paint();
-            paint.setColor(Color.RED);
-            paint.setStyle(Paint.Style.FILL_AND_STROKE);
-
             canvas.drawLine(
                     originX,
                     originY,
