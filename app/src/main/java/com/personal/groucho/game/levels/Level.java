@@ -82,7 +82,7 @@ public abstract class Level {
 
         // Right border
         gameObjects.add(GameObjectFactory.makeVerBorder(
-                (int) (surface.width() + (0.75f)*cellSize),
+                (int) (surface.width() + (0.74f)*cellSize),
                 (int) ((surface.height()/2)-(1.75f * cellSize)),
                 surface.height()+(1.5f*cellSize),
                 gameWorld));
