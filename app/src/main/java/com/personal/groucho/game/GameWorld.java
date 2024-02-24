@@ -64,6 +64,7 @@ public class GameWorld {
     private TouchHandler touchHandler;
     private boolean pause = false;
     protected boolean gameOver = false;
+    protected boolean grouchoIsTalking = false;
     private final BubbleSpeech grouchoBubble;
 
     // Pools to reduce allocation and de-allocation
@@ -83,6 +84,7 @@ public class GameWorld {
 
     public void init(Level level) {
         graphics.reset();
+
         // TODO: Use a singleton
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
 
@@ -115,10 +117,10 @@ public class GameWorld {
         player = new Player(playerGO, posComponent.posX, posComponent.posY);
         player.setPos(posX, posY);
 
-        grouchoBubble.setBubbleTexture(bubble);
-        grouchoBubble.setPosX(player.posX);
-        grouchoBubble.setPosY(player.posY);
-        grouchoBubble.setText("sada asdi qweji sjdfjs  eijh hg h jh jhg hjg hj jhk ur kljdsf woiur sdkjlf wieour jkh.jhg gjhg hj hjg g jhgg j gjh gh hjfg  fgh hg k uy u gf gh");
+//        grouchoBubble.setBubbleTexture(bubble);
+//        grouchoBubble.setPosX(player.posX);
+//        grouchoBubble.setPosY(player.posY);
+//        grouchoBubble.setText("sada asdi qweji sjdfjs  eijh hg h jh jhg hjg hj jhk ur kljdsf woiur sdkjlf wieour jkh.jhg gjhg hj hjg g jhgg j gjh gh hjfg  fgh hg k uy u gf gh");
 
         addGameObject(playerGO);
     }
@@ -219,7 +221,6 @@ public class GameWorld {
         }
     }
 
-    boolean grouchoIsTalking = true;
     public synchronized void render() {
         if (!pause) {
             graphics.render();

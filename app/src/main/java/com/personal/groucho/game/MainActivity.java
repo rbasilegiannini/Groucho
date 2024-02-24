@@ -1,7 +1,6 @@
 package com.personal.groucho.game;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.personal.groucho.R;
 import com.personal.groucho.badlogic.androidgames.framework.impl.AndroidAudio;

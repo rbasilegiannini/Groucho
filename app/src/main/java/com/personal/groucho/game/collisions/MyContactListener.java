@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class MyContactListener extends ContactListener {
+
+    // TODO: Use SparseArray
     private final Collection<Collision> collisions = new HashSet<>();
     private Body ba, bb;
     private final GameWorld gameWorld;

@@ -22,7 +22,6 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.google.fpl.liquidfun.Vec2;

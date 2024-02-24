@@ -1,9 +1,6 @@
 package com.personal.groucho.game;
 
-import static com.personal.groucho.game.Graphics.bufferHeight;
-import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.constants.System.characterDimX;
-import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
 
 import android.graphics.Bitmap;
@@ -14,10 +11,8 @@ import android.graphics.Typeface;
 import android.text.TextPaint;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
-import com.personal.groucho.game.gameobjects.GameObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class BubbleSpeech {

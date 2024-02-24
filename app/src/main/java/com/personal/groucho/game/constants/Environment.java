@@ -1,9 +1,6 @@
 package com.personal.groucho.game.constants;
 
 import android.content.Context;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import com.personal.groucho.R;
 

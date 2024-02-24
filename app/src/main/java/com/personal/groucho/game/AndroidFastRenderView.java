@@ -57,7 +57,6 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             // Measure FPS
             frameCounter++;
             if (fpsDeltaTime > 1) { // Print every second
-                Log.d("FastRenderView", "Current FPS = " + frameCounter);
                 Logger.getInstance().fps = (int)frameCounter;
                 frameCounter = 0;
                 fpsTime = currentTime;
