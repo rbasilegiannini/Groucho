@@ -22,12 +22,12 @@ public class Player {
     private float cameraX, cameraY;
     protected boolean isPlayerVisible = false;
 
-    public Player(GameObject gameObject, int posX, int posY) {
+    public Player(GameObject gameObject) {
         this.gameObject = gameObject;
         posComponent = (PositionComponent) gameObject.getComponent(POSITION);
         ctrlComponent = (ControllableComponent) gameObject.getComponent(CONTROLLABLE);
-        this.posX = posX;
-        this.posY = posY;
+        this.posX = posComponent.posX;
+        this.posY = posComponent.posY;
         this.cameraX = 0;
         this.cameraY = 0;
 

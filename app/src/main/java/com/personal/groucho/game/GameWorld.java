@@ -6,7 +6,6 @@ import static com.personal.groucho.game.Events.gameOverEvent;
 import static com.personal.groucho.game.Events.playerShootEnemyEvent;
 import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
 import static com.personal.groucho.game.Events.playerShootWallEvent;
-import static com.personal.groucho.game.assets.Textures.bubble;
 import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
@@ -85,7 +84,6 @@ public class GameWorld {
     public void init(Level level) {
         graphics.reset();
 
-        // TODO: Use a singleton
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
 
         posComponents.clear();
@@ -112,9 +110,7 @@ public class GameWorld {
         this.gameOver = false;
         GameObject playerGO = GameObjectFactory.
                 makePlayer(bufferWidth /2, bufferHeight/2, controller, this);
-        PositionComponent posComponent = (PositionComponent) playerGO.getComponent(POSITION);
-
-        player = new Player(playerGO, posComponent.posX, posComponent.posY);
+        player = new Player(playerGO);
         player.setPos(posX, posY);
 
 //        grouchoBubble.setBubbleTexture(bubble);
