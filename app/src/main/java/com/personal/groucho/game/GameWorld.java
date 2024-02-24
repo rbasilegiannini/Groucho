@@ -303,10 +303,12 @@ public class GameWorld {
         drawComponents.removeIf(component -> ((GameObject) component.getOwner()).role != PLAYER);
         aiComponents.clear();
 
-        for (int i = 0; i < objects.size(); i++) {
-            objectsPool.release(objects.get(i));
+        for (GameObject gameObject : objects) {
+            if (gameObject.role != PLAYER) {
+                objectsPool.release(gameObject);
+            }
         }
-        objects.clear();
+        objects.removeIf(object -> object.role != PLAYER);
 
         currentLevel = newLevel;
         currentLevel.init();

@@ -14,12 +14,20 @@ public class GameObject extends Entity{
         this.role = role;
     }
 
-    public void setName(String name) {this.name = name;}
+    @Override
+    public void init(String name, Role role) {
+        this.name = name;
+        this.role = role;
+    }
 
     @Override
-    public void init(Entity object) {
-        super.init(object);
-        name = ((GameObject)object).name;
-        role = ((GameObject)object).role;
+    public void reset() {
+        this.name = "";
+        this.role = Role.NEUTRAL;
+
+        for (int i = 0; i < components.size(); i++) {
+            components.valueAt(i).delete();
+        }
+        components.clear();
     }
 }

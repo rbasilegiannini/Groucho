@@ -28,9 +28,4 @@ public class Entity {
         }
         components.clear();
     }
-    public void init(Entity entity) {
-        for (int i = 0; i < entity.components.size(); i++) {
-            addComponent(entity.components.valueAt(i));
-        }
-    }
 }

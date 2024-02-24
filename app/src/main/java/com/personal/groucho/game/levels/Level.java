@@ -34,6 +34,7 @@ public abstract class Level {
     }
 
     public void init() {
+        gameObjects.clear();
         gameWorld.setGameGrid(grid);
         makeBorders();
     }

@@ -2,7 +2,11 @@ package com.personal.groucho.game;
 
 import androidx.annotation.NonNull;
 
-public class ObjectsPool<T> {
+import com.personal.groucho.game.gameobjects.Init;
+
+import java.lang.reflect.Array;
+
+public class ObjectsPool<T extends Init> {
     private final T[] mPool;
     private int mPoolSize;
 
@@ -12,7 +16,7 @@ public class ObjectsPool<T> {
             throw new IllegalArgumentException("The max pool size must be > 0");
         }
         mPoolSize = maxPoolSize;
-        mPool = (T[]) new Object[mPoolSize];
+        mPool = (T[]) Array.newInstance(tClass, mPoolSize);
 
         for (int i = 0; i < mPoolSize; i++) {
             mPool[i] = createObject(tClass);
@@ -37,6 +41,7 @@ public class ObjectsPool<T> {
 
     public void release(@NonNull T instance) {
         if (mPoolSize < mPool.length) {
+            instance.reset();
             mPool[mPoolSize] = instance;
             mPoolSize++;
         }
