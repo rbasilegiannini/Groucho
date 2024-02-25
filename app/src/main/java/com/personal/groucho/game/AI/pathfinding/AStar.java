@@ -43,7 +43,7 @@ public class AStar {
     private void processNeighbors(Node current, Node goal) {
         closedSet.put(current.hashCode(), current);
         for (Node neighbor : getNeighbors(current)) {
-            if (closedSet.contains(neighbor.hashCode()))
+            if (closedSet.indexOfKey(neighbor.hashCode()) >= 0)
                 continue; // Ignore already evaluated neighbor
 
             int tentativeGCost = current.getCostToNode() + manhattan(current, neighbor);
