@@ -16,7 +16,7 @@ public class SpriteDrawableComponent extends DrawableComponent {
     private final Paint spriteColor;
     private PositionComponent posComponent = null;
     private int currentAnim = 0, currentStep = 0;
-    private long currentTimeMillis = 0,lastTimestamp = 0, delay = 0;
+    private long lastTimestamp = 0;
 
 
     public SpriteDrawableComponent (Spritesheet currentSpritesheet) {
@@ -44,8 +44,8 @@ public class SpriteDrawableComponent extends DrawableComponent {
             posComponent = (PositionComponent) owner.getComponent(POSITION);
         }
 
-        currentTimeMillis = System.currentTimeMillis();
-        delay = currentTimeMillis - lastTimestamp;
+        long currentTimeMillis = System.currentTimeMillis();
+        long delay = currentTimeMillis - lastTimestamp;
 
         if (delay > currentSpritesheet.getDelay(currentAnim)) {
             currentStep = currentStep + 1;

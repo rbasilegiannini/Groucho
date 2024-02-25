@@ -58,7 +58,7 @@ public abstract class WalkingComponent extends Component {
         phyComponent.updatePosY(increaseY);
     }
 
-    private void initComponents() {
+    protected void initComponents() {
         if (posComponent == null) {
             posComponent = (PositionComponent) owner.getComponent(POSITION);
         }

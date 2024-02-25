@@ -20,7 +20,6 @@ import com.personal.groucho.game.gameobjects.ComponentType;
 public class LightComponent extends Component {
     private PositionComponent position = null;
     private final Paint maskPaint;
-    private Bitmap maskBitmap;
     private final Bitmap defaultBitmap;
     private final Canvas maskCanvas ;
     private final PorterDuffXfermode porterCLEAR;
@@ -53,7 +52,7 @@ public class LightComponent extends Component {
             position = (PositionComponent) owner.getComponent(POSITION);
         }
 
-        maskBitmap = Bitmap.createBitmap(defaultBitmap);
+        Bitmap maskBitmap = Bitmap.createBitmap(defaultBitmap);
         maskCanvas.setBitmap(maskBitmap);
 
         maskCanvas.drawColor(Color.valueOf(0,0,0, 1-brightness).toArgb());

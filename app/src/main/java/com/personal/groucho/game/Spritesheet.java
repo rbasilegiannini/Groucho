@@ -8,10 +8,8 @@ import android.graphics.Rect;
 public class Spritesheet {
 
     private final Bitmap sheet;
-
     private int frameWidth;
     private int frameHeight;
-
     private final int[] start, length, delay;
     private final Rect src, dest;
 

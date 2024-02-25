@@ -42,11 +42,8 @@ public class Physics {
     private static final int PARTICLE_ITERATIONS = 3;
 
     // To avoid further allocations
-    private GameObject currentGO = null;
     private final List<GameObject> hitGameObjects = new ArrayList<>();
     private final List<Float> fractions = new ArrayList<>();
-    private SparseArray<Node> oldCellsToReset = new SparseArray<>();
-    private SparseArray<Node> newCellsToChange = new SparseArray<>();
     private final SparseArray<Node> unchangedCells = new SparseArray<>();
 
     private Physics(GameWorld gameWorld) {
@@ -73,7 +70,7 @@ public class Physics {
 
     private void updatePhysicsPosition() {
         for (PhysicsComponent phyComponent : gameWorld.phyComponents) {
-            currentGO = (GameObject)(phyComponent.getOwner());
+            GameObject currentGO = (GameObject)(phyComponent.getOwner());
             PositionComponent posComponent = (PositionComponent) currentGO.getComponent(POSITION);
 
             if (currentGO.role == FURNITURE) {
@@ -104,21 +101,21 @@ public class Physics {
         if (gameGrid != null) {
             int dCost = (int) (phyComponent.density * 10000);
 
-            oldCellsToReset = gameGrid.getNodes(
+            SparseArray<Node> oldCellsToReset = gameGrid.getNodes(
                     (int)originalPosX,
                     (int)originalPosY,
                     (int)phyComponent.dimX,
                     (int)phyComponent.dimY
             );
 
-            newCellsToChange = gameGrid.getNodes(
+            SparseArray<Node> newCellsToChange = gameGrid.getNodes(
                     (int)fromMetersToBufferX(phyComponent.getPosX()),
                     (int)fromMetersToBufferY(phyComponent.getPosY()),
                     (int)phyComponent.dimX,
                     (int)phyComponent.dimY
             );
 
-            setUnchangedCells();
+            setUnchangedCells(oldCellsToReset, newCellsToChange);
 
             for (int i = 0; i < unchangedCells.size(); i++) {
                 int key = unchangedCells.keyAt(i);
@@ -138,7 +135,7 @@ public class Physics {
         }
     }
 
-    private void setUnchangedCells() {
+    private void setUnchangedCells(SparseArray<Node> oldCellsToReset, SparseArray<Node> newCellsToChange) {
         unchangedCells.clear();
         for (int i = 0; i < newCellsToChange.size(); i++) {
             int key = newCellsToChange.keyAt(i);
@@ -152,7 +149,7 @@ public class Physics {
         hitGameObjects.clear();
         fractions.clear();
 
-        currentGO = null;
+        GameObject currentGO = null;
 
         world.rayCast(
                 new RayCastCallback() {

@@ -1,8 +1,10 @@
 package com.personal.groucho.game;
 
+import com.personal.groucho.game.gameobjects.Resettable;
+
 import java.util.ArrayList;
 
-public class TextBlock {
+public class TextBlock implements Resettable {
     private final ArrayList<String> sentences = new ArrayList<>();
 
     public void add(String sentence) {
@@ -14,4 +16,9 @@ public class TextBlock {
     }
 
     public ArrayList<String> getSentences() {return sentences;}
+
+    @Override
+    public void reset() {
+        sentences.clear();
+    }
 }

@@ -20,7 +20,6 @@ import java.util.Comparator;
 
 class DrawableComparator implements Comparator<DrawableComponent> {
     private static DrawableComparator instance = null;
-    private GameObject go1, go2;
 
     public static DrawableComparator getInstance() {
         if (instance == null) {
@@ -31,8 +30,8 @@ class DrawableComparator implements Comparator<DrawableComponent> {
 
     @Override
     public int compare(DrawableComponent obj1, DrawableComponent obj2) {
-        go1 = (GameObject) obj1.getOwner();
-        go2 = (GameObject) obj2.getOwner();
+        GameObject go1 = (GameObject) obj1.getOwner();
+        GameObject go2 = (GameObject) obj2.getOwner();
 
         if (go1.role == Role.ENEMY) {
             if (((AliveComponent)(go1.getComponent(ALIVE))).currentStatus == DEAD){
@@ -47,19 +46,20 @@ class DrawableComparator implements Comparator<DrawableComponent> {
         }
 
         return Integer.compare(
-                ((PositionComponent)go1.getComponent(POSITION)).posY,
-                ((PositionComponent)go2.getComponent(POSITION)).posY);
+                ((PositionComponent) go1.getComponent(POSITION)).posY,
+                ((PositionComponent) go2.getComponent(POSITION)).posY);
     }
 }
 
 public class Graphics {
+    private static Graphics instance = null;
+
     public final static int bufferWidth = 1920;
     public final static int bufferHeight = 1080;
 
     protected Bitmap buffer;
     protected Canvas canvas;
     private final GameWorld gameWorld;
-    private static Graphics instance = null;
 
     private Graphics(GameWorld gameWorld) {
         this.gameWorld = gameWorld;

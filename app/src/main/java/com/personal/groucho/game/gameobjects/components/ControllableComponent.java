@@ -56,18 +56,11 @@ public class ControllableComponent extends WalkingComponent implements Controlle
         }
     }
 
-    private void initComponents() {
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
-        if(phyComponent == null) {
-            phyComponent = (PhysicsComponent) owner.getComponent(PHYSICS);
-        }
+    @Override
+    protected void initComponents() {
+        super.initComponents();
         if (lightComponent == null) {
             lightComponent = (LightComponent) owner.getComponent(LIGHT);
-        }
-        if (character == null) {
-            character = (CharacterComponent) owner.getComponent(CHARACTER);
         }
     }
 

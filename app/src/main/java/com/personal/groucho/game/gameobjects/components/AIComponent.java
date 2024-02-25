@@ -53,23 +53,18 @@ public class AIComponent extends WalkingComponent {
     private final GameWorld gameWorld;
     private final AStar aStar;
     private Orientation originalOrientation;
-    private Node originalPosOnGrid;
-    private Node posOnGrid;
-    private Node playerPosOnGrid;
-    private Node currentNode;
+    private Node originalPosOnGrid, posOnGrid, playerPosOnGrid, currentNode;
     private final int maxSteps;
     private int currentSteps;
-    private long lastHitMillis;
     private boolean isNodeReached = true;
     public boolean isPlayerEngaged = false;
     public boolean isPlayerReached = false;
     public boolean isInvestigate = false;
     private boolean isIdle = false;
     private boolean isPatrol = false;
-    private long lastSeenMills;
+    private long lastHitMillis, lastSeenMills;
 
     // To avoid further allocations
-    private List<Action> actions;
     private List<Node> currentPath;
     private AliveComponent playerAliveComponent = null;
 
@@ -112,7 +107,7 @@ public class AIComponent extends WalkingComponent {
         );
         originalOrientation = posComponent.orientation;
 
-        actions = fsm.getActions();
+        List<Action> actions = fsm.getActions();
         for (Action action : actions) {
             action.doIt();
         }
@@ -133,13 +128,9 @@ public class AIComponent extends WalkingComponent {
         }
     }
 
-    private void initComponents() {
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
-        }
-        if (character == null) {
-            character = (CharacterComponent) owner.getComponent(CHARACTER);
-        }
+    @Override
+    protected void initComponents() {
+        super.initComponents();
         if (playerAliveComponent == null) {
             playerAliveComponent = (AliveComponent) gameWorld.getPlayerGO().getComponent(ALIVE);
         }
