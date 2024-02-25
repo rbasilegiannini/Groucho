@@ -7,20 +7,24 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.SparseArray;
 
+import com.personal.groucho.game.GameWorld;
+
 public class GameGrid {
-    private final int width;
-    private final int height;
-    private final Node[][] grid;
+    public final int width;
+    public final int height;
+    public final Node[][] grid;
     private final SparseArray<Node> nodesBelowTheObject = new SparseArray<>();
 
-    public GameGrid(int width, int height) {
+    public GameGrid(int width, int height, GameWorld gameWorld) {
         this.width = width;
         this.height = height;
         this.grid = new Node[width][height];
 
         for (int posX = 0; posX < width; posX++) {
             for (int posY = 0; posY < height; posY++) {
-                grid[posX][posY] = new Node(posX, posY);
+                grid[posX][posY] = gameWorld.nodesPool.acquire();
+                grid[posX][posY].posX = posX;
+                grid[posX][posY].posY = posY;
             }
         }
     }

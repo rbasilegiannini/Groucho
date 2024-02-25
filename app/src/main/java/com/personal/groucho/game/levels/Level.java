@@ -20,20 +20,22 @@ public abstract class Level {
 
     protected final GameWorld gameWorld;
     protected final List<GameObject> gameObjects = new ArrayList<>();
-    protected final GameGrid grid;
+    protected GameGrid grid;
     protected final Rect surface;
     protected final Paint floorPaint;
+    private final int widthGrid;
+    private final int heightGrid;
 
     protected Level(GameWorld gameWorld, int levelDimX, int levelDimY) {
         this.gameWorld = gameWorld;
-        int widthGrid = levelDimX/cellSize;
-        int heightGrid = levelDimY/cellSize;
-        grid = new GameGrid(widthGrid, heightGrid);
+        widthGrid = levelDimX/cellSize;
+        heightGrid = levelDimY/cellSize;
         surface = new Rect(0,0, widthGrid*cellSize, heightGrid*cellSize);
         floorPaint = new Paint();
     }
 
     public void init() {
+        grid = new GameGrid(widthGrid, heightGrid, gameWorld);
         gameObjects.clear();
         gameWorld.setGameGrid(grid);
         makeBorders();

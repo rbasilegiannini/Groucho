@@ -1,15 +1,29 @@
 package com.personal.groucho.game.AI.pathfinding;
 
-public class Node {
+import com.personal.groucho.game.gameobjects.Resettable;
+
+public class Node implements Resettable {
     public int posX, posY;
     protected int costToNode, heuristicCostToGoal, defaultCost;
     public Node parent;
+    public static int counter = 0;
+
+    public Node(){
+        this.posX = 0;
+        this.posY = 0;
+        this.parent = null;
+        this.defaultCost = 0;
+
+        counter++;
+    }
 
     public Node(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
         this.parent = null;
         this.defaultCost = 0;
+
+        counter++;
     }
 
     public void setParent(Node parent) {
