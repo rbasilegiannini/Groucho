@@ -178,7 +178,10 @@ public class Physics {
     }
 
     private void handleCollisions() {
-        for (Collision event: contactListener.getCollisions()) {
+        SparseArray<Collision> collisions = contactListener._getCollisions();
+        for (int i = 0; i < collisions.size(); i ++) {
+            Collision event = collisions.valueAt(i);
+
             if (event.GO1.role == PLAYER)
                 handlePlayerCollision(event.GO1, event.GO2);
             else if (event.GO2.role == PLAYER)

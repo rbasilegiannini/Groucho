@@ -1,33 +1,35 @@
 package com.personal.groucho.game.collisions;
 
+import android.util.SparseArray;
+
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
 import com.google.fpl.liquidfun.ContactListener;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.GameObject;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 public class MyContactListener extends ContactListener {
 
-    // TODO: Use SparseArray
-    private final Collection<Collision> collisions = new HashSet<>();
-    private Body ba, bb;
+    private final SparseArray<Collision> collisions = new SparseArray<>();
+    private final SparseArray<Collision> result = new SparseArray<>();
     private final GameWorld gameWorld;
 
     public MyContactListener(GameWorld gameWorld) {this.gameWorld = gameWorld;}
 
-    public Collection<Collision> getCollisions() {
-        Collection<Collision> result = new HashSet<>(collisions);
+    public SparseArray<Collision> _getCollisions() {
+        result.clear();
+        for (int i = 0; i < collisions.size(); i++) {
+            result.put(collisions.keyAt(i), collisions.valueAt(i));
+        }
         collisions.clear();
+
         return result;
     }
 
     @Override
     public void beginContact(Contact contact) {
-        ba = contact.getFixtureA().getBody();
-        bb = contact.getFixtureB().getBody();
+        Body ba = contact.getFixtureA().getBody();
+        Body bb = contact.getFixtureB().getBody();
 
         GameObject a = (GameObject) ba.getUserData();
         GameObject b = (GameObject) bb.getUserData();
@@ -36,6 +38,6 @@ public class MyContactListener extends ContactListener {
         collision.GO1 = a;
         collision.GO2 = b;
 
-        collisions.add(collision);
+        collisions.put(collision.hashCode(), collision);
     }
 }
