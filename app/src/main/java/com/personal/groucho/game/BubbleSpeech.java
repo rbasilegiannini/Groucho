@@ -18,13 +18,15 @@ import java.util.List;
 public class BubbleSpeech {
     private final GameWorld gameWorld;
     private final TextPaint paint;
-    private final int lineSpacing = 10;
     private final Rect src, dest;
     private int posX;
     private int posY;
     private int width;
     private int height;
     private Bitmap bubble;
+    private final StringBuilder currentLine = new StringBuilder();
+    private final List<TextBlock> textBlocks = new ArrayList<>();
+    private final ObjectsPool<TextBlock> textBlocksPool= new ObjectsPool<>(10, TextBlock.class);
 
     public BubbleSpeech(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
@@ -62,6 +64,7 @@ public class BubbleSpeech {
 
             for (String line : textBlocks.get(0).getSentences()) {
                 canvas.drawText(line, x, y, paint);
+                int lineSpacing = 10;
                 y += paint.getTextSize() + lineSpacing;
             }
         }
@@ -70,13 +73,11 @@ public class BubbleSpeech {
         }
     }
 
-    // TODO: will be a pool
-    List<TextBlock> textBlocks = new ArrayList<>();
     public void setText(String text) {
         String[] words = text.split("\\s+");
-        StringBuilder currentLine = new StringBuilder();
+        currentLine.setLength(0);
 
-        TextBlock currentTextBlock = new TextBlock();
+        TextBlock currentTextBlock = textBlocksPool.acquire();
         for (String word : words) {
             if ((currentLine.length() + word.length()) * paint.getTextSize() <= 2*width) {
                 if (currentLine.length() > 0) {
@@ -85,11 +86,12 @@ public class BubbleSpeech {
                 currentLine.append(word);
             } else {
                 currentTextBlock.add(currentLine.toString());
-                currentLine = new StringBuilder(word);
+                currentLine.setLength(0);
+                currentLine.append(word);
 
                 if (currentTextBlock.isFull()) {
                     textBlocks.add(currentTextBlock);
-                    currentTextBlock = new TextBlock();
+                    currentTextBlock = textBlocksPool.acquire();
                 }
             }
         }
@@ -105,6 +107,7 @@ public class BubbleSpeech {
 
     public void consumeTouchEvent(Input.TouchEvent event) {
         if (event.type == Input.TouchEvent.TOUCH_DOWN) {
+            textBlocksPool.release(textBlocks.get(0));
             textBlocks.remove(0);
         }
     }
