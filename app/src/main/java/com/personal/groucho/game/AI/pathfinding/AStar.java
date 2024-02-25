@@ -103,6 +103,6 @@ public class AStar {
     private void reset() {
         openSet.clear();
         closedSet.clear();
-        grid.reset();
+        grid.clear();
     }
 }

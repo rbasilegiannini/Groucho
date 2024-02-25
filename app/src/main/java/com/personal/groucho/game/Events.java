@@ -67,7 +67,7 @@ public class Events {
     public static void alertEnemiesEvent(GameWorld gameWorld) {
         List<PositionComponent> enemiesPos = new ArrayList<>();
         List<Float> enemiesDist = new ArrayList<>();
-        for (GameObject enemy : gameWorld.getGOByRole(ENEMY)){
+        for (GameObject enemy : gameWorld.goHandler.getGOByRole(ENEMY)){
             if (((AliveComponent) enemy.getComponent(ALIVE)).currentStatus != DEAD) {
                 PositionComponent enemyPos = (PositionComponent) enemy.getComponent(POSITION);
                 if (isInCircle(
@@ -97,7 +97,7 @@ public class Events {
         AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.ALIVE);
         alive.heal(medicalKit);
 
-        gameWorld.removeGameObject(health);
+        gameWorld.goHandler.removeGameObject(health);
     }
 
     public static void playerCollideWithEnemyEvent(GameWorld gameWorld, GameObject enemy) {

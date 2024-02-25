@@ -9,9 +9,11 @@ public class Node implements Resettable {
     public static int counter = 0;
 
     public Node(){
-        this.posX = 0;
-        this.posY = 0;
+        this.posX = -1;
+        this.posY = -1;
         this.parent = null;
+        this.costToNode = 0;
+        this.heuristicCostToGoal = 0;
         this.defaultCost = 0;
 
         counter++;
@@ -21,6 +23,8 @@ public class Node implements Resettable {
         this.posX = posX;
         this.posY = posY;
         this.parent = null;
+        this.costToNode = 0;
+        this.heuristicCostToGoal = 0;
         this.defaultCost = 0;
 
         counter++;
@@ -42,9 +46,18 @@ public class Node implements Resettable {
         return posX == other.posX && posY == other.posY;
     }
 
-    public void reset() {
-        this.costToNode = 0;
-        this.heuristicCostToGoal = 0;
-        this.parent = null;
+    public void clear() {
+        costToNode = 0;
+        heuristicCostToGoal = 0;
+        parent = null;
+    }
+
+    public void reset(){
+        posX = -1;
+        posY = -1;
+        defaultCost = 0;
+        costToNode = 0;
+        heuristicCostToGoal = 0;
+        parent = null;
     }
 }

@@ -72,10 +72,10 @@ public class GameGrid {
         grid[node.posX][node.posY].defaultCost -= decrease;
     }
 
-    public void reset() {
+    public void clear() {
         for (int posX = 0; posX < width; posX++) {
             for (int posY = 0; posY < height; posY++) {
-                grid[posX][posY].reset();
+                grid[posX][posY].clear();
             }
         }
     }
@@ -104,7 +104,6 @@ public class GameGrid {
                 String cost = String.valueOf(grid[x][y].defaultCost);
                 paint.setColor(Color.WHITE);
                 canvas.drawText(cost, startX+(float)cellSize /4, startY+ (float)cellSize /2, paint);
-
             }
         }
     }

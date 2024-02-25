@@ -1,9 +1,5 @@
 package com.personal.groucho.game.levels;
 
-import static com.personal.groucho.game.constants.System.cellSize;
-import static com.personal.groucho.game.constants.System.characterDimY;
-import static com.personal.groucho.game.constants.System.characterScaleFactor;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Matrix;
@@ -13,10 +9,12 @@ import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 
+import java.util.Objects;
+
 public class SecondLevel extends Level {
 
     public SecondLevel(GameWorld gameWorld) {
-        super(gameWorld, 2000, 2000);
+        super(gameWorld, 2000, 1000);
         Bitmap floor = Textures.firstLevelFloor;
 
         // Set floor
@@ -31,13 +29,16 @@ public class SecondLevel extends Level {
     public void init() {
         super.init();
 
+        gameObjects.add(GameObjectFactory.makeTrigger("changelevel", 1200, 800, gameWorld));
         for (GameObject go : gameObjects) {
-            gameWorld.addGameObject(go);
+            gameWorld.goHandler.addGameObject(go);
         }
     }
 
     @Override
     public void handleTrigger(GameObject trigger) {
-
+        if(Objects.equals(trigger.name, "changelevel")) {
+            gameWorld.changeLevel(new FirstLevel(gameWorld));
+        }
     }
 }

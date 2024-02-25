@@ -8,19 +8,16 @@ import static com.personal.groucho.game.Utils.toBufferYLength;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
-import com.personal.groucho.game.AI.Sight;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Debugger {
     private final GameWorld gameWorld;
-    private final List<Sight> sights = new ArrayList<>();
     private GameGrid grid;
     private static Debugger instance = null;
     private final Paint positionPaint, colliderPaint, gameGridPaint, sightPaint, pathPaint;
@@ -61,23 +58,24 @@ public class Debugger {
     public void draw(Canvas canvas) {
         grid.drawDebugGrid(canvas, gameGridPaint);
 
-        for (AIComponent aiComponent : gameWorld.aiComponents) {
+        for (AIComponent aiComponent : gameWorld.goHandler.aiComponents) {
             aiComponent.getSight().drawDebugSight(canvas, sightPaint);
             aiComponent.drawDebugPath(canvas, pathPaint);
         }
 
         drawPositions(canvas);
         drawColliders(canvas);
+        Log.i("Nodes", String.valueOf(Node.counter));
     }
 
     private void drawPositions(Canvas canvas) {
-        for (PositionComponent posComponent : gameWorld.posComponents) {
+        for (PositionComponent posComponent : gameWorld.goHandler.posComponents) {
             canvas.drawCircle(posComponent.posX, posComponent.posY, 20, positionPaint);
         }
     }
 
     private void drawColliders(Canvas canvas){
-        for (PhysicsComponent phyComponent : gameWorld.phyComponents) {
+        for (PhysicsComponent phyComponent : gameWorld.goHandler.phyComponents) {
             float shapeCenterX = toBufferXLength(phyComponent.fixtureCenterX);
             float shapeCenterY = toBufferYLength(phyComponent.fixtureCenterY);
 
@@ -97,10 +95,6 @@ public class Debugger {
     }
 
     public void updateDebugger() {
-        sights.clear();
-        for (AIComponent aiComponent : gameWorld.aiComponents) {
-            sights.add(aiComponent.getSight());
-        }
         grid = gameWorld.grid;
     }
 }

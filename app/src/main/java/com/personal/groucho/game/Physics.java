@@ -69,7 +69,7 @@ public class Physics {
     }
 
     private void updatePhysicsPosition() {
-        for (PhysicsComponent phyComponent : gameWorld.phyComponents) {
+        for (PhysicsComponent phyComponent : gameWorld.goHandler.phyComponents) {
             GameObject currentGO = (GameObject)(phyComponent.getOwner());
             PositionComponent posComponent = (PositionComponent) currentGO.getComponent(POSITION);
 
