@@ -34,7 +34,7 @@ public class Physics {
     private static Physics instance = null;
     private final GameWorld gameWorld;
     private GameGrid gameGrid;
-    protected final World world;
+    public final World world;
     private final MyContactListener contactListener;
 
     private static final int VELOCITY_ITERATIONS = 8;
@@ -207,7 +207,7 @@ public class Physics {
                 break;
 
             case TRIGGER:
-                gameWorld.getLevel().handleTrigger(object);
+                gameWorld.currentLevel.handleTrigger(object);
                 break;
         }
     }

@@ -49,12 +49,12 @@ import java.util.List;
 public class GameWorld {
     static Box physicalSize, screenSize, currentView;
     final MainActivity activity;
-    private final Physics physics;
-    private final Graphics graphics;
-    private Player player;
+    public final Physics physics;
+    public final Graphics graphics;
+    public Player player;
     public Controller controller;
     protected Level currentLevel;
-    protected GameGrid grid;
+    public GameGrid grid;
     private final List<GameObject> objects = new ArrayList<>();
     protected final List<PositionComponent> posComponents = new ArrayList<>();
     protected final List<PhysicsComponent> phyComponents = new ArrayList<>();
@@ -64,7 +64,7 @@ public class GameWorld {
     protected final List<LightComponent> lightComponents = new ArrayList<>();
     private TouchHandler touchHandler;
     private boolean pause = false;
-    protected boolean gameOver = false;
+    public boolean gameOver = false;
     protected boolean grouchoIsTalking = true;
     private final BubbleSpeech grouchoBubble;
 
@@ -85,29 +85,22 @@ public class GameWorld {
         grouchoBubble = new BubbleSpeech(this);
     }
 
-    // TODO: Add a "re-init" method and use a new menu to handle the game over.
     public void init(Level level) {
-        graphics.reset();
-
-        controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
-
-        posComponents.clear();
-        phyComponents.clear();
-        aliveComponents.clear();
-        lightComponents.clear();
-        drawComponents.clear();
-        aiComponents.clear();
-
-        for (int i = 0; i < objects.size(); i++) {
-            objectsPool.release(objects.get(i));
-        }
-        objects.clear();
+        initEnvironment();
 
         currentLevel = level;
         currentLevel.init();
     }
 
     public void tryAgain(Level level) {
+        initEnvironment();
+        resetPool();
+
+        currentLevel = level;
+        currentLevel.init();
+    }
+
+    private void initEnvironment() {
         graphics.reset();
 
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
@@ -119,15 +112,10 @@ public class GameWorld {
         drawComponents.clear();
         aiComponents.clear();
 
-        resetPool();
-
         for (int i = 0; i < objects.size(); i++) {
             objectsPool.release(objects.get(i));
         }
         objects.clear();
-
-        currentLevel = level;
-        currentLevel.init();
     }
 
     public void setTouchHandler(TouchHandler touchHandler) {
@@ -153,15 +141,7 @@ public class GameWorld {
         physics.setGameGrid(grid);
     }
     public void setPlayerVisibility(boolean visibility) {player.setPlayerVisibility(visibility);}
-    public boolean isPlayerVisible() {return player.isPlayerVisible;}
-    public Bitmap getBuffer() {return graphics.buffer;}
-    public World getWorld() {return physics.world;}
-    public Level getLevel() {return currentLevel;}
-    public GameObject getPlayerGO(){return player.gameObject;}
-    public float getPlayerPositionX() {return player.posX;}
-    public float getPlayerPositionY() {return player.posY;}
 
-    public GameGrid getGameGrid() {return grid;}
     public List<GameObject> getGOByRole(Role role) {
         List<GameObject> gameObjects = new ArrayList<>();
         for (GameObject go : objects) {
@@ -355,17 +335,8 @@ public class GameWorld {
         }
     }
 
-    public void resume() {
-        pause = false;
-    }
-
-    public void pause() {
-        pause = true;
-    }
-
-    protected void finalize() {
-        physics.finalize();
-    }
+    public void resume() {pause = false;}
+    public void pause() {pause = true;}
 
     public void GameOver() {
         this.gameOver = true;
@@ -375,5 +346,8 @@ public class GameWorld {
         removeComponent(player.gameObject, LIGHT);
     }
 
-    public boolean isGameOver() {return gameOver;}
+    protected void finalize() {
+        physics.finalize();
+    }
+
 }

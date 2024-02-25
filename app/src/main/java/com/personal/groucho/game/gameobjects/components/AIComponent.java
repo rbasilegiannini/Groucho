@@ -68,7 +68,7 @@ public class AIComponent extends WalkingComponent {
 
     public AIComponent(GameWorld gameWorld, StateName currentState) {
         this.gameWorld = gameWorld;
-        grid = gameWorld.getGameGrid();
+        grid = gameWorld.grid;
 
         originalState = currentState;
         switch (originalState) {
@@ -119,7 +119,7 @@ public class AIComponent extends WalkingComponent {
         if (sight == null) {
             sight = new Sight(
                     this,
-                    gameWorld.getWorld(),
+                    gameWorld.physics.world,
                     new Vec2(posComponent.posX, posComponent.posY),
                     posComponent.orientation);
         }
@@ -129,12 +129,12 @@ public class AIComponent extends WalkingComponent {
     protected void initComponents() {
         super.initComponents();
         if (playerAliveComponent == null) {
-            playerAliveComponent = (AliveComponent) gameWorld.getPlayerGO().getComponent(ALIVE);
+            playerAliveComponent = (AliveComponent) gameWorld.player.gameObject.getComponent(ALIVE);
         }
     }
 
     public Sight getSight() {return sight;}
-    public boolean isPlayerVisible() {return gameWorld.isPlayerVisible();}
+    public boolean isPlayerVisible() {return gameWorld.player.isPlayerVisible;}
     public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
     public void setInvestigateStatus(boolean isInvestigate) {this.isInvestigate = isInvestigate;}
 
@@ -253,7 +253,7 @@ public class AIComponent extends WalkingComponent {
             isPlayerReached = false;
         }
 
-        if (!gameWorld.isPlayerVisible()) {
+        if (!gameWorld.player.isPlayerVisible) {
             if (System.currentTimeMillis() - lastSeenMills > maxInvisiblePlayer){
                 isPlayerEngaged = false;
             }
@@ -270,8 +270,8 @@ public class AIComponent extends WalkingComponent {
 
     private boolean hasPlayerChangedPosition() {
         return !playerPosOnGrid.equal(grid.getNode(
-                (int) gameWorld.getPlayerPositionX() / cellSize,
-                (int) gameWorld.getPlayerPositionY() / cellSize));
+                gameWorld.player.posX / cellSize,
+                gameWorld.player.posY / cellSize));
     }
 
     // Attack actions
@@ -286,11 +286,11 @@ public class AIComponent extends WalkingComponent {
 
         isPlayerReached = isAPlayerNeighbor();
 
-        if (!gameWorld.isGameOver() && playerAliveComponent.currentStatus != DEAD) {
+        if (!gameWorld.gameOver && playerAliveComponent.currentStatus != DEAD) {
             long delay =
                     character.properties.sheetHurt.getDelay(0) * character.properties.sheetHurt.getLength(0);
             if (isPlayerReached && System.currentTimeMillis() - lastHitMillis > delay) {
-                updateDirection(directionBetweenGO(gameWorld.getPlayerGO(), (GameObject)owner));
+                updateDirection(directionBetweenGO(gameWorld.player.gameObject, (GameObject)owner));
                 enemyHitPlayerEvent(playerAliveComponent, character.properties.power);
                 lastHitMillis = System.currentTimeMillis();
             }
@@ -321,8 +321,8 @@ public class AIComponent extends WalkingComponent {
         );
 
         playerPosOnGrid = grid.getNode(
-                (int) gameWorld.getPlayerPositionX()/cellSize,
-                (int) gameWorld.getPlayerPositionY()/cellSize
+                gameWorld.player.posX /cellSize,
+                gameWorld.player.posY /cellSize
         );
 
         currentPath.clear();
@@ -332,9 +332,9 @@ public class AIComponent extends WalkingComponent {
     // TODO: Optimize this method
     public boolean isAPlayerNeighbor() {
         float distanceFromPlayerX =
-                (float) posComponent.posX - gameWorld.getPlayerPositionX();
+                (float) posComponent.posX - gameWorld.player.posX;
         float distanceFromPlayerY =
-                (float) posComponent.posY - gameWorld.getPlayerPositionY();
+                (float) posComponent.posY - gameWorld.player.posY;
 
         float distanceFromPlayer = (float)sqrt(pow(distanceFromPlayerX,2) + pow(distanceFromPlayerY,2));
 

@@ -71,11 +71,11 @@ public class Events {
             if (((AliveComponent) enemy.getComponent(ALIVE)).currentStatus != DEAD) {
                 PositionComponent enemyPos = (PositionComponent) enemy.getComponent(POSITION);
                 if (isInCircle(
-                        gameWorld.getPlayerPositionX(), gameWorld.getPlayerPositionY(), enemyPos.posX, enemyPos.posY,
+                        gameWorld.player.posX, gameWorld.player.posY, enemyPos.posX, enemyPos.posY,
                         hearingRangeSqr)) {
 
                     float dist = distBetweenVec(
-                            new Vec2(gameWorld.getPlayerPositionX(), gameWorld.getPlayerPositionY()),
+                            new Vec2(gameWorld.player.posX, gameWorld.player.posY),
                             new Vec2(enemyPos.posX, enemyPos.posY));
 
                     enemiesPos.add(enemyPos);
@@ -103,7 +103,7 @@ public class Events {
     public static void playerCollideWithEnemyEvent(GameWorld gameWorld, GameObject enemy) {
         AIComponent aiEnemy = (AIComponent) enemy.getComponent(AI);
         if (!aiEnemy.isPlayerEngaged) {
-            aiEnemy.updateDirection(directionBetweenGO(gameWorld.getPlayerGO(), enemy));
+            aiEnemy.updateDirection(directionBetweenGO(gameWorld.player.gameObject, enemy));
             aiEnemy.setPlayerEngaged(true);
         }
     }

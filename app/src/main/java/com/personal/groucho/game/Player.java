@@ -15,12 +15,13 @@ import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
 public class Player {
-    protected final GameObject gameObject;
+    public final GameObject gameObject;
     private final PositionComponent posComponent;
     private final ControllableComponent ctrlComponent;
-    protected int posX, posY;
+    public int posX;
+    public int posY;
     private float cameraX, cameraY;
-    protected boolean isPlayerVisible = false;
+    public boolean isPlayerVisible = false;
 
     public Player(GameObject gameObject) {
         this.gameObject = gameObject;

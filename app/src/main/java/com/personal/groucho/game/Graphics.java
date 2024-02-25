@@ -57,7 +57,7 @@ public class Graphics {
     public final static int bufferWidth = 1920;
     public final static int bufferHeight = 1080;
 
-    protected Bitmap buffer;
+    public Bitmap buffer;
     protected Canvas canvas;
     private final GameWorld gameWorld;
 
@@ -78,7 +78,7 @@ public class Graphics {
         canvas.drawARGB(255,0,0,0);
         gameWorld.currentLevel.draw(canvas);
         drawGameObjects();
-        if (!gameWorld.isGameOver() && !gameWorld.grouchoIsTalking) {
+        if (!gameWorld.gameOver && !gameWorld.grouchoIsTalking) {
             gameWorld.controller.draw(canvas);
         }
 

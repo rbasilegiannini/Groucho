@@ -51,8 +51,8 @@ public class Sight {
     }
 
     public void see(GameWorld gameWorld) {
-        playerPosX = gameWorld.getPlayerPositionX();
-        playerPosY = gameWorld.getPlayerPositionY();
+        playerPosX = gameWorld.player.posX;
+        playerPosY = gameWorld.player.posY;
 
         if(isInTriangle(originX, originY, playerPosX, playerPosY, distSight, phase)){
             world.rayCast(
