@@ -57,10 +57,7 @@ public class MenuHandler {
                     });
 
                     optionsButton.setOnClickListener(v -> handleOptionsPauseMenu(gameWorld));
-                    exitButton.setOnClickListener(v -> {
-                        gameWorld.finalize();
-                        gameWorld.activity.finish();
-                    });
+                    exitButton.setOnClickListener(v -> gameWorld.activity.finish());
                 });
     }
 
@@ -94,8 +91,22 @@ public class MenuHandler {
     public static void handleGameOverMenu(GameWorld gameWorld) {
         gameWorld.activity.runOnUiThread(
                 () -> {
-                    gameWorld.activity.setContentView(R.layout.menu);
-                    handleMainMenu(gameWorld);
+                    gameWorld.activity.setContentView(R.layout.gameover);
+                    handleTryAgain(gameWorld);
+                });
+    }
+
+    public static void handleTryAgain(GameWorld gameWorld) {
+        gameWorld.activity.runOnUiThread(
+                () -> {
+                    ImageButton tryAgainButton = gameWorld.activity.findViewById(R.id.tryAgain);
+                    ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
+
+                    tryAgainButton.setOnClickListener(v -> {
+                            gameWorld.tryAgain(new FirstLevel(gameWorld));
+                            gameWorld.activity.setContentView(gameWorld.activity.renderView);
+                    });
+                    exitButton.setOnClickListener(v -> gameWorld.activity.finish());
                 });
     }
 }

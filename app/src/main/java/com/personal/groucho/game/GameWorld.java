@@ -6,6 +6,7 @@ import static com.personal.groucho.game.Events.gameOverEvent;
 import static com.personal.groucho.game.Events.playerShootEnemyEvent;
 import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
 import static com.personal.groucho.game.Events.playerShootWallEvent;
+import static com.personal.groucho.game.assets.Textures.bubble;
 import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
@@ -25,6 +26,7 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
@@ -63,12 +65,14 @@ public class GameWorld {
     private TouchHandler touchHandler;
     private boolean pause = false;
     protected boolean gameOver = false;
-    protected boolean grouchoIsTalking = false;
+    protected boolean grouchoIsTalking = true;
     private final BubbleSpeech grouchoBubble;
 
     // Pools to reduce allocation and de-allocation
     public final ObjectsPool<GameObject> objectsPool = new ObjectsPool<>(100, GameObject.class);
     public final ObjectsPool<Collision> collisionsPool = new ObjectsPool<>(30, Collision.class);
+    public final ObjectsPool<Node> nodesPool = new ObjectsPool<>(200, Node.class);
+
 
     public GameWorld(Box physicalSize, Box screenSize, MainActivity newActivity) {
         GameWorld.physicalSize = physicalSize;
@@ -81,6 +85,7 @@ public class GameWorld {
         grouchoBubble = new BubbleSpeech(this);
     }
 
+    // TODO: Add a "re-init" method and use a new menu to handle the game over.
     public void init(Level level) {
         graphics.reset();
 
@@ -102,6 +107,29 @@ public class GameWorld {
         currentLevel.init();
     }
 
+    public void tryAgain(Level level) {
+        graphics.reset();
+
+        controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
+
+        posComponents.clear();
+        phyComponents.clear();
+        aliveComponents.clear();
+        lightComponents.clear();
+        drawComponents.clear();
+        aiComponents.clear();
+
+        resetPool();
+
+        for (int i = 0; i < objects.size(); i++) {
+            objectsPool.release(objects.get(i));
+        }
+        objects.clear();
+
+        currentLevel = level;
+        currentLevel.init();
+    }
+
     public void setTouchHandler(TouchHandler touchHandler) {
         this.touchHandler = touchHandler;
     }
@@ -113,10 +141,10 @@ public class GameWorld {
         player = new Player(playerGO);
         player.setPos(posX, posY);
 
-//        grouchoBubble.setBubbleTexture(bubble);
-//        grouchoBubble.setPosX(player.posX);
-//        grouchoBubble.setPosY(player.posY);
-//        grouchoBubble.setText("sada asdi qweji sjdfjs  eijh hg h jh jhg hjg hj jhk ur kljdsf woiur sdkjlf wieour jkh.jhg gjhg hj hjg g jhgg j gjh gh hjfg  fgh hg k uy u gf gh");
+        grouchoBubble.setBubbleTexture(bubble);
+        grouchoBubble.setPosX(player.posX);
+        grouchoBubble.setPosY(player.posY);
+        grouchoBubble.setText("sada asdi qweji sjdfjs  eijh hg h jh jhg hjg hj jhk ur kljdsf woiur sdkjlf wieour jkh.jhg gjhg hj hjg g jhgg j gjh gh hjfg  fgh hg k uy u gf gh");
 
         addGameObject(playerGO);
     }
@@ -302,6 +330,7 @@ public class GameWorld {
         drawComponents.removeIf(component -> ((GameObject) component.getOwner()).role != PLAYER);
         aiComponents.clear();
 
+        resetPool();
         for (GameObject gameObject : objects) {
             if (gameObject.role != PLAYER) {
                 objectsPool.release(gameObject);
@@ -314,6 +343,15 @@ public class GameWorld {
 
         if(debugMode) {
             getDebugger(this).updateDebugger();
+        }
+    }
+
+    // TODO: Add this method in ObjectsPool
+    public void resetPool() {
+        for (int posX = 0; posX < grid.width; posX++) {
+            for (int posY = 0; posY < grid.height; posY++) {
+                nodesPool.release(grid.grid[posX][posY]);
+            }
         }
     }
 
