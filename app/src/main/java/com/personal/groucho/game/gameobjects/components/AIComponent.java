@@ -12,9 +12,7 @@ import static com.personal.groucho.game.controller.Orientation.RIGHT;
 import static com.personal.groucho.game.controller.Orientation.UP;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
-import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
 import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
-import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import static java.lang.Math.abs;
@@ -45,7 +43,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AIComponent extends WalkingComponent {
-    private CharacterComponent character = null;
     public final StateName originalState;
     private final FSM fsm;
     private final GameGrid grid;

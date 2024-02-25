@@ -106,14 +106,14 @@ public class Physics {
                     (int)originalPosY,
                     (int)phyComponent.dimX,
                     (int)phyComponent.dimY
-            );
+            ).clone();
 
             SparseArray<Node> newCellsToChange = gameGrid.getNodes(
                     (int)fromMetersToBufferX(phyComponent.getPosX()),
                     (int)fromMetersToBufferY(phyComponent.getPosY()),
                     (int)phyComponent.dimX,
                     (int)phyComponent.dimY
-            );
+            ).clone();
 
             setUnchangedCells(oldCellsToReset, newCellsToChange);
 

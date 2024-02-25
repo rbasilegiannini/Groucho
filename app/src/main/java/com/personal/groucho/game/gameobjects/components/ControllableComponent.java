@@ -12,11 +12,8 @@ import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.loading;
 import static com.personal.groucho.game.controller.states.StateName.AIMING;
 import static com.personal.groucho.game.controller.states.StateName.WALKING;
-import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
 import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
-import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
-import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import com.personal.groucho.game.controller.ControllerObserver;
 import com.personal.groucho.game.GameWorld;
@@ -30,7 +27,6 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     private final Controller controller;
     private final GameWorld gameWorld;
     private LightComponent lightComponent = null;
-    private CharacterComponent character = null;
     private boolean playShotAnimation = false;
     private boolean playLoadingSound = true;
 

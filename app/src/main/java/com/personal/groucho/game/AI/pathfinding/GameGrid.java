@@ -11,6 +11,7 @@ public class GameGrid {
     private final int width;
     private final int height;
     private final Node[][] grid;
+    private final SparseArray<Node> nodesBelowTheObject = new SparseArray<>();
 
     public GameGrid(int width, int height) {
         this.width = width;
@@ -25,9 +26,9 @@ public class GameGrid {
     }
 
     public Node getNode(int posX, int posY) {return grid[posX][posY];}
-
+    
     public SparseArray<Node> getNodes(int centerX, int centerY, int dimX, int dimY) {
-        SparseArray<Node> nodes = new SparseArray<>();
+        nodesBelowTheObject.clear();
 
         int top = (centerY + dimY/2)/cellSize;
         int left = (centerX - dimX/2)/cellSize;
@@ -36,23 +37,23 @@ public class GameGrid {
 
         for (int y = bottom; y <= top; y++){
             if(isInGrid(left, y)){
-                nodes.put(grid[left][y].hashCode(), grid[left][y]);
+                nodesBelowTheObject.put(grid[left][y].hashCode(), grid[left][y]);
             }
             if(isInGrid(right, y)){
-                nodes.put(grid[right][y].hashCode(), grid[right][y]);
+                nodesBelowTheObject.put(grid[right][y].hashCode(), grid[right][y]);
             }
         }
 
         for (int x = left; x <= right; x++){
             if(isInGrid(x, bottom)){
-                nodes.put(grid[x][bottom].hashCode(), grid[x][bottom]);
+                nodesBelowTheObject.put(grid[x][bottom].hashCode(), grid[x][bottom]);
             }
             if(isInGrid(x, top)) {
-                nodes.put(grid[x][top].hashCode(), grid[x][top]);
+                nodesBelowTheObject.put(grid[x][top].hashCode(), grid[x][top]);
             }
         }
 
-        return  nodes;
+        return nodesBelowTheObject;
     }
 
     public boolean isInGrid(int x, int y) {
