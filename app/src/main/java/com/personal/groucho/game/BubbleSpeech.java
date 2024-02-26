@@ -25,6 +25,7 @@ public class BubbleSpeech {
     private int height;
     private Bitmap bubble;
     private final StringBuilder currentLine = new StringBuilder();
+    private TextBlock currentTextBlock;
     private final List<TextBlock> textBlocks = new ArrayList<>();
     private final ObjectsPool<TextBlock> textBlocksPool= new ObjectsPool<>(10, TextBlock.class);
 
@@ -32,7 +33,7 @@ public class BubbleSpeech {
         this.gameWorld = gameWorld;
         paint = new TextPaint();
         paint.setColor(Color.BLACK);
-        paint.setTextSize(50);
+        paint.setTextSize(48);
         paint.setTypeface(Typeface.create("serif", Typeface.NORMAL));
 
         src = new Rect();
@@ -52,15 +53,15 @@ public class BubbleSpeech {
 
     public void draw(Canvas canvas) {
         if (!textBlocks.isEmpty()) {
-            dest.left = posX - width / 2;
-            dest.top = (int) (posY - 0.75 * height);
-            dest.right = posX + width / 2;
-            dest.bottom = (int) (posY + 0.25 * height);
+            dest.left = (int) (posX - 0.50 * width);
+            dest.top = (int) (posY - 0.70 * height);
+            dest.right = (int) (posX + 0.60*width);
+            dest.bottom = (int) (posY + 0.35 * height);
 
             canvas.drawBitmap(bubble, src, dest, paint);
 
             float x = dest.left + 50;
-            float y = dest.top + paint.getTextSize();
+            float y = dest.top + paint.getTextSize() + 10;
 
             for (String line : textBlocks.get(0).getSentences()) {
                 canvas.drawText(line, x, y, paint);
@@ -74,32 +75,58 @@ public class BubbleSpeech {
     }
 
     public void setText(String text) {
-        String[] words = text.split("\\s+");
+        String[] words = text.split(" ");
         currentLine.setLength(0);
+        currentTextBlock = textBlocksPool.acquire();
 
-        TextBlock currentTextBlock = textBlocksPool.acquire();
         for (String word : words) {
-            if ((currentLine.length() + word.length()) * paint.getTextSize() <= 2*width) {
-                if (currentLine.length() > 0) {
-                    currentLine.append(" ");
-                }
-                currentLine.append(word);
-            } else {
-                currentTextBlock.add(currentLine.toString());
-                currentLine.setLength(0);
-                currentLine.append(word);
-
-                if (currentTextBlock.isFull()) {
-                    textBlocks.add(currentTextBlock);
-                    currentTextBlock = textBlocksPool.acquire();
+            if (word.equals("\n")) {
+                completeCurrentTextBlock();
+                currentTextBlock = textBlocksPool.acquire();
+            }
+            else {
+                if (lineIsNotTooLarge(word)) {
+                    updateCurrentLine(word);
+                } else {
+                    updateCurrentTextBlock(word);
                 }
             }
         }
 
         if (currentLine.length() > 0) {
-            currentTextBlock.add(currentLine.toString());
-            textBlocks.add(currentTextBlock);
+            completeCurrentTextBlock();
         }
+    }
+
+    private void completeCurrentTextBlock() {
+        addLineToTextBlock(currentTextBlock);
+        textBlocks.add(currentTextBlock);
+    }
+
+    private void updateCurrentTextBlock(String word) {
+        addLineToTextBlock(currentTextBlock);
+        currentLine.append(word);
+
+        if (currentTextBlock.isFull()) {
+            textBlocks.add(currentTextBlock);
+            currentTextBlock = textBlocksPool.acquire();
+        }
+    }
+
+    private void updateCurrentLine(String word) {
+        if (currentLine.length() > 0) {
+            currentLine.append(" ");
+        }
+        currentLine.append(word);
+    }
+
+    private boolean lineIsNotTooLarge(String word) {
+        return (currentLine.length() + word.length()) * paint.getTextSize() <= 1.75 * width;
+    }
+
+    private void addLineToTextBlock(TextBlock currentTextBlock) {
+        currentTextBlock.add(currentLine.toString());
+        currentLine.setLength(0);
     }
 
     public void setPosX(int posX){ this.posX = (int) (posX - width/2 - 0.65*(characterScaleFactor*characterDimX));}

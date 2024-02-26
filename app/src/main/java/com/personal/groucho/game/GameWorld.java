@@ -102,7 +102,7 @@ public class GameWorld {
         grouchoBubble.setBubbleTexture(bubble);
         grouchoBubble.setPosX(player.posX);
         grouchoBubble.setPosY(player.posY);
-        grouchoBubble.setText("sada asdi qweji sjdfjs  eijh hg h jh jhg hjg hj jhk ur kljdsf woiur sdkjlf wieour jkh.jhg gjhg hj hjg g jhgg j gjh gh hjfg  fgh hg k uy u gf gh");
+        grouchoBubble.setText("Ciao. Io sono Groucho e in questo momento sto provando il funzionamento del Bubble Speech. In particolare, voglio vedere se... \n funziona il newline.");
 
         goHandler.addGameObject(playerGO);
     }

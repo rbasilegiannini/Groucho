@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 enum TriggerType {
-    CHANGE_LEVEL
+    CHANGE_LEVEL,
+    TALK
 }
 
 public abstract class Level {
