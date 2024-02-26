@@ -72,6 +72,7 @@ public class GameWorld {
     public void tryAgain(Level level) {
         initEnvironment();
         nodesPool.clear();
+        grid.reset();
 
         currentLevel = level;
         setPlayer();
