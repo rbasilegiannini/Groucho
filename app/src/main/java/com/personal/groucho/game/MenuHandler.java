@@ -26,7 +26,7 @@ public class MenuHandler {
                         gameWorld.activity.setContentView(gameWorld.activity.renderView);
                     });
                     optionsButton.setOnClickListener(v -> handleOptionsMainMenu(gameWorld));
-                    exitButton.setOnClickListener(v -> gameWorld.activity.finish());
+                    exitButton.setOnClickListener(v -> gameWorld.finalize());
                 });
     }
 
@@ -57,7 +57,7 @@ public class MenuHandler {
                     });
 
                     optionsButton.setOnClickListener(v -> handleOptionsPauseMenu(gameWorld));
-                    exitButton.setOnClickListener(v -> gameWorld.activity.finish());
+                    exitButton.setOnClickListener(v -> gameWorld.finalize());
                 });
     }
 
@@ -106,7 +106,7 @@ public class MenuHandler {
                             gameWorld.tryAgain(new FirstLevel(gameWorld));
                             gameWorld.activity.setContentView(gameWorld.activity.renderView);
                     });
-                    exitButton.setOnClickListener(v -> gameWorld.activity.finish());
+                    exitButton.setOnClickListener(v -> gameWorld.finalize());
                 });
     }
 }

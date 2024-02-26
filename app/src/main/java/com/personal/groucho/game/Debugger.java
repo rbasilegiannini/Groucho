@@ -97,4 +97,14 @@ public class Debugger {
     public void updateDebugger() {
         grid = gameWorld.grid;
     }
+
+    protected void finalize(){
+        try {
+            super.finalize();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+        instance = null;
+    }
 }

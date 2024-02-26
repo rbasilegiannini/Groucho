@@ -65,15 +65,15 @@ public class GameWorld {
     }
 
     public void init(Level level) {
-        _initEnvironment();
+        initEnvironment();
 
         currentLevel = level;
         currentLevel.init();
     }
 
     public void tryAgain(Level level) {
-        _initEnvironment();
-        resetPool();
+        initEnvironment();
+        nodesPool.clear();
 
         currentLevel = level;
         currentLevel.init();
@@ -83,7 +83,7 @@ public class GameWorld {
         }
     }
 
-    private void _initEnvironment() {
+    private void initEnvironment() {
         graphics.reset();
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
         goHandler.init();
@@ -201,23 +201,13 @@ public class GameWorld {
 
     public synchronized void changeLevel(Level newLevel) {
         goHandler.changeLevel();
-
-        resetPool();
+        nodesPool.clear();
 
         currentLevel = newLevel;
         currentLevel.init();
 
         if(debugMode) {
             getDebugger(this).updateDebugger();
-        }
-    }
-
-    // TODO: Add this method in ObjectsPool
-    public void resetPool() {
-        for (int posX = 0; posX < grid.width; posX++) {
-            for (int posY = 0; posY < grid.height; posY++) {
-                nodesPool.release(grid.grid[posX][posY]);
-            }
         }
     }
 
@@ -232,5 +222,21 @@ public class GameWorld {
         goHandler.removeComponent(player.gameObject, LIGHT);
     }
 
-    protected void finalize() {physics.finalize();}
+    protected void finalize(){
+        try {
+            super.finalize();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+        physics.finalize();
+        graphics.finalize();
+        goHandler.finalize();
+
+        objectsPool.clear();
+        nodesPool.clear();
+        collisionsPool.clear();
+
+        activity.finish();
+    }
 }

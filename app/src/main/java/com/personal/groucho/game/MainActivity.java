@@ -102,4 +102,26 @@ public class MainActivity extends Activity {
 
         renderView.resume();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("Main thread", "destroy");
+
+        Spritesheets.release();
+        Textures.release();
+        Sounds.release();
+
+        if (renderView != null) {
+            renderView.pause();
+            renderView = null;
+        }
+        if (audio != null) {
+            audio = null;
+        }
+        if (touch != null) {
+            touch = null;
+        }
+    }
+
 }

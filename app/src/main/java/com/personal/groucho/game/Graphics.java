@@ -115,4 +115,18 @@ public class Graphics {
     public void reset() {
         this.canvas = new Canvas(buffer);
     }
+
+    protected void finalize(){
+        try {
+            super.finalize();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+        if (buffer != null) {
+            buffer.recycle();
+            buffer = null;
+        }
+        instance = null;
+    }
 }

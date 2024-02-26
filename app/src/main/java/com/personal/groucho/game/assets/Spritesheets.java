@@ -54,4 +54,18 @@ public class Spritesheets {
 
         return spritesheet;
     }
+
+    public static void release() {
+        grouchoIdle.dispose();
+        grouchoWalk.dispose();
+        grouchoShoot.dispose();
+        grouchoAim.dispose();
+        grouchoFire.dispose();
+        grouchoDoor.dispose();
+        grouchoDeath.dispose();
+        skeletonIdle.dispose();
+        skeletonWalk.dispose();
+        skeletonHurt.dispose();
+        skeletonDeath.dispose();
+    }
 }

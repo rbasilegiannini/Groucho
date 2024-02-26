@@ -219,6 +219,13 @@ public class Physics {
     }
 
     protected void finalize() {
+        try {
+            super.finalize();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
         world.delete();
+        instance = null;
     }
 }

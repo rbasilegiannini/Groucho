@@ -150,4 +150,23 @@ public class GameObjectHandler {
         }
         objects.removeIf(object -> object.role != PLAYER);
     }
+
+    protected void finalize(){
+        try {
+            super.finalize();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+        objects.clear();
+
+        posComponents.clear();
+        phyComponents.clear();
+        aliveComponents.clear();
+        lightComponents.clear();
+        drawComponents.clear();
+        aiComponents.clear();
+
+        instance = null;
+    }
 }

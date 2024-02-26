@@ -7,7 +7,7 @@ import android.graphics.Rect;
 
 public class Spritesheet {
 
-    private final Bitmap sheet;
+    private Bitmap sheet;
     private int frameWidth;
     private int frameHeight;
     private final int[] start, length, delay;
@@ -56,4 +56,11 @@ public class Spritesheet {
         return delay[animation];
     }
     public int getLength(int animation) {return length[animation];}
+
+    public void dispose() {
+        if (sheet != null) {
+            sheet.recycle();
+            sheet = null;
+        }
+    }
 }

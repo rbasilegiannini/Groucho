@@ -23,4 +23,22 @@ public class Sounds {
         bodyHitFurniture = audio.newSound("body_hit_furniture.mp3");
         healing = audio.newSound("healing.mp3");
     }
+
+    public static void release() {
+        releaseSound(loading);
+        releaseSound(shooting);
+        releaseSound(stabbing);
+        releaseSound(click);
+        releaseSound(bulletHitEnemy);
+        releaseSound(bulletHitFurniture);
+        releaseSound(bodyHitFurniture);
+        releaseSound(healing);
+    }
+
+    private static void releaseSound(Sound sound) {
+        if (sound != null) {
+            sound.dispose();
+            sound = null;
+        }
+    }
 }

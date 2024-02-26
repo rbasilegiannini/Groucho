@@ -33,4 +33,21 @@ public class Textures {
 
         return bitmap;
     }
+
+    public static void release() {
+        releaseBitmap(firstLevelFloor);
+        releaseBitmap(table);
+        releaseBitmap(wall);
+        releaseBitmap(lightBulb);
+        releaseBitmap(pause);
+        releaseBitmap(health);
+        releaseBitmap(bubble);
+    }
+
+    private static void releaseBitmap(Bitmap bitmap) {
+        if (bitmap != null) {
+            bitmap.recycle();
+            bitmap = null;
+        }
+    }
 }
