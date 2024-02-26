@@ -4,6 +4,7 @@ import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 import static com.personal.groucho.game.Graphics.bufferWidth;
+import static com.personal.groucho.game.levels.TriggerType.CHANGE_LEVEL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -60,7 +61,7 @@ public class FirstLevel extends Level{
         gameObjects.addAll(GameObjectFactory.
                 makeWall(4*cellSize - cellSize/2, -cellSize, 5*cellSize, gameWorld));
 
-        gameObjects.add(GameObjectFactory.makeTrigger("changelevel", 800, 800, gameWorld));
+        gameObjects.add(GameObjectFactory.makeTrigger(CHANGE_LEVEL.name(), 800, 800, gameWorld));
 
         for (GameObject go : gameObjects) {
             gameWorld.goHandler.addGameObject(go);
@@ -69,7 +70,7 @@ public class FirstLevel extends Level{
 
     @Override
     public void handleTrigger(GameObject trigger) {
-        if(Objects.equals(trigger.name, "changelevel")) {
+        if(Objects.equals(trigger.name, CHANGE_LEVEL.name())) {
             gameWorld.changeLevel(new SecondLevel(gameWorld));
         }
     }

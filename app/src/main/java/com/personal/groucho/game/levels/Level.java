@@ -16,6 +16,10 @@ import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+enum TriggerType {
+    CHANGE_LEVEL
+}
+
 public abstract class Level {
 
     protected final GameWorld gameWorld;
