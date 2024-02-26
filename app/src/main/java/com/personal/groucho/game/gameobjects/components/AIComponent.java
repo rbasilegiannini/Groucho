@@ -16,8 +16,6 @@ import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -244,7 +242,7 @@ public class AIComponent extends WalkingComponent {
         if (hasPlayerChangedPosition() && currentNode == null) {
             setPathToPlayer();
         }
-        isPlayerReached = isAPlayerNeighbor();
+        isPlayerReached = isCloseToPlayer();
 
         if (!currentPath.isEmpty() || !isNodeReached) {
             walkingToDestination();
@@ -284,7 +282,7 @@ public class AIComponent extends WalkingComponent {
     public void activeAttackAction() {
         initComponents();
 
-        isPlayerReached = isAPlayerNeighbor();
+        isPlayerReached = isCloseToPlayer();
 
         if (!gameWorld.gameOver && playerAliveComponent.currentStatus != DEAD) {
             long delay =
@@ -329,16 +327,17 @@ public class AIComponent extends WalkingComponent {
         currentPath = aStar.findPath(posOnGrid, playerPosOnGrid);
     }
 
-    // TODO: Optimize this method
-    public boolean isAPlayerNeighbor() {
-        float distanceFromPlayerX =
+    public boolean isCloseToPlayer() {
+        float distFromPlayerX =
                 (float) posComponent.posX - gameWorld.player.posX;
-        float distanceFromPlayerY =
+        float distFromPlayerY =
                 (float) posComponent.posY - gameWorld.player.posY;
 
-        float distanceFromPlayer = (float)sqrt(pow(distanceFromPlayerX,2) + pow(distanceFromPlayerY,2));
+        float distSquared = distFromPlayerX * distFromPlayerX + distFromPlayerY * distFromPlayerY;
+        float thresholdSquared = 1.2f * characterScaleFactor * characterDimX;
+        thresholdSquared *= thresholdSquared;
 
-        return distanceFromPlayer < 1.2*characterScaleFactor* characterDimX;
+        return distSquared < thresholdSquared;
     }
 
     private void walkingToDestination() {
