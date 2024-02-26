@@ -25,7 +25,7 @@ public class AStar {
     }
 
     public List<Node> findPath(Node start, Node goal) {
-        reset();
+        clear();
 
         openSet.add(start);
         while (!openSet.isEmpty()) {
@@ -100,7 +100,7 @@ public class AStar {
         return path;
     }
 
-    private void reset() {
+    private void clear() {
         openSet.clear();
         closedSet.clear();
         grid.clear();

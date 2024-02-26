@@ -68,6 +68,7 @@ public class GameWorld {
         initEnvironment();
 
         currentLevel = level;
+        setPlayer();
         currentLevel.init();
     }
 
@@ -76,6 +77,7 @@ public class GameWorld {
         nodesPool.clear();
 
         currentLevel = level;
+        setPlayer();
         currentLevel.init();
 
         if(debugMode) {
@@ -93,12 +95,11 @@ public class GameWorld {
         this.touchHandler = touchHandler;
     }
 
-    public void _setPlayer(int posX, int posY) {
+    public void setPlayer() {
         this.gameOver = false;
         GameObject playerGO = GameObjectFactory.
                 makePlayer(bufferWidth /2, bufferHeight/2, controller, this);
         player = new Player(playerGO);
-        player.setPos(posX, posY);
 
         grouchoBubble.setBubbleTexture(bubble);
         grouchoBubble.setPosX(player.posX);
@@ -202,6 +203,7 @@ public class GameWorld {
     public synchronized void changeLevel(Level newLevel) {
         goHandler.changeLevel();
         nodesPool.clear();
+        grid.reset();
 
         currentLevel = newLevel;
         currentLevel.init();

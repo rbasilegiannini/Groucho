@@ -80,6 +80,14 @@ public class GameGrid {
         }
     }
 
+    public void reset() {
+        for (int posX = 0; posX < width; posX++) {
+            for (int posY = 0; posY < height; posY++) {
+                grid[posX][posY].reset();
+            }
+        }
+    }
+
     public void drawDebugGrid(Canvas canvas, Paint paint){
         int startX;
         int startY;

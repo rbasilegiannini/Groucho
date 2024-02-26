@@ -30,11 +30,10 @@ public class FirstLevel extends Level{
         floorPaint.setShader(bs);
     }
 
-    // TODO: Fix this bug: when player comes back to the first level, there is a second Groucho.
     @Override
     public void init() {
         super.init();
-        gameWorld._setPlayer(850, 1000);
+        gameWorld.player.setPos(850, 1000);
         setBrightness(maxBrightness);
 
         // Set furniture
