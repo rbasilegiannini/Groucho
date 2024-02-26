@@ -2,7 +2,6 @@ package com.personal.groucho.game;
 
 import static com.personal.groucho.game.Debugger.getDebugger;
 import static com.personal.groucho.game.Events.alertEnemiesEvent;
-import static com.personal.groucho.game.Events.gameOverEvent;
 import static com.personal.groucho.game.Events.playerShootEnemyEvent;
 import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
 import static com.personal.groucho.game.Events.playerShootWallEvent;
@@ -13,7 +12,6 @@ import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.Role.PLAYER;
-import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import com.personal.groucho.badlogic.androidgames.framework.Input;
 import com.personal.groucho.badlogic.androidgames.framework.impl.TouchHandler;
@@ -25,7 +23,6 @@ import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
-import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.levels.Level;
@@ -136,14 +133,8 @@ public class GameWorld {
             physics.update(elapsedTime);
 
             if (!gameOver) {
-                for (AliveComponent aliveComponent : goHandler.aliveComponents) {
-                    if (aliveComponent.currentStatus == DEAD) {
-                        handleDeath((GameObject) aliveComponent.getOwner());
-                    }
-                }
+                player.update(graphics.canvas, controller);
             }
-
-            player.update(graphics.canvas, controller);
 
             for (AIComponent aiComponent : goHandler.aiComponents) {
                 aiComponent.update(this);
@@ -169,9 +160,9 @@ public class GameWorld {
         }
     }
 
-    private void handleDeath(GameObject gameObject) {
+    public void handleDeath(GameObject gameObject) {
         if (gameObject.role == PLAYER) {
-            gameOverEvent(this);
+            GameOver();
         }
         else {
             goHandler.removeComponent(gameObject, AI);

@@ -5,8 +5,10 @@ import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
 import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
+import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
+import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.Status;
 
 public class AliveComponent extends Component {
@@ -15,8 +17,10 @@ public class AliveComponent extends Component {
     public Status currentStatus;
     private SpriteDrawableComponent sprite = null;
     private CharacterComponent character = null;
+    private final GameWorld gameWorld;
 
-    public AliveComponent() {
+    public AliveComponent(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
         currentStatus = Status.ALIVE;
     }
 
@@ -48,6 +52,7 @@ public class AliveComponent extends Component {
         currentStatus = DEAD;
         sprite.setCurrentSpritesheet(character.properties.sheetDeath);
         sprite.setAnim(0);
+        gameWorld.handleDeath((GameObject) getOwner());
     }
 
     private void updateSprite() {

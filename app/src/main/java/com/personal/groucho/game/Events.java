@@ -127,10 +127,6 @@ public class Events {
         }
     }
 
-    public static void gameOverEvent(GameWorld gameWorld) {
-        gameWorld.GameOver();
-    }
-
     public static void pauseEvent(GameWorld gameWorld) {
         gameWorld.pause();
         MenuHandler.handlePauseMenu(gameWorld);

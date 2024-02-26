@@ -93,7 +93,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new ControllableComponent(gameWorld));
         gameObject.addComponent(new PhysicsComponent(gameWorld.physics.world,
                 characterScaleFactor*characterDimX, characterScaleFactor*characterDimY));
-        gameObject.addComponent(new AliveComponent());
+        gameObject.addComponent(new AliveComponent(gameWorld));
         gameObject.addComponent(new CharacterComponent(getGroucho()));
         gameObject.addComponent(new LightComponent(gameWorld.graphics.buffer));
 
@@ -121,7 +121,7 @@ public class GameObjectFactory {
         gameObject.addComponent(new PhysicsComponent(gameWorld.physics.world,
                 characterScaleFactor*characterDimX, characterScaleFactor*characterDimY));
         gameObject.addComponent(new SpriteDrawableComponent(idle));
-        gameObject.addComponent(new AliveComponent());
+        gameObject.addComponent(new AliveComponent(gameWorld));
         gameObject.addComponent(new CharacterComponent(getSkeleton()));
         gameObject.addComponent(new AIComponent(gameWorld, state));
 
