@@ -9,12 +9,14 @@ import java.lang.reflect.Array;
 public class ObjectsPool<T extends Resettable> {
     private final T[] mPool;
     private int mPoolSize;
+    private final Class<T> tClass;
 
     @SuppressWarnings("unchecked")
     public ObjectsPool(int maxPoolSize, Class<T> tClass) {
         if (maxPoolSize <= 0) {
             throw new IllegalArgumentException("The max pool size must be > 0");
         }
+        this.tClass = tClass;
         mPoolSize = maxPoolSize;
         mPool = (T[]) Array.newInstance(tClass, mPoolSize);
 
@@ -45,5 +47,12 @@ public class ObjectsPool<T extends Resettable> {
             mPool[mPoolSize] = instance;
             mPoolSize++;
         }
+    }
+
+    public void clear() {
+        for (int i = 0; i < mPoolSize; i++) {
+            mPool[i] = createObject(tClass);
+        }
+        mPoolSize = mPool.length;
     }
 }
