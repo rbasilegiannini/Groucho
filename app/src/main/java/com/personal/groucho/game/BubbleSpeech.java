@@ -19,7 +19,7 @@ public class BubbleSpeech {
     private final GameWorld gameWorld;
     private final TextPaint paint;
     private final Rect src, dest;
-    private int posX, posY, width, height;
+    private int posX, posY, width, height, offsetX, offsetY;
     private Bitmap bubble;
     private final StringBuilder currentLine = new StringBuilder();
     private TextBlock currentTextBlock;
@@ -31,8 +31,10 @@ public class BubbleSpeech {
         paint = new TextPaint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(48);
-        paint.setTypeface(Typeface.create("serif", Typeface.NORMAL));
+        paint.setTypeface(Typeface.create("comic_sans", Typeface.NORMAL));
 
+        offsetX = 0;
+        offsetY = 0;
         src = new Rect();
         dest = new Rect();
     }
@@ -61,7 +63,7 @@ public class BubbleSpeech {
             float y = dest.top + paint.getTextSize() + 10;
 
             for (String line : textBlocks.get(0).getSentences()) {
-                canvas.drawText(line, x, y, paint);
+                canvas.drawText(line, offsetX + x, offsetY + y, paint);
                 int lineSpacing = 10;
                 y += paint.getTextSize() + lineSpacing;
             }
@@ -83,6 +85,24 @@ public class BubbleSpeech {
         if (currentLine.length() > 0) {
             completeCurrentTextBlock();
         }
+    }
+
+    public void setLeftAlignment() {
+        offsetX = 0;
+        offsetY = 0;
+    }
+
+    public void setCenterAlignment(){
+        offsetX = (int) (0.25*width);
+        offsetY = (int) (0.35*height);
+    }
+
+    public void setNormalText() {
+        paint.setTypeface(Typeface.create("serif", Typeface.NORMAL));
+    }
+
+    public void setBoldText() {
+        paint.setTypeface(Typeface.create("serif", Typeface.BOLD));
     }
 
     private void processWord(String word) {
@@ -131,8 +151,8 @@ public class BubbleSpeech {
         currentLine.setLength(0);
     }
 
-    public void setPosX(int posX){ this.posX = (int) (posX - width/2 - 0.65*(characterScaleFactor*characterDimX));}
-    public void setPosY(int posY){ this.posY = posY + height;}
+    public void setPosX(int posX){ this.posX = posX - width/2;}
+    public void setPosY(int posY){ this.posY = posY - height;}
 
     public void consumeTouchEvent(Input.TouchEvent event) {
         if (event.type == Input.TouchEvent.TOUCH_DOWN) {

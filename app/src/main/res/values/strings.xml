@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Groucho</string>
+    <string name="groucho_talk_room">mmm… \n Forse sto dormendo…</string>
+    <string name="dylan_talk_room">GROUCHO!</string>
 </resources>

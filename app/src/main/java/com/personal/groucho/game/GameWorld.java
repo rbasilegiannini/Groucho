@@ -28,7 +28,7 @@ import com.personal.groucho.game.levels.Level;
 
 public class GameWorld {
     static Box physicalSize, screenSize, currentView;
-    final MainActivity activity;
+    public final MainActivity activity;
     public final Physics physics;
     public final Graphics graphics;
     public final GameObjectHandler goHandler;
@@ -39,8 +39,8 @@ public class GameWorld {
     private TouchHandler touchHandler;
     private boolean pause = false;
     public boolean gameOver = false;
-    protected boolean grouchoIsTalking = false;
-    private final BubbleSpeech grouchoBubble;
+    public boolean grouchoIsTalking = false;
+    public final BubbleSpeech bubbleSpeech;
 
     // Pools to reduce allocation and de-allocation
     public final ObjectsPool<GameObject> objectsPool = new ObjectsPool<>(100, GameObject.class);
@@ -57,7 +57,7 @@ public class GameWorld {
         physics = Physics.getInstance(this);
         graphics = Graphics.getInstance(this);
         goHandler = GameObjectHandler.getInstance(this);
-        grouchoBubble = new BubbleSpeech(this);
+        bubbleSpeech = new BubbleSpeech(this);
     }
 
     public void init(Level level) {
@@ -96,7 +96,7 @@ public class GameWorld {
         this.gameOver = false;
         GameObject playerGO = GameObjectFactory.
                 makePlayer(bufferWidth /2, bufferHeight/2, controller, this);
-        player = new Player(playerGO);
+        player = new Player(playerGO, this);
         goHandler.addGameObject(playerGO);
     }
 
@@ -115,7 +115,7 @@ public class GameWorld {
                 }
                 else {
                     if (grouchoIsTalking) {
-                        grouchoBubble.consumeTouchEvent(event);
+                        bubbleSpeech.consumeTouchEvent(event);
                     }
                 }
             }
@@ -141,7 +141,7 @@ public class GameWorld {
             graphics.render();
 
             if (grouchoIsTalking) {
-                grouchoBubble.draw(graphics.canvas);
+                bubbleSpeech.draw(graphics.canvas);
             }
 
             if (debugMode) {
@@ -225,5 +225,10 @@ public class GameWorld {
         collisionsPool.clear();
 
         activity.finish();
+    }
+
+    public void hasToTalk() {
+        grouchoIsTalking = true;
+        player.rest();
     }
 }

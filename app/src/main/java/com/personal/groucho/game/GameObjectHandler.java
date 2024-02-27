@@ -99,7 +99,6 @@ public class GameObjectHandler {
     public void removeComponent(GameObject go, ComponentType type){
         Component component = go.getComponent(type);
 
-        // TODO: Use a map
         switch (type) {
             case AI:
                 aiComponents.remove((AIComponent)component);

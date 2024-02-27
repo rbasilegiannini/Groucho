@@ -9,6 +9,9 @@ import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import android.graphics.Canvas;
 
 import com.personal.groucho.game.controller.Controller;
+import com.personal.groucho.game.controller.ControllerObserver;
+import com.personal.groucho.game.controller.ControllerSubject;
+import com.personal.groucho.game.controller.states.Idle;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.components.ControllableComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
@@ -18,13 +21,16 @@ public class Player {
     public final GameObject gameObject;
     private final PositionComponent posComponent;
     private final ControllableComponent ctrlComponent;
+    private final GameWorld gameWorld;
+
     public int posX;
     public int posY;
     private float cameraX, cameraY;
     public boolean isPlayerVisible = false;
 
-    public Player(GameObject gameObject) {
+    public Player(GameObject gameObject, GameWorld gameWorld) {
         this.gameObject = gameObject;
+        this.gameWorld = gameWorld;
         posComponent = (PositionComponent) gameObject.getComponent(POSITION);
         ctrlComponent = (ControllableComponent) gameObject.getComponent(CONTROLLABLE);
         this.posX = posComponent.posX;
@@ -65,5 +71,10 @@ public class Player {
     public void setPos(int posX, int posY) {
         PhysicsComponent phyComponent = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         phyComponent.setPos(posX, posY);
+    }
+
+    public void rest() {
+        gameWorld.controller.currentState = Idle.getInstance(gameWorld.controller);
+        gameWorld.controller.notifyToListeners();
     }
 }

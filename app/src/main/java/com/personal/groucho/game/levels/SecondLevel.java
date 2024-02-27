@@ -29,7 +29,7 @@ public class SecondLevel extends Level {
     public void init() {
         super.init();
 
-        gameObjects.add(GameObjectFactory.makeTrigger("changelevel", 1200, 800, gameWorld));
+//        gameObjects.add(GameObjectFactory.makeTrigger("changelevel", 1200, 800, gameWorld));
         for (GameObject go : gameObjects) {
             gameWorld.goHandler.addGameObject(go);
         }
@@ -38,7 +38,7 @@ public class SecondLevel extends Level {
     @Override
     public void handleTrigger(GameObject trigger) {
         if(Objects.equals(trigger.name, "changelevel")) {
-            gameWorld.changeLevel(new FirstLevel(gameWorld));
+            gameWorld.changeLevel(new GrouchoRoom(gameWorld));
         }
     }
 }

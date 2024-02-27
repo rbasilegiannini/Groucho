@@ -307,9 +307,8 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeTrigger(String name, int posX, int posY, GameWorld gameWorld) {
-        int dimX = 64;
-        int dimY = 128;
+    public static GameObject makeTrigger(String name, int posX, int posY, int dimX, int dimY,
+                                         GameWorld gameWorld) {
 
         GameObject gameObject = gameWorld.objectsPool.acquire();
         gameObject.init(name, TRIGGER);

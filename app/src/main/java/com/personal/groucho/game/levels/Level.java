@@ -18,7 +18,22 @@ import java.util.List;
 
 enum TriggerType {
     CHANGE_LEVEL,
-    TALK
+    INIT_LEVEL,
+    DYLAN;
+
+    public static TriggerType getTypeFromName(String name) {
+
+        switch (name) {
+            case "CHANGE_LEVEL":
+                return CHANGE_LEVEL;
+            case "INIT_LEVEL":
+                return INIT_LEVEL;
+            case "DYLAN":
+                return DYLAN;
+            default:
+                throw new IllegalArgumentException("Unknown trigger type: " + name);
+        }
+    }
 }
 
 public abstract class Level {
