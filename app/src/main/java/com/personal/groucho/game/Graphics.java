@@ -5,6 +5,7 @@ import static com.personal.groucho.game.constants.System.memoryUsage;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Role.ENEMY;
+import static com.personal.groucho.game.gameobjects.Role.FLOOR;
 import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
@@ -33,13 +34,14 @@ class DrawableComparator implements Comparator<DrawableComponent> {
     public int compare(DrawableComponent obj1, DrawableComponent obj2) {
         GameObject go1 = (GameObject) obj1.getOwner();
         GameObject go2 = (GameObject) obj2.getOwner();
-
+        if (go1.role == FLOOR) return -1;
         if (go1.role == ENEMY || go1.role == PLAYER) {
             if (((AliveComponent)(go1.getComponent(ALIVE))).currentStatus == DEAD){
                 return -1;
             }
         }
 
+        if (go2.role == FLOOR) return 1;
         if (go2.role == ENEMY || go2.role == PLAYER) {
             if (((AliveComponent)(go2.getComponent(ALIVE))).currentStatus == DEAD){
                 return 1;

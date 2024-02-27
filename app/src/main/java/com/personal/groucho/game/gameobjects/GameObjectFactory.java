@@ -19,8 +19,10 @@ import static com.personal.groucho.game.assets.Textures.health;
 import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.Role.ENEMY;
+import static com.personal.groucho.game.gameobjects.Role.FLOOR;
 import static com.personal.groucho.game.gameobjects.Role.FURNITURE;
 import static com.personal.groucho.game.gameobjects.Role.HEALTH;
+import static com.personal.groucho.game.gameobjects.Role.NEUTRAL;
 import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 import static com.personal.groucho.game.gameobjects.Role.TRIGGER;
 import static com.personal.groucho.game.gameobjects.Role.WALL;
@@ -232,7 +234,7 @@ public class GameObjectFactory {
         int dimX = cellSize/2;
 
         border.addComponent(new PositionComponent(centerX-cellSize/2, centerY));
-        border.addComponent(new PhysicsComponent(gameWorld.physics.world, dimX, dimY));
+        border.addComponent(new PhysicsComponent(gameWorld.physics.world, (float) (dimX+0.2*cellSize), dimY));
         border.addComponent(new BoxDrawableComponent(dimX, dimY, paintRoof));
 
         PhysicsComponent phyComp = (PhysicsComponent) border.getComponent(PHYSICS);
@@ -246,8 +248,8 @@ public class GameObjectFactory {
     }
 
 
-    public static GameObject makeFurniture(int centerX, int centerY, float dimX, float dimY, GameWorld gameWorld,
-                                           Bitmap texture) {
+    public static GameObject makeFurniture(int centerX, int centerY, float dimX, float dimY, float density,
+                                           GameWorld gameWorld, Bitmap texture) {
         GameObject gameObject = gameWorld.objectsPool.acquire();
         gameObject.init("Furniture", FURNITURE);
 
@@ -257,9 +259,31 @@ public class GameObjectFactory {
 
         PhysicsComponent phyComp = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f,0f,
-                5f, 0, dynamicBody);
+                density, 0, dynamicBody);
         setFurniturePhysics(phyComp, prop);
         setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, dimY);
+
+        return gameObject;
+    }
+
+    public static GameObject makeWallDecoration(int centerX, int centerY, float dimX, float dimY,
+                                                GameWorld gameWorld, Bitmap texture) {
+        GameObject gameObject = gameWorld.objectsPool.acquire();
+
+        gameObject.init("Decoration", NEUTRAL);
+        gameObject.addComponent(new PositionComponent(centerX, centerY));
+        gameObject.addComponent(new TextureDrawableComponent(texture, (int)dimX, (int)dimY));
+
+        return gameObject;
+    }
+
+    public static GameObject makeFloorDecoration(int centerX, int centerY, float dimX, float dimY,
+                                                GameWorld gameWorld, Bitmap texture) {
+        GameObject gameObject = gameWorld.objectsPool.acquire();
+
+        gameObject.init("Decoration", FLOOR);
+        gameObject.addComponent(new PositionComponent(centerX, centerY));
+        gameObject.addComponent(new TextureDrawableComponent(texture, (int)dimX, (int)dimY));
 
         return gameObject;
     }

@@ -5,7 +5,6 @@ import static com.personal.groucho.game.Events.alertEnemiesEvent;
 import static com.personal.groucho.game.Events.playerShootEnemyEvent;
 import static com.personal.groucho.game.Events.playerShootFurnitureEvent;
 import static com.personal.groucho.game.Events.playerShootWallEvent;
-import static com.personal.groucho.game.assets.Textures.bubble;
 import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
