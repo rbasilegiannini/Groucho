@@ -8,10 +8,8 @@ import static com.personal.groucho.game.Utils.toBufferYLength;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
-import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
@@ -65,7 +63,6 @@ public class Debugger {
 
         drawPositions(canvas);
         drawColliders(canvas);
-        Log.i("Nodes", String.valueOf(Node.counter));
     }
 
     private void drawPositions(Canvas canvas) {

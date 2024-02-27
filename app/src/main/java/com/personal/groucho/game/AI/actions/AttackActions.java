@@ -44,7 +44,6 @@ public class AttackActions implements Actions {
             }
         }
         else {
-            // TODO: check this behavior
             comeBack();
         }
     }

@@ -1,8 +1,6 @@
 package com.personal.groucho.game.gameobjects.components;
 
 import static com.personal.groucho.game.constants.System.cellSize;
-import static com.personal.groucho.game.constants.System.characterDimX;
-import static com.personal.groucho.game.constants.System.characterScaleFactor;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.Orientation.RIGHT;
@@ -24,7 +22,6 @@ import com.personal.groucho.game.AI.actions.IdleActions;
 import com.personal.groucho.game.AI.actions.InvestigateActions;
 import com.personal.groucho.game.AI.actions.PatrolActions;
 import com.personal.groucho.game.AI.pathfinding.AStar;
-import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.AI.states.Attack;
 import com.personal.groucho.game.AI.states.Engage;

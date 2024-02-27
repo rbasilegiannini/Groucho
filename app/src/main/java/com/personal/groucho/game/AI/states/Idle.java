@@ -1,7 +1,5 @@
 package com.personal.groucho.game.AI.states;
 
-import android.util.Log;
-
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;

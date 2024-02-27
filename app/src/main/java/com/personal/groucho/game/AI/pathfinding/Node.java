@@ -6,7 +6,6 @@ public class Node implements Resettable {
     public int posX, posY;
     protected int costToNode, heuristicCostToGoal, defaultCost;
     public Node parent;
-    public static int counter = 0;
 
     public Node(){
         this.posX = -1;
@@ -15,8 +14,6 @@ public class Node implements Resettable {
         this.costToNode = 0;
         this.heuristicCostToGoal = 0;
         this.defaultCost = 0;
-
-        counter++;
     }
 
     public Node(int posX, int posY) {
@@ -26,8 +23,6 @@ public class Node implements Resettable {
         this.costToNode = 0;
         this.heuristicCostToGoal = 0;
         this.defaultCost = 0;
-
-        counter++;
     }
 
     public void setParent(Node parent) {

@@ -40,7 +40,7 @@ public class GameWorld {
     private TouchHandler touchHandler;
     private boolean pause = false;
     public boolean gameOver = false;
-    protected boolean grouchoIsTalking = true;
+    protected boolean grouchoIsTalking = false;
     private final BubbleSpeech grouchoBubble;
 
     // Pools to reduce allocation and de-allocation
@@ -98,12 +98,6 @@ public class GameWorld {
         GameObject playerGO = GameObjectFactory.
                 makePlayer(bufferWidth /2, bufferHeight/2, controller, this);
         player = new Player(playerGO);
-
-        grouchoBubble.setBubbleTexture(bubble);
-        grouchoBubble.setPosX(player.posX);
-        grouchoBubble.setPosY(player.posY);
-        grouchoBubble.setText("Ciao. Io sono Groucho e in questo momento sto provando il funzionamento del Bubble Speech. In particolare, voglio vedere se... \n funziona il newline.");
-
         goHandler.addGameObject(playerGO);
     }
 
