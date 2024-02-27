@@ -30,7 +30,7 @@ public class PatrolTransition extends Transition {
     @Override
     public Condition guard() {
         return () ->
-                !owner.isPlayerEngaged && !owner.isInvestigate && owner.originalState == PATROL;
+                !owner.isPlayerEngaged && !owner.investigateActions.isInvestigate && owner.originalState == PATROL;
     }
 
     @Override

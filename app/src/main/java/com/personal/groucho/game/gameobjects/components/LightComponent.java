@@ -18,7 +18,7 @@ import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class LightComponent extends Component {
-    private PositionComponent position = null;
+    private PositionComponent posComp = null;
     private final Paint maskPaint;
     private final Bitmap defaultBitmap;
     private final Canvas maskCanvas ;
@@ -48,8 +48,8 @@ public class LightComponent extends Component {
 
     @SuppressLint("NewApi")
     public void draw(Canvas canvas) {
-        if (position == null) {
-            position = (PositionComponent) owner.getComponent(POSITION);
+        if (posComp == null) {
+            posComp = (PositionComponent) owner.getComponent(POSITION);
         }
 
         Bitmap maskBitmap = Bitmap.createBitmap(defaultBitmap);
@@ -60,7 +60,7 @@ public class LightComponent extends Component {
         maskPaint.setXfermode(porterCLEAR);
         maskCanvas.drawCircle(centerX, centerY, intensity, maskPaint);
 
-        canvas.drawBitmap(maskBitmap, position.posX - centerX, position.posY - centerY, null);
+        canvas.drawBitmap(maskBitmap, posComp.posX - centerX, posComp.posY - centerY, null);
     }
 
     public void setLightIntensity(float intensity) {this.intensity = intensity;}

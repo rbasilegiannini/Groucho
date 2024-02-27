@@ -5,6 +5,7 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.GameWorld.physicalSize;
 import static com.personal.groucho.game.GameWorld.screenSize;
 import static com.personal.groucho.game.constants.Character.enemyFovInRad;
+import static com.personal.groucho.game.constants.System.characterDimX;
 import static com.personal.groucho.game.constants.System.characterDimY;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
@@ -39,10 +40,7 @@ public class Utils {
     }
 
     public static float toBufferXLength(float x) {return x/physicalSize.width*bufferWidth;}
-    public static float toBufferYLength(float y)
-    {
-        return y/physicalSize.height*bufferHeight;
-    }
+    public static float toBufferYLength(float y) {return y/physicalSize.height*bufferHeight;}
     public static float toMetersXLength(float x) {return x/bufferWidth * physicalSize.width;}
     public static float toMetersYLength(float y) {return y/bufferHeight * physicalSize.height;}
 
@@ -70,9 +68,9 @@ public class Utils {
                 || (crossProduct1 <= 0 && crossProduct2 <= 0 && crossProduct3 <= 0);
     }
 
-    public static float distBetweenVec(Vec2 vec1, Vec2 vec2){
-        float deltaX = vec2.getX() - vec1.getX();
-        float deltaY = vec2.getY() - vec1.getY();
+    public static float distBetweenPos(float pos1x, float pos1y, float pos2x, float pos2y){
+        float deltaX = pos2x - pos1x;
+        float deltaY = pos2y - pos1y;
         return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 
@@ -100,5 +98,17 @@ public class Utils {
         }
 
         return UP;
+    }
+
+    public static boolean isCloseToGO(int originX, int originY, GameObject go) {
+        PositionComponent posGO = (PositionComponent) go.getComponent(POSITION);
+        float distFromGOX = originX - posGO.posX;
+        float distFromGOY = originY - posGO.posY;
+
+        float distSquared = distFromGOX * distFromGOX + distFromGOY * distFromGOY;
+        float thresholdSquared = 1.2f * characterScaleFactor * characterDimX;
+        thresholdSquared *= thresholdSquared;
+
+        return distSquared <= thresholdSquared;
     }
 }

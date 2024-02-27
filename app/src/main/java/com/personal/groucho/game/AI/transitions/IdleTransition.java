@@ -27,7 +27,7 @@ public class IdleTransition extends Transition {
     @Override
     public Condition guard() {
         return () ->
-                !owner.isPlayerEngaged && !owner.isInvestigate && owner.originalState == StateName.IDLE;
+                !owner.isPlayerEngaged && !owner.investigateActions.isInvestigate && owner.originalState == StateName.IDLE;
     }
 
     @Override

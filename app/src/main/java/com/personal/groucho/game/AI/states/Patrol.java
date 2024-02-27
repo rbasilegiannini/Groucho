@@ -32,7 +32,8 @@ public class Patrol extends AIState {
     public List<Action> entryActions() {
         Log.i("State", "I'm entering in Patrol state....");
         actions.clear();
-        actions.add(() -> owner.entryPatrolAction());
+//        actions.add(() -> owner.entryPatrolAction());
+        actions.add(() -> owner.patrolActions.entryAction());
 
         return actions;
     }
@@ -40,7 +41,8 @@ public class Patrol extends AIState {
     @Override
     public List<Action> activeActions() {
         actions.clear();
-        actions.add(() -> owner.activePatrolAction());
+//        actions.add(() -> owner.activePatrolAction());
+        actions.add(() -> owner.patrolActions.activeAction());
 
         return actions;
     }
@@ -49,7 +51,8 @@ public class Patrol extends AIState {
     public List<Action> exitActions() {
         Log.i("State", "I'm leaving Patrol state....");
         actions.clear();
-        actions.add(() -> owner.exitPatrolAction());
+//        actions.add(() -> owner.exitPatrolAction());
+        actions.add(() -> owner.patrolActions.exitAction());
 
         return actions;
     }

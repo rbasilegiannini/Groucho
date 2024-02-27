@@ -15,7 +15,7 @@ public class AliveComponent extends Component {
     private int maxHealth;
     private int currentHealth;
     public Status currentStatus;
-    private SpriteDrawableComponent sprite = null;
+    private SpriteDrawableComponent spriteComp = null;
     private CharacterComponent character = null;
     private final GameWorld gameWorld;
 
@@ -50,14 +50,14 @@ public class AliveComponent extends Component {
 
     private void die() {
         currentStatus = DEAD;
-        sprite.setCurrentSpritesheet(character.properties.sheetDeath);
-        sprite.setAnim(0);
+        spriteComp.setCurrentSpritesheet(character.properties.sheetDeath);
+        spriteComp.setAnim(0);
         gameWorld.handleDeath((GameObject) getOwner());
     }
 
     private void updateSprite() {
         initComponents();
-        sprite.updateColorFilter(currentHealth, maxHealth);
+        spriteComp.updateColorFilter(currentHealth, maxHealth);
     }
 
     private void initComponents(){
@@ -66,8 +66,8 @@ public class AliveComponent extends Component {
             maxHealth = character.properties.health;
             currentHealth = character.properties.health;
         }
-        if (sprite == null) {
-            sprite = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
+        if (spriteComp == null) {
+            spriteComp = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
         }
     }
 }

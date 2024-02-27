@@ -26,8 +26,8 @@ public class ControllableComponent extends WalkingComponent implements Controlle
 
     private final Controller controller;
     private final GameWorld gameWorld;
-    private LightComponent lightComponent = null;
-    private boolean playShotAnimation = false;
+    private LightComponent lightComp = null;
+    private boolean playShotAnim = false;
     private boolean playLoadingSound = true;
 
     public ControllableComponent(GameWorld gameworld) {
@@ -46,28 +46,28 @@ public class ControllableComponent extends WalkingComponent implements Controlle
         else if (controller.currentState.getName() == AIMING)
             handleAimingPlayer();
 
-        if (playShotAnimation) {
+        if (playShotAnim) {
             updateSprite(character.properties.sheetFire);
-            playShotAnimation = false;
+            playShotAnim = false;
         }
     }
 
     @Override
-    protected void initComponents() {
+    public void initComponents() {
         super.initComponents();
-        if (lightComponent == null) {
-            lightComponent = (LightComponent) owner.getComponent(LIGHT);
+        if (lightComp == null) {
+            lightComp = (LightComponent) owner.getComponent(LIGHT);
         }
     }
 
     @Override
     public void switchLight(boolean isTurnOn) {
         if(isTurnOn) {
-            lightComponent.setLightIntensity(maxLightIntensity);
+            lightComp.setLightIntensity(maxLightIntensity);
             turnOnLightEvent(gameWorld);
         }
         else {
-            lightComponent.setLightIntensity(minLightIntensity);
+            lightComp.setLightIntensity(minLightIntensity);
             turnOffLightEvent(gameWorld);
         }
     }
@@ -100,7 +100,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     }
 
     private void handleShootingPlayer() {
-        playShotAnimation = true;
+        playShotAnim = true;
         playLoadingSound = true;
         Sounds.shooting.play(0.2f);
 
@@ -111,12 +111,12 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     private void shoot() {
         initComponents();
 
-        float originX = fromMetersToBufferX(phyComponent.getPosX());
-        float originY = fromMetersToBufferY(phyComponent.getPosY());
+        float originX = fromMetersToBufferX(phyComp.getPosX());
+        float originY = fromMetersToBufferY(phyComp.getPosY());
         float endX = 0;
         float endY = 0;
 
-        switch (posComponent.orientation) {
+        switch (posComp.orientation) {
             case UP:
                 originY = originY - characterDimY;
                 endX = originX;
@@ -145,7 +145,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     public void update(ControllerState currentState) {
         initComponents();
 
-        posComponent.setOrientation(controller.orientation);
+        posComp.setOrientation(controller.orientation);
 
         switch (currentState.getName()) {
             case IDLE:

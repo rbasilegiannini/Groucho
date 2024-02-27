@@ -19,10 +19,7 @@ public class BubbleSpeech {
     private final GameWorld gameWorld;
     private final TextPaint paint;
     private final Rect src, dest;
-    private int posX;
-    private int posY;
-    private int width;
-    private int height;
+    private int posX, posY, width, height;
     private Bitmap bubble;
     private final StringBuilder currentLine = new StringBuilder();
     private TextBlock currentTextBlock;
@@ -80,21 +77,26 @@ public class BubbleSpeech {
         currentTextBlock = textBlocksPool.acquire();
 
         for (String word : words) {
-            if (word.equals("\n")) {
-                completeCurrentTextBlock();
-                currentTextBlock = textBlocksPool.acquire();
-            }
-            else {
-                if (lineIsNotTooLarge(word)) {
-                    updateCurrentLine(word);
-                } else {
-                    updateCurrentTextBlock(word);
-                }
-            }
+            processWord(word);
         }
 
         if (currentLine.length() > 0) {
             completeCurrentTextBlock();
+        }
+    }
+
+    private void processWord(String word) {
+        if (word.equals("\n")) {
+            completeCurrentTextBlock();
+            currentTextBlock = textBlocksPool.acquire();
+        }
+        else {
+            if (lineIsNotTooLarge(word)) {
+                updateCurrentLine(word);
+            }
+            else {
+                updateCurrentTextBlock(word);
+            }
         }
     }
 

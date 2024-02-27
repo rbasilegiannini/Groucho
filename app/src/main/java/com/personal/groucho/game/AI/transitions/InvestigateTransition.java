@@ -24,7 +24,7 @@ public class InvestigateTransition extends Transition {
     }
 
     @Override
-    public Condition guard() {return () -> owner.isInvestigate;}
+    public Condition guard() {return () -> owner.investigateActions.isInvestigate;}
 
     @Override
     public List<Action> actions() { return Collections.emptyList(); }

@@ -1,7 +1,7 @@
 package com.personal.groucho.game;
 
 import static com.personal.groucho.game.Utils.directionBetweenGO;
-import static com.personal.groucho.game.Utils.distBetweenVec;
+import static com.personal.groucho.game.Utils.distBetweenPos;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.isInCircle;
@@ -37,22 +37,22 @@ import java.util.List;
 public class Events {
     public static void playerShootEnemyEvent(GameObject enemy) {
         bulletHitEnemy.play(1f);
-        AliveComponent alive = (AliveComponent) enemy.getComponent(ComponentType.ALIVE);
-        if (alive.currentStatus != DEAD) alive.damage(grouchoPower);
+        AliveComponent aliveComp = (AliveComponent) enemy.getComponent(ComponentType.ALIVE);
+        if (aliveComp.currentStatus != DEAD) aliveComp.damage(grouchoPower);
     }
 
     public static void playerShootFurnitureEvent(GameObject furniture, float originX, float originY) {
         bulletHitFurniture.play(1f);
-        PhysicsComponent physics = (PhysicsComponent) furniture.getComponent(ComponentType.PHYSICS);
-        float goPosX = physics.getPosX();
-        float goPosY = physics.getPosY();
+        PhysicsComponent phyComp = (PhysicsComponent) furniture.getComponent(ComponentType.PHYSICS);
+        float goPosX = phyComp.getPosX();
+        float goPosY = phyComp.getPosY();
         float forceX = goPosX - fromBufferToMetersX(originX);
         float forceY = goPosY - fromBufferToMetersY(originY);
         float module = (float) Math.sqrt(Math.pow(forceX,2) + Math.pow(forceY, 2));
 
         Vec2 force = new Vec2(20*(forceX/module), 20*(forceY/module));
 
-        physics.applyForce(force);
+        phyComp.applyForce(force);
     }
 
     public static void playerShootWallEvent() {
@@ -67,35 +67,45 @@ public class Events {
     public static void alertEnemiesEvent(GameWorld gameWorld) {
         List<PositionComponent> enemiesPos = new ArrayList<>();
         List<Float> enemiesDist = new ArrayList<>();
+
         for (GameObject enemy : gameWorld.goHandler.getGOByRole(ENEMY)){
-            if (((AliveComponent) enemy.getComponent(ALIVE)).currentStatus != DEAD) {
+            if (enemyIsAlive(enemy)) {
                 PositionComponent enemyPos = (PositionComponent) enemy.getComponent(POSITION);
-                if (isInCircle(
-                        gameWorld.player.posX, gameWorld.player.posY, enemyPos.posX, enemyPos.posY,
-                        hearingRangeSqr)) {
+                float playerPosX = gameWorld.player.posX;
+                float playerPosY = gameWorld.player.posY;
 
-                    float dist = distBetweenVec(
-                            new Vec2(gameWorld.player.posX, gameWorld.player.posY),
-                            new Vec2(enemyPos.posX, enemyPos.posY));
-
+                if (playerIsAudible(enemyPos, playerPosX, playerPosY)) {
+                    float dist = distBetweenPos(playerPosX, playerPosY, enemyPos.posX, enemyPos.posY);
                     enemiesPos.add(enemyPos);
                     enemiesDist.add(dist);
                 }
             }
         }
         if (!enemiesDist.isEmpty()) {
-            int indexLessFraction = enemiesDist.indexOf(Collections.min(enemiesDist));
-            AIComponent aiEnemy = (AIComponent) enemiesPos.get(indexLessFraction).getOwner().getComponent(AI);
-            if (!aiEnemy.isPlayerEngaged) {
-                aiEnemy.setInvestigateStatus(true);
-            }
+            callNearestEnemy(enemiesPos, enemiesDist);
+        }
+    }
+
+    private static boolean playerIsAudible(PositionComponent enemyPos, float playerPosX, float playerPosY) {
+        return isInCircle(playerPosX, playerPosY, enemyPos.posX, enemyPos.posY, hearingRangeSqr);
+    }
+
+    private static boolean enemyIsAlive(GameObject enemy) {
+        return ((AliveComponent) enemy.getComponent(ALIVE)).currentStatus != DEAD;
+    }
+
+    private static void callNearestEnemy(List<PositionComponent> enemiesPos, List<Float> enemiesDist) {
+        int indexLessFraction = enemiesDist.indexOf(Collections.min(enemiesDist));
+        AIComponent aiEnemy = (AIComponent) enemiesPos.get(indexLessFraction).getOwner().getComponent(AI);
+        if (!aiEnemy.isPlayerEngaged) {
+            aiEnemy.investigateActions.setInvestigateStatus(true);
         }
     }
 
     public static void playerCollideWithHealthEvent(GameObject player, GameObject health, GameWorld gameWorld) {
         healing.play(0.7f);
-        AliveComponent alive = (AliveComponent) player.getComponent(ComponentType.ALIVE);
-        alive.heal(medicalKit);
+        AliveComponent aliveComp = (AliveComponent) player.getComponent(ComponentType.ALIVE);
+        aliveComp.heal(medicalKit);
 
         gameWorld.goHandler.removeGameObject(health);
     }
@@ -108,9 +118,9 @@ public class Events {
         }
     }
 
-    public static void enemyHitPlayerEvent(AliveComponent alive, int power) {
+    public static void enemyHitPlayerEvent(AliveComponent aliveComp, int power) {
         stabbing.play(1f);
-        alive.damage(power);
+        aliveComp.damage(power);
     }
 
     public static void turnOnLightEvent(GameWorld gameWorld){

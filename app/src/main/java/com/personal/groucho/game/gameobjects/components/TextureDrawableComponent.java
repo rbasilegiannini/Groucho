@@ -9,7 +9,7 @@ import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class TextureDrawableComponent extends DrawableComponent{
 
-    private PositionComponent position = null;
+    private PositionComponent posComp = null;
     private final int dimX, dimY;
     private final Bitmap texture;
     private final Rect src;
@@ -25,11 +25,11 @@ public class TextureDrawableComponent extends DrawableComponent{
 
     @Override
     public void draw(Canvas canvas) {
-        if (position == null) {
-            position = (PositionComponent) owner.getComponent(ComponentType.POSITION);
+        if (posComp == null) {
+            posComp = (PositionComponent) owner.getComponent(ComponentType.POSITION);
         }
 
-        dest.offsetTo(position.posX-dimX/2, position.posY-dimY/2);
+        dest.offsetTo(posComp.posX-dimX/2, posComp.posY-dimY/2);
         canvas.drawBitmap(texture, src, dest, null);
     }
 }

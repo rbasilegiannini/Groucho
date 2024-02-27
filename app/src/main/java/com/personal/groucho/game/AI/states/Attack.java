@@ -29,9 +29,8 @@ public class Attack extends AIState {
 
     @Override
     public List<Action> entryActions() {
-        Log.i("State", "I'm entering in Attack state....");
         actions.clear();
-        actions.add(() -> owner.entryAttackAction());
+        actions.add(() -> owner.attackActions.entryAction());
 
         return actions;
     }
@@ -39,7 +38,7 @@ public class Attack extends AIState {
     @Override
     public List<Action> activeActions() {
         actions.clear();
-        actions.add(() -> owner.activeAttackAction());
+        actions.add(() -> owner.attackActions.activeAction());
 
         return actions;
     }
@@ -47,7 +46,7 @@ public class Attack extends AIState {
     @Override
     public List<Action> exitActions() {
         actions.clear();
-        actions.add(() -> owner.exitAttackAction());
+        actions.add(() -> owner.attackActions.exitAction());
 
         return actions;
     }

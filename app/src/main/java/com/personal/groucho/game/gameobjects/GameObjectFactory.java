@@ -97,14 +97,14 @@ public class GameObjectFactory {
         gameObject.addComponent(new CharacterComponent(getGroucho()));
         gameObject.addComponent(new LightComponent(gameWorld.graphics.buffer));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsComponent phyComp = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         PhysicsProp properties = new PhysicsProp(posX, posY, 0f, -1f,
                 1f, 1f, dynamicBody);
-        setCharacterPhysics(physics, properties);
+        setCharacterPhysics(phyComp, properties);
 
-        ControllableComponent controllable = (ControllableComponent) gameObject.getComponent(CONTROLLABLE);
+        ControllableComponent ctrlComp = (ControllableComponent) gameObject.getComponent(CONTROLLABLE);
 
-        gameWorld.controller.addControllerListener(controllable);
+        gameWorld.controller.addControllerListener(ctrlComp);
         controller.setCurrentState(Idle.getInstance(controller));
 
         return gameObject;
@@ -125,12 +125,12 @@ public class GameObjectFactory {
         gameObject.addComponent(new CharacterComponent(getSkeleton()));
         gameObject.addComponent(new AIComponent(gameWorld, state));
 
-        PositionComponent position = (PositionComponent) gameObject.getComponent(ComponentType.POSITION);
-        position.setOrientation(orientation);
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PositionComponent posComp = (PositionComponent) gameObject.getComponent(ComponentType.POSITION);
+        posComp.setOrientation(orientation);
+        PhysicsComponent phyComp = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(posX, posY,0f, -1f,
                 100f, 1f, dynamicBody);
-        setCharacterPhysics(physics, prop);
+        setCharacterPhysics(phyComp, prop);
 
         return gameObject;
     }
@@ -161,14 +161,14 @@ public class GameObjectFactory {
         roof.addComponent(new BoxDrawableComponent(dimX, dimRoofY, paintRoof));
         roof.addComponent(new PhysicsComponent(gameWorld.physics.world, dimX, length-dimWallY));
 
-        PhysicsComponent physics = (PhysicsComponent) roof.getComponent(PHYSICS);
+        PhysicsComponent phyComp = (PhysicsComponent) roof.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(
                 centerX,
                 centerY + dimWallY/2,
                 0f,
                 0,
                 0f, 0f, staticBody);
-        setFurniturePhysics(physics, prop);
+        setFurniturePhysics(phyComp, prop);
         setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, length);
 
         List<GameObject> gameObjects = new ArrayList<>();
@@ -206,10 +206,10 @@ public class GameObjectFactory {
         wall.addComponent(new BoxDrawableComponent(dimX, dimWallY, paintWall));
         roof.addComponent(new BoxDrawableComponent(dimX, dimRoofY, paintRoof));
 
-        PhysicsComponent physics = (PhysicsComponent) wall.getComponent(PHYSICS);
+        PhysicsComponent phyComp = (PhysicsComponent) wall.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f, 0f,
                 0f, 0f, staticBody);
-        setFurniturePhysics(physics, prop);
+        setFurniturePhysics(phyComp, prop);
         setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, dimWallY);
 
         List<GameObject> gameObjects = new ArrayList<>();
@@ -235,11 +235,11 @@ public class GameObjectFactory {
         border.addComponent(new PhysicsComponent(gameWorld.physics.world, dimX, dimY));
         border.addComponent(new BoxDrawableComponent(dimX, dimY, paintRoof));
 
-        PhysicsComponent physics = (PhysicsComponent) border.getComponent(PHYSICS);
+        PhysicsComponent phyComp = (PhysicsComponent) border.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(
                 centerX-cellSize/2, centerY, 0f, 0f,
                 0f, 0f, staticBody);
-        setFurniturePhysics(physics, prop);
+        setFurniturePhysics(phyComp, prop);
         setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, dimY);
 
         return border;
@@ -255,10 +255,10 @@ public class GameObjectFactory {
         gameObject.addComponent(new PhysicsComponent(gameWorld.physics.world, dimX, dimY/2));
         gameObject.addComponent(new TextureDrawableComponent(texture, (int)dimX, (int)dimY));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsComponent phyComp = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f,0f,
                 5f, 0, dynamicBody);
-        setFurniturePhysics(physics, prop);
+        setFurniturePhysics(phyComp, prop);
         setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, dimY);
 
         return gameObject;
@@ -274,10 +274,10 @@ public class GameObjectFactory {
         gameObject.addComponent(new PhysicsComponent(gameWorld.physics.world, dimX, dimY));
         gameObject.addComponent(new TextureDrawableComponent(health, dimX, dimY));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsComponent phyComp = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(posX, posY, 0f, 0f,
                 0f, 0, staticBody);
-        setFurniturePhysics(physics, prop);
+        setFurniturePhysics(phyComp, prop);
         setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, dimY);
 
         return gameObject;
@@ -293,10 +293,10 @@ public class GameObjectFactory {
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.physics.world, dimX, dimY));
 
-        PhysicsComponent physics = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsComponent phyComp = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(posX, posY, 0f, 0f,
                 0f, 0, staticBody);
-        setFurniturePhysics(physics, prop);
+        setFurniturePhysics(phyComp, prop);
 
         return gameObject;
     }

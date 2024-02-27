@@ -1,7 +1,5 @@
 package com.personal.groucho.game.AI.states;
 
-import android.util.Log;
-
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
@@ -31,9 +29,8 @@ public class Investigate extends AIState {
 
     @Override
     public List<Action> entryActions() {
-        Log.i("State", "I'm entering in Investigate state....");
         actions.clear();
-        actions.add(() -> owner.entryInvestigateAction());
+        actions.add(() -> owner.investigateActions.entryAction());
 
         return actions;
     }
@@ -41,15 +38,14 @@ public class Investigate extends AIState {
     @Override
     public List<Action> activeActions() {
         actions.clear();
-        actions.add(() -> owner.activeInvestigateAction());
+        actions.add(() -> owner.investigateActions.activeAction());
 
         return actions;    }
 
     @Override
     public List<Action> exitActions() {
-        Log.i("State", "I'm leaving Investigate state....");
         actions.clear();
-        actions.add(() -> owner.exitInvestigateAction());
+        actions.add(() -> owner.investigateActions.exitAction());
 
         return actions;
     }

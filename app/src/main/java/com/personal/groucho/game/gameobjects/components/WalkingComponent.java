@@ -10,17 +10,17 @@ import com.personal.groucho.game.Spritesheet;
 import com.personal.groucho.game.gameobjects.Component;
 
 public abstract class WalkingComponent extends Component {
-    protected PositionComponent posComponent = null;
-    protected SpriteDrawableComponent spriteComponent = null;
-    protected PhysicsComponent phyComponent = null;
-    protected CharacterComponent character = null;
+    public PositionComponent posComp = null;
+    protected SpriteDrawableComponent spriteComp = null;
+    protected PhysicsComponent phyComp = null;
+    public CharacterComponent character = null;
     protected float increaseX, increaseY;
 
 
     protected void walking() {
         initComponents();
 
-        switch (posComponent.orientation) {
+        switch (posComp.orientation) {
             case UP:
                 increaseX = 0;
                 increaseY = -1;
@@ -44,29 +44,29 @@ public abstract class WalkingComponent extends Component {
         updateSprite(character.properties.sheetWalk);
     }
 
-    protected void updateSprite(Spritesheet sheet) {
+    public void updateSprite(Spritesheet sheet) {
         initComponents();
 
-        spriteComponent.setCurrentSpritesheet(sheet);
-        spriteComponent.setAnim(posComponent.orientation.getValue());
+        spriteComp.setCurrentSpritesheet(sheet);
+        spriteComp.setAnim(posComp.orientation.getValue());
     }
 
     private void updatePosition(float increaseX, float increaseY) {
         initComponents();
 
-        phyComponent.updatePosX(increaseX);
-        phyComponent.updatePosY(increaseY);
+        phyComp.updatePosX(increaseX);
+        phyComp.updatePosY(increaseY);
     }
 
-    protected void initComponents() {
-        if (posComponent == null) {
-            posComponent = (PositionComponent) owner.getComponent(POSITION);
+    public void initComponents() {
+        if (posComp == null) {
+            posComp = (PositionComponent) owner.getComponent(POSITION);
         }
-        if(phyComponent == null) {
-            phyComponent = (PhysicsComponent) owner.getComponent(PHYSICS);
+        if(phyComp == null) {
+            phyComp = (PhysicsComponent) owner.getComponent(PHYSICS);
         }
-        if (spriteComponent == null) {
-            spriteComponent = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
+        if (spriteComp == null) {
+            spriteComp = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
         }
         if (character == null){
             character = (CharacterComponent) owner.getComponent(CHARACTER);

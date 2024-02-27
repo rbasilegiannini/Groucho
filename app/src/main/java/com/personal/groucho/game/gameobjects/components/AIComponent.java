@@ -1,19 +1,14 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.Events.enemyHitPlayerEvent;
-import static com.personal.groucho.game.Utils.directionBetweenGO;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.constants.System.characterDimX;
 import static com.personal.groucho.game.constants.System.characterScaleFactor;
-import static com.personal.groucho.game.constants.System.maxInvisiblePlayer;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.Orientation.RIGHT;
 import static com.personal.groucho.game.controller.Orientation.UP;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
-import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
 import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
-import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import static java.lang.Math.abs;
 
@@ -22,7 +17,12 @@ import android.graphics.Paint;
 
 import com.google.fpl.liquidfun.Vec2;
 import com.personal.groucho.game.AI.Action;
+import com.personal.groucho.game.AI.actions.AttackActions;
+import com.personal.groucho.game.AI.actions.EngageActions;
 import com.personal.groucho.game.AI.FSM;
+import com.personal.groucho.game.AI.actions.IdleActions;
+import com.personal.groucho.game.AI.actions.InvestigateActions;
+import com.personal.groucho.game.AI.actions.PatrolActions;
 import com.personal.groucho.game.AI.pathfinding.AStar;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.pathfinding.Node;
@@ -35,38 +35,37 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.AI.Sight;
-import com.personal.groucho.game.gameobjects.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AIComponent extends WalkingComponent {
     public final StateName originalState;
-    private final FSM fsm;
-    private final GameGrid grid;
-    private Sight sight = null;
-    private final GameWorld gameWorld;
-    private final AStar aStar;
-    private Orientation originalOrientation;
-    private Node originalPosOnGrid, posOnGrid, playerPosOnGrid, currentNode;
-    private final int maxSteps;
-    private int currentSteps;
-    private boolean isNodeReached = true;
+    public final FSM fsm;
+    public Sight sight = null;
+    public final GameWorld gameWorld;
+    public final AStar aStar;
+    public Orientation originalOrientation;
+    public Node originalPosOnGrid, posOnGrid, playerPosOnGrid, currentNode;
+    public List<Node> currentPath;
+    public boolean isNodeReached = true;
     public boolean isPlayerEngaged = false;
     public boolean isPlayerReached = false;
-    public boolean isInvestigate = false;
-    private boolean isIdle = false;
-    private boolean isPatrol = false;
-    private long lastHitMillis, lastSeenMills;
 
-    // To avoid further allocations
-    private List<Node> currentPath;
-    private AliveComponent playerAliveComponent = null;
-
+    public IdleActions idleActions;
+    public PatrolActions patrolActions;
+    public EngageActions engageActions;
+    public AttackActions attackActions;
+    public InvestigateActions investigateActions;
 
     public AIComponent(GameWorld gameWorld, StateName currentState) {
         this.gameWorld = gameWorld;
-        grid = gameWorld.grid;
+
+        idleActions = new IdleActions(this);
+        patrolActions = new PatrolActions(this);
+        engageActions = new EngageActions(this);
+        attackActions = new AttackActions(this);
+        investigateActions = new InvestigateActions(this);
 
         originalState = currentState;
         switch (originalState) {
@@ -84,10 +83,8 @@ public class AIComponent extends WalkingComponent {
                 break;
         }
 
-        aStar = new AStar(grid);
+        aStar = new AStar(gameWorld.grid);
         currentPath = new ArrayList<>();
-        currentSteps = 0;
-        maxSteps = 100;
     }
 
     @Override
@@ -96,18 +93,12 @@ public class AIComponent extends WalkingComponent {
     public void update(GameWorld gameWorld) {
         init(gameWorld);
 
-        originalPosOnGrid = grid.getNode(
-                posComponent.getPosXOnGrid(),
-                posComponent.getPosYOnGrid()
-        );
-        originalOrientation = posComponent.orientation;
-
         List<Action> actions = fsm.getActions();
         for (Action action : actions) {
             action.doIt();
         }
 
-        sight.updateSightPosition(posComponent.posX, posComponent.posY);
+        sight.updateSightPosition(posComp.posX, posComp.posY);
         sight.see(gameWorld);
     }
 
@@ -115,210 +106,24 @@ public class AIComponent extends WalkingComponent {
         initComponents();
 
         if (sight == null) {
-            sight = new Sight(
-                    this,
+            sight = new Sight(this,
                     gameWorld.physics.world,
-                    new Vec2(posComponent.posX, posComponent.posY),
-                    posComponent.orientation);
-        }
-    }
+                    new Vec2(posComp.posX, posComp.posY),
+                    posComp.orientation);
 
-    @Override
-    protected void initComponents() {
-        super.initComponents();
-        if (playerAliveComponent == null) {
-            playerAliveComponent = (AliveComponent) gameWorld.player.gameObject.getComponent(ALIVE);
+            originalPosOnGrid = gameWorld.grid.getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
+            originalOrientation = posComp.orientation;
         }
     }
 
     public Sight getSight() {return sight;}
     public boolean isPlayerVisible() {return gameWorld.player.isPlayerVisible;}
     public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
-    public void setInvestigateStatus(boolean isInvestigate) {this.isInvestigate = isInvestigate;}
 
-    // Idle actions
-    public void entryIdleAction() {
-        if (!currentPath.isEmpty() || !isNodeReached) {
-            updateSprite(character.properties.sheetWalk);
-        }
-        else {
-            updateSprite(character.properties.sheetIdle);
-        }
-    }
+    public void setPathToPlayer() {
+        posOnGrid = gameWorld.grid.getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
 
-    public void activeIdleAction() {
-        if (!currentPath.isEmpty() || !isNodeReached)
-            walkingToDestination();
-        else if (!isIdle){
-            posComponent.setOrientation(originalOrientation);
-            sight.setNewOrientation(originalOrientation);
-            updateSprite(character.properties.sheetIdle);
-            isIdle = true;
-        }
-    }
-
-    public void exitIdleAction() {
-        isIdle = false;
-    }
-
-    // Patrol actions
-    public void entryPatrolAction() {
-        currentSteps = 0;
-        updateSprite(character.properties.sheetWalk);
-        posComponent.setOrientation(posComponent.orientation.getOpposite());
-    }
-
-    public void activePatrolAction() {
-        initComponents();
-
-        if (!currentPath.isEmpty() || !isNodeReached)
-            walkingToDestination();
-        else {
-            if (!isPatrol) {
-                posComponent.setOrientation(originalOrientation);
-                sight.setNewOrientation(originalOrientation);
-                isPatrol = true;
-            }
-            patrol();
-        }
-    }
-
-    public void exitPatrolAction() {
-        isPatrol = false;
-        currentSteps = 0;
-    }
-
-    private void patrol() {
-        if (currentSteps == maxSteps) {
-            currentSteps = 0;
-            posComponent.setOrientation(posComponent.orientation.getOpposite());
-        }
-        currentSteps++;
-        walking();
-    }
-
-    // Investigate actions
-    public void entryInvestigateAction() {
-        initComponents();
-
-        posOnGrid = grid.getNode(
-                posComponent.getPosXOnGrid(),
-                posComponent.getPosYOnGrid()
-        );
-        setPathToPlayer();
-        isNodeReached = true;
-        isInvestigate = true;
-    }
-
-    public void activeInvestigateAction() {
-        if (!currentPath.isEmpty() || !isNodeReached) {
-            walkingToDestination();
-        }
-        else {
-            isInvestigate = false;
-        }
-    }
-
-    public void exitInvestigateAction() {
-        isInvestigate = false;
-        currentPath.clear();
-        currentPath = aStar.findPath(posOnGrid, originalPosOnGrid);
-    }
-
-    // Engage actions
-    public void entryEngageAction(){
-        initComponents();
-
-        posOnGrid = grid.getNode(
-                posComponent.getPosXOnGrid(),
-                posComponent.getPosYOnGrid()
-        );
-        lastSeenMills = System.currentTimeMillis();
-        setPathToPlayer();
-        isNodeReached = true;
-    }
-
-    public void activeEngageAction(){
-        if (hasPlayerChangedPosition() && currentNode == null) {
-            setPathToPlayer();
-        }
-        isPlayerReached = isCloseToPlayer();
-
-        if (!currentPath.isEmpty() || !isNodeReached) {
-            walkingToDestination();
-        }
-        else {
-            isPlayerReached = false;
-        }
-
-        if (!gameWorld.player.isPlayerVisible) {
-            if (System.currentTimeMillis() - lastSeenMills > maxInvisiblePlayer){
-                isPlayerEngaged = false;
-            }
-        }
-        else {
-            lastSeenMills = System.currentTimeMillis();
-        }
-    }
-
-    public void exitEngageAction() {
-        currentPath.clear();
-        currentPath = aStar.findPath(posOnGrid, originalPosOnGrid);
-    }
-
-    private boolean hasPlayerChangedPosition() {
-        return !playerPosOnGrid.equal(grid.getNode(
-                gameWorld.player.posX / cellSize,
-                gameWorld.player.posY / cellSize));
-    }
-
-    // Attack actions
-    public void entryAttackAction() {
-        lastHitMillis = System.currentTimeMillis();
-        sight.setNewOrientation(posComponent.orientation);
-        updateSprite(character.properties.sheetHurt);
-    }
-
-    public void activeAttackAction() {
-        initComponents();
-
-        isPlayerReached = isCloseToPlayer();
-
-        if (!gameWorld.gameOver && playerAliveComponent.currentStatus != DEAD) {
-            long delay =
-                    character.properties.sheetHurt.getDelay(0) * character.properties.sheetHurt.getLength(0);
-            if (isPlayerReached && System.currentTimeMillis() - lastHitMillis > delay) {
-                updateDirection(directionBetweenGO(gameWorld.player.gameObject, (GameObject)owner));
-                enemyHitPlayerEvent(playerAliveComponent, character.properties.power);
-                lastHitMillis = System.currentTimeMillis();
-            }
-        }
-        else {
-            isPlayerEngaged = false;
-            isPlayerReached = false;
-
-            switch (originalState) {
-                case IDLE:
-                    fsm.setState(Idle.getInstance(this));
-                    break;
-                case PATROL:
-                    fsm.setState(Patrol.getInstance(this));
-                    break;
-            }
-        }
-    }
-
-    public void exitAttackAction() {
-        isPlayerReached = false;
-    }
-
-    private void setPathToPlayer() {
-        posOnGrid = grid.getNode(
-                posComponent.getPosXOnGrid(),
-                posComponent.getPosYOnGrid()
-        );
-
-        playerPosOnGrid = grid.getNode(
+        playerPosOnGrid = gameWorld.grid.getNode(
                 gameWorld.player.posX /cellSize,
                 gameWorld.player.posY /cellSize
         );
@@ -327,35 +132,19 @@ public class AIComponent extends WalkingComponent {
         currentPath = aStar.findPath(posOnGrid, playerPosOnGrid);
     }
 
-    public boolean isCloseToPlayer() {
-        float distFromPlayerX =
-                (float) posComponent.posX - gameWorld.player.posX;
-        float distFromPlayerY =
-                (float) posComponent.posY - gameWorld.player.posY;
-
-        float distSquared = distFromPlayerX * distFromPlayerX + distFromPlayerY * distFromPlayerY;
-        float thresholdSquared = 1.2f * characterScaleFactor * characterDimX;
-        thresholdSquared *= thresholdSquared;
-
-        return distSquared < thresholdSquared;
-    }
-
-    private void walkingToDestination() {
+    public void walkingToDestination() {
         if (isNodeReached || currentNode == null) {
             currentNode = currentPath.remove(0);
             isNodeReached = false;
         }
 
-        posOnGrid = grid.getNode(
-                posComponent.getPosXOnGrid(),
-                posComponent.getPosYOnGrid()
-        );
+        posOnGrid = gameWorld.grid.getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
 
-        if (posComponent.posX != (currentNode.posX*cellSize)+0.5*cellSize) {
-            walkingToXCoordinate(posComponent.posX, (int)((currentNode.posX*cellSize)+0.5*cellSize));
+        if (posComp.posX != (currentNode.posX*cellSize)+0.5*cellSize) {
+            walkingToXCoordinate(posComp.posX, (int)((currentNode.posX*cellSize)+0.5*cellSize));
         }
-        else if (posComponent.posY != (currentNode.posY*cellSize)+0.5*cellSize) {
-            walkingToYCoordinate(posComponent.posY, (int)((currentNode.posY*cellSize)+0.5*cellSize));
+        else if (posComp.posY != (currentNode.posY*cellSize)+0.5*cellSize) {
+            walkingToYCoordinate(posComp.posY, (int)((currentNode.posY*cellSize)+0.5*cellSize));
         }
 
         if (posOnGrid.equal(currentNode)) {
@@ -366,46 +155,46 @@ public class AIComponent extends WalkingComponent {
 
     private void walkingToXCoordinate(int startX, int targetPosX){
         if (abs(startX - targetPosX) < abs(character.properties.speed*increaseX)) {
-            phyComponent.setPosX(targetPosX);
+            phyComp.setPosX(targetPosX);
             return;
         }
 
         if (startX < targetPosX) {
-            posComponent.setOrientation(RIGHT);
+            posComp.setOrientation(RIGHT);
         }
         if (startX > targetPosX) {
-            posComponent.setOrientation(LEFT);
+            posComp.setOrientation(LEFT);
         }
         walking();
     }
 
     private void walkingToYCoordinate(int startY, int targetPosY){
         if (abs(startY - targetPosY) < abs(character.properties.speed*increaseY)) {
-            phyComponent.setPosY(targetPosY);
+            phyComp.setPosY(targetPosY);
             return;
         }
 
         if (startY < targetPosY) {
-            posComponent.setOrientation(DOWN);
+            posComp.setOrientation(DOWN);
         }
         if (startY > targetPosY) {
-            posComponent.setOrientation(UP);
+            posComp.setOrientation(UP);
         }
         walking();
     }
 
     @Override
-    protected void walking() {
+    public void walking() {
         super.walking();
-        sight.updateSightPosition(posComponent.posX, posComponent.posY);
-        sight.setNewOrientation(posComponent.orientation);
+        sight.updateSightPosition(posComp.posX, posComp.posY);
+        sight.setNewOrientation(posComp.orientation);
     }
 
     public void updateDirection(Orientation orientation){
-        posComponent.setOrientation(orientation);
+        posComp.setOrientation(orientation);
         ((SpriteDrawableComponent)
-                owner.getComponent(DRAWABLE)).setAnim(posComponent.orientation.getValue());
-        sight.setNewOrientation(posComponent.orientation);
+                owner.getComponent(DRAWABLE)).setAnim(posComp.orientation.getValue());
+        sight.setNewOrientation(posComp.orientation);
     }
 
     public void drawDebugPath(Canvas canvas, Paint paint) {

@@ -4,13 +4,14 @@ import static com.personal.groucho.game.constants.System.fpsCounter;
 import static com.personal.groucho.game.constants.System.memoryUsage;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
+import static com.personal.groucho.game.gameobjects.Role.ENEMY;
+import static com.personal.groucho.game.gameobjects.Role.PLAYER;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.gameobjects.Role;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.DrawableComponent;
 import com.personal.groucho.game.gameobjects.components.LightComponent;
@@ -33,13 +34,13 @@ class DrawableComparator implements Comparator<DrawableComponent> {
         GameObject go1 = (GameObject) obj1.getOwner();
         GameObject go2 = (GameObject) obj2.getOwner();
 
-        if (go1.role == Role.ENEMY) {
+        if (go1.role == ENEMY || go1.role == PLAYER) {
             if (((AliveComponent)(go1.getComponent(ALIVE))).currentStatus == DEAD){
                 return -1;
             }
         }
 
-        if (go2.role == Role.ENEMY) {
+        if (go2.role == ENEMY || go2.role == PLAYER) {
             if (((AliveComponent)(go2.getComponent(ALIVE))).currentStatus == DEAD){
                 return 1;
             }

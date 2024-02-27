@@ -10,7 +10,7 @@ import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class PositionComponent extends Component {
     public int originalPosX, originalPosY, posX, posY;
-    protected Orientation orientation;
+    public Orientation orientation;
 
     public PositionComponent(int posX, int posY) {
         this.originalPosX = posX;

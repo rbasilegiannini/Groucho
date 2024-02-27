@@ -61,7 +61,7 @@ public class FirstLevel extends Level{
         gameObjects.addAll(GameObjectFactory.
                 makeWall(4*cellSize - cellSize/2, -cellSize, 5*cellSize, gameWorld));
 
-        gameObjects.add(GameObjectFactory.makeTrigger(CHANGE_LEVEL.name(), 800, 800, gameWorld));
+//        gameObjects.add(GameObjectFactory.makeTrigger(CHANGE_LEVEL.name(), 800, 800, gameWorld));
 
         for (GameObject go : gameObjects) {
             gameWorld.goHandler.addGameObject(go);

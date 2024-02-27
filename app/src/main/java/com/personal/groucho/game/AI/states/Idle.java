@@ -30,27 +30,26 @@ public class Idle extends AIState {
 
     @Override
     public List<Action> entryActions() {
-        Log.i("State", "I'm entering in Idle state....");
         actions.clear();
-        actions.add(() -> owner.entryIdleAction());
+        actions.add(() -> owner.idleActions.entryAction());
 
         return actions;
     }
 
     @Override
     public List<Action> activeActions() {
-
         actions.clear();
-        actions.add(() -> owner.activeIdleAction());
+//        actions.add(() -> owner.activeIdleAction());
+        actions.add(() -> owner.idleActions.activeAction());
 
         return actions;
     }
 
     @Override
     public List<Action> exitActions() {
-        Log.i("State", "I'm leaving Idle state....");
         actions.clear();
-        actions.add(() -> owner.exitIdleAction());
+//        actions.add(() -> owner.exitIdleAction());
+        actions.add(() -> owner.idleActions.exitAction());
 
         return actions;
     }

@@ -5,7 +5,7 @@ import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class CharacterComponent extends Component {
-    protected CharacterProp properties;
+    public CharacterProp properties;
     @Override
     public ComponentType type() {return ComponentType.CHARACTER;}
 
