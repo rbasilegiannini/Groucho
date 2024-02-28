@@ -7,6 +7,7 @@ import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import com.personal.groucho.game.AI.Actions;
+import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.states.Idle;
 import com.personal.groucho.game.AI.states.Patrol;
 import com.personal.groucho.game.gameobjects.GameObject;
@@ -56,7 +57,7 @@ public class AttackActions implements Actions {
     private void comeBack() {
         aiComp.isPlayerEngaged = false;
         aiComp.isPlayerReached = false;
-        aiComp.posOnGrid = aiComp.gameWorld.grid.getNode(
+        aiComp.posOnGrid = GameGrid.getInstance(aiComp.gameWorld).getNode(
                 aiComp.posComp.getPosXOnGrid(),
                 aiComp.posComp.getPosYOnGrid()
         );

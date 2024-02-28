@@ -172,7 +172,7 @@ public class GameObjectFactory {
                 0,
                 0f, 0f, staticBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, length);
+        setFurnitureOnGameGrid(gameWorld, prop, dimX, length);
 
         List<GameObject> gameObjects = new ArrayList<>();
         gameObjects.add(roof);
@@ -213,7 +213,7 @@ public class GameObjectFactory {
         PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f, 0f,
                 0f, 0f, staticBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, dimWallY);
+        setFurnitureOnGameGrid(gameWorld, prop, dimX, dimWallY);
 
         List<GameObject> gameObjects = new ArrayList<>();
         gameObjects.add(roof);
@@ -243,7 +243,7 @@ public class GameObjectFactory {
                 centerX-cellSize/2, centerY, 0f, 0f,
                 0f, 0f, staticBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, dimY);
+        setFurnitureOnGameGrid(gameWorld, prop, dimX, dimY);
 
         return border;
     }
@@ -262,7 +262,7 @@ public class GameObjectFactory {
         PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f,0f,
                 density, 0, dynamicBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, dimY);
+        setFurnitureOnGameGrid(gameWorld, prop, dimX, dimY);
 
         return gameObject;
     }
@@ -303,7 +303,7 @@ public class GameObjectFactory {
         PhysicsProp prop = new PhysicsProp(posX, posY, 0f, 0f,
                 0f, 0, staticBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld.grid, prop, dimX, dimY);
+        setFurnitureOnGameGrid(gameWorld, prop, dimX, dimY);
 
         return gameObject;
     }
@@ -383,8 +383,8 @@ public class GameObjectFactory {
         fixtureDef.delete();
     }
 
-    private static void setFurnitureOnGameGrid(GameGrid grid, PhysicsProp prop, float dimX, float dimY) {
-        SparseArray<Node>  nodes= grid.getNodes(prop.posX, prop.posY, (int)dimX, (int)dimY);
+    private static void setFurnitureOnGameGrid(GameWorld gameWorld, PhysicsProp prop, float dimX, float dimY) {
+        SparseArray<Node>  nodes= GameGrid.getInstance(gameWorld).getNodes(prop.posX, prop.posY, (int)dimX, (int)dimY);
 
         int cost = 0;
         switch (prop.type){
@@ -397,7 +397,7 @@ public class GameObjectFactory {
         }
 
         for (int i = 0; i < nodes.size(); i++) {
-            grid.increaseDefaultCostOnNode(nodes.valueAt(i), cost);
+            GameGrid.getInstance(gameWorld).increaseDefaultCostOnNode(nodes.valueAt(i), cost);
         }
     }
 

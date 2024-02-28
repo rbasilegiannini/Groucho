@@ -20,7 +20,6 @@ import java.util.List;
 public class Room {
     protected final GameWorld gameWorld;
     protected final List<GameObject> gameObjects = new ArrayList<>();
-    protected GameGrid grid;
     protected final Rect surface;
     protected final Paint floorPaint;
     private final int widthGrid;
@@ -35,9 +34,8 @@ public class Room {
     }
 
     public void init() {
-        grid = new GameGrid(widthGrid, heightGrid, gameWorld);
+        GameGrid.getInstance(gameWorld).init(widthGrid, heightGrid);
         gameObjects.clear();
-        gameWorld.setGameGrid(grid);
         makeBorders();
     }
 
@@ -91,7 +89,7 @@ public class Room {
     public void releaseRoom() {
         gameWorld.goHandler.changeLevel();
         gameWorld.nodesPool.clear();
-        grid.reset();
+        GameGrid.getInstance(gameWorld).reset();
     }
 
     public void allocateRoom(){

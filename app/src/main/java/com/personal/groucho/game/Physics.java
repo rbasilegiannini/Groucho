@@ -34,7 +34,6 @@ import java.util.List;
 public class Physics {
     private static Physics instance = null;
     private final GameWorld gameWorld;
-    private GameGrid gameGrid;
     public final World world;
     private final MyContactListener contactListener;
 
@@ -60,8 +59,6 @@ public class Physics {
         }
         return instance;
     }
-
-    public void setGameGrid(GameGrid grid) {this.gameGrid = grid;}
 
     public synchronized void update(float elapsedTime) {
         world.step(elapsedTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
@@ -99,17 +96,17 @@ public class Physics {
     }
 
     private void updateGameGrid(PhysicsComponent phyComponent, float originalPosX, float originalPosY) {
-        if (gameGrid != null) {
+        if (GameGrid.getInstance(gameWorld) != null) {
             int dCost = (int) (phyComponent.density * 10000);
 
-            SparseArray<Node> oldCellsToReset = gameGrid.getNodes(
+            SparseArray<Node> oldCellsToReset = GameGrid.getInstance(gameWorld).getNodes(
                     (int)originalPosX,
                     (int)originalPosY,
                     (int)phyComponent.dimX,
                     (int)phyComponent.dimY
             ).clone();
 
-            SparseArray<Node> newCellsToChange = gameGrid.getNodes(
+            SparseArray<Node> newCellsToChange = GameGrid.getInstance(gameWorld).getNodes(
                     (int)fromMetersToBufferX(phyComponent.getPosX()),
                     (int)fromMetersToBufferY(phyComponent.getPosY()),
                     (int)phyComponent.dimX,
@@ -126,12 +123,12 @@ public class Physics {
 
             // Update cost
             for (int i = 0; i < newCellsToChange.size(); i++) {
-                gameGrid.increaseDefaultCostOnNode(newCellsToChange.valueAt(i), dCost);
+                GameGrid.getInstance(gameWorld).increaseDefaultCostOnNode(newCellsToChange.valueAt(i), dCost);
             }
 
             // Reset cost
             for (int i = 0; i < oldCellsToReset.size(); i++) {
-                gameGrid.decreaseDefaultCostOnNode(oldCellsToReset.valueAt(i), dCost);
+                GameGrid.getInstance(gameWorld).decreaseDefaultCostOnNode(oldCellsToReset.valueAt(i), dCost);
             }
         }
     }

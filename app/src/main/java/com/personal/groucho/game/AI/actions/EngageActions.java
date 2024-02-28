@@ -5,6 +5,7 @@ import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.constants.System.maxInvisiblePlayer;
 
 import com.personal.groucho.game.AI.Actions;
+import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 public class EngageActions implements Actions {
@@ -19,7 +20,7 @@ public class EngageActions implements Actions {
     public void entryAction() {
         aiComp.initComponents();
 
-        aiComp.posOnGrid = aiComp.gameWorld.grid.getNode(
+        aiComp.posOnGrid = GameGrid.getInstance(aiComp.gameWorld).getNode(
                 aiComp.posComp.getPosXOnGrid(),
                 aiComp.posComp.getPosYOnGrid()
         );
@@ -61,7 +62,7 @@ public class EngageActions implements Actions {
     }
 
     private boolean hasPlayerChangedPosition() {
-        return !aiComp.playerPosOnGrid.equal(aiComp.gameWorld.grid.getNode(
+        return !aiComp.playerPosOnGrid.equal(GameGrid.getInstance(aiComp.gameWorld).getNode(
                 aiComp.gameWorld.player.posX / cellSize,
                 aiComp.gameWorld.player.posY / cellSize));
     }

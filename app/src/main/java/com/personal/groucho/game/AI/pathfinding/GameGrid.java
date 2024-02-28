@@ -10,12 +10,25 @@ import android.util.SparseArray;
 import com.personal.groucho.game.GameWorld;
 
 public class GameGrid {
-    public final int width;
-    public final int height;
-    public final Node[][] grid;
+    public static GameGrid instance = null;
+    public int width;
+    public int height;
+    public Node[][] grid;
+    public final GameWorld gameWorld;
     private final SparseArray<Node> nodesBelowTheObject = new SparseArray<>();
 
-    public GameGrid(int width, int height, GameWorld gameWorld) {
+    private GameGrid(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
+    }
+
+    public static GameGrid getInstance(GameWorld gameWorld){
+        if (instance == null){
+            instance = new GameGrid(gameWorld);
+        }
+        return instance;
+    }
+
+    public void init(int width, int height){
         this.width = width;
         this.height = height;
         this.grid = new Node[width][height];

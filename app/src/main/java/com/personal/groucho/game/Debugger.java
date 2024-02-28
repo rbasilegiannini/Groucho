@@ -16,7 +16,6 @@ import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
 public class Debugger {
     private final GameWorld gameWorld;
-    private GameGrid grid;
     private static Debugger instance = null;
     private final Paint positionPaint, colliderPaint, gameGridPaint, sightPaint, pathPaint;
 
@@ -42,8 +41,6 @@ public class Debugger {
         pathPaint = new Paint();
         pathPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         pathPaint.setColor(Color.BLUE);
-
-        updateDebugger();
     }
 
     public static Debugger getDebugger(GameWorld gameWorld) {
@@ -54,7 +51,7 @@ public class Debugger {
     }
 
     public void draw(Canvas canvas) {
-        grid.drawDebugGrid(canvas, gameGridPaint);
+        GameGrid.getInstance(gameWorld).drawDebugGrid(canvas, gameGridPaint);
 
         for (AIComponent aiComponent : gameWorld.goHandler.aiComponents) {
             aiComponent.getSight().drawDebugSight(canvas, sightPaint);
@@ -89,10 +86,6 @@ public class Debugger {
                     colliderPaint
             );
         }
-    }
-
-    public void updateDebugger() {
-        grid = gameWorld.grid;
     }
 
     protected void finalize(){

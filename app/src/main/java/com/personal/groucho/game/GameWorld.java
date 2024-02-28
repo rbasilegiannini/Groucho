@@ -36,7 +36,6 @@ public class GameWorld {
     public Player player;
     public Controller controller;
     protected Level currentLevel;
-    public GameGrid grid;
     private TouchHandler touchHandler;
     private boolean pause = false;
     public boolean gameOver = false;
@@ -71,17 +70,13 @@ public class GameWorld {
 
     public void tryAgain(Level level) {
         initEnvironment();
-        GrouchoRoom.firstTime = false;
+        GrouchoRoom.firstTime = true;
         nodesPool.clear();
-        grid.reset();
+        GameGrid.getInstance(this).reset();
 
         currentLevel = level;
         setPlayer();
         currentLevel.init();
-
-        if(debugMode) {
-            getDebugger(this).updateDebugger();
-        }
     }
 
     private void initEnvironment() {
@@ -100,11 +95,6 @@ public class GameWorld {
                 makePlayer(bufferWidth /2, bufferHeight/2, controller, this);
         player = new Player(playerGO, this);
         goHandler.addGameObject(playerGO);
-    }
-
-    public void setGameGrid(GameGrid grid) {
-        this.grid = grid;
-        physics.setGameGrid(grid);
     }
 
     public void setPlayerVisibility(boolean visibility) {player.setPlayerVisibility(visibility);}
@@ -194,10 +184,6 @@ public class GameWorld {
 //
 //        currentLevel = newLevel;
 //        currentLevel.init();
-//
-//        if(debugMode) {
-//            getDebugger(this).updateDebugger();
-//        }
     }
 
     public void resume() {pause = false;}

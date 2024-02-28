@@ -22,6 +22,7 @@ import com.personal.groucho.game.AI.actions.IdleActions;
 import com.personal.groucho.game.AI.actions.InvestigateActions;
 import com.personal.groucho.game.AI.actions.PatrolActions;
 import com.personal.groucho.game.AI.pathfinding.AStar;
+import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.AI.states.Attack;
 import com.personal.groucho.game.AI.states.Engage;
@@ -80,7 +81,7 @@ public class AIComponent extends WalkingComponent {
                 break;
         }
 
-        aStar = new AStar(gameWorld.grid);
+        aStar = new AStar(gameWorld);
         currentPath = new ArrayList<>();
     }
 
@@ -108,7 +109,7 @@ public class AIComponent extends WalkingComponent {
                     new Vec2(posComp.posX, posComp.posY),
                     posComp.orientation);
 
-            originalPosOnGrid = gameWorld.grid.getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
+            originalPosOnGrid = GameGrid.getInstance(gameWorld).getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
             originalOrientation = posComp.orientation;
         }
     }
@@ -118,9 +119,9 @@ public class AIComponent extends WalkingComponent {
     public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
 
     public void setPathToPlayer() {
-        posOnGrid = gameWorld.grid.getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
+        posOnGrid = GameGrid.getInstance(gameWorld).getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
 
-        playerPosOnGrid = gameWorld.grid.getNode(
+        playerPosOnGrid = GameGrid.getInstance(gameWorld).getNode(
                 gameWorld.player.posX /cellSize,
                 gameWorld.player.posY /cellSize
         );
@@ -135,7 +136,7 @@ public class AIComponent extends WalkingComponent {
             isNodeReached = false;
         }
 
-        posOnGrid = gameWorld.grid.getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
+        posOnGrid = GameGrid.getInstance(gameWorld).getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
 
         if (posComp.posX != (currentNode.posX*cellSize)+0.5*cellSize) {
             walkingToXCoordinate(posComp.posX, (int)((currentNode.posX*cellSize)+0.5*cellSize));

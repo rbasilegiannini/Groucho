@@ -5,6 +5,8 @@ import static com.personal.groucho.game.constants.System.cellSize;
 import android.annotation.SuppressLint;
 import android.util.SparseArray;
 
+import com.personal.groucho.game.GameWorld;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,15 +14,14 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class AStar {
-    private final GameGrid grid;
+    private final GameWorld gameWorld;
     private final PriorityQueue<Node> openSet;
     private final SparseArray<Node> closedSet = new SparseArray<>();
     private final List<Node> neighbors = new ArrayList<>();
     private final List<Node> path = new ArrayList<>();
 
-
-    public AStar(GameGrid grid) {
-        this.grid = grid;
+    public AStar (GameWorld gameWorld){
+        this.gameWorld = gameWorld;
         this.openSet = new PriorityQueue<>(Comparator.comparingInt(Node::getTotalCost));
     }
 
@@ -81,8 +82,8 @@ public class AStar {
             int newX = x + direction[0];
             int newY = y + direction[1];
 
-            if (grid.isInGrid(newX, newY)) {
-                neighbors.add(grid.getNode(newX, newY));
+            if (GameGrid.getInstance(gameWorld).isInGrid(newX, newY)) {
+                neighbors.add(GameGrid.getInstance(gameWorld).getNode(newX, newY));
             }
         }
 
@@ -103,6 +104,6 @@ public class AStar {
     private void clear() {
         openSet.clear();
         closedSet.clear();
-        grid.clear();
+        GameGrid.getInstance(gameWorld).clear();
     }
 }
