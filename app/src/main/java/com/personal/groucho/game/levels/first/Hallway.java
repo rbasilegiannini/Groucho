@@ -1,6 +1,7 @@
-package com.personal.groucho.game.levels;
+package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.UP;
 
@@ -8,15 +9,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Matrix;
 import android.graphics.Shader;
+
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
-import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
+import com.personal.groucho.game.levels.Room;
 
-public class Hallway extends Level {
+public class Hallway extends Room {
+    private final FirstLevel level;
 
-    public Hallway(GameWorld gameWorld) {
-        super(gameWorld, 2000, 600);
+    public Hallway(GameWorld gameWorld, FirstLevel level) {
+        super(2000, 600, gameWorld);
+        this.level = level;
         Bitmap floor = Textures.firstLevelFloor;
 
         // Set floor
@@ -30,15 +34,20 @@ public class Hallway extends Level {
     @Override
     public void init() {
         super.init();
-        gameWorld.player.setPos((int) (2.5*cellSize), (int) (1.7*cellSize));
-        gameWorld.player.setOrientation(UP);
-        gameWorld.player.rest();
 
         makeTriggers();
 
-        for (GameObject go : gameObjects) {
-            gameWorld.goHandler.addGameObject(go);
-        }
+        allocateRoom();
+    }
+
+    @Override
+    public void allocateRoom(){
+        super.allocateRoom();
+
+        gameWorld.player.setPos((int) (2.5*cellSize), (int) (1.7*cellSize));
+        gameWorld.player.setOrientation(UP);
+        gameWorld.player.rest();
+        setBrightness(maxBrightness);
     }
 
     private void makeDecorations() {
@@ -64,7 +73,7 @@ public class Hallway extends Level {
                         gameWorld,
                         () -> {
                             door.play(1f);
-                            gameWorld.changeLevel(new GrouchoRoom(gameWorld));
+                            level.goToGrouchoRoom();
                         }));
     }
 }

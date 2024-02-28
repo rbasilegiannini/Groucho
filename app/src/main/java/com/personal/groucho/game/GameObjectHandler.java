@@ -141,7 +141,6 @@ public class GameObjectHandler {
         drawComponents.removeIf(component -> ((GameObject) component.getOwner()).role != PLAYER);
         aiComponents.clear();
 
-
         for (GameObject gameObject : objects) {
             if (gameObject.role != PLAYER) {
                 gameWorld.objectsPool.release(gameObject);

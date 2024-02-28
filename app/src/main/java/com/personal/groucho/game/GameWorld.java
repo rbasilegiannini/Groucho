@@ -24,6 +24,7 @@ import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
+import com.personal.groucho.game.levels.first.GrouchoRoom;
 import com.personal.groucho.game.levels.Level;
 
 public class GameWorld {
@@ -70,6 +71,7 @@ public class GameWorld {
 
     public void tryAgain(Level level) {
         initEnvironment();
+        GrouchoRoom.firstTime = false;
         nodesPool.clear();
         grid.reset();
 
@@ -186,16 +188,16 @@ public class GameWorld {
     }
 
     public synchronized void changeLevel(Level newLevel) {
-        goHandler.changeLevel();
-        nodesPool.clear();
-        grid.reset();
-
-        currentLevel = newLevel;
-        currentLevel.init();
-
-        if(debugMode) {
-            getDebugger(this).updateDebugger();
-        }
+//        goHandler.changeLevel();
+//        nodesPool.clear();
+//        grid.reset();
+//
+//        currentLevel = newLevel;
+//        currentLevel.init();
+//
+//        if(debugMode) {
+//            getDebugger(this).updateDebugger();
+//        }
     }
 
     public void resume() {pause = false;}

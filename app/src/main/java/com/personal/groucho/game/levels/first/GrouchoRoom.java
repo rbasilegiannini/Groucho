@@ -1,4 +1,4 @@
-package com.personal.groucho.game.levels;
+package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
 import static com.personal.groucho.game.assets.Textures.dylanBubble;
@@ -11,16 +11,20 @@ import android.graphics.BitmapShader;
 import android.graphics.Shader;
 
 import com.personal.groucho.R;
-import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
+import com.personal.groucho.game.gameobjects.GameObject;
+import com.personal.groucho.game.gameobjects.GameObjectFactory;
+import com.personal.groucho.game.levels.Room;
 
-public class GrouchoRoom extends Level{
-    private static boolean firstTime = true;
-    public GrouchoRoom(GameWorld gameWorld) {
-        super(gameWorld, 1000, 1000);
+public class GrouchoRoom extends Room {
+    public static boolean firstTime = true;
+    private GameObject grouchoTrigger, dylanTrigger;
+    private final FirstLevel level;
 
+    public GrouchoRoom(GameWorld gameWorld, FirstLevel level) {
+        super(1000, 1000, gameWorld);
+        this.level = level;
         // Set floor
         Bitmap floor = Bitmap.createScaledBitmap(Textures.firstLevelFloor, 128, 128, false);
         BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
@@ -30,6 +34,19 @@ public class GrouchoRoom extends Level{
     @Override
     public void init() {
         super.init();
+
+        makeFurniture();
+        makeTriggers();
+        makeDecorations();
+
+        allocateRoom();
+
+        firstTime = false;
+    }
+
+    @Override
+    public void allocateRoom(){
+        super.allocateRoom();
         if (firstTime) {
             gameWorld.player.setPos(500, 500);
         }
@@ -37,20 +54,8 @@ public class GrouchoRoom extends Level{
             gameWorld.player.setPos(2*cellSize, cellSize);
         }
         setBrightness(maxBrightness);
-
-        makeFurniture();
-        makeTriggers();
-        makeDecorations();
-
-        for (GameObject go : gameObjects) {
-            gameWorld.goHandler.addGameObject(go);
-        }
-        firstTime = false;
     }
 
-    GameObject grouchoTrigger, dylanTrigger;
-
-    private void handleTrigger(GameObject trigger) { gameWorld.goHandler.removeGameObject(trigger);}
     private void makeTriggers() {
         // Init level
         if (firstTime) {
@@ -59,7 +64,7 @@ public class GrouchoRoom extends Level{
                             gameWorld, () -> {
                                 String sentence = gameWorld.activity.getString(R.string.groucho_talk_room);
                                 grouchoTalk(sentence, 500, 500);
-                                handleTrigger(grouchoTrigger);
+                                removeTrigger(grouchoTrigger);
                             });
             gameObjects.add(grouchoTrigger);
             // Dylan Talk
@@ -68,7 +73,7 @@ public class GrouchoRoom extends Level{
                             gameWorld, () -> {
                                 String sentence = gameWorld.activity.getString(R.string.dylan_talk_room);
                                 dylanTalk(sentence, 600, 250);
-                                handleTrigger(dylanTrigger);
+                                removeTrigger(dylanTrigger);
                             });
             gameObjects.add(dylanTrigger);
         }
@@ -90,9 +95,11 @@ public class GrouchoRoom extends Level{
                         gameWorld,
                         () -> {
                             door.play(1f);
-                            gameWorld.changeLevel(new Hallway(gameWorld));
+                            level.goToHallway();
                         }));
     }
+
+    private void removeTrigger(GameObject trigger) { gameWorld.goHandler.removeGameObject(trigger);}
 
     private void makeFurniture() {
         gameObjects.add((GameObjectFactory.

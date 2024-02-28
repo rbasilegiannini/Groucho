@@ -9,8 +9,7 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 
 import com.personal.groucho.R;
-import com.personal.groucho.game.levels.GrouchoRoom;
-import com.personal.groucho.game.levels.Hallway;
+import com.personal.groucho.game.levels.first.FirstLevel;
 
 public class MenuHandler {
 
@@ -23,7 +22,7 @@ public class MenuHandler {
                     ImageButton optionsButton = gameWorld.activity.findViewById(R.id.options);
                     ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
                     newGameButton.setOnClickListener(v -> {
-                        gameWorld.init(new Hallway(gameWorld));
+                        gameWorld.init(new FirstLevel(gameWorld));
                         gameWorld.activity.setContentView(gameWorld.activity.renderView);
                     });
                     optionsButton.setOnClickListener(v -> handleOptionsMainMenu(gameWorld));
@@ -104,8 +103,8 @@ public class MenuHandler {
                     ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
 
                     tryAgainButton.setOnClickListener(v -> {
-                            gameWorld.tryAgain(new GrouchoRoom(gameWorld));
-                            gameWorld.activity.setContentView(gameWorld.activity.renderView);
+                        gameWorld.tryAgain(new FirstLevel(gameWorld));
+                        gameWorld.activity.setContentView(gameWorld.activity.renderView);
                     });
                     exitButton.setOnClickListener(v -> gameWorld.finalize());
                 });
