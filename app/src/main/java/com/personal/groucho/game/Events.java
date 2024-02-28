@@ -120,9 +120,8 @@ public class Events {
         }
     }
 
-    public static void playerCollideWithTrigger(GameObject trigger, GameWorld gameWorld) {
+    public static void playerCollideWithTrigger(GameObject trigger) {
         ((TriggerComponent) trigger.getComponent(TRIGGER)).handleTrigger();
-        gameWorld.goHandler.removeGameObject(trigger);
     }
 
     public static void enemyHitPlayerEvent(AliveComponent aliveComp, int power) {

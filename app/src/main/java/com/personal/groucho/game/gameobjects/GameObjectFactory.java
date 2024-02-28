@@ -308,25 +308,8 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeTrigger(String name, int posX, int posY, int dimX, int dimY,
-                                         GameWorld gameWorld) {
-
-        GameObject gameObject = gameWorld.objectsPool.acquire();
-        gameObject.init(name, TRIGGER);
-
-        gameObject.addComponent(new PositionComponent(posX, posY));
-        gameObject.addComponent(new PhysicsComponent(gameWorld.physics.world, dimX, dimY));
-
-        PhysicsComponent phyComp = (PhysicsComponent) gameObject.getComponent(PHYSICS);
-        PhysicsProp prop = new PhysicsProp(posX, posY, 0f, 0f,
-                0f, 0, staticBody);
-        setFurniturePhysics(phyComp, prop);
-
-        return gameObject;
-    }
-
-    public static GameObject _makeTrigger(int posX, int posY, int dimX, int dimY,
-                                          GameWorld gameWorld, Runnable runnable) {
+    public static GameObject makeTrigger(int posX, int posY, int dimX, int dimY,
+                                         GameWorld gameWorld, Runnable runnable) {
 
         GameObject gameObject = gameWorld.objectsPool.acquire();
         gameObject.init("Trigger", TRIGGER);

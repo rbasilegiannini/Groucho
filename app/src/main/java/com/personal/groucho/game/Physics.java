@@ -208,7 +208,7 @@ public class Physics {
                 break;
 
             case TRIGGER:
-                playerCollideWithTrigger(object, gameWorld);
+                playerCollideWithTrigger(object);
                 break;
         }
     }

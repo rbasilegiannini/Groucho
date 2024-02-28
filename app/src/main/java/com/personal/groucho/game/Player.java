@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.controller.ControllerObserver;
 import com.personal.groucho.game.controller.ControllerSubject;
+import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.states.Idle;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.components.ControllableComponent;
@@ -76,5 +77,9 @@ public class Player {
     public void rest() {
         gameWorld.controller.currentState = Idle.getInstance(gameWorld.controller);
         gameWorld.controller.notifyToListeners();
+    }
+
+    public void setOrientation(Orientation orientation) {
+        gameWorld.controller.setOrientation(orientation);
     }
 }

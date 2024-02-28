@@ -17,7 +17,7 @@ import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
 
 public class GrouchoRoom extends Level{
-
+    private static boolean firstTime = true;
     public GrouchoRoom(GameWorld gameWorld) {
         super(gameWorld, 1000, 1000);
 
@@ -30,7 +30,12 @@ public class GrouchoRoom extends Level{
     @Override
     public void init() {
         super.init();
-        gameWorld.player.setPos(500, 500);
+        if (firstTime) {
+            gameWorld.player.setPos(500, 500);
+        }
+        else {
+            gameWorld.player.setPos(2*cellSize, cellSize);
+        }
         setBrightness(maxBrightness);
 
         makeFurniture();
@@ -40,24 +45,33 @@ public class GrouchoRoom extends Level{
         for (GameObject go : gameObjects) {
             gameWorld.goHandler.addGameObject(go);
         }
+        firstTime = false;
     }
 
+    GameObject grouchoTrigger, dylanTrigger;
+
+    private void handleTrigger(GameObject trigger) { gameWorld.goHandler.removeGameObject(trigger);}
     private void makeTriggers() {
         // Init level
-        gameObjects.add(GameObjectFactory.
-                _makeTrigger(500, 550, 64, 128,
-                        gameWorld, () -> {
-                            String sentence = gameWorld.activity.getString(R.string.groucho_talk_room);
-                            grouchoTalk(sentence, 500, 500);
-                        }));
-
-        // Dylan Talk
-        gameObjects.add(GameObjectFactory.
-                _makeTrigger(400, 100, 512, 32,
-                        gameWorld, () -> {
-                            String sentence = gameWorld.activity.getString(R.string.dylan_talk_room);
-                            dylanTalk(sentence, 600, 250);
-                        }));
+        if (firstTime) {
+            grouchoTrigger = GameObjectFactory.
+                    makeTrigger(500, 550, 64, 128,
+                            gameWorld, () -> {
+                                String sentence = gameWorld.activity.getString(R.string.groucho_talk_room);
+                                grouchoTalk(sentence, 500, 500);
+                                handleTrigger(grouchoTrigger);
+                            });
+            gameObjects.add(grouchoTrigger);
+            // Dylan Talk
+            dylanTrigger = GameObjectFactory.
+                    makeTrigger(400, 100, 512, 32,
+                            gameWorld, () -> {
+                                String sentence = gameWorld.activity.getString(R.string.dylan_talk_room);
+                                dylanTalk(sentence, 600, 250);
+                                handleTrigger(dylanTrigger);
+                            });
+            gameObjects.add(dylanTrigger);
+        }
 
         // Door
         gameObjects.add((GameObjectFactory.
@@ -70,7 +84,7 @@ public class GrouchoRoom extends Level{
                         Textures.brownDoor
                 )));
         gameObjects.add(GameObjectFactory.
-                _makeTrigger(
+                makeTrigger(
                         2*cellSize, (int) (-0.85*cellSize),
                         160, 270,
                         gameWorld,

@@ -10,6 +10,7 @@ import android.widget.Switch;
 
 import com.personal.groucho.R;
 import com.personal.groucho.game.levels.GrouchoRoom;
+import com.personal.groucho.game.levels.Hallway;
 
 public class MenuHandler {
 
@@ -22,7 +23,7 @@ public class MenuHandler {
                     ImageButton optionsButton = gameWorld.activity.findViewById(R.id.options);
                     ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
                     newGameButton.setOnClickListener(v -> {
-                        gameWorld.init(new GrouchoRoom(gameWorld));
+                        gameWorld.init(new Hallway(gameWorld));
                         gameWorld.activity.setContentView(gameWorld.activity.renderView);
                     });
                     optionsButton.setOnClickListener(v -> handleOptionsMainMenu(gameWorld));
