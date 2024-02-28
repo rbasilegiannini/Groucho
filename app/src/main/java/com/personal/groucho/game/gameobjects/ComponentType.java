@@ -8,5 +8,6 @@ public enum ComponentType {
     CONTROLLABLE,
     LIGHT,
     CHARACTER,
-    ALIVE
+    ALIVE,
+    TRIGGER
 }

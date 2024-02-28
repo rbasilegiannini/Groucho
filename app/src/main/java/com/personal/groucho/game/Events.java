@@ -19,6 +19,7 @@ import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
+import static com.personal.groucho.game.gameobjects.ComponentType.TRIGGER;
 import static com.personal.groucho.game.gameobjects.Role.ENEMY;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
@@ -29,6 +30,7 @@ import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
+import com.personal.groucho.game.gameobjects.components.TriggerComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -116,6 +118,11 @@ public class Events {
             aiEnemy.updateDirection(directionBetweenGO(gameWorld.player.gameObject, enemy));
             aiEnemy.setPlayerEngaged(true);
         }
+    }
+
+    public static void playerCollideWithTrigger(GameObject trigger, GameWorld gameWorld) {
+        ((TriggerComponent) trigger.getComponent(TRIGGER)).handleTrigger();
+        gameWorld.goHandler.removeGameObject(trigger);
     }
 
     public static void enemyHitPlayerEvent(AliveComponent aliveComp, int power) {

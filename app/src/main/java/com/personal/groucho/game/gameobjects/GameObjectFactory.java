@@ -58,6 +58,7 @@ import com.personal.groucho.game.gameobjects.components.SpriteDrawableComponent;
 import com.personal.groucho.game.gameobjects.components.TextureDrawableComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.controller.states.Idle;
+import com.personal.groucho.game.gameobjects.components.TriggerComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -315,6 +316,24 @@ public class GameObjectFactory {
 
         gameObject.addComponent(new PositionComponent(posX, posY));
         gameObject.addComponent(new PhysicsComponent(gameWorld.physics.world, dimX, dimY));
+
+        PhysicsComponent phyComp = (PhysicsComponent) gameObject.getComponent(PHYSICS);
+        PhysicsProp prop = new PhysicsProp(posX, posY, 0f, 0f,
+                0f, 0, staticBody);
+        setFurniturePhysics(phyComp, prop);
+
+        return gameObject;
+    }
+
+    public static GameObject _makeTrigger(int posX, int posY, int dimX, int dimY,
+                                          GameWorld gameWorld, Runnable runnable) {
+
+        GameObject gameObject = gameWorld.objectsPool.acquire();
+        gameObject.init("Trigger", TRIGGER);
+
+        gameObject.addComponent(new PositionComponent(posX, posY));
+        gameObject.addComponent(new PhysicsComponent(gameWorld.physics.world, dimX, dimY));
+        gameObject.addComponent(new TriggerComponent(runnable));
 
         PhysicsComponent phyComp = (PhysicsComponent) gameObject.getComponent(PHYSICS);
         PhysicsProp prop = new PhysicsProp(posX, posY, 0f, 0f,

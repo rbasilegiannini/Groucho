@@ -7,13 +7,12 @@ import android.graphics.Shader;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.gameobjects.GameObjectFactory;
 
 import java.util.Objects;
 
-public class SecondLevel extends Level {
+public class Hallway extends Level {
 
-    public SecondLevel(GameWorld gameWorld) {
+    public Hallway(GameWorld gameWorld) {
         super(gameWorld, 2000, 1000);
         Bitmap floor = Textures.firstLevelFloor;
 
@@ -32,13 +31,6 @@ public class SecondLevel extends Level {
 //        gameObjects.add(GameObjectFactory.makeTrigger("changelevel", 1200, 800, gameWorld));
         for (GameObject go : gameObjects) {
             gameWorld.goHandler.addGameObject(go);
-        }
-    }
-
-    @Override
-    public void handleTrigger(GameObject trigger) {
-        if(Objects.equals(trigger.name, "changelevel")) {
-            gameWorld.changeLevel(new GrouchoRoom(gameWorld));
         }
     }
 }

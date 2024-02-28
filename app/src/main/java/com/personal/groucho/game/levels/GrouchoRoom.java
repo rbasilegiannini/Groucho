@@ -1,5 +1,6 @@
 package com.personal.groucho.game.levels;
 
+import static com.personal.groucho.game.assets.Sounds.door;
 import static com.personal.groucho.game.assets.Textures.dylanBubble;
 import static com.personal.groucho.game.assets.Textures.grouchoBubble;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
@@ -44,13 +45,19 @@ public class GrouchoRoom extends Level{
     private void makeTriggers() {
         // Init level
         gameObjects.add(GameObjectFactory.
-                makeTrigger(TriggerType.INIT_LEVEL.name(), 500, 550, 64, 128,
-                        gameWorld));
+                _makeTrigger(500, 550, 64, 128,
+                        gameWorld, () -> {
+                            String sentence = gameWorld.activity.getString(R.string.groucho_talk_room);
+                            grouchoTalk(sentence, 500, 500);
+                        }));
 
         // Dylan Talk
         gameObjects.add(GameObjectFactory.
-                makeTrigger(TriggerType.DYLAN.name(), 400, 100, 512, 32,
-                        gameWorld));
+                _makeTrigger(400, 100, 512, 32,
+                        gameWorld, () -> {
+                            String sentence = gameWorld.activity.getString(R.string.dylan_talk_room);
+                            dylanTalk(sentence, 600, 250);
+                        }));
 
         // Door
         gameObjects.add((GameObjectFactory.
@@ -62,7 +69,15 @@ public class GrouchoRoom extends Level{
                         gameWorld,
                         Textures.brownDoor
                 )));
-//        gameObjects.add(GameObjectFactory.makeTrigger(CHANGE_LEVEL.name(), 800, 800, gameWorld));
+        gameObjects.add(GameObjectFactory.
+                _makeTrigger(
+                        2*cellSize, (int) (-0.85*cellSize),
+                        160, 270,
+                        gameWorld,
+                        () -> {
+                            door.play(1f);
+                            gameWorld.changeLevel(new Hallway(gameWorld));
+                        }));
     }
 
     private void makeFurniture() {
@@ -117,26 +132,6 @@ public class GrouchoRoom extends Level{
                         gameWorld,
                         Textures.redCarpet
                 )));
-    }
-
-    @Override
-    public void handleTrigger(GameObject trigger) {
-        TriggerType type = TriggerType.getTypeFromName(trigger.name);
-        String sentence;
-        switch (type) {
-            case CHANGE_LEVEL:
-                gameWorld.changeLevel(new SecondLevel(gameWorld));
-                break;
-            case INIT_LEVEL:
-                sentence = gameWorld.activity.getString(R.string.groucho_talk_room);
-                grouchoTalk(sentence, 500, 500);
-                break;
-            case DYLAN:
-                sentence = gameWorld.activity.getString(R.string.dylan_talk_room);
-                dylanTalk(sentence, 600, 250);
-                break;
-        }
-        gameWorld.goHandler.removeGameObject(trigger);
     }
 
     private void grouchoTalk(String sentence, int posX, int posY) {

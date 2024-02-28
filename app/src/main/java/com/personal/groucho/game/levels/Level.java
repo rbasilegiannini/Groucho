@@ -16,26 +16,6 @@ import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-enum TriggerType {
-    CHANGE_LEVEL,
-    INIT_LEVEL,
-    DYLAN;
-
-    public static TriggerType getTypeFromName(String name) {
-
-        switch (name) {
-            case "CHANGE_LEVEL":
-                return CHANGE_LEVEL;
-            case "INIT_LEVEL":
-                return INIT_LEVEL;
-            case "DYLAN":
-                return DYLAN;
-            default:
-                throw new IllegalArgumentException("Unknown trigger type: " + name);
-        }
-    }
-}
-
 public abstract class Level {
 
     protected final GameWorld gameWorld;
@@ -64,8 +44,6 @@ public abstract class Level {
     public void draw(Canvas canvas){
         canvas.drawRect(surface, floorPaint);
     }
-
-    public abstract void handleTrigger(GameObject trigger);
 
     protected void setBrightness(float intensity) {
         if (intensity >= maxBrightness) {

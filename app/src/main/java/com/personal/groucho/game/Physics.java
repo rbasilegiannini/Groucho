@@ -3,6 +3,7 @@ package com.personal.groucho.game;
 import static com.personal.groucho.game.Events.playerCollideWithEnemyEvent;
 import static com.personal.groucho.game.Events.playerCollideWithFurnitureEvent;
 import static com.personal.groucho.game.Events.playerCollideWithHealthEvent;
+import static com.personal.groucho.game.Events.playerCollideWithTrigger;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
@@ -207,7 +208,7 @@ public class Physics {
                 break;
 
             case TRIGGER:
-                gameWorld.currentLevel.handleTrigger(object);
+                playerCollideWithTrigger(object, gameWorld);
                 break;
         }
     }
