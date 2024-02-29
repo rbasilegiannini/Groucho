@@ -8,7 +8,6 @@ import com.personal.groucho.game.gameobjects.ComponentType;
 
 
 public class TextureDrawableComponent extends DrawableComponent{
-
     private PositionComponent posComp = null;
     private int dimX;
     private int dimY;

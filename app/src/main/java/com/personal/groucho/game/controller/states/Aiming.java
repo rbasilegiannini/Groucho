@@ -6,7 +6,6 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.Controller;
 
 public class Aiming extends ControllerState{
-
     private static Aiming state = null;
 
     private Aiming() {

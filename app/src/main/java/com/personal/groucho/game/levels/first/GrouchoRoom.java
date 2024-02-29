@@ -61,7 +61,7 @@ public class GrouchoRoom extends Room {
         if (firstTime) {
             grouchoTrigger = GameObjectFactory.
                     makeTrigger(500, 550, 64, 128,
-                            gameWorld, () -> {
+                            gameWorld.physics.world, () -> {
                                 String sentence = gameWorld.activity.getString(R.string.groucho_talk_room);
                                 grouchoTalk(sentence, 500, 500);
                                 removeTrigger(grouchoTrigger);
@@ -70,7 +70,7 @@ public class GrouchoRoom extends Room {
             // Dylan Talk
             dylanTrigger = GameObjectFactory.
                     makeTrigger(400, 100, 512, 32,
-                            gameWorld, () -> {
+                            gameWorld.physics.world, () -> {
                                 String sentence = gameWorld.activity.getString(R.string.dylan_talk_room);
                                 dylanTalk(sentence, 600, 250);
                                 removeTrigger(dylanTrigger);
@@ -85,14 +85,13 @@ public class GrouchoRoom extends Room {
                         (int) (-0.85*cellSize),
                         160,
                         280,
-                        gameWorld,
                         Textures.brownDoor
                 )));
         gameObjects.add(GameObjectFactory.
                 makeTrigger(
                         2*cellSize, (int) (-0.85*cellSize),
                         160, 270,
-                        gameWorld,
+                        gameWorld.physics.world,
                         () -> {
                             door.play(1f);
                             level.goToHallway();
@@ -108,7 +107,7 @@ public class GrouchoRoom extends Room {
                         (int) (3.5*cellSize),
                         250, 150,
                         5f,
-                        gameWorld,
+                        gameWorld.physics.world,
                         Textures.table)
         ));
 
@@ -118,7 +117,7 @@ public class GrouchoRoom extends Room {
                         2*cellSize,
                         280, 350,
                         100f,
-                        gameWorld,
+                        gameWorld.physics.world,
                         Textures.bed)
         ));
     }
@@ -130,7 +129,6 @@ public class GrouchoRoom extends Room {
                         (int) (-cellSize),
                         128,
                         128,
-                        gameWorld,
                         Textures.grouchoFrame
                 )));
 
@@ -140,7 +138,6 @@ public class GrouchoRoom extends Room {
                         (int) (-0.5*cellSize),
                         280,
                         350,
-                        gameWorld,
                         Textures.grouchoWardrobe
                 )));
 
@@ -150,7 +147,6 @@ public class GrouchoRoom extends Room {
                         (int) (2.5*cellSize),
                         512,
                         380,
-                        gameWorld,
                         Textures.redCarpet
                 )));
     }

@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class BoxDrawableComponent extends DrawableComponent{
-
     private Paint paint;
     private float dimX;
     private float dimY;

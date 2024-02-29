@@ -16,7 +16,6 @@ import com.personal.groucho.game.gameobjects.Component;
 import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class PhysicsComponent extends Component {
-
     private World world;
     private PositionComponent posComp = null;
     public Body body;

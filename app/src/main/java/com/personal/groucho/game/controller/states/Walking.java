@@ -4,7 +4,6 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.Controller;
 
 public class Walking extends ControllerState{
-
     private static Walking state = null;
 
     private Walking() {

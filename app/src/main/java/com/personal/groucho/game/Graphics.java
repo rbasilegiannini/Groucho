@@ -92,13 +92,13 @@ public class Graphics {
     }
 
     private void drawGameObjects() {
-        ComponentHandler.getInstance(gameWorld).drawComps.sort(DrawableComparator.getInstance());
+        ComponentHandler.getInstance().drawComps.sort(DrawableComparator.getInstance());
 
-        for (DrawableComponent drawComp : ComponentHandler.getInstance(gameWorld).drawComps) {
+        for (DrawableComponent drawComp : ComponentHandler.getInstance().drawComps) {
             drawComp.draw(canvas);
         }
 
-        for (LightComponent lightComponent : ComponentHandler.getInstance(gameWorld).lightComps) {
+        for (LightComponent lightComponent : ComponentHandler.getInstance().lightComps) {
             lightComponent.draw(canvas);
         }
     }

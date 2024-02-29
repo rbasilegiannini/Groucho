@@ -20,7 +20,7 @@ public class EngageActions implements Actions {
     public void entryAction() {
         aiComp.initComponents();
 
-        aiComp.posOnGrid = GameGrid.getInstance(aiComp.gameWorld).getNode(
+        aiComp.posOnGrid = GameGrid.getInstance().getNode(
                 aiComp.posComp.getPosXOnGrid(),
                 aiComp.posComp.getPosYOnGrid()
         );
@@ -62,7 +62,7 @@ public class EngageActions implements Actions {
     }
 
     private boolean hasPlayerChangedPosition() {
-        return !aiComp.playerPosOnGrid.equal(GameGrid.getInstance(aiComp.gameWorld).getNode(
+        return !aiComp.playerPosOnGrid.equal(GameGrid.getInstance().getNode(
                 aiComp.gameWorld.player.posX / cellSize,
                 aiComp.gameWorld.player.posY / cellSize));
     }

@@ -6,17 +6,14 @@ import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
 import com.google.fpl.liquidfun.ContactListener;
 import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.Pools;
 import com.personal.groucho.game.gameobjects.GameObject;
 
 public class MyContactListener extends ContactListener {
-
     private final SparseArray<Collision> collisions = new SparseArray<>();
     private final SparseArray<Collision> result = new SparseArray<>();
-    private final GameWorld gameWorld;
 
-    public MyContactListener(GameWorld gameWorld) {this.gameWorld = gameWorld;}
-
-    public SparseArray<Collision> _getCollisions() {
+    public SparseArray<Collision> getCollisions() {
         result.clear();
         for (int i = 0; i < collisions.size(); i++) {
             result.put(collisions.keyAt(i), collisions.valueAt(i));
@@ -34,7 +31,7 @@ public class MyContactListener extends ContactListener {
         GameObject a = (GameObject) ba.getUserData();
         GameObject b = (GameObject) bb.getUserData();
 
-        Collision collision = gameWorld.collisionsPool.acquire();
+        Collision collision = Pools.collisionsPool.acquire();
         collision.GO1 = a;
         collision.GO2 = b;
 

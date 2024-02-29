@@ -34,7 +34,7 @@ public class Room {
     }
 
     public void init() {
-        GameGrid.getInstance(gameWorld).init(widthGrid, heightGrid);
+        GameGrid.getInstance().init(widthGrid, heightGrid);
         gameObjects.clear();
         makeBorders();
     }
@@ -49,7 +49,7 @@ public class Room {
                 makeHorBorder(surface.width() / 2,
                         -cellSize,
                         surface.width(),
-                        gameWorld
+                        gameWorld.physics.world
                 ));
 
         // Bottom border
@@ -57,7 +57,7 @@ public class Room {
                 makeHorBorder(surface.width()/2,
                         surface.height(),
                         surface.width() + cellSize,
-                        gameWorld
+                        gameWorld.physics.world
                 ));
 
         // Left border
@@ -65,14 +65,14 @@ public class Room {
                 cellSize/4,
                 (int) ((surface.height()/2)-(1.75f * cellSize)),
                 surface.height()+(1.5f*cellSize),
-                gameWorld));
+                gameWorld.physics.world));
 
         // Right border
         gameObjects.add(GameObjectFactory.makeVerBorder(
                 (int) (surface.width() + (0.74f)*cellSize),
                 (int) ((surface.height()/2)-(1.75f * cellSize)),
                 surface.height()+(1.5f*cellSize),
-                gameWorld));
+                gameWorld.physics.world));
     }
 
     protected void setBrightness(float intensity) {
@@ -88,7 +88,7 @@ public class Room {
 
     public void releaseRoom() {
         gameWorld.goHandler.changeLevel();
-        GameGrid.getInstance(gameWorld).releasePool();
+        GameGrid.getInstance().releasePool();
     }
 
     public void allocateRoom(){

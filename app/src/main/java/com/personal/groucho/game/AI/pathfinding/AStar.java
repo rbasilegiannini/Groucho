@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class AStar {
-    private GameWorld gameWorld;
     private final PriorityQueue<Node> openSet;
     private final SparseArray<Node> closedSet = new SparseArray<>();
     private final List<Node> neighbors = new ArrayList<>();
@@ -22,10 +21,6 @@ public class AStar {
 
     public AStar() {
         this.openSet = new PriorityQueue<>(Comparator.comparingInt(Node::getTotalCost));
-    }
-
-    public void init(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
     }
 
     public List<Node> findPath(Node start, Node goal) {
@@ -85,8 +80,8 @@ public class AStar {
             int newX = x + direction[0];
             int newY = y + direction[1];
 
-            if (GameGrid.getInstance(gameWorld).isInGrid(newX, newY)) {
-                neighbors.add(GameGrid.getInstance(gameWorld).getNode(newX, newY));
+            if (GameGrid.getInstance().isInGrid(newX, newY)) {
+                neighbors.add(GameGrid.getInstance().getNode(newX, newY));
             }
         }
 
@@ -107,6 +102,6 @@ public class AStar {
     private void clear() {
         openSet.clear();
         closedSet.clear();
-        GameGrid.getInstance(gameWorld).clear();
+        GameGrid.getInstance().clear();
     }
 }

@@ -4,7 +4,6 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.Controller;
 
 public class Loading extends ControllerState{
-
     private static Loading state = null;
 
     private Loading() {

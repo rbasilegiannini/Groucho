@@ -4,7 +4,6 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.Controller;
 
 public class Idle extends ControllerState{
-
     private static Idle state = null;
 
     private Idle() {

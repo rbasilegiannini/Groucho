@@ -33,8 +33,6 @@ import java.util.List;
 
 public class ComponentHandler {
     private static ComponentHandler instance = null;
-    private final GameWorld gameWorld;
-
     protected final List<PositionComponent> posComps = new ArrayList<>();
     protected final List<PhysicsComponent> phyComps = new ArrayList<>();
     protected final ArrayList<DrawableComponent> drawComps = new ArrayList<>();
@@ -44,54 +42,53 @@ public class ComponentHandler {
     private final SparseArray<Runnable> releaseStrategy = new SparseArray<>();
     private Component compToRemove;
 
-    private ComponentHandler(GameWorld gameWorld){
-        this.gameWorld = gameWorld;
+    private ComponentHandler(){
 
         releaseStrategy.put(POSITION.hashCode(), () -> {
-            gameWorld.posCompPool.release((PositionComponent) compToRemove);
+            Pools.posCompPool.release((PositionComponent) compToRemove);
             posComps.remove((PositionComponent) compToRemove);
         });
         releaseStrategy.put(PHYSICS.hashCode(), () -> {
-            gameWorld.phyCompPool.release((PhysicsComponent)compToRemove);
+            Pools.phyCompPool.release((PhysicsComponent)compToRemove);
             phyComps.remove((PhysicsComponent)compToRemove);
         });
         releaseStrategy.put(LIGHT.hashCode(), () -> {
-            gameWorld.lightCompPool.release((LightComponent)compToRemove);
+            Pools.lightCompPool.release((LightComponent)compToRemove);
             lightComps.remove((LightComponent)compToRemove);
         });
         releaseStrategy.put(ALIVE.hashCode(), () -> {
-            gameWorld.aliveCompPool.release((AliveComponent)compToRemove);
+            Pools.aliveCompPool.release((AliveComponent)compToRemove);
             aliveComps.remove((AliveComponent)compToRemove);
         });
         releaseStrategy.put(AI.hashCode(), () -> {
-            gameWorld.aiCompPool.release((AIComponent)compToRemove);
+            Pools.aiCompPool.release((AIComponent)compToRemove);
             aiComps.remove((AIComponent)compToRemove);
         });
         releaseStrategy.put(TRIGGER.hashCode(), () ->
-                gameWorld.triggerCompPool.release((TriggerComponent) compToRemove));
+                Pools.triggerCompPool.release((TriggerComponent) compToRemove));
         releaseStrategy.put(CHARACTER.hashCode(), () ->
-                gameWorld.charCompPool.release((CharacterComponent) compToRemove));
+                Pools.charCompPool.release((CharacterComponent) compToRemove));
         releaseStrategy.put(CONTROLLABLE.hashCode(), () ->
-                gameWorld.ctrlCompPool.release((ControllableComponent) compToRemove));
+                Pools.ctrlCompPool.release((ControllableComponent) compToRemove));
         releaseStrategy.put(DRAWABLE.hashCode(), this::removeDrawableComp);
     }
 
-    public static ComponentHandler getInstance(GameWorld gameWorld){
+    public static ComponentHandler getInstance(){
         if (instance == null) {
-            instance = new ComponentHandler(gameWorld);
+            instance = new ComponentHandler();
         }
         return instance;
     }
 
     private void removeDrawableComp() {
         if (compToRemove.getClass().equals(BoxDrawableComponent.class)) {
-            gameWorld.boxCompPool.release((BoxDrawableComponent) compToRemove);
+            Pools.boxCompPool.release((BoxDrawableComponent) compToRemove);
         }
         else if (compToRemove.getClass().equals(SpriteComponent.class)) {
-            gameWorld.spriteCompPool.release((SpriteComponent) compToRemove);
+            Pools.spriteCompPool.release((SpriteComponent) compToRemove);
         }
         else if (compToRemove.getClass().equals(TextureDrawableComponent.class)) {
-            gameWorld.textureCompPool.release((TextureDrawableComponent) compToRemove);
+            Pools.textureCompPool.release((TextureDrawableComponent) compToRemove);
         }
         drawComps.remove((DrawableComponent)compToRemove);
     }

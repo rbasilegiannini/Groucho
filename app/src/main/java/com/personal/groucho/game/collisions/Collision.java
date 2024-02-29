@@ -11,11 +11,6 @@ public class Collision implements Resettable {
         GO2 = null;
     }
 
-    public Collision(GameObject GO1, GameObject GO2) {
-        this.GO1 = GO1;
-        this.GO2 = GO2;
-    }
-
     public int hashCode() {
         return GO1.hashCode() ^ GO2.hashCode();
     }

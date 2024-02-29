@@ -21,7 +21,6 @@ public class BubbleSpeech {
     private final StringBuilder currentLine = new StringBuilder();
     private TextBlock currentTextBlock;
     private final List<TextBlock> textBlocks = new ArrayList<>();
-    private final ObjectsPool<TextBlock> textBlocksPool= new ObjectsPool<>(10, TextBlock.class);
 
     public BubbleSpeech(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
@@ -73,7 +72,7 @@ public class BubbleSpeech {
     public void setText(String text) {
         String[] words = text.split(" ");
         currentLine.setLength(0);
-        currentTextBlock = textBlocksPool.acquire();
+        currentTextBlock = Pools.textBlocksPool.acquire();
 
         for (String word : words) {
             processWord(word);
@@ -105,7 +104,7 @@ public class BubbleSpeech {
     private void processWord(String word) {
         if (word.equals("\n")) {
             completeCurrentTextBlock();
-            currentTextBlock = textBlocksPool.acquire();
+            currentTextBlock = Pools.textBlocksPool.acquire();
         }
         else {
             if (lineIsNotTooLarge(word)) {
@@ -128,7 +127,7 @@ public class BubbleSpeech {
 
         if (currentTextBlock.isFull()) {
             textBlocks.add(currentTextBlock);
-            currentTextBlock = textBlocksPool.acquire();
+            currentTextBlock = Pools.textBlocksPool.acquire();
         }
     }
 
@@ -153,7 +152,7 @@ public class BubbleSpeech {
 
     public void consumeTouchEvent(Input.TouchEvent event) {
         if (event.type == Input.TouchEvent.TOUCH_DOWN) {
-            textBlocksPool.release(textBlocks.get(0));
+            Pools.textBlocksPool.release(textBlocks.get(0));
             textBlocks.remove(0);
         }
     }

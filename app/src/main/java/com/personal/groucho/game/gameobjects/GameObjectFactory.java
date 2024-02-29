@@ -36,10 +36,12 @@ import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.Vec2;
+import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.CharacterFactory;
 import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.Pools;
 import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.states.StateName;
@@ -84,15 +86,15 @@ public class GameObjectFactory {
     }
 
     public static GameObject makePlayer(int posX, int posY, Controller controller, GameWorld gameWorld) {
-        GameObject gameObject = gameWorld.objectsPool.acquire();
+        GameObject gameObject = Pools.objectsPool.acquire();
 
-        PositionComponent posComp = gameWorld.posCompPool.acquire();
-        PhysicsComponent phyComp = gameWorld.phyCompPool.acquire();
-        SpriteComponent spriteComp = gameWorld.spriteCompPool.acquire();
-        ControllableComponent ctrlComp = gameWorld.ctrlCompPool.acquire();
-        AliveComponent aliveComp = gameWorld.aliveCompPool.acquire();
-        CharacterComponent charComp = gameWorld.charCompPool.acquire();
-        LightComponent lightComp = gameWorld.lightCompPool.acquire();
+        PositionComponent posComp = Pools.posCompPool.acquire();
+        PhysicsComponent phyComp = Pools.phyCompPool.acquire();
+        SpriteComponent spriteComp = Pools.spriteCompPool.acquire();
+        ControllableComponent ctrlComp = Pools.ctrlCompPool.acquire();
+        AliveComponent aliveComp = Pools.aliveCompPool.acquire();
+        CharacterComponent charComp = Pools.charCompPool.acquire();
+        LightComponent lightComp = Pools.lightCompPool.acquire();
 
         gameObject.init("Player", PLAYER);
         posComp.init(posX, posY);
@@ -125,14 +127,14 @@ public class GameObjectFactory {
             int posX, int posY, Orientation orientation, CharacterFactory.CharacterProp charProp,
             StateName state, GameWorld gameWorld) {
 
-        GameObject gameObject = gameWorld.objectsPool.acquire();
+        GameObject gameObject = Pools.objectsPool.acquire();
 
-        PositionComponent posComp = gameWorld.posCompPool.acquire();
-        PhysicsComponent phyComp = gameWorld.phyCompPool.acquire();
-        SpriteComponent spriteComp = gameWorld.spriteCompPool.acquire();
-        AIComponent aiComp = gameWorld.aiCompPool.acquire();
-        AliveComponent aliveComp = gameWorld.aliveCompPool.acquire();
-        CharacterComponent charComp = gameWorld.charCompPool.acquire();
+        PositionComponent posComp = Pools.posCompPool.acquire();
+        PhysicsComponent phyComp = Pools.phyCompPool.acquire();
+        SpriteComponent spriteComp = Pools.spriteCompPool.acquire();
+        AIComponent aiComp = Pools.aiCompPool.acquire();
+        AliveComponent aliveComp = Pools.aliveCompPool.acquire();
+        CharacterComponent charComp = Pools.charCompPool.acquire();
 
         gameObject.init("Enemy", ENEMY);
 
@@ -160,7 +162,7 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static List<GameObject> makeWall(int centerX, int centerY, float length, GameWorld gameWorld) {
+    public static List<GameObject> makeWall(int centerX, int centerY, float length, World world) {
         int dimX = cellSize/2;
         int dimWallY = (int) (2* charScaleFactor * charDimY);
         int dimRoofY = (int) (length - dimWallY);
@@ -173,23 +175,22 @@ public class GameObjectFactory {
         paintRoof.setColor(Color.argb(255, 92,64,51));
         paintRoof.setStyle(FILL_AND_STROKE);
 
-        GameObject roof = gameWorld.objectsPool.acquire();
-        GameObject wall = gameWorld.objectsPool.acquire();
+        GameObject roof = Pools.objectsPool.acquire();
+        GameObject wall = Pools.objectsPool.acquire();
 
-        PositionComponent posCompRoof = gameWorld.posCompPool.acquire();
-        PositionComponent posCompWall = gameWorld.posCompPool.acquire();
-        PhysicsComponent phyComp = gameWorld.phyCompPool.acquire();
-        BoxDrawableComponent boxCompWall = gameWorld.boxCompPool.acquire();
-        BoxDrawableComponent boxCompRoof = gameWorld.boxCompPool.acquire();
+        PositionComponent posCompRoof = Pools.posCompPool.acquire();
+        PositionComponent posCompWall = Pools.posCompPool.acquire();
+        PhysicsComponent phyComp = Pools.phyCompPool.acquire();
+        BoxDrawableComponent boxCompWall = Pools.boxCompPool.acquire();
+        BoxDrawableComponent boxCompRoof = Pools.boxCompPool.acquire();
 
         roof.init("Roof", WALL);
         wall.init("Wall", WALL);
         posCompRoof.init(centerX, centerY);
         posCompWall.init(centerX, centerY+dimRoofY/2+dimWallY/2);
-        phyComp.init(gameWorld.physics.world, dimX, length-dimWallY);
+        phyComp.init(world, dimX, length-dimWallY);
         boxCompWall.init(dimX, dimWallY, paintWall);
         boxCompRoof.init(dimX, dimRoofY, paintRoof);
-
 
         roof.addComponent(posCompRoof);
         wall.addComponent(posCompWall);
@@ -204,7 +205,7 @@ public class GameObjectFactory {
                 0,
                 0f, 0f, staticBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld, prop, dimX, length);
+        setFurnitureOnGameGrid(prop, dimX, length);
 
         List<GameObject> gameObjects = new ArrayList<>();
         gameObjects.add(roof);
@@ -213,7 +214,7 @@ public class GameObjectFactory {
         return gameObjects;
     }
 
-    public static List<GameObject> makeHorBorder(int centerX, int centerY, float length, GameWorld gameWorld) {
+    public static List<GameObject> makeHorBorder(int centerX, int centerY, float length, World world) {
         Paint paintRoof = new Paint();
         Paint paintWall = new Paint();
         Bitmap wallTexture = Bitmap.createScaledBitmap(Textures.wall,256, 256, false);
@@ -228,21 +229,21 @@ public class GameObjectFactory {
         int dimRoofY = cellSize;
         int dimWallY = (int) (2* charScaleFactor * charDimY);
 
-        GameObject roof = gameWorld.objectsPool.acquire();
-        GameObject wall = gameWorld.objectsPool.acquire();
+        GameObject roof = Pools.objectsPool.acquire();
+        GameObject wall = Pools.objectsPool.acquire();
 
-        PositionComponent posCompRoof = gameWorld.posCompPool.acquire();
-        PositionComponent posCompWall = gameWorld.posCompPool.acquire();
-        PhysicsComponent phyComp = gameWorld.phyCompPool.acquire();
-        BoxDrawableComponent boxCompWall = gameWorld.boxCompPool.acquire();
-        BoxDrawableComponent boxCompRoof = gameWorld.boxCompPool.acquire();
+        PositionComponent posCompRoof = Pools.posCompPool.acquire();
+        PositionComponent posCompWall = Pools.posCompPool.acquire();
+        PhysicsComponent phyComp = Pools.phyCompPool.acquire();
+        BoxDrawableComponent boxCompWall = Pools.boxCompPool.acquire();
+        BoxDrawableComponent boxCompRoof = Pools.boxCompPool.acquire();
 
         roof.init("Roof", WALL);
         wall.init("Wall", WALL);
 
         posCompWall.init(centerX, centerY);
         posCompRoof.init(centerX, centerY-cellSize);
-        phyComp.init(gameWorld.physics.world, dimX, dimWallY);
+        phyComp.init(world, dimX, dimWallY);
         boxCompWall.init(dimX, dimWallY, paintWall);
         boxCompRoof.init(dimX, dimRoofY, paintRoof);
 
@@ -255,7 +256,7 @@ public class GameObjectFactory {
         PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f, 0f,
                 0f, 0f, staticBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld, prop, dimX, dimWallY);
+        setFurnitureOnGameGrid(prop, dimX, dimWallY);
 
         List<GameObject> gameObjects = new ArrayList<>();
         gameObjects.add(roof);
@@ -264,23 +265,23 @@ public class GameObjectFactory {
         return gameObjects;
     }
 
-    public static GameObject makeVerBorder(int centerX, int centerY, float length, GameWorld gameWorld){
+    public static GameObject makeVerBorder(int centerX, int centerY, float length, World world){
         int dimY = (int) length;
         int dimX = cellSize/2;
         Paint paintRoof = new Paint();
         paintRoof.setColor(Color.argb(255, 92,64,51));
         paintRoof.setStyle(FILL_AND_STROKE);
 
-        GameObject border = gameWorld.objectsPool.acquire();
+        GameObject border = Pools.objectsPool.acquire();
 
-        PositionComponent posComp = gameWorld.posCompPool.acquire();
-        PhysicsComponent phyComp = gameWorld.phyCompPool.acquire();
-        BoxDrawableComponent boxComp = gameWorld.boxCompPool.acquire();
+        PositionComponent posComp = Pools.posCompPool.acquire();
+        PhysicsComponent phyComp = Pools.phyCompPool.acquire();
+        BoxDrawableComponent boxComp = Pools.boxCompPool.acquire();
 
         border.init("Wall", WALL);
 
         posComp.init(centerX-cellSize/2, centerY);
-        phyComp.init(gameWorld.physics.world, (float) (dimX+0.2*cellSize), dimY);
+        phyComp.init(world, (float) (dimX+0.2*cellSize), dimY);
         boxComp.init(dimX, dimY, paintRoof);
 
         border.addComponent(posComp);
@@ -291,24 +292,23 @@ public class GameObjectFactory {
                 centerX-cellSize/2, centerY, 0f, 0f,
                 0f, 0f, staticBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld, prop, dimX, dimY);
+        setFurnitureOnGameGrid(prop, dimX, dimY);
 
         return border;
     }
 
-
     public static GameObject makeFurniture(int centerX, int centerY, float dimX, float dimY, float density,
-                                           GameWorld gameWorld, Bitmap texture) {
-        GameObject gameObject = gameWorld.objectsPool.acquire();
+                                           World world, Bitmap texture) {
+        GameObject gameObject = Pools.objectsPool.acquire();
 
-        PositionComponent posComp = gameWorld.posCompPool.acquire();
-        PhysicsComponent phyComp = gameWorld.phyCompPool.acquire();
-        TextureDrawableComponent textureComp = gameWorld.textureCompPool.acquire();
+        PositionComponent posComp = Pools.posCompPool.acquire();
+        PhysicsComponent phyComp = Pools.phyCompPool.acquire();
+        TextureDrawableComponent textureComp = Pools.textureCompPool.acquire();
 
         gameObject.init("Furniture", FURNITURE);
 
         posComp.init(centerX, centerY);
-        phyComp.init(gameWorld.physics.world, dimX, dimY/2);
+        phyComp.init(world, dimX, dimY/2);
         textureComp.init(texture, (int)dimX, (int)dimY);
 
         gameObject.addComponent(posComp);
@@ -318,16 +318,16 @@ public class GameObjectFactory {
         PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f,0f,
                 density, 0, dynamicBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld, prop, dimX, dimY);
+        setFurnitureOnGameGrid(prop, dimX, dimY);
 
         return gameObject;
     }
 
     public static GameObject makeWallDecoration(int centerX, int centerY, float dimX, float dimY,
-                                                GameWorld gameWorld, Bitmap texture) {
-        GameObject gameObject = gameWorld.objectsPool.acquire();
-        PositionComponent posComp = gameWorld.posCompPool.acquire();
-        TextureDrawableComponent textureComp = gameWorld.textureCompPool.acquire();
+                                                Bitmap texture) {
+        GameObject gameObject = Pools.objectsPool.acquire();
+        PositionComponent posComp = Pools.posCompPool.acquire();
+        TextureDrawableComponent textureComp = Pools.textureCompPool.acquire();
 
         gameObject.init("Decoration", NEUTRAL);
 
@@ -341,10 +341,10 @@ public class GameObjectFactory {
     }
 
     public static GameObject makeFloorDecoration(int centerX, int centerY, float dimX, float dimY,
-                                                GameWorld gameWorld, Bitmap texture) {
-        GameObject gameObject = gameWorld.objectsPool.acquire();
-        PositionComponent posComp = gameWorld.posCompPool.acquire();
-        TextureDrawableComponent textureComp = gameWorld.textureCompPool.acquire();
+                                                 Bitmap texture) {
+        GameObject gameObject = Pools.objectsPool.acquire();
+        PositionComponent posComp = Pools.posCompPool.acquire();
+        TextureDrawableComponent textureComp = Pools.textureCompPool.acquire();
 
         gameObject.init("Decoration", FLOOR);
 
@@ -357,17 +357,17 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    public static GameObject makeHealth(int posX, int posY, GameWorld gameWorld) {
+    public static GameObject makeHealth(int posX, int posY, World world) {
         int dimX = 64;
         int dimY = 64;
-        GameObject gameObject = gameWorld.objectsPool.acquire();
-        PositionComponent posComp = gameWorld.posCompPool.acquire();
-        PhysicsComponent phyComp = gameWorld.phyCompPool.acquire();
-        TextureDrawableComponent textureComp = gameWorld.textureCompPool.acquire();
+        GameObject gameObject = Pools.objectsPool.acquire();
+        PositionComponent posComp = Pools.posCompPool.acquire();
+        PhysicsComponent phyComp = Pools.phyCompPool.acquire();
+        TextureDrawableComponent textureComp = Pools.textureCompPool.acquire();
 
         gameObject.init("Health", HEALTH);
         posComp.init(posX, posY);
-        phyComp.init(gameWorld.physics.world, dimX, dimY);
+        phyComp.init(world, dimX, dimY);
         textureComp.init(health, dimX, dimY);
 
         gameObject.addComponent(posComp);
@@ -377,23 +377,23 @@ public class GameObjectFactory {
         PhysicsProp prop = new PhysicsProp(posX, posY, 0f, 0f,
                 0f, 0, staticBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(gameWorld, prop, dimX, dimY);
+        setFurnitureOnGameGrid(prop, dimX, dimY);
 
         return gameObject;
     }
 
-    public static GameObject makeTrigger(int posX, int posY, int dimX, int dimY,
-                                         GameWorld gameWorld, Runnable runnable) {
+    public static GameObject makeTrigger(int posX, int posY, int dimX, int dimY, World world,
+                                         Runnable runnable) {
 
-        GameObject gameObject = gameWorld.objectsPool.acquire();
-        PositionComponent posComp = gameWorld.posCompPool.acquire();
-        PhysicsComponent phyComp = gameWorld.phyCompPool.acquire();
-        TriggerComponent triggerComp = gameWorld.triggerCompPool.acquire();
+        GameObject gameObject = Pools.objectsPool.acquire();
+        PositionComponent posComp = Pools.posCompPool.acquire();
+        PhysicsComponent phyComp = Pools.phyCompPool.acquire();
+        TriggerComponent triggerComp = Pools.triggerCompPool.acquire();
 
         gameObject.init("Trigger", TRIGGER);
 
         posComp.init(posX, posY);
-        phyComp.init(gameWorld.physics.world, dimX, dimY);
+        phyComp.init(world, dimX, dimY);
         triggerComp.init(runnable);
 
         gameObject.addComponent(posComp);
@@ -407,7 +407,7 @@ public class GameObjectFactory {
         return gameObject;
     }
 
-    private static void setCharacterPhysics(PhysicsComponent physics, PhysicsProp prop) {
+    private static void setCharacterPhysics(PhysicsComponent phyComp, PhysicsProp prop) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setLinearDamping(10f);
         bodyDef.setPosition(new Vec2(
@@ -416,27 +416,27 @@ public class GameObjectFactory {
         );
         bodyDef.setType(prop.type);
         bodyDef.setAllowSleep(false);
-        physics.setBody(bodyDef);
+        phyComp.setBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape box = new PolygonShape();
         box.setAsBox(
-                toMetersXLength(physics.dimX)/2,
-                toMetersYLength(physics.dimY)/2,
+                toMetersXLength(phyComp.dimX)/2,
+                toMetersYLength(phyComp.dimY)/2,
                 prop.phyCenterX,
                 prop.phyCenterY
                 ,0);
         fixtureDef.setShape(box);
         fixtureDef.setDensity(prop.density);
         fixtureDef.setFriction(prop.friction);
-        physics.addFixture(fixtureDef);
+        phyComp.addFixture(fixtureDef);
 
         box.delete();
         bodyDef.delete();
         fixtureDef.delete();
     }
 
-    private static void setFurniturePhysics(PhysicsComponent physics, PhysicsProp prop) {
+    private static void setFurniturePhysics(PhysicsComponent phyComp, PhysicsProp prop) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setLinearDamping(1f);
 
@@ -445,27 +445,27 @@ public class GameObjectFactory {
                 fromBufferToMetersY(prop.posY))
         );
         bodyDef.setType(prop.type);
-        physics.setBody(bodyDef);
+        phyComp.setBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape box = new PolygonShape();
         box.setAsBox(
-                toMetersXLength(physics.dimX)/2,
-                toMetersYLength(physics.dimY)/2,
+                toMetersXLength(phyComp.dimX)/2,
+                toMetersYLength(phyComp.dimY)/2,
                 prop.phyCenterX,
                 prop.phyCenterY,
                 0);
         fixtureDef.setShape(box);
         fixtureDef.setFriction(prop.friction);
         fixtureDef.setDensity(prop.density);
-        physics.addFixture(fixtureDef);
+        phyComp.addFixture(fixtureDef);
         box.delete();
         bodyDef.delete();
         fixtureDef.delete();
     }
 
-    private static void setFurnitureOnGameGrid(GameWorld gameWorld, PhysicsProp prop, float dimX, float dimY) {
-        SparseArray<Node>  nodes= GameGrid.getInstance(gameWorld).getNodes(prop.posX, prop.posY, (int)dimX, (int)dimY);
+    private static void setFurnitureOnGameGrid(PhysicsProp prop, float dimX, float dimY) {
+        SparseArray<Node>  nodes= GameGrid.getInstance().getNodes(prop.posX, prop.posY, (int)dimX, (int)dimY);
 
         int cost = 0;
         switch (prop.type){
@@ -478,7 +478,7 @@ public class GameObjectFactory {
         }
 
         for (int i = 0; i < nodes.size(); i++) {
-            GameGrid.getInstance(gameWorld).increaseDefaultCostOnNode(nodes.valueAt(i), cost);
+            GameGrid.getInstance().increaseDefaultCostOnNode(nodes.valueAt(i), cost);
         }
     }
 

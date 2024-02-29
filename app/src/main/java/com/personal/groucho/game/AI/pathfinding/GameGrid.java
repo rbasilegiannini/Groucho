@@ -7,23 +7,18 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.SparseArray;
 
-import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.Pools;
 
 public class GameGrid {
     public static GameGrid instance = null;
     public int width;
     public int height;
     public Node[][] grid;
-    public final GameWorld gameWorld;
     private final SparseArray<Node> nodesBelowTheObject = new SparseArray<>();
 
-    private GameGrid(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
-    }
-
-    public static GameGrid getInstance(GameWorld gameWorld){
+    public static GameGrid getInstance(){
         if (instance == null){
-            instance = new GameGrid(gameWorld);
+            instance = new GameGrid();
         }
         return instance;
     }
@@ -35,7 +30,7 @@ public class GameGrid {
 
         for (int posX = 0; posX < width; posX++) {
             for (int posY = 0; posY < height; posY++) {
-                grid[posX][posY] = gameWorld.nodesPool.acquire();
+                grid[posX][posY] = Pools.nodesPool.acquire();
                 grid[posX][posY].posX = posX;
                 grid[posX][posY].posY = posY;
             }
@@ -96,7 +91,7 @@ public class GameGrid {
     public void releasePool(){
         for (int posX = 0; posX < width; posX++) {
             for (int posY = 0; posY < height; posY++) {
-                gameWorld.nodesPool.release(grid[posX][posY]);
+                Pools.nodesPool.release(grid[posX][posY]);
             }
         }
     }

@@ -19,7 +19,6 @@ public class AttackActions implements Actions {
     private final AliveComponent playerAliveComp;
     private long lastHitMillis;
 
-
     public AttackActions(AIComponent aiComp) {
         this.aiComp = aiComp;
         playerAliveComp = (AliveComponent) aiComp.gameWorld.player.gameObject.getComponent(ALIVE);
@@ -57,7 +56,7 @@ public class AttackActions implements Actions {
     private void comeBack() {
         aiComp.isPlayerEngaged = false;
         aiComp.isPlayerReached = false;
-        aiComp.posOnGrid = GameGrid.getInstance(aiComp.gameWorld).getNode(
+        aiComp.posOnGrid = GameGrid.getInstance().getNode(
                 aiComp.posComp.getPosXOnGrid(),
                 aiComp.posComp.getPosYOnGrid()
         );

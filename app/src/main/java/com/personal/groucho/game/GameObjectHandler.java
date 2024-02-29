@@ -10,18 +10,16 @@ import java.util.List;
 
 public class GameObjectHandler {
     private static GameObjectHandler instance = null;
-    private final GameWorld gameWorld;
     private final ComponentHandler compHandler;
     protected final List<GameObject> objects = new ArrayList<>();
 
-    private GameObjectHandler(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
-        compHandler = ComponentHandler.getInstance(gameWorld);
+    private GameObjectHandler() {
+        compHandler = ComponentHandler.getInstance();
     }
 
-    public static GameObjectHandler getInstance(GameWorld gameWorld) {
+    public static GameObjectHandler getInstance() {
         if (instance == null) {
-            instance = new GameObjectHandler(gameWorld);
+            instance = new GameObjectHandler();
         }
         return instance;
     }
@@ -38,7 +36,7 @@ public class GameObjectHandler {
 
     public void removeGameObject(GameObject go){
         compHandler.removeAllComponentsFromGO(go);
-        gameWorld.objectsPool.release(go);
+        Pools.objectsPool.release(go);
         objects.remove(go);
         go.delete();
     }
@@ -57,7 +55,7 @@ public class GameObjectHandler {
         for (GameObject go : objects) {
             if (go.role != PLAYER) {
                 compHandler.removeAllComponentsFromGO(go);
-                gameWorld.objectsPool.release(go);
+                Pools.objectsPool.release(go);
                 go.delete();
             }
         }
@@ -67,7 +65,7 @@ public class GameObjectHandler {
     public void clear(){
         for (GameObject go : objects) {
             compHandler.removeAllComponentsFromGO(go);
-            gameWorld.objectsPool.release(go);
+            Pools.objectsPool.release(go);
             go.delete();
         }
         objects.clear();

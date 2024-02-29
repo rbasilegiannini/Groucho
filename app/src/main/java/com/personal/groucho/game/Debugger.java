@@ -15,13 +15,10 @@ import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
 public class Debugger {
-    private final GameWorld gameWorld;
     private static Debugger instance = null;
     private final Paint positionPaint, colliderPaint, gameGridPaint, sightPaint, pathPaint;
 
-    private Debugger(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
-
+    private Debugger() {
         colliderPaint = new Paint();
         colliderPaint.setStyle(Paint.Style.STROKE);
         colliderPaint.setColor(Color.RED);
@@ -43,17 +40,17 @@ public class Debugger {
         pathPaint.setColor(Color.BLUE);
     }
 
-    public static Debugger getDebugger(GameWorld gameWorld) {
+    public static Debugger getDebugger() {
         if (instance == null) {
-            instance = new Debugger(gameWorld);
+            instance = new Debugger();
         }
         return instance;
     }
 
     public void draw(Canvas canvas) {
-        GameGrid.getInstance(gameWorld).drawDebugGrid(canvas, gameGridPaint);
+        GameGrid.getInstance().drawDebugGrid(canvas, gameGridPaint);
 
-        for (AIComponent aiComponent : ComponentHandler.getInstance(gameWorld).aiComps) {
+        for (AIComponent aiComponent : ComponentHandler.getInstance().aiComps) {
             aiComponent.getSight().drawDebugSight(canvas, sightPaint);
             aiComponent.drawDebugPath(canvas, pathPaint);
         }
@@ -63,13 +60,13 @@ public class Debugger {
     }
 
     private void drawPositions(Canvas canvas) {
-        for (PositionComponent posComponent : ComponentHandler.getInstance(gameWorld).posComps) {
+        for (PositionComponent posComponent : ComponentHandler.getInstance().posComps) {
             canvas.drawCircle(posComponent.posX, posComponent.posY, 20, positionPaint);
         }
     }
 
     private void drawColliders(Canvas canvas){
-        for (PhysicsComponent phyComponent : ComponentHandler.getInstance(gameWorld).phyComps) {
+        for (PhysicsComponent phyComponent : ComponentHandler.getInstance().phyComps) {
             float shapeCenterX = toBufferXLength(phyComponent.fixtureCenterX);
             float shapeCenterY = toBufferYLength(phyComponent.fixtureCenterY);
 

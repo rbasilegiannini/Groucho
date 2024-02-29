@@ -18,22 +18,10 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.Graphics.bufferHeight;
 
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
-import com.personal.groucho.game.AI.pathfinding.Node;
-import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.gameobjects.components.AliveComponent;
-import com.personal.groucho.game.gameobjects.components.BoxDrawableComponent;
-import com.personal.groucho.game.gameobjects.components.CharacterComponent;
-import com.personal.groucho.game.gameobjects.components.ControllableComponent;
-import com.personal.groucho.game.gameobjects.components.LightComponent;
-import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
-import com.personal.groucho.game.gameobjects.components.PositionComponent;
-import com.personal.groucho.game.gameobjects.components.SpriteComponent;
-import com.personal.groucho.game.gameobjects.components.TextureDrawableComponent;
-import com.personal.groucho.game.gameobjects.components.TriggerComponent;
 import com.personal.groucho.game.levels.first.GrouchoRoom;
 import com.personal.groucho.game.levels.Level;
 
@@ -52,22 +40,6 @@ public class GameWorld {
     public boolean grouchoIsTalking = false;
     public final BubbleSpeech bubbleSpeech;
 
-    // Pools to reduce allocation and de-allocation
-    public final ObjectsPool<GameObject> objectsPool = new ObjectsPool<>(100, GameObject.class);
-    public final ObjectsPool<Collision> collisionsPool = new ObjectsPool<>(30, Collision.class);
-    public final ObjectsPool<Node> nodesPool = new ObjectsPool<>(200, Node.class);
-    public final ObjectsPool<PositionComponent> posCompPool = new ObjectsPool<>(100, PositionComponent.class);
-    public final ObjectsPool<PhysicsComponent> phyCompPool = new ObjectsPool<>(100, PhysicsComponent.class);
-    public final ObjectsPool<AIComponent> aiCompPool = new ObjectsPool<>(10, AIComponent.class);
-    public final ObjectsPool<SpriteComponent> spriteCompPool = new ObjectsPool<>(100, SpriteComponent.class);
-    public final ObjectsPool<TextureDrawableComponent> textureCompPool = new ObjectsPool<>(100, TextureDrawableComponent.class);
-    public final ObjectsPool<BoxDrawableComponent> boxCompPool = new ObjectsPool<>(100, BoxDrawableComponent.class);
-    public final ObjectsPool<AliveComponent> aliveCompPool = new ObjectsPool<>(100, AliveComponent.class);
-    public final ObjectsPool<CharacterComponent> charCompPool = new ObjectsPool<>(100, CharacterComponent.class);
-    public final ObjectsPool<LightComponent> lightCompPool = new ObjectsPool<>(1, LightComponent.class);
-    public final ObjectsPool<ControllableComponent> ctrlCompPool = new ObjectsPool<>(1, ControllableComponent.class);
-    public final ObjectsPool<TriggerComponent> triggerCompPool = new ObjectsPool<>(30, TriggerComponent.class);
-
     public GameWorld(Box physicalSize, Box screenSize, MainActivity newActivity) {
         GameWorld.physicalSize = physicalSize;
         GameWorld.screenSize = screenSize;
@@ -77,7 +49,7 @@ public class GameWorld {
         player = new Player();  // TODO: Singleton?
         physics = Physics.getInstance(this);
         graphics = Graphics.getInstance(this);
-        goHandler = GameObjectHandler.getInstance(this);
+        goHandler = GameObjectHandler.getInstance();
         bubbleSpeech = new BubbleSpeech(this);
     }
 
@@ -92,7 +64,7 @@ public class GameWorld {
     public void tryAgain(Level level) {
         initEnvironment();
         GrouchoRoom.firstTime = true;
-        GameGrid.getInstance(this).releasePool();
+        GameGrid.getInstance().releasePool();
 
         currentLevel = level;
         initPlayer();
@@ -143,7 +115,7 @@ public class GameWorld {
                 player.update(graphics.canvas, controller);
             }
 
-            for (AIComponent aiComponent : ComponentHandler.getInstance(this).aiComps) {
+            for (AIComponent aiComponent : ComponentHandler.getInstance().aiComps) {
                 aiComponent.update(this);
             }
         }
@@ -158,7 +130,7 @@ public class GameWorld {
             }
 
             if (debugMode) {
-                getDebugger(this).draw(graphics.canvas);
+                getDebugger().draw(graphics.canvas);
             }
         }
 
@@ -172,9 +144,9 @@ public class GameWorld {
             GameOver();
         }
         else {
-            ComponentHandler.getInstance(this).removeComponent(gameObject, AI);
-            ComponentHandler.getInstance(this).removeComponent(gameObject, PHYSICS);
-            ComponentHandler.getInstance(this).removeComponent(gameObject, LIGHT);
+            ComponentHandler.getInstance().removeComponent(gameObject, AI);
+            ComponentHandler.getInstance().removeComponent(gameObject, PHYSICS);
+            ComponentHandler.getInstance().removeComponent(gameObject, LIGHT);
         }
     }
 
@@ -214,9 +186,9 @@ public class GameWorld {
         player.GameOver();
         this.gameOver = true;
 
-        ComponentHandler.getInstance(this).removeComponent(player.gameObject, CONTROLLABLE);
-        ComponentHandler.getInstance(this).removeComponent(player.gameObject, PHYSICS);
-        ComponentHandler.getInstance(this).removeComponent(player.gameObject, LIGHT);
+        ComponentHandler.getInstance().removeComponent(player.gameObject, CONTROLLABLE);
+        ComponentHandler.getInstance().removeComponent(player.gameObject, PHYSICS);
+        ComponentHandler.getInstance().removeComponent(player.gameObject, LIGHT);
     }
 
     protected void finalize(){

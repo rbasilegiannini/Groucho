@@ -104,18 +104,19 @@ public class Events {
         }
     }
 
-    public static void playerCollideWithHealthEvent(GameObject player, GameObject health, GameWorld gameWorld) {
+    public static void playerCollideWithHealthEvent(GameObject health, GameWorld gameWorld) {
         healing.play(0.7f);
+        GameObject player = gameWorld.player.gameObject;
         AliveComponent aliveComp = (AliveComponent) player.getComponent(ComponentType.ALIVE);
         aliveComp.heal(medicalKit);
 
         gameWorld.goHandler.removeGameObject(health);
     }
 
-    public static void playerCollideWithEnemyEvent(GameWorld gameWorld, GameObject enemy) {
+    public static void playerCollideWithEnemyEvent(GameObject player, GameObject enemy) {
         AIComponent aiEnemy = (AIComponent) enemy.getComponent(AI);
         if (!aiEnemy.isPlayerEngaged) {
-            aiEnemy.updateDirection(directionBetweenGO(gameWorld.player.gameObject, enemy));
+            aiEnemy.updateDirection(directionBetweenGO(player, enemy));
             aiEnemy.setPlayerEngaged(true);
         }
     }

@@ -66,14 +66,13 @@ public class Hallway extends Room {
                         (int) (3.1*cellSize),
                         160,
                         280,
-                        gameWorld,
                         Textures.brownDoor
                 )));
         gameObjects.add(GameObjectFactory.
                 makeTrigger(
                         (int) (2.5*cellSize), (int) (3.0*cellSize),
                         160, 270,
-                        gameWorld,
+                        gameWorld.physics.world,
                         () -> {
                             door.play(1f);
                             level.goToGrouchoRoom();

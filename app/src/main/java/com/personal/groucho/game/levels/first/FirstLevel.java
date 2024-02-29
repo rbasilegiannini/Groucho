@@ -1,8 +1,5 @@
 package com.personal.groucho.game.levels.first;
 
-import static com.personal.groucho.game.Debugger.getDebugger;
-import static com.personal.groucho.game.constants.System.debugMode;
-
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.levels.Level;
 import com.personal.groucho.game.levels.Room;

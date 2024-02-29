@@ -4,7 +4,6 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.Controller;
 
 public abstract class ControllerState {
-
     protected Controller controller;
     protected StateName name;
 

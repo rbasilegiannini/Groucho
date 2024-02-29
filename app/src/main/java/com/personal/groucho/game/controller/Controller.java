@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller implements ControllerSubject {
-
     private final List<ControllerObserver> controllerObservers = new ArrayList<>();
     public ControllerState currentState;
     public Orientation orientation;

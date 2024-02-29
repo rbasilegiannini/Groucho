@@ -69,7 +69,6 @@ public class AIComponent extends WalkingComponent {
 
     public void init(GameWorld gameWorld, StateName currentState){
         this.gameWorld = gameWorld;
-        aStar.init(gameWorld);
         attackActions = new AttackActions(this); // TODO: Use init?
 
         originalState = currentState;
@@ -122,7 +121,7 @@ public class AIComponent extends WalkingComponent {
                     new Vec2(posComp.posX, posComp.posY),
                     posComp.orientation);
 
-            originalPosOnGrid = GameGrid.getInstance(gameWorld).getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
+            originalPosOnGrid = GameGrid.getInstance().getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
             originalOrientation = posComp.orientation;
         }
     }
@@ -132,9 +131,9 @@ public class AIComponent extends WalkingComponent {
     public void setPlayerEngaged(boolean isPlayerEngaged) {this.isPlayerEngaged = isPlayerEngaged;}
 
     public void setPathToPlayer() {
-        posOnGrid = GameGrid.getInstance(gameWorld).getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
+        posOnGrid = GameGrid.getInstance().getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
 
-        playerPosOnGrid = GameGrid.getInstance(gameWorld).getNode(
+        playerPosOnGrid = GameGrid.getInstance().getNode(
                 gameWorld.player.posX /cellSize,
                 gameWorld.player.posY /cellSize
         );
@@ -149,7 +148,7 @@ public class AIComponent extends WalkingComponent {
             isNodeReached = false;
         }
 
-        posOnGrid = GameGrid.getInstance(gameWorld).getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
+        posOnGrid = GameGrid.getInstance().getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
 
         if (posComp.posX != (currentNode.posX*cellSize)+0.5*cellSize) {
             walkingToXCoordinate(posComp.posX, (int)((currentNode.posX*cellSize)+0.5*cellSize));

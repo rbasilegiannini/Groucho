@@ -23,6 +23,7 @@ import com.personal.groucho.game.AI.pathfinding.GameGrid;
 import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.collisions.Collision;
 import com.personal.groucho.game.collisions.MyContactListener;
+import com.personal.groucho.game.gameobjects.Entity;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
@@ -49,7 +50,7 @@ public class Physics {
     private Physics(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
         this.world = new World(0, 0); // No gravity
-        contactListener = new MyContactListener(gameWorld);
+        contactListener = new MyContactListener();
         world.setContactListener(contactListener);
     }
 
@@ -67,11 +68,11 @@ public class Physics {
     }
 
     private void updatePhysicsPos() {
-        for (PhysicsComponent phyComp : ComponentHandler.getInstance(gameWorld).phyComps) {
-            GameObject currentGO = (GameObject)(phyComp.getOwner());
-            PositionComponent posComp = (PositionComponent) currentGO.getComponent(POSITION);
+        for (PhysicsComponent phyComp : ComponentHandler.getInstance().phyComps) {
+            Entity currentEntity = phyComp.getOwner();
+            PositionComponent posComp = (PositionComponent) currentEntity.getComponent(POSITION);
 
-            if (currentGO.role == FURNITURE) {
+            if (currentEntity.role == FURNITURE) {
                 handleFurnitureCollision(phyComp, posComp);
             }
             else {
@@ -96,17 +97,17 @@ public class Physics {
     }
 
     private void updateGameGrid(PhysicsComponent phyComp, float originalPosX, float originalPosY) {
-        if (GameGrid.getInstance(gameWorld) != null) {
+        if (GameGrid.getInstance() != null) {
             int dCost = (int) (phyComp.density * 10000);
 
-            SparseArray<Node> oldCellsToReset = GameGrid.getInstance(gameWorld).getNodes(
+            SparseArray<Node> oldCellsToReset = GameGrid.getInstance().getNodes(
                     (int)originalPosX,
                     (int)originalPosY,
                     (int)phyComp.dimX,
                     (int)phyComp.dimY
             ).clone();
 
-            SparseArray<Node> newCellsToChange = GameGrid.getInstance(gameWorld).getNodes(
+            SparseArray<Node> newCellsToChange = GameGrid.getInstance().getNodes(
                     (int)fromMetersToBufferX(phyComp.getPosX()),
                     (int)fromMetersToBufferY(phyComp.getPosY()),
                     (int)phyComp.dimX,
@@ -123,12 +124,12 @@ public class Physics {
 
             // Update cost
             for (int i = 0; i < newCellsToChange.size(); i++) {
-                GameGrid.getInstance(gameWorld).increaseDefaultCostOnNode(newCellsToChange.valueAt(i), dCost);
+                GameGrid.getInstance().increaseDefaultCostOnNode(newCellsToChange.valueAt(i), dCost);
             }
 
             // Reset cost
             for (int i = 0; i < oldCellsToReset.size(); i++) {
-                GameGrid.getInstance(gameWorld).decreaseDefaultCostOnNode(oldCellsToReset.valueAt(i), dCost);
+                GameGrid.getInstance().decreaseDefaultCostOnNode(oldCellsToReset.valueAt(i), dCost);
             }
         }
     }
@@ -173,7 +174,7 @@ public class Physics {
     }
 
     private void handleCollisions() {
-        SparseArray<Collision> collisions = contactListener._getCollisions();
+        SparseArray<Collision> collisions = contactListener.getCollisions();
         for (int i = 0; i < collisions.size(); i ++) {
             Collision event = collisions.valueAt(i);
 
@@ -186,14 +187,14 @@ public class Physics {
             else if (event.GO2.role == ENEMY)
                 handleEnemyCollision(event.GO2, event.GO1);
 
-            gameWorld.collisionsPool.release(event);
+            Pools.collisionsPool.release(event);
         }
     }
 
     private void handlePlayerCollision(GameObject player, GameObject object) {
         switch (object.role) {
             case ENEMY:
-                playerCollideWithEnemyEvent(gameWorld, object);
+                playerCollideWithEnemyEvent(player, object);
                 break;
 
             case FURNITURE:
@@ -201,7 +202,7 @@ public class Physics {
                 break;
 
             case HEALTH:
-                playerCollideWithHealthEvent(player, object, gameWorld);
+                playerCollideWithHealthEvent(object, gameWorld);
                 break;
 
             case TRIGGER:
@@ -212,7 +213,7 @@ public class Physics {
 
     private void handleEnemyCollision(GameObject enemy, GameObject object) {
         if (object.role == PLAYER) {
-            playerCollideWithEnemyEvent(gameWorld, enemy);
+            playerCollideWithEnemyEvent(gameWorld.player.gameObject, enemy);
         }
     }
 

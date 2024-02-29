@@ -4,7 +4,6 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.Controller;
 
 public class Shooting extends ControllerState{
-
     private static Shooting state = null;
 
     private Shooting() {

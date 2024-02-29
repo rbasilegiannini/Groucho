@@ -20,7 +20,6 @@ import com.personal.groucho.game.gameobjects.components.PositionComponent;
 
 public class Utils {
 
-    // Screen conversions
     public static float fromScreenToBufferX(float x) { return x/screenSize.width*bufferWidth; }
     public static float fromScreenToBufferY(float y) { return y/screenSize.height*bufferHeight; }
 
