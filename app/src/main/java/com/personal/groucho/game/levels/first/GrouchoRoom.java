@@ -5,22 +5,27 @@ import static com.personal.groucho.game.assets.Textures.dylanBubble;
 import static com.personal.groucho.game.assets.Textures.grouchoBubble;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Shader;
 
+import com.google.fpl.liquidfun.World;
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
+import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.levels.Room;
 
 public class GrouchoRoom extends Room {
     public static boolean firstTime = true;
     private GameObject grouchoTrigger, dylanTrigger;
     private final FirstLevel level;
+    private int playerPosX, playerPosY, tableX, tableY, bedX, bedY;
+    private PositionComponent tablePosComp, bedPosComp;
 
     public GrouchoRoom(GameWorld gameWorld, FirstLevel level) {
         super(1000, 1000, gameWorld);
@@ -35,6 +40,19 @@ public class GrouchoRoom extends Room {
     public void init() {
         super.init();
 
+        if (firstTime) {
+            playerPosX = 500;
+            playerPosY = 500;
+            tableX = 5*cellSize;
+            tableY = (int) (3.5*cellSize);
+            bedX = 5*cellSize;
+            bedY = 2*cellSize;
+        }
+        else {
+            playerPosX = 2*cellSize;
+            playerPosY = cellSize;
+        }
+
         makeFurniture();
         makeTriggers();
         makeDecorations();
@@ -47,13 +65,18 @@ public class GrouchoRoom extends Room {
     @Override
     public void allocateRoom(){
         super.allocateRoom();
-        if (firstTime) {
-            gameWorld.player.setPos(500, 500);
-        }
-        else {
-            gameWorld.player.setPos(2*cellSize, cellSize);
-        }
+        gameWorld.player.setPos(playerPosX, playerPosY);
         setBrightness(maxBrightness);
+    }
+
+    @Override
+    public void releaseRoom() {
+        tableX = tablePosComp.posX;
+        tableY = tablePosComp.posY;
+        bedX = bedPosComp.posX;
+        bedY = bedPosComp.posY;
+
+        super.releaseRoom();
     }
 
     private void makeTriggers() {
@@ -62,7 +85,7 @@ public class GrouchoRoom extends Room {
             grouchoTrigger = GameObjectFactory.
                     makeTrigger(500, 550, 64, 128,
                             gameWorld.physics.world, () -> {
-                                String sentence = gameWorld.activity.getString(R.string.groucho_talk_room);
+                                String sentence = gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init);
                                 grouchoTalk(sentence, 500, 500);
                                 removeTrigger(grouchoTrigger);
                             });
@@ -71,13 +94,28 @@ public class GrouchoRoom extends Room {
             dylanTrigger = GameObjectFactory.
                     makeTrigger(400, 100, 512, 32,
                             gameWorld.physics.world, () -> {
-                                String sentence = gameWorld.activity.getString(R.string.dylan_talk_room);
+                                String sentence = gameWorld.activity.getString(R.string.dylan_level1_bedroom_talk_init);
                                 dylanTalk(sentence, 600, 250);
                                 removeTrigger(dylanTrigger);
                             });
             gameObjects.add(dylanTrigger);
         }
 
+        // Groucho's photo
+        gameObjects.add(GameObjectFactory.
+                makeTrigger((int) (0.75*cellSize), (int) (-0.5*cellSize), 128, 128,
+                        gameWorld.physics.world, () -> {
+                            String sentence = gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_photo);
+                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                        }));
+
+        // Wardrobe
+        gameObjects.add(GameObjectFactory.
+                makeTrigger((int) (4.5*cellSize), (int) (-0.5*cellSize), 280, 128,
+                        gameWorld.physics.world, () -> {
+                            String sentence = gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_wardrobe);
+                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                        }));
         // Door
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
@@ -100,26 +138,19 @@ public class GrouchoRoom extends Room {
 
     private void removeTrigger(GameObject trigger) { gameWorld.goHandler.removeGameObject(trigger);}
 
-    private void makeFurniture() {
-        gameObjects.add((GameObjectFactory.
-                makeFurniture(
-                        5*cellSize,
-                        (int) (3.5*cellSize),
-                        250, 150,
-                        5f,
-                        gameWorld.physics.world,
-                        Textures.table)
-        ));
 
-        gameObjects.add((GameObjectFactory.
-                makeFurniture(
-                        5*cellSize,
-                        2*cellSize,
-                        280, 350,
-                        100f,
-                        gameWorld.physics.world,
-                        Textures.bed)
-        ));
+    private void makeFurniture() {
+        World world = gameWorld.physics.world;;
+        GameObject table = GameObjectFactory.
+                makeFurniture(tableX, tableY, 250, 150, 5f, world, Textures.table);
+        tablePosComp = (PositionComponent) table.getComponent(POSITION);
+        gameObjects.add(table);
+
+        GameObject bed = GameObjectFactory.
+                makeFurniture(bedX, bedY, 280, 350, 100f, world, Textures.bed
+        );
+        bedPosComp = (PositionComponent) bed.getComponent(POSITION);
+        gameObjects.add(bed);
     }
 
     private void makeDecorations() {

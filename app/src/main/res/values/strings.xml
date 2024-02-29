@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">Groucho</string>
-    <string name="groucho_talk_room">mmm… \n Forse sto dormendo…</string>
-    <string name="dylan_talk_room">GROUCHO!</string>
+
+    <!-- Dialog first level -->
+    <string name="groucho_level1_bedroom_talk_init">mmm… \n Forse sto dormendo…</string>
+    <string name="groucho_level1_bedroom_talk_photo">Bello.</string>
+    <string name="groucho_level1_bedroom_talk_wardrobe">Sono già vestito!</string>
+
+    <string name="dylan_level1_bedroom_talk_init">GROUCHO!</string>
+
 </resources>
