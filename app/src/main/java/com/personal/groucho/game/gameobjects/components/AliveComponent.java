@@ -15,13 +15,23 @@ public class AliveComponent extends Component {
     private int maxHealth;
     private int currentHealth;
     public Status currentStatus;
-    private SpriteDrawableComponent spriteComp = null;
-    private CharacterComponent character = null;
-    private final GameWorld gameWorld;
+    private SpriteComponent spriteComp = null;
+    private CharacterComponent charComp = null;
+    private GameWorld gameWorld;
 
-    public AliveComponent(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
+    public AliveComponent() {}
+    public void init(GameWorld gameWorld, int maxHealth) {
         currentStatus = Status.ALIVE;
+        this.gameWorld = gameWorld;
+        this.maxHealth = maxHealth;
+        this.currentHealth = maxHealth;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.spriteComp = null;
+        this.charComp = null;
     }
 
     @Override
@@ -50,7 +60,7 @@ public class AliveComponent extends Component {
 
     private void die() {
         currentStatus = DEAD;
-        spriteComp.setCurrentSpritesheet(character.properties.sheetDeath);
+        spriteComp.setCurrentSpritesheet(charComp.properties.sheetDeath);
         spriteComp.setAnim(0);
         gameWorld.handleDeath((GameObject) getOwner());
     }
@@ -61,13 +71,11 @@ public class AliveComponent extends Component {
     }
 
     private void initComponents(){
-        if (character == null) {
-            character = (CharacterComponent) owner.getComponent(CHARACTER);
-            maxHealth = character.properties.health;
-            currentHealth = character.properties.health;
+        if (charComp == null) {
+            charComp = (CharacterComponent) owner.getComponent(CHARACTER);
         }
         if (spriteComp == null) {
-            spriteComp = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
+            spriteComp = (SpriteComponent) owner.getComponent(DRAWABLE);
         }
     }
 }

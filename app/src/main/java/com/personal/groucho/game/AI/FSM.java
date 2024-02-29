@@ -5,11 +5,12 @@ import java.util.List;
 
 public class FSM {
     private AIState currentState;
-    private final List<Action> currentActions;
+    private final List<Action> currentActions = new ArrayList<>();
 
-    public FSM (AIState initialState) {
-        currentState = initialState;
-        currentActions = new ArrayList<>();
+    public FSM(){}
+
+    public void setCurrentState(AIState currentState){
+        this.currentState = currentState;
     }
 
     public List<Action> getActions() {

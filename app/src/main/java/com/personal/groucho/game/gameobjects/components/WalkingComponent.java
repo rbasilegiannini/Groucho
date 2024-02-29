@@ -11,11 +11,19 @@ import com.personal.groucho.game.gameobjects.Component;
 
 public abstract class WalkingComponent extends Component {
     public PositionComponent posComp = null;
-    protected SpriteDrawableComponent spriteComp = null;
+    protected SpriteComponent spriteComp = null;
     protected PhysicsComponent phyComp = null;
-    public CharacterComponent character = null;
+    public CharacterComponent charComp = null;
     protected float increaseX, increaseY;
 
+    @Override
+    public void reset() {
+        super.reset();
+        this.posComp = null;
+        this.spriteComp = null;
+        this.phyComp = null;
+        this.charComp = null;
+    }
 
     protected void walking() {
         initComponents();
@@ -39,9 +47,9 @@ public abstract class WalkingComponent extends Component {
                 break;
         }
         updatePosition(
-                toMetersXLength(character.properties.speed) * increaseX,
-                toMetersXLength(character.properties.speed) * increaseY);
-        updateSprite(character.properties.sheetWalk);
+                toMetersXLength(charComp.properties.speed) * increaseX,
+                toMetersXLength(charComp.properties.speed) * increaseY);
+        updateSprite(charComp.properties.sheetWalk);
     }
 
     public void updateSprite(Spritesheet sheet) {
@@ -66,10 +74,10 @@ public abstract class WalkingComponent extends Component {
             phyComp = (PhysicsComponent) owner.getComponent(PHYSICS);
         }
         if (spriteComp == null) {
-            spriteComp = (SpriteDrawableComponent) owner.getComponent(DRAWABLE);
+            spriteComp = (SpriteComponent) owner.getComponent(DRAWABLE);
         }
-        if (character == null){
-            character = (CharacterComponent) owner.getComponent(CHARACTER);
+        if (charComp == null){
+            charComp = (CharacterComponent) owner.getComponent(CHARACTER);
         }
     }
 }

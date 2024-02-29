@@ -88,8 +88,7 @@ public class Room {
 
     public void releaseRoom() {
         gameWorld.goHandler.changeLevel();
-        gameWorld.nodesPool.clear();
-        GameGrid.getInstance(gameWorld).reset();
+        GameGrid.getInstance(gameWorld).releasePool();
     }
 
     public void allocateRoom(){

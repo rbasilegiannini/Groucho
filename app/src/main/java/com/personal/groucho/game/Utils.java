@@ -5,9 +5,9 @@ import static com.personal.groucho.game.Graphics.bufferWidth;
 import static com.personal.groucho.game.GameWorld.physicalSize;
 import static com.personal.groucho.game.GameWorld.screenSize;
 import static com.personal.groucho.game.constants.Character.enemyFovInRad;
-import static com.personal.groucho.game.constants.System.characterDimX;
-import static com.personal.groucho.game.constants.System.characterDimY;
-import static com.personal.groucho.game.constants.System.characterScaleFactor;
+import static com.personal.groucho.game.constants.System.charDimX;
+import static com.personal.groucho.game.constants.System.charDimY;
+import static com.personal.groucho.game.constants.System.charScaleFactor;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.Orientation.RIGHT;
@@ -77,8 +77,8 @@ public class Utils {
         PositionComponent posGO = (PositionComponent) go.getComponent(POSITION);
         PositionComponent posGOToTurn = (PositionComponent) goToTurn.getComponent(POSITION);
 
-        if (posGO.posY > posGOToTurn.posY - characterScaleFactor*characterDimY &&
-            posGO.posY < posGOToTurn.posY + characterScaleFactor*characterDimY
+        if (posGO.posY > posGOToTurn.posY - charScaleFactor * charDimY &&
+            posGO.posY < posGOToTurn.posY + charScaleFactor * charDimY
         ) {
             if (posGO.posX < posGOToTurn.posX) {
                 return LEFT;
@@ -105,7 +105,7 @@ public class Utils {
         float distFromGOY = originY - posGO.posY;
 
         float distSquared = distFromGOX * distFromGOX + distFromGOY * distFromGOY;
-        float thresholdSquared = 1.2f * characterScaleFactor * characterDimX;
+        float thresholdSquared = 1.2f * charScaleFactor * charDimX;
         thresholdSquared *= thresholdSquared;
 
         return distSquared <= thresholdSquared;

@@ -4,6 +4,7 @@ import android.util.SparseArray;
 
 public class Entity {
     protected final SparseArray<Component> components = new SparseArray<>();
+    public Role role;
 
     public Component getComponent(ComponentType type) {
         return components.get(type.hashCode());

@@ -83,7 +83,7 @@ public class Controller implements ControllerSubject {
     public boolean isOnLoadingArea(float x, float y) {return trigger.isOnLoadingArea(x, y);}
     public boolean isOnShootingArea(float x, float y) {return trigger.isOnShootingArea(x, y);}
 
-    public void updateControllerPosition(float increaseX, float increaseY) {
+    public void updateControllerPos(float increaseX, float increaseY) {
         offsetX += increaseX;
         offsetY += increaseY;
 

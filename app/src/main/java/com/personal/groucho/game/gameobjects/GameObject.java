@@ -2,7 +2,6 @@ package com.personal.groucho.game.gameobjects;
 
 public class GameObject extends Entity implements Resettable {
     public String name;
-    public Role role;
 
     public GameObject() {
         this.name = "";

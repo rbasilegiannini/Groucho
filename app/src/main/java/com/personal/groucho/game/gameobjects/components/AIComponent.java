@@ -38,11 +38,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AIComponent extends WalkingComponent {
-    public final StateName originalState;
-    public final FSM fsm;
+    public StateName originalState;
+    public FSM fsm;
     public Sight sight = null;
-    public final GameWorld gameWorld;
-    public final AStar aStar;
+    public GameWorld gameWorld;
+    public AStar aStar;
     public Orientation originalOrientation;
     public Node originalPosOnGrid, posOnGrid, playerPosOnGrid, currentNode;
     public List<Node> currentPath;
@@ -56,33 +56,46 @@ public class AIComponent extends WalkingComponent {
     public AttackActions attackActions;
     public InvestigateActions investigateActions;
 
-    public AIComponent(GameWorld gameWorld, StateName currentState) {
-        this.gameWorld = gameWorld;
-
+    public AIComponent() {
         idleActions = new IdleActions(this);
         patrolActions = new PatrolActions(this);
         engageActions = new EngageActions(this);
-        attackActions = new AttackActions(this);
         investigateActions = new InvestigateActions(this);
 
+        aStar = new AStar();
+        fsm = new FSM();
+        currentPath = new ArrayList<>();
+    }
+
+    public void init(GameWorld gameWorld, StateName currentState){
+        this.gameWorld = gameWorld;
+        aStar.init(gameWorld);
+        attackActions = new AttackActions(this); // TODO: Use init?
+
         originalState = currentState;
+
         switch (originalState) {
             case PATROL:
-                fsm = new FSM(Patrol.getInstance(this));
+                fsm.setCurrentState(Patrol.getInstance(this));
                 break;
             case ENGAGE:
-                fsm = new FSM(Engage.getInstance(this));
+                fsm.setCurrentState(Engage.getInstance(this));
                 break;
             case ATTACK:
-                fsm = new FSM(Attack.getInstance(this));
+                fsm.setCurrentState(Attack.getInstance(this));
                 break;
             default:
-                fsm = new FSM(Idle.getInstance(this));
+                fsm.setCurrentState(Idle.getInstance(this));
                 break;
         }
 
-        aStar = new AStar(gameWorld);
-        currentPath = new ArrayList<>();
+        currentPath.clear();
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.sight = null;
     }
 
     @Override
@@ -152,7 +165,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void walkingToXCoordinate(int startX, int targetPosX){
-        if (abs(startX - targetPosX) < abs(character.properties.speed*increaseX)) {
+        if (abs(startX - targetPosX) < abs(charComp.properties.speed*increaseX)) {
             phyComp.setPosX(targetPosX);
             return;
         }
@@ -167,7 +180,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void walkingToYCoordinate(int startY, int targetPosY){
-        if (abs(startY - targetPosY) < abs(character.properties.speed*increaseY)) {
+        if (abs(startY - targetPosY) < abs(charComp.properties.speed*increaseY)) {
             phyComp.setPosY(targetPosY);
             return;
         }
@@ -190,7 +203,7 @@ public class AIComponent extends WalkingComponent {
 
     public void updateDirection(Orientation orientation){
         posComp.setOrientation(orientation);
-        ((SpriteDrawableComponent)
+        ((SpriteComponent)
                 owner.getComponent(DRAWABLE)).setAnim(posComp.orientation.getValue());
         sight.setNewOrientation(posComp.orientation);
     }

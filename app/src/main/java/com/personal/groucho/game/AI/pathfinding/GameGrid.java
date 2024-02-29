@@ -93,10 +93,10 @@ public class GameGrid {
         }
     }
 
-    public void reset() {
+    public void releasePool(){
         for (int posX = 0; posX < width; posX++) {
             for (int posY = 0; posY < height; posY++) {
-                grid[posX][posY].reset();
+                gameWorld.nodesPool.release(grid[posX][posY]);
             }
         }
     }

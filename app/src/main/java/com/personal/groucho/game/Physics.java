@@ -62,55 +62,55 @@ public class Physics {
 
     public synchronized void update(float elapsedTime) {
         world.step(elapsedTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
-        updatePhysicsPosition();
+        updatePhysicsPos();
         handleCollisions();
     }
 
-    private void updatePhysicsPosition() {
-        for (PhysicsComponent phyComponent : gameWorld.goHandler.phyComponents) {
-            GameObject currentGO = (GameObject)(phyComponent.getOwner());
-            PositionComponent posComponent = (PositionComponent) currentGO.getComponent(POSITION);
+    private void updatePhysicsPos() {
+        for (PhysicsComponent phyComp : ComponentHandler.getInstance(gameWorld).phyComps) {
+            GameObject currentGO = (GameObject)(phyComp.getOwner());
+            PositionComponent posComp = (PositionComponent) currentGO.getComponent(POSITION);
 
             if (currentGO.role == FURNITURE) {
-                handleFurnitureCollision(phyComponent, posComponent);
+                handleFurnitureCollision(phyComp, posComp);
             }
             else {
-                if (phyComponent.hasChangedPosition()) {
-                    posComponent.setPosX((int) fromMetersToBufferX(phyComponent.getPosX()));
-                    posComponent.setPosY((int) fromMetersToBufferY(phyComponent.getPosY()));
+                if (phyComp.hasChangedPosition()) {
+                    posComp.setPosX((int) fromMetersToBufferX(phyComp.getPosX()));
+                    posComp.setPosY((int) fromMetersToBufferY(phyComp.getPosY()));
                 }
             }
         }
     }
 
-    private void handleFurnitureCollision(PhysicsComponent phyComponent, PositionComponent posComponent) {
-        float originalPosX = fromMetersToBufferX(phyComponent.originalPosX);
-        float originalPosY = fromMetersToBufferY(phyComponent.originalPosY);
+    private void handleFurnitureCollision(PhysicsComponent phyComp, PositionComponent posComp) {
+        float originalPosX = fromMetersToBufferX(phyComp.originalPosX);
+        float originalPosY = fromMetersToBufferY(phyComp.originalPosY);
 
-        if (phyComponent.hasChangedPosition()) {
-            posComponent.setPosX((int) fromMetersToBufferX(phyComponent.getPosX()));
-            posComponent.setPosY((int) fromMetersToBufferY(phyComponent.getPosY()));
+        if (phyComp.hasChangedPosition()) {
+            posComp.setPosX((int) fromMetersToBufferX(phyComp.getPosX()));
+            posComp.setPosY((int) fromMetersToBufferY(phyComp.getPosY()));
 
-            updateGameGrid(phyComponent, originalPosX, originalPosY);
+            updateGameGrid(phyComp, originalPosX, originalPosY);
         }
     }
 
-    private void updateGameGrid(PhysicsComponent phyComponent, float originalPosX, float originalPosY) {
+    private void updateGameGrid(PhysicsComponent phyComp, float originalPosX, float originalPosY) {
         if (GameGrid.getInstance(gameWorld) != null) {
-            int dCost = (int) (phyComponent.density * 10000);
+            int dCost = (int) (phyComp.density * 10000);
 
             SparseArray<Node> oldCellsToReset = GameGrid.getInstance(gameWorld).getNodes(
                     (int)originalPosX,
                     (int)originalPosY,
-                    (int)phyComponent.dimX,
-                    (int)phyComponent.dimY
+                    (int)phyComp.dimX,
+                    (int)phyComp.dimY
             ).clone();
 
             SparseArray<Node> newCellsToChange = GameGrid.getInstance(gameWorld).getNodes(
-                    (int)fromMetersToBufferX(phyComponent.getPosX()),
-                    (int)fromMetersToBufferY(phyComponent.getPosY()),
-                    (int)phyComponent.dimX,
-                    (int)phyComponent.dimY
+                    (int)fromMetersToBufferX(phyComp.getPosX()),
+                    (int)fromMetersToBufferY(phyComp.getPosY()),
+                    (int)phyComp.dimX,
+                    (int)phyComp.dimY
             ).clone();
 
             setUnchangedCells(oldCellsToReset, newCellsToChange);

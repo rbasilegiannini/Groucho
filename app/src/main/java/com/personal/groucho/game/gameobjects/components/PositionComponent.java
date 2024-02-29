@@ -12,7 +12,15 @@ public class PositionComponent extends Component {
     public int originalPosX, originalPosY, posX, posY;
     public Orientation orientation;
 
-    public PositionComponent(int posX, int posY) {
+    public PositionComponent() {
+        this.originalPosX = 0;
+        this.originalPosY = 0;
+        this.posX = 0;
+        this.posY = 0;
+        orientation = UP;
+    }
+
+    public void init(int posX, int posY) {
         this.originalPosX = posX;
         this.originalPosY = posY;
         this.posX = posX;
@@ -34,7 +42,7 @@ public class PositionComponent extends Component {
     public void updatePosX(int increase) {this.posX += increase;}
     public void updatePosY(int increase) {this.posY += increase;}
 
-    public boolean hasChangedPosition() {
+    public boolean hasChangedPos() {
         if (posX != originalPosX || posY != originalPosY) {
             originalPosX = posX;
             originalPosY = posY;

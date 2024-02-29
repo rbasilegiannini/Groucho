@@ -9,5 +9,9 @@ public enum ComponentType {
     LIGHT,
     CHARACTER,
     ALIVE,
-    TRIGGER
+    TRIGGER;
+
+    public static ComponentType[] getAllComponentTypes() {
+        return new ComponentType[]{POSITION, DRAWABLE, PHYSICS, ALIVE, AI, LIGHT, CONTROLLABLE, CHARACTER, TRIGGER};
+    }
 }

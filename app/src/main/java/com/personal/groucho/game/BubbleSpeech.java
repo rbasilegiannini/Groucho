@@ -1,8 +1,5 @@
 package com.personal.groucho.game;
 
-import static com.personal.groucho.game.constants.System.characterDimX;
-import static com.personal.groucho.game.constants.System.characterScaleFactor;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;

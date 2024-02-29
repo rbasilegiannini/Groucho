@@ -9,7 +9,9 @@ public class CharacterComponent extends Component {
     @Override
     public ComponentType type() {return ComponentType.CHARACTER;}
 
-    public CharacterComponent(CharacterProp properties) {
+    public CharacterComponent() {}
+
+    public void init(CharacterProp properties) {
         this.properties = properties;
     }
 }

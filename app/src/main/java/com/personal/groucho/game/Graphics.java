@@ -12,7 +12,7 @@ import static com.personal.groucho.game.gameobjects.Status.DEAD;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import com.personal.groucho.game.gameobjects.GameObject;
+import com.personal.groucho.game.gameobjects.Entity;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.DrawableComponent;
 import com.personal.groucho.game.gameobjects.components.LightComponent;
@@ -32,25 +32,26 @@ class DrawableComparator implements Comparator<DrawableComponent> {
 
     @Override
     public int compare(DrawableComponent obj1, DrawableComponent obj2) {
-        GameObject go1 = (GameObject) obj1.getOwner();
-        GameObject go2 = (GameObject) obj2.getOwner();
-        if (go1.role == FLOOR) return -1;
-        if (go1.role == ENEMY || go1.role == PLAYER) {
-            if (((AliveComponent)(go1.getComponent(ALIVE))).currentStatus == DEAD){
+        Entity e1 = obj1.getOwner();
+        Entity e2 = obj2.getOwner();
+
+        if (e1.role == FLOOR) return -1;
+        if (e1.role == ENEMY || e1.role == PLAYER) {
+            if (((AliveComponent)(e1.getComponent(ALIVE))).currentStatus == DEAD){
                 return -1;
             }
         }
 
-        if (go2.role == FLOOR) return 1;
-        if (go2.role == ENEMY || go2.role == PLAYER) {
-            if (((AliveComponent)(go2.getComponent(ALIVE))).currentStatus == DEAD){
+        if (e2.role == FLOOR) return 1;
+        if (e2.role == ENEMY || e2.role == PLAYER) {
+            if (((AliveComponent)(e2.getComponent(ALIVE))).currentStatus == DEAD){
                 return 1;
             }
         }
 
         return Integer.compare(
-                ((PositionComponent) go1.getComponent(POSITION)).posY,
-                ((PositionComponent) go2.getComponent(POSITION)).posY);
+                ((PositionComponent) e1.getComponent(POSITION)).posY,
+                ((PositionComponent) e2.getComponent(POSITION)).posY);
     }
 }
 
@@ -91,13 +92,13 @@ public class Graphics {
     }
 
     private void drawGameObjects() {
-        gameWorld.goHandler.drawComponents.sort(DrawableComparator.getInstance());
+        ComponentHandler.getInstance(gameWorld).drawComps.sort(DrawableComparator.getInstance());
 
-        for (DrawableComponent drawComponent : gameWorld.goHandler.drawComponents) {
-            drawComponent.draw(canvas);
+        for (DrawableComponent drawComp : ComponentHandler.getInstance(gameWorld).drawComps) {
+            drawComp.draw(canvas);
         }
 
-        for (LightComponent lightComponent : gameWorld.goHandler.lightComponents) {
+        for (LightComponent lightComponent : ComponentHandler.getInstance(gameWorld).lightComps) {
             lightComponent.draw(canvas);
         }
     }

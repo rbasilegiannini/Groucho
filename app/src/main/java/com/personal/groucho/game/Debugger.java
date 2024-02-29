@@ -53,7 +53,7 @@ public class Debugger {
     public void draw(Canvas canvas) {
         GameGrid.getInstance(gameWorld).drawDebugGrid(canvas, gameGridPaint);
 
-        for (AIComponent aiComponent : gameWorld.goHandler.aiComponents) {
+        for (AIComponent aiComponent : ComponentHandler.getInstance(gameWorld).aiComps) {
             aiComponent.getSight().drawDebugSight(canvas, sightPaint);
             aiComponent.drawDebugPath(canvas, pathPaint);
         }
@@ -63,13 +63,13 @@ public class Debugger {
     }
 
     private void drawPositions(Canvas canvas) {
-        for (PositionComponent posComponent : gameWorld.goHandler.posComponents) {
+        for (PositionComponent posComponent : ComponentHandler.getInstance(gameWorld).posComps) {
             canvas.drawCircle(posComponent.posX, posComponent.posY, 20, positionPaint);
         }
     }
 
     private void drawColliders(Canvas canvas){
-        for (PhysicsComponent phyComponent : gameWorld.goHandler.phyComponents) {
+        for (PhysicsComponent phyComponent : ComponentHandler.getInstance(gameWorld).phyComps) {
             float shapeCenterX = toBufferXLength(phyComponent.fixtureCenterX);
             float shapeCenterY = toBufferYLength(phyComponent.fixtureCenterY);
 

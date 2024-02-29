@@ -1,6 +1,6 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.constants.System.characterDimY;
+import static com.personal.groucho.game.constants.System.charDimY;
 import static com.personal.groucho.game.constants.Environment.brightness;
 import static com.personal.groucho.game.constants.Environment.minLightIntensity;
 import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
@@ -20,21 +20,24 @@ import com.personal.groucho.game.gameobjects.ComponentType;
 public class LightComponent extends Component {
     private PositionComponent posComp = null;
     private final Paint maskPaint;
-    private final Bitmap defaultBitmap;
-    private final Canvas maskCanvas ;
+    private Bitmap defaultBitmap;
+    private Canvas maskCanvas ;
     private final PorterDuffXfermode porterCLEAR;
     private float intensity = minLightIntensity;
-    private final float centerX, centerY;
+    private float centerX;
+    private float centerY;
 
     @Override
     public ComponentType type() {
         return LIGHT;
     }
 
-    public LightComponent(Bitmap buffer) {
+    public LightComponent(){
         this.maskPaint = new Paint();
         porterCLEAR = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+    }
 
+    public void init(Bitmap buffer) {
         defaultBitmap = Bitmap.createBitmap(
                 buffer.getWidth()+100,
                 buffer.getHeight()+100,
@@ -43,7 +46,13 @@ public class LightComponent extends Component {
 
         maskCanvas = new Canvas(defaultBitmap);
         centerX = (float)defaultBitmap.getWidth() / 2;
-        centerY = (float)(defaultBitmap.getHeight() / 2) - characterDimY;
+        centerY = (float)(defaultBitmap.getHeight() / 2) - charDimY;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.posComp = null;
     }
 
     @SuppressLint("NewApi")

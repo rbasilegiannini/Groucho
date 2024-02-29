@@ -24,6 +24,16 @@ import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
+import com.personal.groucho.game.gameobjects.components.AliveComponent;
+import com.personal.groucho.game.gameobjects.components.BoxDrawableComponent;
+import com.personal.groucho.game.gameobjects.components.CharacterComponent;
+import com.personal.groucho.game.gameobjects.components.ControllableComponent;
+import com.personal.groucho.game.gameobjects.components.LightComponent;
+import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
+import com.personal.groucho.game.gameobjects.components.PositionComponent;
+import com.personal.groucho.game.gameobjects.components.SpriteComponent;
+import com.personal.groucho.game.gameobjects.components.TextureDrawableComponent;
+import com.personal.groucho.game.gameobjects.components.TriggerComponent;
 import com.personal.groucho.game.levels.first.GrouchoRoom;
 import com.personal.groucho.game.levels.Level;
 
@@ -46,7 +56,17 @@ public class GameWorld {
     public final ObjectsPool<GameObject> objectsPool = new ObjectsPool<>(100, GameObject.class);
     public final ObjectsPool<Collision> collisionsPool = new ObjectsPool<>(30, Collision.class);
     public final ObjectsPool<Node> nodesPool = new ObjectsPool<>(200, Node.class);
-
+    public final ObjectsPool<PositionComponent> posCompPool = new ObjectsPool<>(100, PositionComponent.class);
+    public final ObjectsPool<PhysicsComponent> phyCompPool = new ObjectsPool<>(100, PhysicsComponent.class);
+    public final ObjectsPool<AIComponent> aiCompPool = new ObjectsPool<>(10, AIComponent.class);
+    public final ObjectsPool<SpriteComponent> spriteCompPool = new ObjectsPool<>(100, SpriteComponent.class);
+    public final ObjectsPool<TextureDrawableComponent> textureCompPool = new ObjectsPool<>(100, TextureDrawableComponent.class);
+    public final ObjectsPool<BoxDrawableComponent> boxCompPool = new ObjectsPool<>(100, BoxDrawableComponent.class);
+    public final ObjectsPool<AliveComponent> aliveCompPool = new ObjectsPool<>(100, AliveComponent.class);
+    public final ObjectsPool<CharacterComponent> charCompPool = new ObjectsPool<>(100, CharacterComponent.class);
+    public final ObjectsPool<LightComponent> lightCompPool = new ObjectsPool<>(1, LightComponent.class);
+    public final ObjectsPool<ControllableComponent> ctrlCompPool = new ObjectsPool<>(1, ControllableComponent.class);
+    public final ObjectsPool<TriggerComponent> triggerCompPool = new ObjectsPool<>(30, TriggerComponent.class);
 
     public GameWorld(Box physicalSize, Box screenSize, MainActivity newActivity) {
         GameWorld.physicalSize = physicalSize;
@@ -54,6 +74,7 @@ public class GameWorld {
         currentView = physicalSize;
         activity = newActivity;
 
+        player = new Player();  // TODO: Singleton?
         physics = Physics.getInstance(this);
         graphics = Graphics.getInstance(this);
         goHandler = GameObjectHandler.getInstance(this);
@@ -64,22 +85,22 @@ public class GameWorld {
         initEnvironment();
 
         currentLevel = level;
-        setPlayer();
+        initPlayer();
         currentLevel.init();
     }
 
     public void tryAgain(Level level) {
         initEnvironment();
         GrouchoRoom.firstTime = true;
-        nodesPool.clear();
-        GameGrid.getInstance(this).reset();
+        GameGrid.getInstance(this).releasePool();
 
         currentLevel = level;
-        setPlayer();
+        initPlayer();
         currentLevel.init();
     }
 
     private void initEnvironment() {
+        clearPools();
         graphics.reset();
         controller = new Controller((float)bufferWidth/2, (float)bufferHeight /2);
         goHandler.init();
@@ -89,11 +110,11 @@ public class GameWorld {
         this.touchHandler = touchHandler;
     }
 
-    public void setPlayer() {
+    public void initPlayer() {
         this.gameOver = false;
         GameObject playerGO = GameObjectFactory.
                 makePlayer(bufferWidth /2, bufferHeight/2, controller, this);
-        player = new Player(playerGO, this);
+        player.init(playerGO, this);
         goHandler.addGameObject(playerGO);
     }
 
@@ -122,7 +143,7 @@ public class GameWorld {
                 player.update(graphics.canvas, controller);
             }
 
-            for (AIComponent aiComponent : goHandler.aiComponents) {
+            for (AIComponent aiComponent : ComponentHandler.getInstance(this).aiComps) {
                 aiComponent.update(this);
             }
         }
@@ -151,9 +172,9 @@ public class GameWorld {
             GameOver();
         }
         else {
-            goHandler.removeComponent(gameObject, AI);
-            goHandler.removeComponent(gameObject, PHYSICS);
-            goHandler.removeComponent(gameObject, LIGHT);
+            ComponentHandler.getInstance(this).removeComponent(gameObject, AI);
+            ComponentHandler.getInstance(this).removeComponent(gameObject, PHYSICS);
+            ComponentHandler.getInstance(this).removeComponent(gameObject, LIGHT);
         }
     }
 
@@ -190,11 +211,12 @@ public class GameWorld {
     public void pause() {pause = true;}
 
     public void GameOver() {
+        player.GameOver();
         this.gameOver = true;
 
-        goHandler.removeComponent(player.gameObject, CONTROLLABLE);
-        goHandler.removeComponent(player.gameObject, PHYSICS);
-        goHandler.removeComponent(player.gameObject, LIGHT);
+        ComponentHandler.getInstance(this).removeComponent(player.gameObject, CONTROLLABLE);
+        ComponentHandler.getInstance(this).removeComponent(player.gameObject, PHYSICS);
+        ComponentHandler.getInstance(this).removeComponent(player.gameObject, LIGHT);
     }
 
     protected void finalize(){
@@ -208,11 +230,13 @@ public class GameWorld {
         graphics.finalize();
         goHandler.finalize();
 
-        objectsPool.clear();
-        nodesPool.clear();
-        collisionsPool.clear();
+        clearPools();
 
         activity.finish();
+    }
+
+    protected void clearPools() {
+        goHandler.clear();
     }
 
     public void hasToTalk() {

@@ -17,7 +17,7 @@ public class PatrolActions implements Actions {
     @Override
     public void entryAction() {
         currentSteps = 0;
-        aiComp.updateSprite(aiComp.character.properties.sheetWalk);
+        aiComp.updateSprite(aiComp.charComp.properties.sheetWalk);
         aiComp.posComp.setOrientation(aiComp.posComp.orientation.getOpposite());
     }
 

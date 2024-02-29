@@ -37,7 +37,6 @@ public class Idle extends AIState {
     @Override
     public List<Action> activeActions() {
         actions.clear();
-//        actions.add(() -> owner.activeIdleAction());
         actions.add(() -> owner.idleActions.activeAction());
 
         return actions;
@@ -46,7 +45,6 @@ public class Idle extends AIState {
     @Override
     public List<Action> exitActions() {
         actions.clear();
-//        actions.add(() -> owner.exitIdleAction());
         actions.add(() -> owner.idleActions.exitAction());
 
         return actions;

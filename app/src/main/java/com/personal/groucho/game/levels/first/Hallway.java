@@ -1,7 +1,7 @@
 package com.personal.groucho.game.levels.first;
 
+import static com.personal.groucho.game.CharacterFactory.getSkeleton;
 import static com.personal.groucho.game.assets.Sounds.door;
-import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
@@ -79,6 +79,6 @@ public class Hallway extends Room {
                             level.goToGrouchoRoom();
                         }));
 
-        gameObjects.add(GameObjectFactory.makeEnemy(800, 100, DOWN, skeletonIdle, StateName.IDLE,gameWorld));
+        gameObjects.add(GameObjectFactory.makeEnemy(800, 100, DOWN, getSkeleton(), StateName.IDLE,gameWorld));
     }
 }

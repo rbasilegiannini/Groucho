@@ -14,10 +14,10 @@ public class IdleActions implements Actions {
     @Override
     public void entryAction() {
         if (!aiComp.currentPath.isEmpty() || !aiComp.isNodeReached) {
-            aiComp.updateSprite(aiComp.character.properties.sheetWalk);
+            aiComp.updateSprite(aiComp.charComp.properties.sheetWalk);
         }
         else {
-            aiComp.updateSprite(aiComp.character.properties.sheetIdle);
+            aiComp.updateSprite(aiComp.charComp.properties.sheetIdle);
         }
     }
 
@@ -28,7 +28,7 @@ public class IdleActions implements Actions {
         else if (!isIdle){
             aiComp.posComp.setOrientation(aiComp.originalOrientation);
             aiComp.sight.setNewOrientation(aiComp.originalOrientation);
-            aiComp.updateSprite(aiComp.character.properties.sheetIdle);
+            aiComp.updateSprite(aiComp.charComp.properties.sheetIdle);
             isIdle = true;
         }
     }

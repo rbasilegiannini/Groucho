@@ -14,15 +14,18 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class AStar {
-    private final GameWorld gameWorld;
+    private GameWorld gameWorld;
     private final PriorityQueue<Node> openSet;
     private final SparseArray<Node> closedSet = new SparseArray<>();
     private final List<Node> neighbors = new ArrayList<>();
     private final List<Node> path = new ArrayList<>();
 
-    public AStar (GameWorld gameWorld){
-        this.gameWorld = gameWorld;
+    public AStar() {
         this.openSet = new PriorityQueue<>(Comparator.comparingInt(Node::getTotalCost));
+    }
+
+    public void init(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
     }
 
     public List<Node> findPath(Node start, Node goal) {

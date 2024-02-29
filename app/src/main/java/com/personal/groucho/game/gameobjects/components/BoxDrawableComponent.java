@@ -8,17 +8,26 @@ import android.graphics.Rect;
 
 public class BoxDrawableComponent extends DrawableComponent{
 
-    private final Paint paint;
-    private final float dimensionX;
-    private final float dimensionY;
+    private Paint paint;
+    private float dimX;
+    private float dimY;
     private PositionComponent posComp = null;
     private final Rect surface;
 
-    public BoxDrawableComponent(float dimensionX, float dimensionY, Paint paint) {
-        this.dimensionX = dimensionX;
-        this.dimensionY = dimensionY;
-        this.paint = paint;
+    public BoxDrawableComponent(){
         this.surface = new Rect();
+    }
+
+    public void init(float dimX, float dimY, Paint paint) {
+        this.dimX = dimX;
+        this.dimY = dimY;
+        this.paint = paint;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.posComp = null;
     }
 
     @Override
@@ -26,10 +35,10 @@ public class BoxDrawableComponent extends DrawableComponent{
         if (posComp == null) {
             posComp = (PositionComponent) owner.getComponent(POSITION);
 
-            surface.left = (int) (posComp.posX - dimensionX/2);
-            surface.top = (int) (posComp.posY - dimensionY/2);
-            surface.right = (int) (surface.left + dimensionX);
-            surface.bottom = (int) (surface.top + dimensionY);
+            surface.left = (int) (posComp.posX - dimX /2);
+            surface.top = (int) (posComp.posY - dimY /2);
+            surface.right = (int) (surface.left + dimX);
+            surface.bottom = (int) (surface.top + dimY);
         }
 
         canvas.drawRect(surface, paint);

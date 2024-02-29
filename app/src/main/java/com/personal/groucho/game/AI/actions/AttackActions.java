@@ -29,7 +29,7 @@ public class AttackActions implements Actions {
     public void entryAction() {
         lastHitMillis = System.currentTimeMillis();
         aiComp.sight.setNewOrientation(aiComp.posComp.orientation);
-        aiComp.updateSprite(aiComp.character.properties.sheetHurt);
+        aiComp.updateSprite(aiComp.charComp.properties.sheetHurt);
     }
 
     @Override
@@ -50,8 +50,8 @@ public class AttackActions implements Actions {
     }
 
     private long getDelayHitSpriteMillis() {
-        return aiComp.character.properties.sheetHurt.getDelay(0) *
-                        aiComp.character.properties.sheetHurt.getLength(0);
+        return aiComp.charComp.properties.sheetHurt.getDelay(0) *
+                        aiComp.charComp.properties.sheetHurt.getLength(0);
     }
 
     private void comeBack() {
@@ -76,7 +76,7 @@ public class AttackActions implements Actions {
     private void hitPlayer() {
         aiComp.updateDirection(
                 directionBetweenGO(aiComp.gameWorld.player.gameObject, (GameObject) aiComp.getOwner()));
-        enemyHitPlayerEvent(playerAliveComp, aiComp.character.properties.power);
+        enemyHitPlayerEvent(playerAliveComp, aiComp.charComp.properties.power);
         lastHitMillis = System.currentTimeMillis();
     }
 

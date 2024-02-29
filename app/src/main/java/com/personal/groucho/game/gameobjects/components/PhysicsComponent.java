@@ -17,17 +17,30 @@ import com.personal.groucho.game.gameobjects.ComponentType;
 
 public class PhysicsComponent extends Component {
 
-    private final World world;
+    private World world;
     private PositionComponent posComp = null;
     public Body body;
     public float density, originalPosX, originalPosY;
-    public final float dimX, dimY;
+    public float dimX;
+    public float dimY;
     public float fixtureCenterX, fixtureCenterY;
 
-    public PhysicsComponent(World world, float dimX, float dimY){
+    public PhysicsComponent(){
+        world = null;
+        dimX = 0;
+        dimY = 0;
+    }
+
+    public void init(World world, float dimX, float dimY){
         this.world = world;
         this.dimX = dimX;
         this.dimY = dimY;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.posComp = null;
     }
 
     @Override
@@ -61,10 +74,6 @@ public class PhysicsComponent extends Component {
 
         posComp.setPosX((int) fromMetersToBufferX(body.getPositionX()));
         posComp.setPosY((int) fromMetersToBufferY(body.getPositionY()));
-    }
-
-    public void setBullet(boolean isBullet) {
-        body.setBullet(isBullet);
     }
 
     public void setPos(int posX, int posY) {
