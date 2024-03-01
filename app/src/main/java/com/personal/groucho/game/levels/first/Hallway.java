@@ -144,17 +144,6 @@ public class Hallway extends Room {
     }
 
     private void makeTriggers() {
-        if (firstTime) {
-            grouchoTrigger = GameObjectFactory.
-                    makeTrigger((int) (2.5*cellSize), (int) (2*cellSize), 64, 128,
-                            gameWorld.physics.world, () -> {
-                                String sentence = gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_init);
-                                grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                                removeTrigger(grouchoTrigger);
-                            });
-            gameObjects.add(grouchoTrigger);
-        }
-
         // Door to GrouchoRoom
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(

@@ -2,11 +2,11 @@
     <string name="app_name">Groucho</string>
 
     <!-- Dialog first level -->
-    <string name="groucho_level1_bedroom_talk_init">mmm… \n Forse sto dormendo…</string>
+    <string name="groucho_level1_bedroom_talk_init1">mmm… \n Forse sto dormendo…</string>
+    <string name="groucho_level1_bedroom_talk_init2">Capo! Dove sei?!</string>
     <string name="groucho_level1_bedroom_talk_photo">Bello.</string>
     <string name="groucho_level1_bedroom_talk_wardrobe">Al momento sono già vestito.</string>
 
-    <string name="groucho_level1_hallway_talk_init">Capo! Dove sei?!</string>
     <string name="groucho_level1_hallway_talk_window">È buio.</string>
     <string name="groucho_level1_hallway_talk_library">Sto già dormendo.</string>
 

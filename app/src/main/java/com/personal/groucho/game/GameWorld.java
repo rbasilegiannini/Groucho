@@ -95,14 +95,21 @@ public class GameWorld {
     public synchronized void processInputs(){
         if (!pause) {
             for (Input.TouchEvent event : touchHandler.getTouchEvents()) {
-                if (!gameOver && !grouchoIsTalking) {
+                processEvent(event);
+            }
+        }
+    }
+
+    private void processEvent(Input.TouchEvent event) {
+        if (!gameOver) {
+            if (!grouchoIsTalking) {
+                if (currentLevel.eventChain.isEmpty())
                     controller.consumeTouchEvent(event);
-                }
-                else {
-                    if (grouchoIsTalking) {
-                        bubbleSpeech.consumeTouchEvent(event);
-                    }
-                }
+                else
+                    currentLevel.eventChain.consumeEvent();
+            }
+            else {
+                bubbleSpeech.consumeTouchEvent(event);
             }
         }
     }

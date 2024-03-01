@@ -5,6 +5,7 @@ import static com.personal.groucho.game.assets.Textures.dylanBubble;
 import static com.personal.groucho.game.assets.Textures.grouchoBubble;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
+import static com.personal.groucho.game.controller.Orientation.UP;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Bitmap;
@@ -85,20 +86,13 @@ public class GrouchoRoom extends Room {
             grouchoTrigger = GameObjectFactory.
                     makeTrigger(500, 550, 64, 128,
                             gameWorld.physics.world, () -> {
-                                String sentence = gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init);
-                                grouchoTalk(sentence, 500, 500);
+                                grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init1), 500, 500);
+                                level.eventChain.addAction(()->gameWorld.player.setOrientation(UP));
+                                level.eventChain.addAction(()->dylanTalk( gameWorld.activity.getString(R.string.dylan_level1_bedroom_talk_init), 600, 500));
+                                level.eventChain.addAction(()->grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init2), 500, 500));
                                 removeTrigger(grouchoTrigger);
                             });
             gameObjects.add(grouchoTrigger);
-            // Dylan Talk
-            dylanTrigger = GameObjectFactory.
-                    makeTrigger(400, 100, 512, 32,
-                            gameWorld.physics.world, () -> {
-                                String sentence = gameWorld.activity.getString(R.string.dylan_level1_bedroom_talk_init);
-                                dylanTalk(sentence, 600, 250);
-                                removeTrigger(dylanTrigger);
-                            });
-            gameObjects.add(dylanTrigger);
         }
 
         // Groucho's photo
