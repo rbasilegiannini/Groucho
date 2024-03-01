@@ -7,10 +7,13 @@ import com.personal.groucho.game.levels.Room;
 public class FirstLevel extends Level {
     private final Room grouchoRoom;
     private final Room hallway;
+    private final Room hall;
+    protected boolean fromGrouchoRoom, fromHall;
 
     public FirstLevel(GameWorld gameWorld){
         grouchoRoom = new GrouchoRoom(gameWorld, this);
         hallway = new Hallway(gameWorld, this);
+        hall = new Hall(gameWorld, this);
     }
 
     public void init(){
@@ -18,15 +21,21 @@ public class FirstLevel extends Level {
         activeRoom.init();
     }
 
+    public void goToHall(){
+        changeRoom(hall);
+    }
+
     public void goToHallway() {
-        activeRoom.releaseRoom();
-        activeRoom = hallway;
-        activeRoom.init();
+        changeRoom(hallway);
     }
 
     public void goToGrouchoRoom() {
+        changeRoom(grouchoRoom);
+    }
+
+    private void changeRoom(Room hall) {
         activeRoom.releaseRoom();
-        activeRoom = grouchoRoom;
+        activeRoom = hall;
         activeRoom.init();
     }
 }

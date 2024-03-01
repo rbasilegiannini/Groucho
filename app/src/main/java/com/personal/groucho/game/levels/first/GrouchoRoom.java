@@ -116,7 +116,7 @@ public class GrouchoRoom extends Room {
                             String sentence = gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_wardrobe);
                             grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
                         }));
-        // Door
+        // Door to hallway
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
                         2*cellSize,
@@ -132,11 +132,11 @@ public class GrouchoRoom extends Room {
                         gameWorld.physics.world,
                         () -> {
                             door.play(1f);
+                            level.fromHall = false;
+                            level.fromGrouchoRoom = true;
                             level.goToHallway();
                         }));
     }
-
-    private void removeTrigger(GameObject trigger) { gameWorld.goHandler.removeGameObject(trigger);}
 
 
     private void makeFurniture() {
@@ -162,7 +162,6 @@ public class GrouchoRoom extends Room {
                         128,
                         Textures.grouchoFrame
                 )));
-
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
                         (int) (4.5*cellSize),
@@ -171,7 +170,6 @@ public class GrouchoRoom extends Room {
                         350,
                         Textures.grouchoWardrobe
                 )));
-
         gameObjects.add((GameObjectFactory.
                 makeFloorDecoration(
                         2*cellSize,
@@ -179,6 +177,22 @@ public class GrouchoRoom extends Room {
                         512,
                         380,
                         Textures.redCarpet
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeWallDecoration(
+                        (int) (1.5*cellSize),
+                        (int) (6.0*cellSize),
+                        188,
+                        200,
+                        Textures.windowInternal
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeWallDecoration(
+                        (int) (4.5*cellSize),
+                        (int) (6.0*cellSize),
+                        188,
+                        200,
+                        Textures.windowInternal
                 )));
     }
 
