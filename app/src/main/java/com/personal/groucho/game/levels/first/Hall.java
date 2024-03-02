@@ -1,12 +1,12 @@
 package com.personal.groucho.game.levels.first;
 
+import static com.personal.groucho.game.CharacterFactory.getZombie;
 import static com.personal.groucho.game.assets.Sounds.door;
-import static com.personal.groucho.game.assets.Textures.grouchoBubble;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
-import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.Orientation.UP;
+import static com.personal.groucho.game.controller.states.StateName.IDLE;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -15,13 +15,11 @@ import android.graphics.Shader;
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
-import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.levels.Room;
 
 public class Hall extends Room {
     public static boolean firstTime = true;
-    private GameObject grouchoTrigger;
     private final FirstLevel level;
     private int playerPosX, playerPosY;
 
@@ -45,20 +43,26 @@ public class Hall extends Room {
         if (firstTime) {
             setControllerVisibility(false);
             grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hall_talk_init1), playerPosX, playerPosY);
-            level.eventChain.addAction(()->gameWorld.player.setOrientation(DOWN));
-            level.eventChain.addAction(()->grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hall_talk_init2), playerPosX, playerPosY));
+            level.eventChain.addAction(()-> {
+                gameWorld.player.setOrientation(DOWN);
+                grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hall_talk_init2), playerPosX, playerPosY);
+            });
             level.eventChain.addAction(()->setControllerVisibility(true));
         }
 
         makeFurniture();
         makeTriggers();
         makeDecorations();
+        makeEnemies();
 
         allocateRoom();
 
         firstTime = false;
     }
 
+    private void makeEnemies(){
+        gameObjects.add(GameObjectFactory.makeEnemy(500, 500, UP, getZombie(), IDLE,gameWorld));
+    }
     private void makeDecorations() {
 
     }

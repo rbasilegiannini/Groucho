@@ -17,10 +17,9 @@ public class Spritesheets {
     public static Spritesheet grouchoDoor;
     public static Spritesheet grouchoDeath;
 
-    public static Spritesheet skeletonIdle;
-    public static Spritesheet skeletonWalk;
-    public static Spritesheet skeletonHurt;
-    public static Spritesheet skeletonDeath;
+    public static Spritesheet skeletonIdle, skeletonWalk, skeletonHurt, skeletonDeath;
+    public static Spritesheet zombieIdle, zombieWalk, zombieHurt, zombieDeath;
+
 
     public static int directions = 4;
 
@@ -37,6 +36,11 @@ public class Spritesheets {
         skeletonWalk = loadAnimation(res, R.drawable.skeleton_walk, 8, directions);
         skeletonHurt = loadAnimation(res, R.drawable.skeleton_hurt, 5, directions);
         skeletonDeath = loadAnimation(res, R.drawable.skeleton_death, 1, 1);
+
+        zombieIdle = loadAnimation(res, R.drawable.zombie_idle, 1, directions);
+        zombieWalk = loadAnimation(res, R.drawable.zombie_walk, 8, directions);
+        zombieHurt = loadAnimation(res, R.drawable.zombie_hurt, 5, directions);
+        zombieDeath = loadAnimation(res, R.drawable.zombie_death, 1, 1);
     }
 
     private static Spritesheet loadAnimation(Resources res, int idDraw, int frames, int animations) {

@@ -10,12 +10,19 @@ import static com.personal.groucho.game.assets.Spritesheets.skeletonDeath;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonHurt;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;
+import static com.personal.groucho.game.assets.Spritesheets.zombieDeath;
+import static com.personal.groucho.game.assets.Spritesheets.zombieHurt;
+import static com.personal.groucho.game.assets.Spritesheets.zombieIdle;
+import static com.personal.groucho.game.assets.Spritesheets.zombieWalk;
 import static com.personal.groucho.game.constants.Character.grouchoHealth;
 import static com.personal.groucho.game.constants.Character.grouchoPower;
 import static com.personal.groucho.game.constants.Character.grouchoSpeed;
 import static com.personal.groucho.game.constants.Character.skeletonHealth;
 import static com.personal.groucho.game.constants.Character.skeletonPower;
 import static com.personal.groucho.game.constants.Character.skeletonSpeed;
+import static com.personal.groucho.game.constants.Character.zombieHealth;
+import static com.personal.groucho.game.constants.Character.zombiePower;
+import static com.personal.groucho.game.constants.Character.zombieSpeed;
 
 public class CharacterFactory {
     public static class CharacterProp {
@@ -30,20 +37,6 @@ public class CharacterFactory {
         public Spritesheet sheetDoor = null;
         public Spritesheet sheetHurt = null;
         public Spritesheet sheetDeath = null;
-    }
-
-    public static CharacterProp getSkeleton() {
-        CharacterProp skeleton = new CharacterProp();
-
-        skeleton.health = skeletonHealth;
-        skeleton.speed = skeletonSpeed;
-        skeleton.power = skeletonPower;
-        skeleton.sheetIdle = skeletonIdle;
-        skeleton.sheetWalk = skeletonWalk;
-        skeleton.sheetHurt = skeletonHurt;
-        skeleton.sheetDeath = skeletonDeath;
-
-        return skeleton;
     }
 
     public static CharacterProp getGroucho(){
@@ -62,4 +55,31 @@ public class CharacterFactory {
         return groucho;
     }
 
+    public static CharacterProp getZombie() {
+        CharacterProp zombie = new CharacterProp();
+
+        zombie.health = zombieHealth;
+        zombie.speed = zombieSpeed;
+        zombie.power = zombiePower;
+        zombie.sheetIdle = zombieIdle;
+        zombie.sheetWalk = zombieWalk;
+        zombie.sheetHurt = zombieHurt;
+        zombie.sheetDeath = zombieDeath;
+
+        return zombie;
+    }
+
+    public static CharacterProp getSkeleton() {
+        CharacterProp skeleton = new CharacterProp();
+
+        skeleton.health = skeletonHealth;
+        skeleton.speed = skeletonSpeed;
+        skeleton.power = skeletonPower;
+        skeleton.sheetIdle = skeletonIdle;
+        skeleton.sheetWalk = skeletonWalk;
+        skeleton.sheetHurt = skeletonHurt;
+        skeleton.sheetDeath = skeletonDeath;
+
+        return skeleton;
+    }
 }

@@ -1,8 +1,6 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
-import static com.personal.groucho.game.assets.Textures.grouchoBubble;
-import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
@@ -27,7 +25,6 @@ import com.personal.groucho.game.levels.Room;
 public class Hallway extends Room {
     public static boolean firstTime = true;
     private final FirstLevel level;
-    private GameObject grouchoTrigger;
     private int playerPosX, playerPosY;
     private Orientation playerOrientation;
 
@@ -69,8 +66,8 @@ public class Hallway extends Room {
                 gameWorld.controller.bulb.setVisibility(true);
                 grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_init2), playerPosX, playerPosY);
             });
-            level.eventChain.addAction(()->gameWorld.controller.handleLightTouchDown());
             level.eventChain.addAction(()-> {
+                gameWorld.controller.handleLightTouchDown();
                 gameWorld.controller.dpad.setVisibility(true);
                 gameWorld.controller.pause.setVisibility(true);
             });

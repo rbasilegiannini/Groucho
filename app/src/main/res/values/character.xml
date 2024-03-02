@@ -2,11 +2,15 @@
 <resources>
     <dimen name="groucho_speed">15f</dimen>
     <integer name="groucho_health">100</integer>
-    <integer name="groucho_power">30</integer>
+    <integer name="groucho_power">15</integer>
 
     <dimen name="skeleton_speed">5f</dimen>
     <integer name="skeleton_health">100</integer>
     <integer name="skeleton_power">30</integer>
+
+    <dimen name="zombie_speed">2f</dimen>
+    <integer name="zombie_health">100</integer>
+    <integer name="zombie_power">30</integer>
 
     <integer name="medical_kit">20</integer>
 

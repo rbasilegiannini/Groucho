@@ -7,12 +7,12 @@ import com.personal.groucho.R;
 public class Character {
 
     public static float grouchoSpeed;
+    public static int grouchoHealth, grouchoPower;
     public static float skeletonSpeed;
-    public static int grouchoHealth;
-    public static int skeletonHealth;
+    public static int skeletonHealth, skeletonPower;
+    public static float zombieSpeed;
+    public static int zombieHealth, zombiePower;
     public static int medicalKit;
-    public static int grouchoPower;
-    public static int skeletonPower;
     public static int hearingRange;
     public static int hearingRangeSqr;
     public static float enemyFovInRad;
@@ -25,6 +25,10 @@ public class Character {
         skeletonSpeed = context.getResources().getFloat(R.dimen.skeleton_speed);
         skeletonHealth = context.getResources().getInteger(R.integer.skeleton_health);
         skeletonPower = context.getResources().getInteger(R.integer.skeleton_power);
+
+        zombieSpeed = context.getResources().getFloat(R.dimen.zombie_speed);
+        zombieHealth = context.getResources().getInteger(R.integer.zombie_health);
+        zombiePower = context.getResources().getInteger(R.integer.zombie_power);
 
         medicalKit = context.getResources().getInteger(R.integer.medical_kit);
 

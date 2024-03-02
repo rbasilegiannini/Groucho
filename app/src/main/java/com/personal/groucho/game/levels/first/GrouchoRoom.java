@@ -1,8 +1,6 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
-import static com.personal.groucho.game.assets.Textures.dylanBubble;
-import static com.personal.groucho.game.assets.Textures.grouchoBubble;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.UP;
@@ -23,7 +21,6 @@ import com.personal.groucho.game.levels.Room;
 
 public class GrouchoRoom extends Room {
     public static boolean firstTime = true;
-    private GameObject grouchoTrigger;
     private final FirstLevel level;
     private int playerPosX, playerPosY, tableX, tableY, bedX, bedY;
     private PositionComponent tablePosComp, bedPosComp;
@@ -52,8 +49,10 @@ public class GrouchoRoom extends Room {
             setControllerVisibility(false);
 
             grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init1), playerPosX, playerPosY);
-            level.eventChain.addAction(()->gameWorld.player.setOrientation(UP));
-            level.eventChain.addAction(()->dylanTalk( gameWorld.activity.getString(R.string.dylan_level1_bedroom_talk_init), 600, 500));
+            level.eventChain.addAction(()-> {
+                gameWorld.player.setOrientation(UP);
+                dylanTalk( gameWorld.activity.getString(R.string.dylan_level1_bedroom_talk_init), 600, 500);
+            });
             level.eventChain.addAction(()->grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init2), playerPosX, playerPosY));
             level.eventChain.addAction(()->{
                 gameWorld.controller.dpad.setVisibility(true);
