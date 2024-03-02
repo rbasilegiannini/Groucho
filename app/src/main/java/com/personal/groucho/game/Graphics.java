@@ -82,7 +82,8 @@ public class Graphics {
         canvas.drawARGB(255,0,0,0);
         gameWorld.currentLevel.draw(canvas);
         drawGameObjects();
-        if (!gameWorld.gameOver && !gameWorld.grouchoIsTalking) {
+
+        if (!gameWorld.gameOver) {
             gameWorld.controller.draw(canvas);
         }
 

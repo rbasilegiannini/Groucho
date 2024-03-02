@@ -3,6 +3,7 @@ package com.personal.groucho.game.levels.first;
 import static com.personal.groucho.game.assets.Sounds.door;
 import static com.personal.groucho.game.assets.Textures.grouchoBubble;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
+import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
 import static com.personal.groucho.game.controller.Orientation.UP;
@@ -46,12 +47,6 @@ public class Hallway extends Room {
     @Override
     public void init() {
         super.init();
-
-        if (firstTime) {
-            tableX = 6*cellSize;
-            tableY = (int) (0.75*cellSize);
-        }
-
         if (level.fromGrouchoRoom) {
             playerPosX = (int) (2.5*cellSize);
             playerPosY = (int) (1.7*cellSize);
@@ -61,6 +56,24 @@ public class Hallway extends Room {
             playerPosX = (int) (10.5*cellSize);
             playerPosY = cellSize;
             playerOrientation = DOWN;
+        }
+
+        if (firstTime) {
+            tableX = 6*cellSize;
+            tableY = (int) (0.75*cellSize);
+
+            setControllerVisibility(false);
+
+            grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_init1), playerPosX, playerPosY);
+            level.eventChain.addAction(()-> {
+                gameWorld.controller.bulb.setVisibility(true);
+                grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_init2), playerPosX, playerPosY);
+            });
+            level.eventChain.addAction(()->gameWorld.controller.handleLightTouchDown());
+            level.eventChain.addAction(()-> {
+                gameWorld.controller.dpad.setVisibility(true);
+                gameWorld.controller.pause.setVisibility(true);
+            });
         }
 
         makeTriggers();
@@ -79,7 +92,7 @@ public class Hallway extends Room {
         gameWorld.player.setPos(playerPosX, playerPosY);
         gameWorld.player.setOrientation(playerOrientation);
         gameWorld.player.rest();
-        setBrightness(maxBrightness);
+        setBrightness(minBrightness);
     }
 
     @Override
@@ -213,15 +226,5 @@ public class Hallway extends Room {
                             String sentence = gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_window);
                             grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
                         }));
-    }
-
-    private void grouchoTalk(String sentence, int posX, int posY) {
-        gameWorld.hasToTalk();
-        gameWorld.bubbleSpeech.setBubbleTexture(grouchoBubble);
-        gameWorld.bubbleSpeech.setPosX(posX);
-        gameWorld.bubbleSpeech.setPosY(posY);
-        gameWorld.bubbleSpeech.setLeftAlignment();
-        gameWorld.bubbleSpeech.setNormalText();
-        gameWorld.bubbleSpeech.setText(sentence);
     }
 }

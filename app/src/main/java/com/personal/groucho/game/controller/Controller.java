@@ -21,10 +21,10 @@ public class Controller implements ControllerSubject {
     private final List<ControllerObserver> controllerObservers = new ArrayList<>();
     public ControllerState currentState;
     public Orientation orientation;
-    private final DPad dpad;
-    private final Trigger trigger;
-    private final Bulb bulb;
-    private final Pause pause;
+    public final DPad dpad;
+    public final Trigger trigger;
+    public final Bulb bulb;
+    public final Pause pause;
     private float offsetX, offsetY;
     private float touchX, touchY;
     private int dpadPointer, triggerPointer;
@@ -142,7 +142,7 @@ public class Controller implements ControllerSubject {
         }
     }
 
-    private void handleLightTouchDown() {
+    public void handleLightTouchDown() {
         for (ControllerObserver observer : controllerObservers) {
             observer.switchLight(bulb.switchLight());
         }

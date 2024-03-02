@@ -41,12 +41,14 @@ public class Bulb extends Widget{
 
     @Override
     public void draw(Canvas canvas) {
-        dest.top = (int) posY;
-        dest.left = (int) posX;
-        dest.right = (int) posX + 128;
-        dest.bottom = (int) posY + 128;
+        if (visible) {
+            dest.top = (int) posY;
+            dest.left = (int) posX;
+            dest.right = (int) posX + 128;
+            dest.bottom = (int) posY + 128;
 
-        canvas.drawBitmap(lightBulb, src, dest, paint);
+            canvas.drawBitmap(lightBulb, src, dest, paint);
+        }
     }
 
     public boolean switchLight(){
@@ -63,6 +65,7 @@ public class Bulb extends Widget{
     }
 
     public boolean isOnLight(float x, float y) {
+        if(!visible) return false;
         return isInCircle(posX +64, posY +64, x, y, distanceSqr);
     }
 }

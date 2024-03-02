@@ -54,11 +54,13 @@ public class Trigger extends Widget{
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawArc(loadPosX, loadPosY, loadPosX + 200, loadPosY + 200,
-                225, 90, false, arcPaint);
-        canvas.drawArc(shootPosX, shootPosY, shootPosX + 200, shootPosY + 200,
-                45, 90, false, arcPaint);
-        canvas.drawCircle(triggerPosX, triggerPosY, (int)radius, circlePaint);
+        if (visible) {
+            canvas.drawArc(loadPosX, loadPosY, loadPosX + 200, loadPosY + 200,
+                    225, 90, false, arcPaint);
+            canvas.drawArc(shootPosX, shootPosY, shootPosX + 200, shootPosY + 200,
+                    45, 90, false, arcPaint);
+            canvas.drawCircle(triggerPosX, triggerPosY, (int) radius, circlePaint);
+        }
     }
 
     public void setPositionTrigger(float x, float y) {
@@ -81,12 +83,15 @@ public class Trigger extends Widget{
     }
 
     public boolean isOnTrigger(float x, float y) {
+        if(!visible) return false;
         return isInCircle(triggerPosX, triggerPosY, x, y, radiusSqr);
     }
     public boolean isOnLoadingArea(float x, float y) {
+        if(!visible) return false;
         return isInCircle(loadPosX +100, loadPosY +radius/2, x, y, radiusSqr);
     }
     public boolean isOnShootingArea(float x, float y) {
+        if(!visible) return false;
         return isInCircle(shootPosX +100, shootPosY+3*radius, x, y, radiusSqr);
     }
 }

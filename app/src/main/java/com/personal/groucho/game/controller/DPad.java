@@ -49,22 +49,28 @@ public class DPad extends Widget{
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawCircle(upPosX, upPosY, (int) radius, circlePaint);
-        canvas.drawCircle(downPosX, downPosY, (int) radius, circlePaint);
-        canvas.drawCircle(leftPosX, leftPosY, (int) radius, circlePaint);
-        canvas.drawCircle(rightPosX, rightPosY, (int) radius, circlePaint);
+        if (visible){
+            canvas.drawCircle(upPosX, upPosY, (int) radius, circlePaint);
+            canvas.drawCircle(downPosX, downPosY, (int) radius, circlePaint);
+            canvas.drawCircle(leftPosX, leftPosY, (int) radius, circlePaint);
+            canvas.drawCircle(rightPosX, rightPosY, (int) radius, circlePaint);
+        }
     }
 
     public boolean isOnRight(float x, float y) {
+        if (!visible) return false;
         return isInCircle(rightPosX, rightPosY, x, y, radiusSqr);
     }
     public boolean isOnLeft(float x, float y) {
+        if (!visible) return false;
         return isInCircle(leftPosX, leftPosY, x, y, radiusSqr);
     }
     public boolean isOnDown(float x, float y) {
+        if (!visible) return false;
         return isInCircle(downPosX, downPosY, x, y, radiusSqr);
     }
     public boolean isOnUp(float x, float y) {
+        if (!visible) return false;
         return isInCircle(upPosX, upPosY, x, y, radiusSqr);
     }
 }

@@ -23,7 +23,7 @@ import com.personal.groucho.game.levels.Room;
 
 public class GrouchoRoom extends Room {
     public static boolean firstTime = true;
-    private GameObject grouchoTrigger, dylanTrigger;
+    private GameObject grouchoTrigger;
     private final FirstLevel level;
     private int playerPosX, playerPosY, tableX, tableY, bedX, bedY;
     private PositionComponent tablePosComp, bedPosComp;
@@ -48,6 +48,18 @@ public class GrouchoRoom extends Room {
             tableY = (int) (3.5*cellSize);
             bedX = 5*cellSize;
             bedY = 2*cellSize;
+
+            setControllerVisibility(false);
+
+            grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init1), playerPosX, playerPosY);
+            level.eventChain.addAction(()->gameWorld.player.setOrientation(UP));
+            level.eventChain.addAction(()->dylanTalk( gameWorld.activity.getString(R.string.dylan_level1_bedroom_talk_init), 600, 500));
+            level.eventChain.addAction(()->grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init2), playerPosX, playerPosY));
+            level.eventChain.addAction(()->{
+                gameWorld.controller.dpad.setVisibility(true);
+                gameWorld.controller.pause.setVisibility(true);
+            });
+
         }
         else {
             playerPosX = 2*cellSize;
@@ -81,20 +93,6 @@ public class GrouchoRoom extends Room {
     }
 
     private void makeTriggers() {
-        // Init level
-        if (firstTime) {
-            grouchoTrigger = GameObjectFactory.
-                    makeTrigger(500, 550, 64, 128,
-                            gameWorld.physics.world, () -> {
-                                grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init1), 500, 500);
-                                level.eventChain.addAction(()->gameWorld.player.setOrientation(UP));
-                                level.eventChain.addAction(()->dylanTalk( gameWorld.activity.getString(R.string.dylan_level1_bedroom_talk_init), 600, 500));
-                                level.eventChain.addAction(()->grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init2), 500, 500));
-                                removeTrigger(grouchoTrigger);
-                            });
-            gameObjects.add(grouchoTrigger);
-        }
-
         // Groucho's photo
         gameObjects.add(GameObjectFactory.
                 makeTrigger((int) (0.75*cellSize), (int) (-0.5*cellSize), 128, 128,
@@ -188,25 +186,5 @@ public class GrouchoRoom extends Room {
                         200,
                         Textures.windowInternal
                 )));
-    }
-
-    private void grouchoTalk(String sentence, int posX, int posY) {
-        gameWorld.hasToTalk();
-        gameWorld.bubbleSpeech.setBubbleTexture(grouchoBubble);
-        gameWorld.bubbleSpeech.setPosX(posX);
-        gameWorld.bubbleSpeech.setPosY(posY);
-        gameWorld.bubbleSpeech.setLeftAlignment();
-        gameWorld.bubbleSpeech.setNormalText();
-        gameWorld.bubbleSpeech.setText(sentence);
-    }
-
-    private void dylanTalk(String sentence, int posX, int posY) {
-        gameWorld.hasToTalk();
-        gameWorld.bubbleSpeech.setBubbleTexture(dylanBubble);
-        gameWorld.bubbleSpeech.setPosX(posX);
-        gameWorld.bubbleSpeech.setPosY(posY);
-        gameWorld.bubbleSpeech.setCenterAlignment();
-        gameWorld.bubbleSpeech.setBoldText();
-        gameWorld.bubbleSpeech.setText(sentence);
     }
 }

@@ -1,5 +1,7 @@
 package com.personal.groucho.game.levels;
 
+import static com.personal.groucho.game.assets.Textures.dylanBubble;
+import static com.personal.groucho.game.assets.Textures.grouchoBubble;
 import static com.personal.groucho.game.constants.Environment.brightness;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.Environment.minBrightness;
@@ -98,4 +100,32 @@ public class Room {
     }
 
     protected void removeTrigger(GameObject trigger) { gameWorld.goHandler.removeGameObject(trigger);}
+
+
+    protected void setControllerVisibility(boolean visibility) {
+        gameWorld.controller.dpad.setVisibility(visibility);
+        gameWorld.controller.pause.setVisibility(visibility);
+        gameWorld.controller.trigger.setVisibility(visibility);
+        gameWorld.controller.bulb.setVisibility(visibility);
+    }
+
+    protected void grouchoTalk(String sentence, int posX, int posY) {
+        gameWorld.hasToTalk();
+        gameWorld.bubbleSpeech.setBubbleTexture(grouchoBubble);
+        gameWorld.bubbleSpeech.setPosX(posX);
+        gameWorld.bubbleSpeech.setPosY(posY);
+        gameWorld.bubbleSpeech.setLeftAlignment();
+        gameWorld.bubbleSpeech.setNormalText();
+        gameWorld.bubbleSpeech.setText(sentence);
+    }
+
+    protected void dylanTalk(String sentence, int posX, int posY) {
+        gameWorld.hasToTalk();
+        gameWorld.bubbleSpeech.setBubbleTexture(dylanBubble);
+        gameWorld.bubbleSpeech.setPosX(posX);
+        gameWorld.bubbleSpeech.setPosY(posY);
+        gameWorld.bubbleSpeech.setCenterAlignment();
+        gameWorld.bubbleSpeech.setBoldText();
+        gameWorld.bubbleSpeech.setText(sentence);
+    }
 }
