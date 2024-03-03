@@ -100,7 +100,10 @@ public class Events {
         int indexLessFraction = enemiesDist.indexOf(Collections.min(enemiesDist));
         AIComponent aiEnemy = (AIComponent) enemiesPos.get(indexLessFraction).getOwner().getComponent(AI);
         if (!aiEnemy.isPlayerEngaged) {
-            aiEnemy.investigateActions.setInvestigateStatus(true);
+            if (!aiEnemy.investigateActions.isInvestigate)
+                aiEnemy.investigateActions.setInvestigateStatus(true);
+            else
+                aiEnemy.investigateActions.updatePath();
         }
     }
 

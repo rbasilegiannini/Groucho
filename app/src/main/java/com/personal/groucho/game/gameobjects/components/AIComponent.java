@@ -69,6 +69,9 @@ public class AIComponent extends WalkingComponent {
 
     public void init(GameWorld gameWorld, StateName currentState){
         this.gameWorld = gameWorld;
+        isNodeReached = true;
+        isPlayerEngaged = false;
+        isPlayerReached = false;
         attackActions = new AttackActions(this); // TODO: Use init?
 
         originalState = currentState;

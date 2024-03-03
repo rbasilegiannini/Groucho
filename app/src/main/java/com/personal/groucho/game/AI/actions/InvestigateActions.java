@@ -36,4 +36,5 @@ public class InvestigateActions implements Actions {
     }
 
     public void setInvestigateStatus(boolean isInvestigate) {this.isInvestigate = isInvestigate;}
+    public void updatePath() {aiComp.setPathToPlayer();}
 }
