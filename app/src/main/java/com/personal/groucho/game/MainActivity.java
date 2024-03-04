@@ -1,6 +1,7 @@
 package com.personal.groucho.game;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.personal.groucho.R;
 import com.personal.groucho.badlogic.androidgames.framework.impl.AndroidAudio;
@@ -29,6 +31,7 @@ public class MainActivity extends Activity {
 
     public static String TAG;
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,7 @@ public class MainActivity extends Activity {
         Sounds.init(audio);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     private void initConstants() {
         Character.init(this);
         Environment.init(this);
