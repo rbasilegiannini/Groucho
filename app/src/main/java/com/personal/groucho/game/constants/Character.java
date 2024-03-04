@@ -1,6 +1,9 @@
 package com.personal.groucho.game.constants;
 
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.personal.groucho.R;
 
@@ -17,6 +20,7 @@ public class Character {
     public static int hearingRangeSqr;
     public static float enemyFovInRad;
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     public static void init(Context context){
         grouchoSpeed = context.getResources().getFloat(R.dimen.groucho_speed);
         grouchoHealth = context.getResources().getInteger(R.integer.groucho_health);
