@@ -13,4 +13,6 @@ public abstract class Level {
     public void draw(Canvas canvas) {
         activeRoom.draw(canvas);
     }
+
+    public Room getActiveRoom() {return activeRoom;}
 }

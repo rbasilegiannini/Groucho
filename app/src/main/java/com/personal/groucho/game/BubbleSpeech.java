@@ -152,8 +152,10 @@ public class BubbleSpeech {
 
     public void consumeTouchEvent(Input.TouchEvent event) {
         if (event.type == Input.TouchEvent.TOUCH_DOWN) {
-            Pools.textBlocksPool.release(textBlocks.get(0));
-            textBlocks.remove(0);
+            if (!textBlocks.isEmpty()) {
+                Pools.textBlocksPool.release(textBlocks.get(0));
+                textBlocks.remove(0);
+            }
         }
     }
 }

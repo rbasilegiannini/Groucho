@@ -45,5 +45,5 @@ public class Pools {
     public static final ObjectsPool<TriggerComponent> triggerCompPool =
             new ObjectsPool<>(30, TriggerComponent.class);
     public static final ObjectsPool<TextBlock> textBlocksPool =
-            new ObjectsPool<>(10, TextBlock.class);
+            new ObjectsPool<>(20, TextBlock.class);
 }

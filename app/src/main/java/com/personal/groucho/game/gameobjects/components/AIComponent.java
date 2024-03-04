@@ -72,6 +72,8 @@ public class AIComponent extends WalkingComponent {
         isNodeReached = true;
         isPlayerEngaged = false;
         isPlayerReached = false;
+        investigateActions.isInvestigate = false;
+
         attackActions = new AttackActions(this); // TODO: Use init?
 
         originalState = currentState;

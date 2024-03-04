@@ -146,14 +146,14 @@ public class GameWorld {
         }
     }
 
-    public void handleDeath(GameObject gameObject) {
-        if (gameObject.role == PLAYER) {
+    public void handleDeath(GameObject character) {
+        if (character.role == PLAYER) {
             GameOver();
         }
         else {
-            ComponentHandler.getInstance().removeComponent(gameObject, AI);
-            ComponentHandler.getInstance().removeComponent(gameObject, PHYSICS);
-            ComponentHandler.getInstance().removeComponent(gameObject, LIGHT);
+            ComponentHandler.getInstance().removeComponent(character, AI);
+            ComponentHandler.getInstance().removeComponent(character, PHYSICS);
+            ComponentHandler.getInstance().removeComponent(character, LIGHT);
         }
     }
 

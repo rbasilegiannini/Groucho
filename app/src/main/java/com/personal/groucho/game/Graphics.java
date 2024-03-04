@@ -36,13 +36,14 @@ class DrawableComparator implements Comparator<DrawableComponent> {
         Entity e2 = obj2.getOwner();
 
         if (e1.role == FLOOR) return -1;
+        if (e2.role == FLOOR) return 1;
+
         if (e1.role == ENEMY || e1.role == PLAYER) {
             if (((AliveComponent)(e1.getComponent(ALIVE))).currentStatus == DEAD){
                 return -1;
             }
         }
 
-        if (e2.role == FLOOR) return 1;
         if (e2.role == ENEMY || e2.role == PLAYER) {
             if (((AliveComponent)(e2.getComponent(ALIVE))).currentStatus == DEAD){
                 return 1;

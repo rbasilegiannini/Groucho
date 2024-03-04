@@ -1,15 +1,16 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Textures.orangeWall;
+import static com.personal.groucho.game.assets.Textures.woodFloor;
+import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
 import static com.personal.groucho.game.controller.Orientation.UP;
-import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
-import android.graphics.Matrix;
 import android.graphics.Shader;
 
 import com.google.fpl.liquidfun.World;
@@ -17,33 +18,34 @@ import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.controller.Orientation;
-import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
-import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.levels.Room;
 
 public class Hallway extends Room {
     public static boolean firstTime = true;
     private final FirstLevel level;
     private int playerPosX, playerPosY;
+    private int tableX, tableY;
     private Orientation playerOrientation;
 
     public Hallway(GameWorld gameWorld, FirstLevel level) {
         super(2000, 600, gameWorld);
         this.level = level;
-        Bitmap floor = Textures.firstLevelFloor;
+        this.internalWall = orangeWall;
+        this.externalWall = woodWall;
 
         // Set floor
+        Bitmap floor = Bitmap.createScaledBitmap(woodFloor, 128, 128, false);
         BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         floorPaint.setShader(bs);
-        Matrix m = new Matrix();
-        m.postTranslate(surface.width(), surface.height());
-        floorPaint.getShader().setLocalMatrix(m);
     }
 
     @Override
     public void init() {
         super.init();
+        tableX = 6*cellSize;
+        tableY = (int) (0.75*cellSize);
+
         if (level.fromGrouchoRoom) {
             playerPosX = (int) (2.5*cellSize);
             playerPosY = (int) (1.7*cellSize);
@@ -56,9 +58,6 @@ public class Hallway extends Room {
         }
 
         if (firstTime) {
-            tableX = 6*cellSize;
-            tableY = (int) (0.75*cellSize);
-
             setControllerVisibility(false);
 
             grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_init1), playerPosX, playerPosY);
@@ -92,22 +91,11 @@ public class Hallway extends Room {
         setBrightness(minBrightness);
     }
 
-    @Override
-    public void releaseRoom(){
-        tableX = tablePosComp.posX;
-        tableY = tablePosComp.posY;
-
-        super.releaseRoom();
-    }
-
-    private int tableX, tableY;
-    private PositionComponent tablePosComp;
     private void makeFurniture(){
         World world = gameWorld.physics.world;;
-        GameObject table = GameObjectFactory.
-                makeFurniture(tableX, tableY, 150, 150, 5f, world, Textures.littleTable);
-        tablePosComp = (PositionComponent) table.getComponent(POSITION);
-        gameObjects.add(table);
+        gameObjects.add(GameObjectFactory.
+                makeFurniture(tableX, tableY, 150, 150, 5f, world, Textures.littleTable)
+        );
     }
 
     private void makeDecorations() {
@@ -133,7 +121,7 @@ public class Hallway extends Room {
                         (int) (-0.25*cellSize),
                         180,
                         250,
-                        Textures.dresserWithFlower
+                        Textures.dresser
                 )));
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
@@ -141,7 +129,7 @@ public class Hallway extends Room {
                         (int) (3*cellSize),
                         188,
                         200,
-                        Textures.windowInternal
+                        Textures.windowNight
                 )));
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
@@ -149,7 +137,7 @@ public class Hallway extends Room {
                         (int) (3*cellSize),
                         188,
                         200,
-                        Textures.windowInternal
+                        Textures.windowNight
                 )));
     }
 

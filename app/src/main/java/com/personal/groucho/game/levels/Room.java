@@ -7,6 +7,7 @@ import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -24,6 +25,7 @@ public class Room {
     protected final List<GameObject> gameObjects = new ArrayList<>();
     protected final Rect surface;
     protected final Paint floorPaint;
+    protected Bitmap internalWall, externalWall;
     private final int widthGrid;
     private final int heightGrid;
 
@@ -51,6 +53,7 @@ public class Room {
                 makeHorBorder(surface.width() / 2,
                         -cellSize,
                         surface.width(),
+                        internalWall,
                         gameWorld.physics.world
                 ));
 
@@ -59,6 +62,7 @@ public class Room {
                 makeHorBorder(surface.width()/2,
                         surface.height(),
                         surface.width() + cellSize,
+                        externalWall,
                         gameWorld.physics.world
                 ));
 
@@ -71,7 +75,7 @@ public class Room {
 
         // Right border
         gameObjects.add(GameObjectFactory.makeVerBorder(
-                (int) (surface.width() + (0.75f)*cellSize),
+                (int) (surface.width() + (0.74f)*cellSize),
                 (int) ((surface.height()/2)-(1.75f * cellSize)),
                 surface.height()+(1.5f*cellSize),
                 gameWorld.physics.world));
@@ -99,9 +103,6 @@ public class Room {
         }
     }
 
-    protected void removeTrigger(GameObject trigger) { gameWorld.goHandler.removeGameObject(trigger);}
-
-
     protected void setControllerVisibility(boolean visibility) {
         gameWorld.controller.dpad.setVisibility(visibility);
         gameWorld.controller.pause.setVisibility(visibility);
@@ -128,4 +129,5 @@ public class Room {
         gameWorld.bubbleSpeech.setBoldText();
         gameWorld.bubbleSpeech.setText(sentence);
     }
+
 }

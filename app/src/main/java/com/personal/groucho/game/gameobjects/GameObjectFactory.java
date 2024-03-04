@@ -168,7 +168,7 @@ public class GameObjectFactory {
         int dimRoofY = (int) (length - dimWallY);
         Paint paintRoof = new Paint();
         Paint paintWall = new Paint();
-        Bitmap wallTexture = Bitmap.createScaledBitmap(Textures.wall,256, 256, false);
+        Bitmap wallTexture = Bitmap.createScaledBitmap(Textures.woodWall,256, 256, false);
 
         Shader wallShader = new BitmapShader(wallTexture, REPEAT, REPEAT);
         paintWall.setShader(wallShader);
@@ -214,20 +214,22 @@ public class GameObjectFactory {
         return gameObjects;
     }
 
-    public static List<GameObject> makeHorBorder(int centerX, int centerY, float length, World world) {
+    public static List<GameObject> makeHorBorder(int centerX, int centerY, float length, Bitmap texture,
+                                                 World world) {
+
+        int dimX = (int) length;
+        int dimRoofY = cellSize;
+        int dimWallY = (int) (2* charScaleFactor * charDimY);
+
         Paint paintRoof = new Paint();
         Paint paintWall = new Paint();
-        Bitmap wallTexture = Bitmap.createScaledBitmap(Textures.wall,256, 256, false);
+        Bitmap wallTexture = Bitmap.createScaledBitmap(texture,256, dimWallY, false);
 
         Shader wallShader = new BitmapShader(wallTexture, REPEAT, REPEAT);
         paintWall.setShader(wallShader);
 
         paintRoof.setColor(Color.argb(255, 92,64,51));
         paintRoof.setStyle(FILL_AND_STROKE);
-
-        int dimX = (int) length;
-        int dimRoofY = cellSize;
-        int dimWallY = (int) (2* charScaleFactor * charDimY);
 
         GameObject roof = Pools.objectsPool.acquire();
         GameObject wall = Pools.objectsPool.acquire();

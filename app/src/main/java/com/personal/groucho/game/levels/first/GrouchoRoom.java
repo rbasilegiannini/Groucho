@@ -1,10 +1,12 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Textures.orangeWall;
+import static com.personal.groucho.game.assets.Textures.woodFloor;
+import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.UP;
-import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -14,22 +16,21 @@ import com.google.fpl.liquidfun.World;
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
-import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
-import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.levels.Room;
 
 public class GrouchoRoom extends Room {
     public static boolean firstTime = true;
     private final FirstLevel level;
     private int playerPosX, playerPosY, tableX, tableY, bedX, bedY;
-    private PositionComponent tablePosComp, bedPosComp;
 
     public GrouchoRoom(GameWorld gameWorld, FirstLevel level) {
         super(1000, 1000, gameWorld);
+        this.internalWall = orangeWall;
+        this.externalWall = woodWall;
         this.level = level;
         // Set floor
-        Bitmap floor = Bitmap.createScaledBitmap(Textures.firstLevelFloor, 128, 128, false);
+        Bitmap floor = Bitmap.createScaledBitmap(woodFloor, 128, 128, false);
         BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         floorPaint.setShader(bs);
     }
@@ -37,14 +38,14 @@ public class GrouchoRoom extends Room {
     @Override
     public void init() {
         super.init();
+        tableX = 5*cellSize;
+        tableY = (int) (3.5*cellSize);
+        bedX = 5*cellSize;
+        bedY = 2*cellSize;
 
         if (firstTime) {
             playerPosX = 500;
             playerPosY = 500;
-            tableX = 5*cellSize;
-            tableY = (int) (3.5*cellSize);
-            bedX = 5*cellSize;
-            bedY = 2*cellSize;
 
             setControllerVisibility(false);
 
@@ -79,16 +80,6 @@ public class GrouchoRoom extends Room {
         super.allocateRoom();
         gameWorld.player.setPos(playerPosX, playerPosY);
         setBrightness(maxBrightness);
-    }
-
-    @Override
-    public void releaseRoom() {
-        tableX = tablePosComp.posX;
-        tableY = tablePosComp.posY;
-        bedX = bedPosComp.posX;
-        bedY = bedPosComp.posY;
-
-        super.releaseRoom();
     }
 
     private void makeTriggers() {
@@ -132,16 +123,13 @@ public class GrouchoRoom extends Room {
 
     private void makeFurniture() {
         World world = gameWorld.physics.world;;
-        GameObject table = GameObjectFactory.
-                makeFurniture(tableX, tableY, 250, 150, 5f, world, Textures.table);
-        tablePosComp = (PositionComponent) table.getComponent(POSITION);
-        gameObjects.add(table);
-
-        GameObject bed = GameObjectFactory.
-                makeFurniture(bedX, bedY, 280, 350, 100f, world, Textures.bed
+        gameObjects.add(GameObjectFactory.
+                makeFurniture(tableX, tableY, 250, 150, 5f, world, Textures.table)
         );
-        bedPosComp = (PositionComponent) bed.getComponent(POSITION);
-        gameObjects.add(bed);
+
+        gameObjects.add(GameObjectFactory.
+                makeFurniture(bedX, bedY, 280, 350, 100f, world, Textures.bed)
+        );
     }
 
     private void makeDecorations() {
