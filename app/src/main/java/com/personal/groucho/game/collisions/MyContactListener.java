@@ -5,7 +5,6 @@ import android.util.SparseArray;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
 import com.google.fpl.liquidfun.ContactListener;
-import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.Pools;
 import com.personal.groucho.game.gameobjects.GameObject;
 

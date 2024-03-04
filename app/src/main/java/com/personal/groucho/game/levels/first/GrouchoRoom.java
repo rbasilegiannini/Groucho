@@ -122,7 +122,7 @@ public class GrouchoRoom extends Room {
 
 
     private void makeFurniture() {
-        World world = gameWorld.physics.world;;
+        World world = gameWorld.physics.world;
         gameObjects.add(GameObjectFactory.
                 makeFurniture(tableX, tableY, 250, 150, 5f, world, Textures.table)
         );

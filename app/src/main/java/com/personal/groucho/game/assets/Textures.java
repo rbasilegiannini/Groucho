@@ -12,7 +12,7 @@ public class Textures {
     public static Bitmap chairLeft, chairRight, chairUp, chairDown;
     public static Bitmap armChairLeft, armChairRight;
     public static Bitmap bed;
-    public static Bitmap dresser, dresserWithFlower;
+    public static Bitmap dresser;
     public static Bitmap woodWall, orangeWall;
     public static Bitmap windowInternal, windowNight;
     public static Bitmap brownDoor;

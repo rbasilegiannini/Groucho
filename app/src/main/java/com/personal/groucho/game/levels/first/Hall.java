@@ -149,7 +149,7 @@ public class Hall extends Room {
 
 
     private void makeFurniture() {
-        World world = gameWorld.physics.world;;
+        World world = gameWorld.physics.world;
 
         gameObjects.add(GameObjectFactory.
                 makeFurniture(couchX, couchY, 400, 210, 25f, world, Textures.orangeCouch)

@@ -5,8 +5,6 @@ import static com.personal.groucho.game.constants.System.cellSize;
 import android.annotation.SuppressLint;
 import android.util.SparseArray;
 
-import com.personal.groucho.game.GameWorld;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
