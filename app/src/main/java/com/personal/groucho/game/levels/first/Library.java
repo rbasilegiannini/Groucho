@@ -18,18 +18,20 @@ import com.google.fpl.liquidfun.World;
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
+import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.levels.Room;
 
-public class Hall extends Room {
+public class Library extends Room {
     public static boolean firstTime = true;
     private final FirstLevel level;
     private int playerPosX, playerPosY;
+    private Orientation playerOrientation = UP;
     private int couchX, couchY, tableX, tableY, littleTableX, littleTableY;
     private int chairLeftX, chairLeftY, chairRightX, chairRightY;
     private int chairUpX, chairUpY, chairDownX, chairDownY;
 
-    public Hall(GameWorld gameWorld, FirstLevel level) {
+    public Library(GameWorld gameWorld, FirstLevel level) {
         super(1500, 1500, gameWorld);
         this.level = level;
         this.internalWall = orangeWall;
@@ -45,8 +47,16 @@ public class Hall extends Room {
     public void init() {
         super.init();
 
-        playerPosX = (int) (4.5*cellSize);
-        playerPosY = (int) (7.5*cellSize);
+        if (level.fromHallwayToLibrary) {
+            playerPosX = (int) (4.5 * cellSize);
+            playerPosY = (int) (7.5 * cellSize);
+            playerOrientation = UP;
+        }
+        if (level.fromEntryHallToLibrary) {
+            playerPosX = (int) (4.5*cellSize);
+            playerPosY = cellSize;
+            playerOrientation = DOWN;
+        }
 
         couchX = (int) (4.5*cellSize);
         couchY = 3*cellSize;
@@ -66,10 +76,10 @@ public class Hall extends Room {
 
         if (firstTime) {
             setControllerVisibility(false);
-            grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hall_talk_init1), playerPosX, playerPosY);
+            grouchoTalk(gameWorld.activity.getString(R.string.groucho_hall_talk_init1), playerPosX, playerPosY);
             level.eventChain.addAction(()-> {
                 gameWorld.player.setOrientation(DOWN);
-                grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hall_talk_init2), playerPosX, playerPosY);
+                grouchoTalk(gameWorld.activity.getString(R.string.groucho_hall_talk_init2), playerPosX, playerPosY);
             });
             level.eventChain.addAction(()->setControllerVisibility(true));
         }
@@ -77,7 +87,7 @@ public class Hall extends Room {
         makeFurniture();
         makeTriggers();
         makeDecorations();
-        makeEnemies();
+//        makeEnemies();
 
         allocateRoom();
 
@@ -92,16 +102,16 @@ public class Hall extends Room {
 
     private void makeDecorations() {
         gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (2*cellSize),
-                        (int) (-0.5*cellSize),
-                        400,
-                        400,
-                        Textures.library
+                makeFloorDecoration(
+                        (int) (4.5*cellSize),
+                        (int) (0.4*cellSize),
+                        170,
+                        90,
+                        Textures.littleGreenCarpet
                 )));
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
-                        (int) (4.5*cellSize),
+                        (int) (2*cellSize),
                         (int) (-0.5*cellSize),
                         400,
                         400,
@@ -127,24 +137,32 @@ public class Hall extends Room {
 
     private void makeTriggers() {
         // Door to hallway
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (4.5*cellSize), (int) (9.1*cellSize),
-                        160, 280,
-                        Textures.brownDoor
-                )));
-        gameObjects.add(GameObjectFactory.
-                makeTrigger(
-                        (int) (4.5*cellSize), (int) (9*cellSize),
-                        160, 270,
-                        gameWorld.physics.world,
-                        () -> {
-                            door.play(1f);
-                            level.fromHall = true;
-                            level.fromGrouchoRoom = false;
-                            level.goToHallway();
-                        }));
+        makeWallTrigger(
+                (int)(4.5*cellSize), (int)(9.1*cellSize),
+                (int) (4.5*cellSize), (int) (9*cellSize),
+                160, 280,
+                Textures.brownDoor,
+                () -> {
+                    door.play(1f);
+                    level.fromLibraryToHallway = true;
+                    level.fromGrouchoRoomToHallway = false;
+                    level.goToHallway();
+                }
+        );
 
+        // Door to entry hall
+        makeWallTrigger(
+                (int)(4.5*cellSize), (int)(-0.85*cellSize),
+                (int)(4.5*cellSize), (int)(-0.95*cellSize),
+                160, 280,
+                Textures.brownDoor,
+                () -> {
+                    // if key
+                    door.play(1f);
+                    level.fromLibraryToEntryHall = true;
+                    level.goToEntryHall();
+                }
+        );
     }
 
 
@@ -179,7 +197,7 @@ public class Hall extends Room {
         );
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture((int)(6.5*cellSize), (int) (4.5*cellSize), 150, 200, 15f, world, Textures.armChairRight)
+                makeFurniture((int)(6.5*cellSize), (int)(4.5*cellSize), 150, 200, 15f, world, Textures.armChairRight)
         );
     }
 
@@ -187,7 +205,7 @@ public class Hall extends Room {
     public void allocateRoom(){
         super.allocateRoom();
         gameWorld.player.setPos(playerPosX, playerPosY);
-        gameWorld.player.setOrientation(UP);
+        gameWorld.player.setOrientation(playerOrientation);
         setBrightness(minBrightness);
     }
 }

@@ -1,0 +1,236 @@
+package com.personal.groucho.game.levels.first;
+
+import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Textures.greenWall;
+import static com.personal.groucho.game.assets.Textures.lightWoodFloor;
+import static com.personal.groucho.game.assets.Textures.woodWall;
+import static com.personal.groucho.game.constants.Environment.maxBrightness;
+import static com.personal.groucho.game.constants.System.cellSize;
+import static com.personal.groucho.game.controller.Orientation.UP;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Shader;
+
+import com.google.fpl.liquidfun.World;
+import com.personal.groucho.R;
+import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.assets.Textures;
+import com.personal.groucho.game.controller.Orientation;
+import com.personal.groucho.game.gameobjects.GameObjectFactory;
+import com.personal.groucho.game.levels.Room;
+
+public class EntryHall extends Room {
+    public static boolean firstTime = true;
+    private final FirstLevel level;
+    private int playerPosX, playerPosY;
+    private Orientation playerOrientation = UP;
+
+    public EntryHall(GameWorld gameWorld, FirstLevel level) {
+        super(2000, 1500, gameWorld);
+        this.internalWall = greenWall;
+        this.externalWall = woodWall;
+        this.level = level;
+
+        // Set floor
+        Bitmap floor = Bitmap.createScaledBitmap(lightWoodFloor, 128, 128, false);
+        BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        floorPaint.setShader(bs);
+    }
+
+    @Override
+    public void init() {
+        super.init();
+
+        if (firstTime) {
+            playerPosX = 3*cellSize;
+            playerPosY = (int) (7.5*cellSize);
+            String sentence = gameWorld.activity.getString(R.string.dylan_bedroom_talk_init);
+            dylanTalk(sentence, playerPosX+2*cellSize, (int) playerPosY);
+        }
+
+        if (level.fromLibraryToEntryHall){
+            playerPosX = 3*cellSize;
+            playerPosY = (int) (7.5*cellSize);
+            playerOrientation = UP;
+        }
+
+        makeDecorations();
+        makeTriggers();
+        makeFurniture();
+
+        allocateRoom();
+    }
+
+    @Override
+    public void allocateRoom(){
+        super.allocateRoom();
+        gameWorld.player.setPos(playerPosX, playerPosY);
+        gameWorld.player.setOrientation(playerOrientation);
+
+        setBrightness(maxBrightness);
+    }
+
+    private void makeTriggers() {
+        // Door to library
+        makeWallTrigger(
+                3*cellSize, (int) (9.1*cellSize),
+                3*cellSize, (int) (9*cellSize),
+                160, 280, Textures.brownDoor,
+                () -> {
+                    door.play(1f);
+                    level.fromEntryHallToLibrary = true;
+                    level.fromHallwayToLibrary = false;
+                    level.goToLibrary();
+                });
+
+        // Dresser
+        makeWallTrigger(
+                (int) (1.5*cellSize), (int) (-0.25*cellSize),
+                (int)(1.5*cellSize), (int) (-0.9*cellSize),
+                180, 250,
+                Textures.dresser,
+                () -> {
+                    String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_dresser);
+                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                });
+
+        // Windows
+        makeWallTrigger(
+                (int)(3.5*cellSize), -cellSize,
+                (int)(3.5*cellSize), (int)(-0.75*cellSize),
+                188, 200,
+                Textures.windowNight,
+                () -> {
+                    String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_window);
+                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                });
+        makeWallTrigger(
+                (int)(8.5*cellSize), -cellSize,
+                (int)(8.5*cellSize), (int)(-0.75*cellSize),
+                188, 200,
+                Textures.windowNight,
+                () -> {
+                    String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_window);
+                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                });
+
+        // Frame
+        makeWallTrigger(
+                (int)(10.5*cellSize), -cellSize,
+                (int)(10.5*cellSize), (int) (-0.60*cellSize),
+                150, 150, Textures.meFrame,
+                () -> {
+                    String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_me_frame);
+                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                });
+
+        // Heavy door
+        Runnable runnable;
+        if (firstTime) {
+            runnable = () -> {
+                dylanTalk(gameWorld.activity.getString(R.string.dylan_entryhall_heavydoor),
+                        (int) (9.5 * cellSize), cellSize);
+                level.eventChain.addAction(() ->
+                        grouchoTalk(gameWorld.activity.getString(R.string.groucho_entryhall_heavydoor_init),
+                                gameWorld.player.posX, gameWorld.player.posY));
+                firstTime = false;
+            };
+        }
+        else {
+            runnable = () -> {
+                dylanTalk(gameWorld.activity.getString(R.string.dylan_entryhall_heavydoor),
+                        (int) (9.5 * cellSize), cellSize);
+                level.eventChain.addAction(
+                        () -> grouchoTalk(gameWorld.activity.getString(R.string.groucho_entryhall_heavydoor),
+                                gameWorld.player.posX, gameWorld.player.posY));
+            };
+        }
+        if (level.isEndGame()) {
+            // runnable = ...
+        }
+        makeWallTrigger(
+                6*cellSize, (int) (-0.85*cellSize),
+                6 * cellSize, (int) (-0.95 * cellSize),
+                320, 280,
+                Textures.heavyDoor, runnable);
+    }
+
+    private void makeDecorations() {
+        gameObjects.add((GameObjectFactory.
+                makeFloorDecoration(
+                        (int) (6*cellSize), (int) (1.1*cellSize),
+                        512, 356,
+                        Textures.brownCarpet
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeWallDecoration(
+                        (int) (4.2*cellSize), (int) (-0.5*cellSize),
+                        100, 356,
+                        Textures.hanger
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeWallDecoration(
+                        (int) (7.8*cellSize), (int) (-0.5*cellSize),
+                        100, 356,
+                        Textures.lamp
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeFloorDecoration(
+                        (int)(1.50*cellSize), (int)(6.6*cellSize),
+                        90, 210,
+                        Textures.littleCarpet
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeFloorDecoration(
+                        (int)(0.35*cellSize), (int)(3.0*cellSize),
+                        90, 150,
+                        Textures.littleGreenCarpetVer
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeFloorDecoration(
+                        (int) (11.65*cellSize), (int) (2.0*cellSize),
+                        90, 150,
+                        Textures.littleGreenCarpetVer
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeFloorDecoration(
+                        (int) (11.65*cellSize), (int) (6.0*cellSize),
+                        90, 150,
+                        Textures.littleGreenCarpetVer
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeWallDecoration(
+                        (int) (7.5*cellSize), (int) (9.0*cellSize),
+                        188, 200,
+                        Textures.windowInternal
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeWallDecoration(
+                        (int) (10.5*cellSize), (int) (9.0*cellSize),
+                        188, 200,
+                        Textures.windowInternal
+                )));
+    }
+
+    private void makeFurniture() {
+        World world = gameWorld.physics.world;
+
+        gameObjects.add(GameObjectFactory.
+                makeFurniture((int)(0.80*cellSize), (int) (6.5*cellSize),
+                        150, 200, 15f, world, Textures.armChairLeft)
+        );
+        gameObjects.add(GameObjectFactory.
+                makeFurniture((int)(0.80*cellSize), (int) (5.5*cellSize),
+                        150, 150, 5f, world, Textures.littleTable)
+        );
+        gameObjects.add(GameObjectFactory.
+                makeFurniture((int)(11.5*cellSize), (int) (0.3*cellSize),
+                        150, 150, 5f, world, Textures.littleTable)
+        );
+        gameObjects.add(GameObjectFactory.
+                makeFurniture((int)(11.5*cellSize), (int) (3.8*cellSize),
+                        150, 380, 25f, world, Textures.greenCouchRight)
+        );
+    }
+}

@@ -2,19 +2,19 @@
     <string name="app_name">Groucho</string>
 
     <!-- Dialog first level -->
-    <string name="groucho_level1_bedroom_talk_init1">mmm… \n Forse sto dormendo…</string>
-    <string name="groucho_level1_bedroom_talk_init2">Capo! Dove sei?!</string>
-    <string name="groucho_level1_bedroom_talk_photo">Bello.</string>
-    <string name="groucho_level1_bedroom_talk_wardrobe">Al momento sono già vestito.</string>
-    <string name="dylan_level1_bedroom_talk_init">GROUCHO!</string>
+    <string name="groucho_bedroom_talk_init1">mmm… \n Forse sto dormendo…</string>
+    <string name="groucho_bedroom_talk_init2">Capo! Dove sei?!</string>
+    <string name="groucho_bedroom_talk_photo">Mi somiglia.</string>
+    <string name="groucho_bedroom_talk_wardrobe">Al momento sono già vestito.</string>
+    <string name="dylan_bedroom_talk_init">GROUCHO!</string>
 
-    <string name="groucho_level1_hallway_talk_init1">Hey! Chi ha spento la luce?</string>
-    <string name="groucho_level1_hallway_talk_init2">Premendo la lampadina in alto a destra puoi fare luce.</string>
-    <string name="groucho_level1_hallway_talk_window">È buio.</string>
-    <string name="groucho_level1_hallway_talk_library">Sto già dormendo.</string>
+    <string name="groucho_hallway_talk_init1">Hey! Chi ha spento la luce?</string>
+    <string name="groucho_hallway_talk_init2">Premendo la lampadina in alto a destra puoi fare luce.</string>
+    <string name="groucho_hallway_talk_window">È buio.</string>
+    <string name="groucho_hallway_talk_library">Sto già dormendo.</string>
 
-    <string name="groucho_level1_hall_talk_init1">! \n Uno zombie!</string>
-    <string name="groucho_level1_hall_talk_init2">
+    <string name="groucho_hall_talk_init1">! \n Uno zombie!</string>
+    <string name="groucho_hall_talk_init2">
         A proposito, come si chiama un autobus pieno di appestati? \n
         Autopus! \n
         ... \n
@@ -23,6 +23,18 @@
         A volte potrebbe essere la strategia migliore, ma ci sono meno suoni splatter e sparatorie... \n
         Tuttavia, questo ha una chiave e quindi va ucciso.
     </string>
+
+    <string name="dylan_entryhall_init">GROUCHO!</string>
+    <string name="dylan_entryhall_heavydoor">LA PISTOLA!</string>
+    <string name="groucho_entryhall_heavydoor_init">
+        Capo! \n
+        Il capo è in pericolo, tocca a me fare l\'eroe. \n
+        Servono tre chiavi. Che originalità!
+    </string>
+    <string name="groucho_entryhall_heavydoor">Servono tre chiavi. Non faccio io le regole.</string>
+    <string name="groucho_entryhall_window">Vedo il capo, steso. Sembra in salute.</string>
+    <string name="groucho_entryhall_me_frame">Direi autoreferenziale.</string>
+    <string name="groucho_entryhall_dresser">È finto.</string>
 
 
 </resources>

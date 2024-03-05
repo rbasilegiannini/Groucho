@@ -110,6 +110,16 @@ public class Room {
         gameWorld.controller.bulb.setVisibility(visibility);
     }
 
+    protected void makeWallTrigger(int decCx, int decCy,
+                                 int triggerX, int triggerY,
+                                 int dimX, int dimY,
+                                 Bitmap texture, Runnable runnable) {
+
+        gameObjects.add((GameObjectFactory.makeWallDecoration(decCx, decCy, dimX, dimY, texture)));
+        gameObjects.add(GameObjectFactory.
+                makeTrigger(triggerX, triggerY, dimX, dimY, gameWorld.physics.world, runnable));
+    }
+
     protected void grouchoTalk(String sentence, int posX, int posY) {
         gameWorld.hasToTalk();
         gameWorld.bubbleSpeech.setBubbleTexture(grouchoBubble);

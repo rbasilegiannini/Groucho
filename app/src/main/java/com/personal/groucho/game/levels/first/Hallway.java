@@ -26,7 +26,7 @@ public class Hallway extends Room {
     private final FirstLevel level;
     private int playerPosX, playerPosY;
     private int tableX, tableY;
-    private Orientation playerOrientation;
+    private Orientation playerOrientation = UP;
 
     public Hallway(GameWorld gameWorld, FirstLevel level) {
         super(2000, 600, gameWorld);
@@ -46,12 +46,12 @@ public class Hallway extends Room {
         tableX = 6*cellSize;
         tableY = (int) (0.75*cellSize);
 
-        if (level.fromGrouchoRoom) {
+        if (level.fromGrouchoRoomToHallway) {
             playerPosX = (int) (2.5*cellSize);
             playerPosY = (int) (1.7*cellSize);
             playerOrientation = UP;
         }
-        else if (level.fromHall) {
+        else if (level.fromLibraryToHallway) {
             playerPosX = (int) (10.5*cellSize);
             playerPosY = cellSize;
             playerOrientation = DOWN;
@@ -60,10 +60,10 @@ public class Hallway extends Room {
         if (firstTime) {
             setControllerVisibility(false);
 
-            grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_init1), playerPosX, playerPosY);
+            grouchoTalk(gameWorld.activity.getString(R.string.groucho_hallway_talk_init1), playerPosX, playerPosY);
             level.eventChain.addAction(()-> {
                 gameWorld.controller.bulb.setVisibility(true);
-                grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_init2), playerPosX, playerPosY);
+                grouchoTalk(gameWorld.activity.getString(R.string.groucho_hallway_talk_init2), playerPosX, playerPosY);
             });
             level.eventChain.addAction(()-> {
                 gameWorld.controller.handleLightTouchDown();
@@ -98,118 +98,94 @@ public class Hallway extends Room {
         );
     }
 
+    private void makeTriggers() {
+        // Door to GrouchoRoom
+        makeWallTrigger(
+                (int)(2.5*cellSize), (int)(3.1*cellSize),
+                (int) (2.5*cellSize), (int) (2.95*cellSize),
+                160, 280,
+                Textures.brownDoor,
+                () -> {
+                    door.play(1f);
+                    level.goToGrouchoRoom();
+                }
+        );
+
+        // Door to library
+        makeWallTrigger(
+                (int)(10.5*cellSize), (int)(-0.85*cellSize),
+                (int)(10.5*cellSize), (int)(-0.95*cellSize),
+                160, 280,
+                Textures.brownDoor,
+                () -> {
+                    door.play(1f);
+                    level.fromHallwayToLibrary = true;
+                    level.fromEntryHallToLibrary = false;
+                    level.goToLibrary();
+                }
+        );
+
+        // Little library
+        makeWallTrigger(
+                (int)(8.5*cellSize), (int)(-0.25*cellSize),
+                (int)(8.5*cellSize), (int)(-0.5*cellSize),
+                180, 128,
+                Textures.littleLibrary,
+                () -> {
+                    String sentence = gameWorld.activity.getString(R.string.groucho_hallway_talk_library);
+                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                }
+        );
+
+        // Window
+        makeWallTrigger(
+                (int)(2.5*cellSize), -cellSize,
+                (int)(2.5*cellSize), (int)(-0.75*cellSize),
+                188, 200,
+                Textures.windowNight,
+                () -> {
+                    String sentence = gameWorld.activity.getString(R.string.groucho_hallway_talk_window);
+                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                }
+        );
+    }
+
     private void makeDecorations() {
         gameObjects.add((GameObjectFactory.
                 makeFloorDecoration(
-                        (int) (6*cellSize),
-                        (int) (1.5*cellSize),
-                        512,
-                        356,
+                        (int)(10.5*cellSize), (int)(0.4*cellSize),
+                        170, 90,
+                        Textures.littleGreenCarpet
+                )));
+        gameObjects.add((GameObjectFactory.
+                makeFloorDecoration(
+                        (int)(6*cellSize), (int)(1.5*cellSize),
+                        512, 356,
                         Textures.brownCarpet
                 )));
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
-                        (int) (6*cellSize),
-                        0,
-                        400,
-                        210,
+                        (int)(6*cellSize), 0,
+                        400, 210,
                         Textures.orangeCouch
                 )));
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
-                        cellSize,
-                        (int) (-0.25*cellSize),
-                        180,
-                        250,
+                        cellSize, (int)(-0.25*cellSize),
+                        180, 250,
                         Textures.dresser
                 )));
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
-                        (int) (7.5*cellSize),
-                        (int) (3*cellSize),
-                        188,
-                        200,
+                        (int)(7.5*cellSize), (int)(3*cellSize),
+                        188, 200,
                         Textures.windowNight
                 )));
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
-                        (int) (10.5*cellSize),
-                        (int) (3*cellSize),
-                        188,
-                        200,
+                        (int)(10.5*cellSize), (int)(3*cellSize),
+                        188, 200,
                         Textures.windowNight
                 )));
-    }
-
-    private void makeTriggers() {
-        // Door to GrouchoRoom
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (2.5*cellSize),
-                        (int) (3.1*cellSize),
-                        160,
-                        280,
-                        Textures.brownDoor
-                )));
-        gameObjects.add(GameObjectFactory.
-                makeTrigger(
-                        (int) (2.5*cellSize), (int) (3.0*cellSize),
-                        160, 270,
-                        gameWorld.physics.world,
-                        () -> {
-                            door.play(1f);
-                            level.goToGrouchoRoom();
-                        }));
-
-        // Door to hall
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (10.5*cellSize),
-                        (int) (-0.85*cellSize),
-                        160,
-                        280,
-                        Textures.brownDoor
-                )));
-        gameObjects.add(GameObjectFactory.
-                makeTrigger(
-                        (int) (10.5*cellSize), (int) (-0.95*cellSize),
-                        160, 270,
-                        gameWorld.physics.world,
-                        () -> {
-                            door.play(1f);
-                            level.goToHall();
-                        }));
-
-        // Little library
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (8.5*cellSize),
-                        (int) (-0.25*cellSize),
-                        180,
-                        250,
-                        Textures.littleLibrary
-                )));
-        gameObjects.add(GameObjectFactory.
-                makeTrigger((int)(8.5*cellSize), (int) (-0.5*cellSize), 180, 128,
-                        gameWorld.physics.world, () -> {
-                            String sentence = gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_library);
-                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                        }));
-
-        // Window
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (2.5*cellSize),
-                        -cellSize,
-                        188,
-                        200,
-                        Textures.windowNight
-                )));
-        gameObjects.add(GameObjectFactory.
-                makeTrigger((int)(2.5*cellSize), (int) (-0.5*cellSize), 188, 128,
-                        gameWorld.physics.world, () -> {
-                            String sentence = gameWorld.activity.getString(R.string.groucho_level1_hallway_talk_window);
-                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                        }));
     }
 }

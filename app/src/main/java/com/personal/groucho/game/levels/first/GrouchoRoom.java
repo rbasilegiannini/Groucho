@@ -1,8 +1,8 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Textures.brownFloor;
 import static com.personal.groucho.game.assets.Textures.orangeWall;
-import static com.personal.groucho.game.assets.Textures.woodFloor;
 import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
@@ -29,8 +29,9 @@ public class GrouchoRoom extends Room {
         this.internalWall = orangeWall;
         this.externalWall = woodWall;
         this.level = level;
+
         // Set floor
-        Bitmap floor = Bitmap.createScaledBitmap(woodFloor, 128, 128, false);
+        Bitmap floor = Bitmap.createScaledBitmap(brownFloor, 128, 128, false);
         BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         floorPaint.setShader(bs);
     }
@@ -49,12 +50,13 @@ public class GrouchoRoom extends Room {
 
             setControllerVisibility(false);
 
-            grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init1), playerPosX, playerPosY);
+            grouchoTalk(gameWorld.activity.getString(R.string.groucho_bedroom_talk_init1), playerPosX, playerPosY);
             level.eventChain.addAction(()-> {
                 gameWorld.player.setOrientation(UP);
-                dylanTalk( gameWorld.activity.getString(R.string.dylan_level1_bedroom_talk_init), 600, 500);
+                dylanTalk( gameWorld.activity.getString(R.string.dylan_bedroom_talk_init), 600, 500);
             });
-            level.eventChain.addAction(()->grouchoTalk(gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_init2), playerPosX, playerPosY));
+            level.eventChain.addAction(()->
+                    grouchoTalk(gameWorld.activity.getString(R.string.groucho_bedroom_talk_init2), playerPosX, playerPosY));
             level.eventChain.addAction(()->{
                 gameWorld.controller.dpad.setVisibility(true);
                 gameWorld.controller.pause.setVisibility(true);
@@ -84,40 +86,40 @@ public class GrouchoRoom extends Room {
 
     private void makeTriggers() {
         // Groucho's photo
-        gameObjects.add(GameObjectFactory.
-                makeTrigger((int) (0.75*cellSize), (int) (-0.5*cellSize), 128, 128,
-                        gameWorld.physics.world, () -> {
-                            String sentence = gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_photo);
-                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                        }));
+        makeWallTrigger(
+                (int)(0.75*cellSize), (int)(-cellSize),
+                (int)(0.75*cellSize), (int)(-0.5*cellSize),
+                128, 128,
+                Textures.grouchoFrame,
+                () -> {
+                    String sentence = gameWorld.activity.getString(R.string.groucho_bedroom_talk_photo);
+                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                });
 
         // Wardrobe
-        gameObjects.add(GameObjectFactory.
-                makeTrigger((int) (4.5*cellSize), (int) (-0.5*cellSize), 280, 128,
-                        gameWorld.physics.world, () -> {
-                            String sentence = gameWorld.activity.getString(R.string.groucho_level1_bedroom_talk_wardrobe);
-                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                        }));
+        makeWallTrigger(
+                (int)(4.5*cellSize), (int)(-0.5*cellSize),
+                (int) (4.5*cellSize), (int) (-1.2*cellSize),
+                280, 350,
+                Textures.grouchoWardrobe,
+                () -> {
+                    String sentence = gameWorld.activity.getString(R.string.groucho_bedroom_talk_wardrobe);
+                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                });
+
         // Door to hallway
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        2*cellSize,
-                        (int) (-0.85*cellSize),
-                        160,
-                        280,
-                        Textures.brownDoor
-                )));
-        gameObjects.add(GameObjectFactory.
-                makeTrigger(
-                        2*cellSize, (int) (-0.85*cellSize),
-                        160, 270,
-                        gameWorld.physics.world,
-                        () -> {
-                            door.play(1f);
-                            level.fromHall = false;
-                            level.fromGrouchoRoom = true;
-                            level.goToHallway();
-                        }));
+        makeWallTrigger(
+                2*cellSize, (int)(-0.85*cellSize),
+                2*cellSize, (int) (-0.95*cellSize),
+                160, 280,
+                Textures.brownDoor,
+                () -> {
+                    door.play(1f);
+                    level.fromLibraryToHallway = false;
+                    level.fromGrouchoRoomToHallway = true;
+                    level.goToHallway();
+                });
+
     }
 
 
@@ -134,43 +136,27 @@ public class GrouchoRoom extends Room {
 
     private void makeDecorations() {
         gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (0.75*cellSize),
-                        (int) (-cellSize),
-                        128,
-                        128,
-                        Textures.grouchoFrame
-                )));
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (4.5*cellSize),
-                        (int) (-0.5*cellSize),
-                        280,
-                        350,
-                        Textures.grouchoWardrobe
+                makeFloorDecoration(
+                        (int)(2*cellSize), (int)(0.4*cellSize),
+                        170, 90,
+                        Textures.littleGreenCarpet
                 )));
         gameObjects.add((GameObjectFactory.
                 makeFloorDecoration(
-                        2*cellSize,
-                        (int) (2.5*cellSize),
-                        512,
-                        380,
+                        2*cellSize, (int)(2.5*cellSize),
+                        512, 380,
                         Textures.redCarpet
                 )));
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
-                        (int) (1.5*cellSize),
-                        (int) (6.0*cellSize),
-                        188,
-                        200,
+                        (int)(1.5*cellSize), (int)(6.0*cellSize),
+                        188, 200,
                         Textures.windowInternal
                 )));
         gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
-                        (int) (4.5*cellSize),
-                        (int) (6.0*cellSize),
-                        188,
-                        200,
+                        (int)(4.5*cellSize), (int)(6.0*cellSize),
+                        188, 200,
                         Textures.windowInternal
                 )));
     }
