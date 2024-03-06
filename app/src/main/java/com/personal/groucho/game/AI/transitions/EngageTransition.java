@@ -37,6 +37,6 @@ public class EngageTransition extends Transition {
 
     @Override
     public AIState targetState() {
-        return Engage.getInstance(owner);
+        return owner.engage;
     }
 }

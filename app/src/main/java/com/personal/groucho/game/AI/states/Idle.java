@@ -1,29 +1,20 @@
 package com.personal.groucho.game.AI.states;
 
+import static com.personal.groucho.game.controller.states.StateName.IDLE;
+
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
 import com.personal.groucho.game.AI.transitions.InvestigateTransition;
-import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
 
 public class Idle extends AIState {
-    private static Idle state = null;
 
-    private Idle() {
-        super();
-        name = StateName.IDLE;
-    }
-
-    public static AIState getInstance(AIComponent aiComponent) {
-        if (state == null) {
-            state = new Idle();
-        }
-        state.owner = aiComponent;
-        return state;
+    public Idle(AIComponent aiComponent) {
+        super(IDLE, aiComponent);
     }
 
     @Override

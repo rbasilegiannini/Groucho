@@ -37,6 +37,6 @@ public class AttackTransition extends Transition {
 
     @Override
     public AIState targetState() {
-        return Attack.getInstance(owner);
+        return owner.attack;
     }
 }

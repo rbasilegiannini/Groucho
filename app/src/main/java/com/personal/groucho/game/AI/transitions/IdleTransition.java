@@ -34,6 +34,6 @@ public class IdleTransition extends Transition {
     public List<Action> actions() { return Collections.emptyList(); }
 
     @Override
-    public AIState targetState() { return Idle.getInstance(owner); }
+    public AIState targetState() { return owner.idle; }
 }
 

@@ -1,30 +1,21 @@
 package com.personal.groucho.game.AI.states;
 
+import static com.personal.groucho.game.controller.states.StateName.INVESTIGATE;
+
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
 import com.personal.groucho.game.AI.transitions.IdleTransition;
 import com.personal.groucho.game.AI.transitions.PatrolTransition;
-import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
 
 public class Investigate extends AIState {
-    private static Investigate state = null;
 
-    private Investigate() {
-        super();
-        name = StateName.INVESTIGATE;
-    }
-
-    public static AIState getInstance(AIComponent aiComponent) {
-        if (state == null) {
-            state = new Investigate();
-        }
-        state.owner = aiComponent;
-        return state;
+    public Investigate(AIComponent aiComponent) {
+        super(INVESTIGATE, aiComponent);
     }
 
     @Override

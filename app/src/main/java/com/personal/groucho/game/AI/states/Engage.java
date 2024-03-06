@@ -1,30 +1,21 @@
 package com.personal.groucho.game.AI.states;
 
+import static com.personal.groucho.game.controller.states.StateName.ENGAGE;
+
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.AttackTransition;
 import com.personal.groucho.game.AI.transitions.IdleTransition;
 import com.personal.groucho.game.AI.transitions.PatrolTransition;
-import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
 
 public class Engage extends AIState {
-    private static Engage state = null;
 
-    private Engage() {
-        super();
-        name = StateName.ENGAGE;
-    }
-
-    public static AIState getInstance(AIComponent aiComponent) {
-        if (state == null) {
-            state = new Engage();
-        }
-        state.owner = aiComponent;
-        return state;
+    public Engage(AIComponent aiComponent) {
+        super(ENGAGE, aiComponent);
     }
 
     @Override

@@ -39,7 +39,5 @@ public class PatrolTransition extends Transition {
     }
 
     @Override
-    public AIState targetState() {
-        return Patrol.getInstance(owner);
-    }
+    public AIState targetState() {return owner.patrol;}
 }

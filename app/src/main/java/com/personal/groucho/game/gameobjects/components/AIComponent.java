@@ -27,6 +27,7 @@ import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.AI.states.Attack;
 import com.personal.groucho.game.AI.states.Engage;
 import com.personal.groucho.game.AI.states.Idle;
+import com.personal.groucho.game.AI.states.Investigate;
 import com.personal.groucho.game.AI.states.Patrol;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.controller.Orientation;
@@ -56,11 +57,23 @@ public class AIComponent extends WalkingComponent {
     public AttackActions attackActions;
     public InvestigateActions investigateActions;
 
+    public Idle idle;
+    public Patrol patrol;
+    public Engage engage;
+    public Investigate investigate;
+    public Attack attack;
+
     public AIComponent() {
         idleActions = new IdleActions(this);
         patrolActions = new PatrolActions(this);
         engageActions = new EngageActions(this);
         investigateActions = new InvestigateActions(this);
+
+        idle = new Idle(this);
+        patrol = new Patrol(this);
+        engage = new Engage(this);
+        investigate = new Investigate(this);
+        attack = new Attack(this);
 
         aStar = new AStar();
         fsm = new FSM();
@@ -80,16 +93,16 @@ public class AIComponent extends WalkingComponent {
 
         switch (originalState) {
             case PATROL:
-                fsm.setCurrentState(Patrol.getInstance(this));
+                fsm.setCurrentState(patrol);
                 break;
             case ENGAGE:
-                fsm.setCurrentState(Engage.getInstance(this));
+                fsm.setCurrentState(engage);
                 break;
             case ATTACK:
-                fsm.setCurrentState(Attack.getInstance(this));
+                fsm.setCurrentState(attack);
                 break;
             default:
-                fsm.setCurrentState(Idle.getInstance(this));
+                fsm.setCurrentState(idle);
                 break;
         }
 

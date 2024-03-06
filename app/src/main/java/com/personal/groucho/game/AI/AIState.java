@@ -12,6 +12,11 @@ public abstract class AIState {
     protected final List<Transition> transitions = new ArrayList<>();
     protected StateName name;
 
+    protected AIState(StateName name, AIComponent aiComponent){
+        this.name = name;
+        this.owner = aiComponent;
+    }
+
     public abstract List<Action> entryActions();
     public abstract List<Action> activeActions();
     public abstract List<Action> exitActions();

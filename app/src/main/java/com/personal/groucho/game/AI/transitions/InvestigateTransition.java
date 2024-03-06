@@ -30,5 +30,5 @@ public class InvestigateTransition extends Transition {
     public List<Action> actions() { return Collections.emptyList(); }
 
     @Override
-    public AIState targetState() { return Investigate.getInstance(owner); }
+    public AIState targetState() { return owner.investigate; }
 }

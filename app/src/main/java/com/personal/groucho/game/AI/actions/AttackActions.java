@@ -64,10 +64,10 @@ public class AttackActions implements Actions {
 
         switch (aiComp.originalState) {
             case IDLE:
-                aiComp.fsm.setState(Idle.getInstance(aiComp));
+                aiComp.fsm.setState(aiComp.idle);
                 break;
             case PATROL:
-                aiComp.fsm.setState(Patrol.getInstance(aiComp));
+                aiComp.fsm.setState(aiComp.patrol);
                 break;
         }
     }

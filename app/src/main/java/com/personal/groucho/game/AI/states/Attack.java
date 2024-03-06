@@ -1,28 +1,19 @@
 package com.personal.groucho.game.AI.states;
 
+import static com.personal.groucho.game.controller.states.StateName.ATTACK;
+
 import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
 import com.personal.groucho.game.AI.transitions.EngageTransition;
-import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.List;
 
 public class Attack extends AIState {
-    private static Attack state = null;
 
-    private Attack() {
-        super();
-        name = StateName.ATTACK;
-    }
-
-    public static AIState getInstance(AIComponent aiComponent) {
-        if (state == null) {
-            state = new Attack();
-        }
-        state.owner = aiComponent;
-        return state;
+    public Attack(AIComponent aiComponent) {
+        super(ATTACK, aiComponent);
     }
 
     @Override
