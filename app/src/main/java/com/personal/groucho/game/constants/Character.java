@@ -1,5 +1,7 @@
 package com.personal.groucho.game.constants;
 
+import static com.personal.groucho.game.constants.System.godMode;
+
 import android.content.Context;
 import android.os.Build;
 
@@ -24,6 +26,7 @@ public class Character {
     public static void init(Context context){
         grouchoSpeed = context.getResources().getFloat(R.dimen.groucho_speed);
         grouchoHealth = context.getResources().getInteger(R.integer.groucho_health);
+        if (godMode) grouchoHealth = 100000000;
         grouchoPower = context.getResources().getInteger(R.integer.groucho_power);
 
         skeletonSpeed = context.getResources().getFloat(R.dimen.skeleton_speed);

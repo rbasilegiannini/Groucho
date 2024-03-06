@@ -2,6 +2,6 @@
 <resources>
     <dimen name="max_light_intensity">400f</dimen>
     <dimen name="min_light_intensity">0f</dimen>
-    <dimen name="min_brightness">0.2f</dimen>
+    <dimen name="min_brightness">0.08f</dimen>
     <dimen name="max_brightness">1.0f</dimen>
 </resources>

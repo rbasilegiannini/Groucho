@@ -1,6 +1,7 @@
 package com.personal.groucho.game.constants;
 
 public class System {
+    public static boolean godMode = false;
     public static boolean debugMode = false;
     public static boolean fpsCounter = true;
     public static boolean memoryUsage = true;
@@ -9,5 +10,6 @@ public class System {
     public static final int charScaleFactor = 5;
     public static float distSight = 1000;
     public static int maxInvisiblePlayer = 5000;
+    public static int maxInvestigateTime = 15000;
     public static int cellSize = charScaleFactor *(int) charDimX;
 }
