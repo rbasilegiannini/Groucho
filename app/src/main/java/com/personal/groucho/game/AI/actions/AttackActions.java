@@ -8,8 +8,6 @@ import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import com.personal.groucho.game.AI.Actions;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
-import com.personal.groucho.game.AI.states.Idle;
-import com.personal.groucho.game.AI.states.Patrol;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.gameobjects.components.AliveComponent;

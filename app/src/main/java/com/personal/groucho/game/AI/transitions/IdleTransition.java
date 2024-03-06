@@ -4,7 +4,6 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
 import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
-import com.personal.groucho.game.AI.states.Idle;
 import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 

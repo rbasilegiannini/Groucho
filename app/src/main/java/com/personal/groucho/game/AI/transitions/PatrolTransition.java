@@ -6,7 +6,6 @@ import com.personal.groucho.game.AI.Action;
 import com.personal.groucho.game.AI.Condition;
 import com.personal.groucho.game.AI.AIState;
 import com.personal.groucho.game.AI.Transition;
-import com.personal.groucho.game.AI.states.Patrol;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 
 import java.util.Collections;
