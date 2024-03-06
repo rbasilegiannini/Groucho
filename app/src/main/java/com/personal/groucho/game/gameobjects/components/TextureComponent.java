@@ -7,7 +7,7 @@ import android.graphics.Rect;
 import com.personal.groucho.game.gameobjects.ComponentType;
 
 
-public class TextureDrawableComponent extends DrawableComponent{
+public class TextureComponent extends DrawableComponent{
     private PositionComponent posComp = null;
     private int dimX;
     private int dimY;
@@ -15,7 +15,7 @@ public class TextureDrawableComponent extends DrawableComponent{
     private final Rect src;
     private final Rect dest;
 
-    public TextureDrawableComponent(){
+    public TextureComponent(){
         src = new Rect();
         dest = new Rect();
     }

@@ -22,7 +22,7 @@ public class LightComponent extends Component {
     private final Paint maskPaint;
     private Bitmap defaultBitmap;
     private Canvas maskCanvas ;
-    private final PorterDuffXfermode porterCLEAR;
+    private final PorterDuffXfermode porterClear;
     private float intensity = minLightIntensity;
     private float centerX;
     private float centerY;
@@ -34,7 +34,7 @@ public class LightComponent extends Component {
 
     public LightComponent(){
         this.maskPaint = new Paint();
-        porterCLEAR = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+        porterClear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
     }
 
     public void init(Bitmap buffer) {
@@ -66,7 +66,7 @@ public class LightComponent extends Component {
 
         maskCanvas.drawColor(Color.valueOf(0,0,0, 1-brightness).toArgb());
 
-        maskPaint.setXfermode(porterCLEAR);
+        maskPaint.setXfermode(porterClear);
         maskCanvas.drawCircle(centerX, centerY, intensity, maskPaint);
 
         canvas.drawBitmap(maskBitmap, posComp.posX - centerX, posComp.posY - centerY, null);

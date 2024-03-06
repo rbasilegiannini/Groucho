@@ -3,6 +3,7 @@ package com.personal.groucho.game.gameobjects;
 import static android.graphics.Paint.Style.FILL_AND_STROKE;
 import static android.graphics.Shader.TileMode.REPEAT;
 import static com.google.fpl.liquidfun.BodyType.dynamicBody;
+import static com.google.fpl.liquidfun.BodyType.kinematicBody;
 import static com.google.fpl.liquidfun.BodyType.staticBody;
 import static com.personal.groucho.game.CharacterFactory.getGroucho;
 import static com.personal.groucho.game.assets.Spritesheets.grouchoIdle;
@@ -54,7 +55,7 @@ import com.personal.groucho.game.gameobjects.components.LightComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.gameobjects.components.SpriteComponent;
-import com.personal.groucho.game.gameobjects.components.TextureDrawableComponent;
+import com.personal.groucho.game.gameobjects.components.TextureComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.controller.states.Idle;
 import com.personal.groucho.game.gameobjects.components.TriggerComponent;
@@ -156,7 +157,7 @@ public class GameObjectFactory {
 
         posComp.setOrientation(orientation);
         PhysicsProp prop = new PhysicsProp(posX, posY,0f, -1f,
-                100f, 1f, dynamicBody);
+                25f, 1f, kinematicBody);
         setCharacterPhysics(phyComp, prop);
 
         return gameObject;
@@ -168,7 +169,7 @@ public class GameObjectFactory {
         int dimRoofY = (int) (length - dimWallY);
         Paint paintRoof = new Paint();
         Paint paintWall = new Paint();
-        Bitmap wallTexture = Bitmap.createScaledBitmap(Textures.woodWall,256, 256, false);
+        Bitmap wallTexture = Bitmap.createScaledBitmap(Textures.whiteWall,256, 256, false);
 
         Shader wallShader = new BitmapShader(wallTexture, REPEAT, REPEAT);
         paintWall.setShader(wallShader);
@@ -305,7 +306,7 @@ public class GameObjectFactory {
 
         PositionComponent posComp = Pools.posCompPool.acquire();
         PhysicsComponent phyComp = Pools.phyCompPool.acquire();
-        TextureDrawableComponent textureComp = Pools.textureCompPool.acquire();
+        TextureComponent textureComp = Pools.textureCompPool.acquire();
 
         gameObject.init("Furniture", FURNITURE);
 
@@ -329,7 +330,7 @@ public class GameObjectFactory {
                                                 Bitmap texture) {
         GameObject gameObject = Pools.objectsPool.acquire();
         PositionComponent posComp = Pools.posCompPool.acquire();
-        TextureDrawableComponent textureComp = Pools.textureCompPool.acquire();
+        TextureComponent textureComp = Pools.textureCompPool.acquire();
 
         gameObject.init("Decoration", NEUTRAL);
 
@@ -346,7 +347,7 @@ public class GameObjectFactory {
                                                  Bitmap texture) {
         GameObject gameObject = Pools.objectsPool.acquire();
         PositionComponent posComp = Pools.posCompPool.acquire();
-        TextureDrawableComponent textureComp = Pools.textureCompPool.acquire();
+        TextureComponent textureComp = Pools.textureCompPool.acquire();
 
         gameObject.init("Decoration", FLOOR);
 
@@ -365,7 +366,7 @@ public class GameObjectFactory {
         GameObject gameObject = Pools.objectsPool.acquire();
         PositionComponent posComp = Pools.posCompPool.acquire();
         PhysicsComponent phyComp = Pools.phyCompPool.acquire();
-        TextureDrawableComponent textureComp = Pools.textureCompPool.acquire();
+        TextureComponent textureComp = Pools.textureCompPool.acquire();
 
         gameObject.init("Health", HEALTH);
         posComp.init(posX, posY);

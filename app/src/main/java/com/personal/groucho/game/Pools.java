@@ -12,7 +12,7 @@ import com.personal.groucho.game.gameobjects.components.LightComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.gameobjects.components.SpriteComponent;
-import com.personal.groucho.game.gameobjects.components.TextureDrawableComponent;
+import com.personal.groucho.game.gameobjects.components.TextureComponent;
 import com.personal.groucho.game.gameobjects.components.TriggerComponent;
 
 public class Pools {
@@ -30,8 +30,8 @@ public class Pools {
             new ObjectsPool<>(10, AIComponent.class);
     public static final ObjectsPool<SpriteComponent> spriteCompPool =
             new ObjectsPool<>(100, SpriteComponent.class);
-    public static final ObjectsPool<TextureDrawableComponent> textureCompPool =
-            new ObjectsPool<>(100, TextureDrawableComponent.class);
+    public static final ObjectsPool<TextureComponent> textureCompPool =
+            new ObjectsPool<>(100, TextureComponent.class);
     public static final ObjectsPool<BoxDrawableComponent> boxCompPool =
             new ObjectsPool<>(100, BoxDrawableComponent.class);
     public static final ObjectsPool<AliveComponent> aliveCompPool =

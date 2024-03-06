@@ -25,7 +25,7 @@ import com.personal.groucho.game.gameobjects.components.LightComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.gameobjects.components.SpriteComponent;
-import com.personal.groucho.game.gameobjects.components.TextureDrawableComponent;
+import com.personal.groucho.game.gameobjects.components.TextureComponent;
 import com.personal.groucho.game.gameobjects.components.TriggerComponent;
 
 import java.util.ArrayList;
@@ -87,8 +87,8 @@ public class ComponentHandler {
         else if (compToRemove.getClass().equals(SpriteComponent.class)) {
             Pools.spriteCompPool.release((SpriteComponent) compToRemove);
         }
-        else if (compToRemove.getClass().equals(TextureDrawableComponent.class)) {
-            Pools.textureCompPool.release((TextureDrawableComponent) compToRemove);
+        else if (compToRemove.getClass().equals(TextureComponent.class)) {
+            Pools.textureCompPool.release((TextureComponent) compToRemove);
         }
         drawComps.remove((DrawableComponent)compToRemove);
     }
