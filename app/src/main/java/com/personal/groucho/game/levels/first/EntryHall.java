@@ -6,6 +6,7 @@ import static com.personal.groucho.game.assets.Textures.lightWoodFloor;
 import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
+import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.Orientation.UP;
 
 import android.graphics.Bitmap;
@@ -42,6 +43,10 @@ public class EntryHall extends Room {
     public void init() {
         super.init();
 
+        if (level.isEndGame()) {
+
+        }
+
         if (firstTime) {
             playerPosX = 3*cellSize;
             playerPosY = (int) (7.5*cellSize);
@@ -53,6 +58,20 @@ public class EntryHall extends Room {
             playerPosX = 3*cellSize;
             playerPosY = (int) (7.5*cellSize);
             playerOrientation = UP;
+        }
+
+        if (level.fromZombieRoomToEntryHall) {
+            playerPosX = (int) (11*cellSize);
+            playerPosY = (int) (2.0*cellSize);
+            playerOrientation = LEFT;
+        }
+
+        if (level.fromSkeletonRoomToEntryHall) {
+
+        }
+
+        if (level.fromWolfRoomToEntryHall) {
+
         }
 
         makeDecorations();
@@ -82,6 +101,22 @@ public class EntryHall extends Room {
                     level.fromEntryHallToLibrary = true;
                     level.fromHallwayToLibrary = false;
                     level.goToLibrary();
+                });
+
+        // Door to zombies room
+        makeFloorTrigger(
+                (int) (11.55*cellSize),2*cellSize,
+                (int) (12.4*cellSize), 2*cellSize,
+                90, 150, Textures.littleGreenCarpetVer,
+                ()->{
+                    if (!level.bathroomKey) {
+                        door.play(1f);
+                        level.goToZombiesRoom();
+                    }
+                    else {
+                        String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
+                        grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                    }
                 });
 
         // Dresser
@@ -189,12 +224,6 @@ public class EntryHall extends Room {
                 )));
         gameObjects.add((GameObjectFactory.
                 makeFloorDecoration(
-                        (int) (11.65*cellSize), (int) (2.0*cellSize),
-                        90, 150,
-                        Textures.littleGreenCarpetVer
-                )));
-        gameObjects.add((GameObjectFactory.
-                makeFloorDecoration(
                         (int) (11.65*cellSize), (int) (6.0*cellSize),
                         90, 150,
                         Textures.littleGreenCarpetVer
@@ -225,11 +254,11 @@ public class EntryHall extends Room {
                         150, 150, 5f, world, Textures.littleTable)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture((int)(11.5*cellSize), (int) (0.3*cellSize),
+                makeFurniture((int)(11.3*cellSize), (int) (0.3*cellSize),
                         150, 150, 5f, world, Textures.littleTable)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture((int)(11.5*cellSize), (int) (3.8*cellSize),
+                makeFurniture((int)(11.3*cellSize), (int) (3.8*cellSize),
                         150, 380, 25f, world, Textures.greenCouchRight)
         );
     }

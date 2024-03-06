@@ -110,14 +110,28 @@ public class Room {
         gameWorld.controller.bulb.setVisibility(visibility);
     }
 
-    protected void makeWallTrigger(int decCx, int decCy,
+    protected GameObject makeWallTrigger(int decCx, int decCy,
                                  int triggerX, int triggerY,
                                  int dimX, int dimY,
                                  Bitmap texture, Runnable runnable) {
-
-        gameObjects.add((GameObjectFactory.makeWallDecoration(decCx, decCy, dimX, dimY, texture)));
+        GameObject decoration = GameObjectFactory.makeWallDecoration(decCx, decCy, dimX, dimY, texture);
+        gameObjects.add(decoration);
         gameObjects.add(GameObjectFactory.
                 makeTrigger(triggerX, triggerY, dimX, dimY, gameWorld.physics.world, runnable));
+
+        return decoration;
+    }
+
+    protected GameObject makeFloorTrigger(int decCx, int decCy,
+                                         int triggerX, int triggerY,
+                                         int dimX, int dimY,
+                                         Bitmap texture, Runnable runnable) {
+        GameObject decoration = GameObjectFactory.makeFloorDecoration(decCx, decCy, dimX, dimY, texture);
+        gameObjects.add(decoration);
+        gameObjects.add(GameObjectFactory.
+                makeTrigger(triggerX, triggerY, dimX, dimY, gameWorld.physics.world, runnable));
+
+        return decoration;
     }
 
     protected void grouchoTalk(String sentence, int posX, int posY) {

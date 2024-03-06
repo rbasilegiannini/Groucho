@@ -36,5 +36,12 @@
     <string name="groucho_entryhall_me_frame">Direi autoreferenziale.</string>
     <string name="groucho_entryhall_dresser">È finto.</string>
 
+    <string name="groucho_zombiesroom_init">Shh!</string>
+    <string name="groucho_entryhall_room_complete">
+        Ho già preso la chiave e non ho intenzione di tornarci.
+    </string>
+
+    <string name="groucho_keys">Una chiave! Ora ne ho </string>
+
 
 </resources>

@@ -69,6 +69,7 @@ public class GameWorld {
         currentLevel = level;
         initPlayer();
         currentLevel.init();
+        controller.handleLightTouchDown();
     }
 
     private void initEnvironment() {
@@ -175,15 +176,6 @@ public class GameWorld {
                     break;
             }
         }
-    }
-
-    public synchronized void changeLevel(Level newLevel) {
-//        goHandler.changeLevel();
-//        nodesPool.clear();
-//        grid.reset();
-//
-//        currentLevel = newLevel;
-//        currentLevel.init();
     }
 
     public void resume() {pause = false;}
