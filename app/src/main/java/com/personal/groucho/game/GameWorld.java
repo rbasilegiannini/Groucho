@@ -152,6 +152,7 @@ public class GameWorld {
             GameOver();
         }
         else {
+            currentLevel.handleDeath();
             ComponentHandler.getInstance().removeComponent(character, AI);
             ComponentHandler.getInstance().removeComponent(character, PHYSICS);
             ComponentHandler.getInstance().removeComponent(character, LIGHT);

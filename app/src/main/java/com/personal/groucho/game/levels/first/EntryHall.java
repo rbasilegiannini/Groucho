@@ -7,6 +7,7 @@ import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
+import static com.personal.groucho.game.controller.Orientation.RIGHT;
 import static com.personal.groucho.game.controller.Orientation.UP;
 
 import android.graphics.Bitmap;
@@ -66,12 +67,15 @@ public class EntryHall extends Room {
             playerOrientation = LEFT;
         }
 
-        if (level.fromSkeletonRoomToEntryHall) {
-
+        if (level.fromGardenToEntryHall) {
+            playerPosX = (int) (11*cellSize);
+            playerPosY = (int) (6.0*cellSize);
+            playerOrientation = LEFT;
         }
 
         if (level.fromWolfRoomToEntryHall) {
-
+            //
+            playerOrientation = RIGHT;
         }
 
         makeDecorations();
@@ -106,12 +110,28 @@ public class EntryHall extends Room {
         // Door to zombies room
         makeFloorTrigger(
                 (int) (11.55*cellSize),2*cellSize,
-                (int) (12.4*cellSize), 2*cellSize,
+                (int) (12.3*cellSize), 2*cellSize,
                 90, 150, Textures.littleGreenCarpetVer,
                 ()->{
                     if (!level.bathroomKey) {
                         door.play(1f);
                         level.goToZombiesRoom();
+                    }
+                    else {
+                        String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
+                        grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                    }
+                });
+
+        // Door to garden
+        makeFloorTrigger(
+                (int) (11.55*cellSize),6*cellSize,
+                (int) (12.3*cellSize), 6*cellSize,
+                90, 150, Textures.littleGreenCarpetVer,
+                ()->{
+                    if (!level.gardenKey) {
+                        door.play(1f);
+                        level.goToGarden();
                     }
                     else {
                         String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
@@ -223,12 +243,6 @@ public class EntryHall extends Room {
                         Textures.littleGreenCarpetVer
                 )));
         gameObjects.add((GameObjectFactory.
-                makeFloorDecoration(
-                        (int) (11.65*cellSize), (int) (6.0*cellSize),
-                        90, 150,
-                        Textures.littleGreenCarpetVer
-                )));
-        gameObjects.add((GameObjectFactory.
                 makeWallDecoration(
                         (int) (7.5*cellSize), (int) (9.0*cellSize),
                         188, 200,
@@ -246,19 +260,19 @@ public class EntryHall extends Room {
         World world = gameWorld.physics.world;
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture((int)(0.80*cellSize), (int) (6.5*cellSize),
+                makeDynamicFurniture((int)(0.80*cellSize), (int) (6.5*cellSize),
                         150, 200, 15f, world, Textures.armChairLeft)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture((int)(0.80*cellSize), (int) (5.5*cellSize),
+                makeDynamicFurniture((int)(0.80*cellSize), (int) (5.5*cellSize),
                         150, 150, 5f, world, Textures.littleTable)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture((int)(11.3*cellSize), (int) (0.3*cellSize),
+                makeDynamicFurniture((int)(11.3*cellSize), (int) (0.3*cellSize),
                         150, 150, 5f, world, Textures.littleTable)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture((int)(11.3*cellSize), (int) (3.8*cellSize),
+                makeDynamicFurniture((int)(11.3*cellSize), (int) (3.8*cellSize),
                         150, 380, 25f, world, Textures.greenCouchRight)
         );
     }
