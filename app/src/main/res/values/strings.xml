@@ -37,6 +37,11 @@
     <string name="groucho_entryhall_dresser">È finto.</string>
 
     <string name="groucho_zombiesroom_init">Shh!</string>
+    <string name="groucho_garden_statue">Siamo ancora in troppi!</string>
+    <string name="groucho_garden_init">
+        Accidenti, che linea! \n
+        Anche io una volta ho iniziato a seguire una dieta, ma mi ha seminato.
+    </string>
     <string name="groucho_entryhall_room_complete">
         Ho già preso la chiave e non ho intenzione di tornarci.
     </string>

@@ -144,7 +144,7 @@ public class ZombiesRoom extends Room {
                 90, 150, Textures.littleGreenCarpetVer,
                 ()->{
                     level.fromZombieRoomToEntryHall = true;
-                    level.fromSkeletonRoomToEntryHall = false;
+                    level.fromGardenToEntryHall = false;
                     level.fromLibraryToEntryHall = false;
                     level.fromWolfRoomToEntryHall = false;
                     door.play(1f);
@@ -155,47 +155,47 @@ public class ZombiesRoom extends Room {
         World world = gameWorld.physics.world;
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture(
+                makeDynamicFurniture(
                         5*cellSize, 5*cellSize, 90, 150, 5f,
                         world, Textures.chairLeft)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture(
+                makeDynamicFurniture(
                         (int) (3.9*cellSize), 2*cellSize, 90, 300, 35f,
                         world, Textures.dresserRight)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture(
+                makeDynamicFurniture(
                         (int) (0.5*cellSize), 5*cellSize, 150, 150, 5f,
                         world, Textures.littleTable)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture(
+                makeDynamicFurniture(
                         (int) (7.7*cellSize), 4*cellSize, 150, 130, 5f,
                         world, Textures.ironingBoard)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture(
+                makeDynamicFurniture(
                         (int) (10.7*cellSize), 5*cellSize, 150, 180, 15f,
                         world, Textures.tableWithFlowers)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture(
+                makeDynamicFurniture(
                         (int) (16.7*cellSize), 5*cellSize, 100, 100, 5f,
                         world, Textures.box)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture(
+                makeDynamicFurniture(
                         (int) (17.3*cellSize), 5*cellSize, 70, 70, 5f,
                         world, Textures.box)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture(
+                makeDynamicFurniture(
                         (int) (17.0*cellSize), (int) (4.5*cellSize), 110, 110, 5f,
                         world, Textures.box)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture(
+                makeDynamicFurniture(
                         (int) (17.7*cellSize), (int) (2*cellSize), 90, 300, 35f,
                         world, Textures.dresserRight)
         );
@@ -214,6 +214,6 @@ public class ZombiesRoom extends Room {
                         (int) (11.5* cellSize), (int) (2.5*cellSize), UP, getZombie(), PATROL, gameWorld));
         gameObjects.add(
                 GameObjectFactory.makeEnemy(
-                        (int) (13.5* cellSize), (int) (3.5*cellSize), UP, getZombie(), IDLE, gameWorld));
+                        (int) (13.5* cellSize), (int) (3.3*cellSize), UP, getZombie(), IDLE, gameWorld));
     }
 }

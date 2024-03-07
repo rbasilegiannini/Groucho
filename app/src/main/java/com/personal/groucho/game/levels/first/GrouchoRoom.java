@@ -126,11 +126,11 @@ public class GrouchoRoom extends Room {
     private void makeFurniture() {
         World world = gameWorld.physics.world;
         gameObjects.add(GameObjectFactory.
-                makeFurniture(tableX, tableY, 250, 150, 5f, world, Textures.table)
+                makeDynamicFurniture(tableX, tableY, 250, 150, 5f, world, Textures.table)
         );
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture(bedX, bedY, 280, 350, 100f, world, Textures.bed)
+                makeDynamicFurniture(bedX, bedY, 280, 350, 100f, world, Textures.bed)
         );
     }
 

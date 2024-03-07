@@ -300,8 +300,8 @@ public class GameObjectFactory {
         return border;
     }
 
-    public static GameObject makeFurniture(int centerX, int centerY, float dimX, float dimY, float density,
-                                           World world, Bitmap texture) {
+    public static GameObject makeDynamicFurniture(int centerX, int centerY, float dimX, float dimY, float density,
+                                                  World world, Bitmap texture) {
         GameObject gameObject = Pools.objectsPool.acquire();
 
         PositionComponent posComp = Pools.posCompPool.acquire();
@@ -320,6 +320,32 @@ public class GameObjectFactory {
 
         PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f,0f,
                 density, 0, dynamicBody);
+        setFurniturePhysics(phyComp, prop);
+        setFurnitureOnGameGrid(prop, dimX, dimY);
+
+        return gameObject;
+    }
+
+    public static GameObject makeStaticFurniture(int centerX, int centerY, float dimX, float dimY,
+                                                  World world, Bitmap texture) {
+        GameObject gameObject = Pools.objectsPool.acquire();
+
+        PositionComponent posComp = Pools.posCompPool.acquire();
+        PhysicsComponent phyComp = Pools.phyCompPool.acquire();
+        TextureComponent textureComp = Pools.textureCompPool.acquire();
+
+        gameObject.init("Furniture", FURNITURE);
+
+        posComp.init(centerX, centerY);
+        phyComp.init(world, dimX, dimY/4);
+        textureComp.init(texture, (int)dimX, (int)dimY);
+
+        gameObject.addComponent(posComp);
+        gameObject.addComponent(phyComp);
+        gameObject.addComponent(textureComp);
+
+        PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f,0.5f,
+                0f, 0, staticBody);
         setFurniturePhysics(phyComp, prop);
         setFurnitureOnGameGrid(prop, dimX, dimY);
 

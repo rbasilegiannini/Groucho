@@ -5,14 +5,14 @@
     <integer name="groucho_power">15</integer>
 
     <dimen name="skeleton_speed">5f</dimen>
-    <integer name="skeleton_health">100</integer>
-    <integer name="skeleton_power">30</integer>
+    <integer name="skeleton_health">70</integer>
+    <integer name="skeleton_power">10</integer>
 
     <dimen name="zombie_speed">3f</dimen>
     <integer name="zombie_health">200</integer>
     <integer name="zombie_power">30</integer>
 
-    <integer name="medical_kit">20</integer>
+    <integer name="medical_kit">10</integer>
 
     <integer name="hearing_range">1500</integer>
     <integer name="hearing_range_sqr">2250000</integer>

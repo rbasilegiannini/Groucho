@@ -84,7 +84,7 @@ public class Trigger extends Widget{
 
     public boolean isOnTrigger(float x, float y) {
         if(!visible) return false;
-        return isInCircle(triggerPosX, triggerPosY, x, y, radiusSqr);
+        return isInCircle(triggerPosX, triggerPosY, x, y, radiusSqr+50000);
     }
     public boolean isOnLoadingArea(float x, float y) {
         if(!visible) return false;

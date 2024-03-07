@@ -170,34 +170,34 @@ public class Library extends Room {
         World world = gameWorld.physics.world;
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture(couchX, couchY, 400, 210, 25f, world, Textures.orangeCouch)
+                makeDynamicFurniture(couchX, couchY, 400, 210, 25f, world, Textures.orangeCouch)
         );
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture(tableX, tableY, 250, 150, 5f, world, Textures.mediumTable)
+                makeDynamicFurniture(tableX, tableY, 250, 150, 5f, world, Textures.mediumTable)
         );
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture(littleTableX, littleTableY, 150, 150, 5f, world, Textures.littleTable)
+                makeDynamicFurniture(littleTableX, littleTableY, 150, 150, 5f, world, Textures.littleTable)
         );
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture(chairLeftX, chairLeftY, 90, 150, 5f, world, Textures.chairLeft)
+                makeDynamicFurniture(chairLeftX, chairLeftY, 90, 150, 5f, world, Textures.chairLeft)
         );
         gameObjects.add(GameObjectFactory.
-                makeFurniture(chairRightX, chairRightY, 90, 150, 5f, world, Textures.chairRight)
-        );
-
-        gameObjects.add(GameObjectFactory.
-                makeFurniture(chairUpX, chairUpY, 90, 150, 5f, world, Textures.chairUp)
+                makeDynamicFurniture(chairRightX, chairRightY, 90, 150, 5f, world, Textures.chairRight)
         );
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture(chairDownX, chairDownY, 90, 110, 5f, world, Textures.chairDown)
+                makeDynamicFurniture(chairUpX, chairUpY, 90, 150, 5f, world, Textures.chairUp)
         );
 
         gameObjects.add(GameObjectFactory.
-                makeFurniture((int)(6.5*cellSize), (int)(4.5*cellSize), 150, 200, 15f, world, Textures.armChairRight)
+                makeDynamicFurniture(chairDownX, chairDownY, 90, 110, 5f, world, Textures.chairDown)
+        );
+
+        gameObjects.add(GameObjectFactory.
+                makeDynamicFurniture((int)(6.5*cellSize), (int)(4.5*cellSize), 150, 200, 15f, world, Textures.armChairRight)
         );
     }
 

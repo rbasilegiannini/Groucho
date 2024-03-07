@@ -154,4 +154,5 @@ public class Room {
         gameWorld.bubbleSpeech.setText(sentence);
     }
 
+    public void handleDeath() {}
 }
