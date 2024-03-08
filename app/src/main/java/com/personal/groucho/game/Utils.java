@@ -104,7 +104,7 @@ public class Utils {
         float distFromGOY = originY - posGO.posY;
 
         float distSquared = distFromGOX * distFromGOX + distFromGOY * distFromGOY;
-        float thresholdSquared = 1.2f * charScaleFactor * charDimX;
+        float thresholdSquared = 1.5f * charScaleFactor * charDimX;
         thresholdSquared *= thresholdSquared;
 
         return distSquared <= thresholdSquared;
