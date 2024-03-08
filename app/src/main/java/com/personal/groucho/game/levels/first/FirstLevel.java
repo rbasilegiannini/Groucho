@@ -9,11 +9,11 @@ public class FirstLevel extends Level {
     private final Room hallway;
     private final Room library;
     private final Room entryHall;
-    private final Room zombiesRoom;
+    private final Room bathroom;
     private final Room garden;
     private final Room wolfRoom;
 
-    protected boolean fromZombieRoomToEntryHall, fromGardenToEntryHall, fromKitchenToEntryHall;
+    protected boolean fromBathroomToEntryHall, fromGardenToEntryHall, fromKitchenToEntryHall;
     protected int counterKeys = 0;
     protected boolean fromEntryHallToLibrary,fromHallwayToLibrary;
     protected boolean fromGrouchoRoomToHallway, fromLibraryToHallway, fromLibraryToEntryHall;
@@ -24,7 +24,7 @@ public class FirstLevel extends Level {
         hallway = new Hallway(gameWorld, this);
         library = new Library(gameWorld, this);
         entryHall = new EntryHall(gameWorld, this);
-        zombiesRoom = new ZombiesRoom(gameWorld, this);
+        bathroom = new Bathroom(gameWorld, this);
         garden = new Garden(gameWorld, this);
         wolfRoom = new Kitchen(gameWorld, this);
     }
@@ -38,7 +38,7 @@ public class FirstLevel extends Level {
     public void goToHallway() {changeRoom(hallway);}
     public void goToGrouchoRoom() {changeRoom(grouchoRoom);}
     public void goToEntryHall() {changeRoom(entryHall);}
-    public void goToZombiesRoom() {changeRoom(zombiesRoom);}
+    public void goToBathroom() {changeRoom(bathroom);}
     public void goToGarden() {changeRoom(garden);}
     public void goToKitchen() {changeRoom(wolfRoom);}
 

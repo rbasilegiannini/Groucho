@@ -132,7 +132,7 @@ public class Kitchen extends Room {
                 (int)(10.3*cellSize), 4*cellSize,
                 90, 150, Textures.littleGreenCarpetVer,
                 ()->{
-                    level.fromZombieRoomToEntryHall = false;
+                    level.fromBathroomToEntryHall = false;
                     level.fromGardenToEntryHall = false;
                     level.fromLibraryToEntryHall = false;
                     level.fromKitchenToEntryHall = true;

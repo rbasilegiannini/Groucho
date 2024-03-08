@@ -118,7 +118,7 @@ public class Garden extends Room {
                 (int)(-0.35*cellSize), 3*cellSize,
                 90, 150, Textures.littleGreenCarpetVer,
                 ()->{
-                    level.fromZombieRoomToEntryHall = false;
+                    level.fromBathroomToEntryHall = false;
                     level.fromGardenToEntryHall = true;
                     level.fromLibraryToEntryHall = false;
                     level.fromKitchenToEntryHall = false;

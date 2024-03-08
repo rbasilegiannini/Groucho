@@ -61,7 +61,7 @@ public class EntryHall extends Room {
             playerOrientation = UP;
         }
 
-        if (level.fromZombieRoomToEntryHall) {
+        if (level.fromBathroomToEntryHall) {
             playerPosX = (int) (11*cellSize);
             playerPosY = (int) (2.0*cellSize);
             playerOrientation = LEFT;
@@ -113,7 +113,7 @@ public class EntryHall extends Room {
                     level.goToLibrary();
                 });
 
-        // Door to zombies room
+        // Door to bathroom
         makeFloorTrigger(
                 (int) (11.55*cellSize),2*cellSize,
                 (int) (12.3*cellSize), 2*cellSize,
@@ -121,7 +121,7 @@ public class EntryHall extends Room {
                 ()->{
                     if (!level.bathroomKey) {
                         door.play(1f);
-                        level.goToZombiesRoom();
+                        level.goToBathroom();
                     }
                     else {
                         String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);

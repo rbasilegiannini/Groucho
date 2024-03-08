@@ -28,14 +28,14 @@ import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.components.TextureComponent;
 import com.personal.groucho.game.levels.Room;
 
-public class ZombiesRoom extends Room {
+public class Bathroom extends Room {
     private final FirstLevel level;
     private int playerPosX, playerPosY;
     private GameObject bathroomKey;
 
     public static boolean firstTime = true;
 
-    public ZombiesRoom(GameWorld gameWorld, FirstLevel level) {
+    public Bathroom(GameWorld gameWorld, FirstLevel level) {
         super(3000, 1200, gameWorld);
         this.internalWall = bathroomWall;
         this.externalWall = woodWall;
@@ -142,7 +142,7 @@ public class ZombiesRoom extends Room {
                 (int)(-0.35*cellSize), 3*cellSize,
                 90, 150, Textures.littleGreenCarpetVer,
                 ()->{
-                    level.fromZombieRoomToEntryHall = true;
+                    level.fromBathroomToEntryHall = true;
                     level.fromGardenToEntryHall = false;
                     level.fromLibraryToEntryHall = false;
                     level.fromKitchenToEntryHall = false;
