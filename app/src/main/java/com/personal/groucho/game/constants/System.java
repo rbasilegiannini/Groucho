@@ -1,7 +1,7 @@
 package com.personal.groucho.game.constants;
 
 public class System {
-    public static boolean godMode = false;
+    public static boolean godMode = true;
     public static boolean debugMode = false;
     public static boolean fpsCounter = true;
     public static boolean memoryUsage = true;

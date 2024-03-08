@@ -50,13 +50,13 @@ public class GrouchoRoom extends Room {
 
             setControllerVisibility(false);
 
-            grouchoTalk(gameWorld.activity.getString(R.string.groucho_bedroom_talk_init1), playerPosX, playerPosY);
+            grouchoTalk(gameWorld.activity.getString(R.string.groucho_bedroom_init1), playerPosX, playerPosY);
             level.eventChain.addAction(()-> {
                 gameWorld.player.setOrientation(UP);
-                dylanTalk( gameWorld.activity.getString(R.string.dylan_bedroom_talk_init), 600, 500);
+                dylanTalk( gameWorld.activity.getString(R.string.dylan_bedroom_init), 600, 500);
             });
             level.eventChain.addAction(()->
-                    grouchoTalk(gameWorld.activity.getString(R.string.groucho_bedroom_talk_init2), playerPosX, playerPosY));
+                    grouchoTalk(gameWorld.activity.getString(R.string.groucho_bedroom_init2), playerPosX, playerPosY));
             level.eventChain.addAction(()->{
                 gameWorld.controller.dpad.setVisibility(true);
                 gameWorld.controller.pause.setVisibility(true);
@@ -92,7 +92,7 @@ public class GrouchoRoom extends Room {
                 128, 128,
                 Textures.grouchoFrame,
                 () -> {
-                    String sentence = gameWorld.activity.getString(R.string.groucho_bedroom_talk_photo);
+                    String sentence = gameWorld.activity.getString(R.string.groucho_bedroom_photo);
                     grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
                 });
 
@@ -103,7 +103,7 @@ public class GrouchoRoom extends Room {
                 280, 350,
                 Textures.grouchoWardrobe,
                 () -> {
-                    String sentence = gameWorld.activity.getString(R.string.groucho_bedroom_talk_wardrobe);
+                    String sentence = gameWorld.activity.getString(R.string.groucho_bedroom_wardrobe);
                     grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
                 });
 

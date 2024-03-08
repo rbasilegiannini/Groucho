@@ -76,10 +76,10 @@ public class Library extends Room {
 
         if (firstTime) {
             setControllerVisibility(false);
-            grouchoTalk(gameWorld.activity.getString(R.string.groucho_hall_talk_init1), playerPosX, playerPosY);
+            grouchoTalk(gameWorld.activity.getString(R.string.groucho_library_init1), playerPosX, playerPosY);
             level.eventChain.addAction(()-> {
                 gameWorld.player.setOrientation(DOWN);
-                grouchoTalk(gameWorld.activity.getString(R.string.groucho_hall_talk_init2), playerPosX, playerPosY);
+                grouchoTalk(gameWorld.activity.getString(R.string.groucho_library_init2), playerPosX, playerPosY);
             });
             level.eventChain.addAction(()->setControllerVisibility(true));
         }

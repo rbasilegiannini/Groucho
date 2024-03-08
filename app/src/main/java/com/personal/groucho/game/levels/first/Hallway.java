@@ -60,10 +60,10 @@ public class Hallway extends Room {
         if (firstTime) {
             setControllerVisibility(false);
 
-            grouchoTalk(gameWorld.activity.getString(R.string.groucho_hallway_talk_init1), playerPosX, playerPosY);
+            grouchoTalk(gameWorld.activity.getString(R.string.groucho_hallway_init1), playerPosX, playerPosY);
             level.eventChain.addAction(()-> {
                 gameWorld.controller.bulb.setVisibility(true);
-                grouchoTalk(gameWorld.activity.getString(R.string.groucho_hallway_talk_init2), playerPosX, playerPosY);
+                grouchoTalk(gameWorld.activity.getString(R.string.groucho_hallway_init2), playerPosX, playerPosY);
             });
             level.eventChain.addAction(()-> {
                 gameWorld.controller.handleLightTouchDown();
@@ -132,7 +132,7 @@ public class Hallway extends Room {
                 180, 128,
                 Textures.littleLibrary,
                 () -> {
-                    String sentence = gameWorld.activity.getString(R.string.groucho_hallway_talk_library);
+                    String sentence = gameWorld.activity.getString(R.string.groucho_hallway_library);
                     grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
                 }
         );
@@ -144,7 +144,7 @@ public class Hallway extends Room {
                 188, 200,
                 Textures.windowNight,
                 () -> {
-                    String sentence = gameWorld.activity.getString(R.string.groucho_hallway_talk_window);
+                    String sentence = gameWorld.activity.getString(R.string.groucho_hallway_window);
                     grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
                 }
         );

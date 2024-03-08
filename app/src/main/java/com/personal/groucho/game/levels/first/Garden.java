@@ -121,7 +121,7 @@ public class Garden extends Room {
                     level.fromZombieRoomToEntryHall = false;
                     level.fromGardenToEntryHall = true;
                     level.fromLibraryToEntryHall = false;
-                    level.fromWolfRoomToEntryHall = false;
+                    level.fromKitchenToEntryHall = false;
                     door.play(1f);
                     level.goToEntryHall();
                 });

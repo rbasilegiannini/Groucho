@@ -54,7 +54,7 @@ public class ZombiesRoom extends Room {
         playerPosY = 3*cellSize;
 
         if (firstTime) {
-            String sentence = gameWorld.activity.getString(R.string.groucho_zombiesroom_init);
+            String sentence = gameWorld.activity.getString(R.string.groucho_bathroom_init);
             grouchoTalk(sentence, playerPosX, playerPosY);
         }
 
@@ -108,7 +108,6 @@ public class ZombiesRoom extends Room {
                 (int) (2.2* cellSize), cellSize, 250, 100, Textures.littleCarpetBathroom));
         gameObjects.add((GameObjectFactory.makeWallDecoration(
                         (int) (15.2*cellSize), (int) (-0.5*cellSize), 100, 356, Textures.lamp)));
-
     }
 
     private void makeTriggers() {
@@ -146,7 +145,7 @@ public class ZombiesRoom extends Room {
                     level.fromZombieRoomToEntryHall = true;
                     level.fromGardenToEntryHall = false;
                     level.fromLibraryToEntryHall = false;
-                    level.fromWolfRoomToEntryHall = false;
+                    level.fromKitchenToEntryHall = false;
                     door.play(1f);
                     level.goToEntryHall();
                 });
@@ -199,7 +198,6 @@ public class ZombiesRoom extends Room {
                         (int) (17.7*cellSize), (int) (2*cellSize), 90, 300, 35f,
                         world, Textures.dresserRight)
         );
-
     }
 
     private void makeEnemies() {

@@ -51,7 +51,7 @@ public class EntryHall extends Room {
         if (firstTime) {
             playerPosX = 3*cellSize;
             playerPosY = (int) (7.5*cellSize);
-            String sentence = gameWorld.activity.getString(R.string.dylan_bedroom_talk_init);
+            String sentence = gameWorld.activity.getString(R.string.dylan_bedroom_init);
             dylanTalk(sentence, playerPosX+2*cellSize, (int) playerPosY);
         }
 
@@ -73,9 +73,15 @@ public class EntryHall extends Room {
             playerOrientation = LEFT;
         }
 
-        if (level.fromWolfRoomToEntryHall) {
-            //
+        if (level.fromKitchenToEntryHall) {
+            playerPosX = cellSize;
+            playerPosY = 3*cellSize;
             playerOrientation = RIGHT;
+        }
+
+        if (level.kitchenKey) {
+            String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_afterwolf);
+            grouchoTalk(sentence, playerPosX, playerPosY);
         }
 
         makeDecorations();
@@ -132,6 +138,22 @@ public class EntryHall extends Room {
                     if (!level.gardenKey) {
                         door.play(1f);
                         level.goToGarden();
+                    }
+                    else {
+                        String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
+                        grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                    }
+                });
+
+        // Door to kitchen
+        makeFloorTrigger(
+                (int)(0.35*cellSize), 3*cellSize,
+                (int) (-0.35*cellSize), 3*cellSize,
+                90, 150, Textures.littleGreenCarpetVer,
+                ()->{
+                    if (!level.kitchenKey) {
+                        door.play(1f);
+                        level.goToKitchen();
                     }
                     else {
                         String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);

@@ -11,11 +11,13 @@ public class FirstLevel extends Level {
     private final Room entryHall;
     private final Room zombiesRoom;
     private final Room garden;
-    protected boolean fromZombieRoomToEntryHall, fromGardenToEntryHall, fromWolfRoomToEntryHall;
+    private final Room wolfRoom;
+
+    protected boolean fromZombieRoomToEntryHall, fromGardenToEntryHall, fromKitchenToEntryHall;
     protected int counterKeys = 0;
     protected boolean fromEntryHallToLibrary,fromHallwayToLibrary;
     protected boolean fromGrouchoRoomToHallway, fromLibraryToHallway, fromLibraryToEntryHall;
-    protected boolean bathroomKey = false, gardenKey = false, wolfKey = false;
+    protected boolean bathroomKey = false, gardenKey = false, kitchenKey = false;
 
     public FirstLevel(GameWorld gameWorld){
         grouchoRoom = new GrouchoRoom(gameWorld, this);
@@ -24,10 +26,11 @@ public class FirstLevel extends Level {
         entryHall = new EntryHall(gameWorld, this);
         zombiesRoom = new ZombiesRoom(gameWorld, this);
         garden = new Garden(gameWorld, this);
+        wolfRoom = new Kitchen(gameWorld, this);
     }
 
     public void init(){
-        activeRoom = garden;
+        activeRoom = wolfRoom;
         activeRoom.init();
     }
 
@@ -37,6 +40,7 @@ public class FirstLevel extends Level {
     public void goToEntryHall() {changeRoom(entryHall);}
     public void goToZombiesRoom() {changeRoom(zombiesRoom);}
     public void goToGarden() {changeRoom(garden);}
+    public void goToKitchen() {changeRoom(wolfRoom);}
 
     private void changeRoom(Room hall) {
         activeRoom.releaseRoom();
@@ -44,5 +48,6 @@ public class FirstLevel extends Level {
         activeRoom.init();
     }
 
-    protected boolean isEndGame() {return bathroomKey && gardenKey && wolfKey;}
+    protected boolean isEndGame() {return bathroomKey && gardenKey && kitchenKey;}
+
 }

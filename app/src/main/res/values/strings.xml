@@ -2,19 +2,19 @@
     <string name="app_name">Groucho</string>
 
     <!-- Dialog first level -->
-    <string name="groucho_bedroom_talk_init1">mmm… \n Forse sto dormendo…</string>
-    <string name="groucho_bedroom_talk_init2">Capo! Dove sei?!</string>
-    <string name="groucho_bedroom_talk_photo">Mi somiglia.</string>
-    <string name="groucho_bedroom_talk_wardrobe">Al momento sono già vestito.</string>
-    <string name="dylan_bedroom_talk_init">GROUCHO!</string>
+    <string name="groucho_bedroom_init1">mmm… \n Forse sto dormendo…</string>
+    <string name="groucho_bedroom_init2">Capo! Dove sei?!</string>
+    <string name="groucho_bedroom_photo">Mi somiglia.</string>
+    <string name="groucho_bedroom_wardrobe">Al momento sono già vestito.</string>
+    <string name="dylan_bedroom_init">GROUCHO!</string>
 
-    <string name="groucho_hallway_talk_init1">Hey! Chi ha spento la luce?</string>
-    <string name="groucho_hallway_talk_init2">Premendo la lampadina in alto a destra puoi fare luce.</string>
-    <string name="groucho_hallway_talk_window">È buio.</string>
-    <string name="groucho_hallway_talk_library">Sto già dormendo.</string>
+    <string name="groucho_hallway_init1">Hey! Chi ha spento la luce?</string>
+    <string name="groucho_hallway_init2">Premendo la lampadina in alto a destra puoi fare luce.</string>
+    <string name="groucho_hallway_window">È buio.</string>
+    <string name="groucho_hallway_library">Sto già dormendo.</string>
 
-    <string name="groucho_hall_talk_init1">! \n Uno zombie!</string>
-    <string name="groucho_hall_talk_init2">
+    <string name="groucho_library_init1">! \n Uno zombie!</string>
+    <string name="groucho_library_init2">
         A proposito, come si chiama un autobus pieno di appestati? \n
         Autopus! \n
         ... \n
@@ -36,7 +36,7 @@
     <string name="groucho_entryhall_me_frame">Direi autoreferenziale.</string>
     <string name="groucho_entryhall_dresser">È finto.</string>
 
-    <string name="groucho_zombiesroom_init">Shh!</string>
+    <string name="groucho_bathroom_init">Shh!</string>
     <string name="groucho_garden_statue">Siamo ancora in troppi!</string>
     <string name="groucho_garden_init">
         Accidenti, che linea! \n
@@ -45,6 +45,10 @@
     <string name="groucho_entryhall_room_complete">
         Ho già preso la chiave e non ho intenzione di tornarci.
     </string>
+    <string name="groucho_kitchen_init">
+        Un lupo! Come cliché mi aspettavo un vampiro.
+    </string>
+    <string name="groucho_entryhall_afterwolf">Capo! Ho battuto un vampiro vestito da lupo!</string>
 
     <string name="groucho_keys">Una chiave! Ora ne ho </string>
 
