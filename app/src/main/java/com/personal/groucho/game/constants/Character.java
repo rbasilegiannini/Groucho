@@ -17,6 +17,8 @@ public class Character {
     public static int skeletonHealth, skeletonPower;
     public static float zombieSpeed;
     public static int zombieHealth, zombiePower;
+    public static float wolfSpeed;
+    public static int wolfHealth, wolfPower;
     public static int medicalKit;
     public static int hearingRange;
     public static int hearingRangeSqr;
@@ -36,6 +38,10 @@ public class Character {
         zombieSpeed = context.getResources().getFloat(R.dimen.zombie_speed);
         zombieHealth = context.getResources().getInteger(R.integer.zombie_health);
         zombiePower = context.getResources().getInteger(R.integer.zombie_power);
+
+        wolfSpeed = context.getResources().getFloat(R.dimen.wolf_speed);
+        wolfHealth = context.getResources().getInteger(R.integer.wolf_health);
+        wolfPower = context.getResources().getInteger(R.integer.wolf_power);
 
         medicalKit = context.getResources().getInteger(R.integer.medical_kit);
 

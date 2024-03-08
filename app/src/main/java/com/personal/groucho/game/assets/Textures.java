@@ -19,7 +19,7 @@ public class Textures {
     public static Bitmap redCarpet, brownCarpet, littleCarpetBathroom, sink;
     public static Bitmap orangeCouch, littleLibrary, library, greenCouchRight;
     public static Bitmap hanger, littleCarpet, littleGreenCarpet, littleGreenCarpetVer, lamp;
-    public static Bitmap littleDresser, littleDresserWithKey, bench;
+    public static Bitmap littleDresser, littleDresserWithKey, bench, kitchen, fridge, bigTable;
     public static Bitmap wc, box, tableWithFlowers, headstone, stone;
     public static Bitmap lightBulb;
     public static Bitmap grouchoFrame, meFrame;
@@ -59,6 +59,9 @@ public class Textures {
     }
 
     private static void loadFurniture(Resources res) {
+        bigTable = setBitmap(res, R.drawable.big_table, 86, 110);
+        fridge = setBitmap(res, R.drawable.fridge, 46, 97);
+        kitchen = setBitmap(res, R.drawable.kitchen, 214, 121);
         bench = setBitmap(res, R.drawable.bench, 43, 97);
         stone = setBitmap(res, R.drawable.stone_medium, 78, 82);
         headstone = setBitmap(res, R.drawable.headstone, 60,91);

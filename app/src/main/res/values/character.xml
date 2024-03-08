@@ -12,6 +12,10 @@
     <integer name="zombie_health">200</integer>
     <integer name="zombie_power">30</integer>
 
+    <dimen name="wolf_speed">6f</dimen>
+    <integer name="wolf_health">300</integer>
+    <integer name="wolf_power">10</integer>
+
     <integer name="medical_kit">10</integer>
 
     <integer name="hearing_range">1500</integer>

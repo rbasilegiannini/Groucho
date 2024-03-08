@@ -10,6 +10,10 @@ import static com.personal.groucho.game.assets.Spritesheets.skeletonDeath;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonHurt;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonIdle;
 import static com.personal.groucho.game.assets.Spritesheets.skeletonWalk;
+import static com.personal.groucho.game.assets.Spritesheets.wolfDeath;
+import static com.personal.groucho.game.assets.Spritesheets.wolfHurt;
+import static com.personal.groucho.game.assets.Spritesheets.wolfIdle;
+import static com.personal.groucho.game.assets.Spritesheets.wolfWalk;
 import static com.personal.groucho.game.assets.Spritesheets.zombieDeath;
 import static com.personal.groucho.game.assets.Spritesheets.zombieHurt;
 import static com.personal.groucho.game.assets.Spritesheets.zombieIdle;
@@ -20,6 +24,9 @@ import static com.personal.groucho.game.constants.Character.grouchoSpeed;
 import static com.personal.groucho.game.constants.Character.skeletonHealth;
 import static com.personal.groucho.game.constants.Character.skeletonPower;
 import static com.personal.groucho.game.constants.Character.skeletonSpeed;
+import static com.personal.groucho.game.constants.Character.wolfHealth;
+import static com.personal.groucho.game.constants.Character.wolfPower;
+import static com.personal.groucho.game.constants.Character.wolfSpeed;
 import static com.personal.groucho.game.constants.Character.zombieHealth;
 import static com.personal.groucho.game.constants.Character.zombiePower;
 import static com.personal.groucho.game.constants.Character.zombieSpeed;
@@ -81,5 +88,19 @@ public class CharacterFactory {
         skeleton.sheetDeath = skeletonDeath;
 
         return skeleton;
+    }
+
+    public static CharacterProp getWolf() {
+        CharacterProp wolf = new CharacterProp();
+
+        wolf.health = wolfHealth;
+        wolf.speed = wolfSpeed;
+        wolf.power = wolfPower;
+        wolf.sheetIdle = wolfIdle;
+        wolf.sheetWalk = wolfWalk;
+        wolf.sheetHurt = wolfHurt;
+        wolf.sheetDeath = wolfDeath;
+
+        return wolf;
     }
 }
