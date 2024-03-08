@@ -71,7 +71,8 @@ public class Events {
         List<Float> enemiesDist = new ArrayList<>();
 
         for (GameObject enemy : gameWorld.goHandler.getGOByRole(ENEMY)){
-            if (enemyIsAlive(enemy)) {
+            AIComponent aiComp = (AIComponent) enemy.getComponent(AI);
+            if (enemyIsAlive(enemy) && !aiComp.isPlayerEngaged) {
                 PositionComponent enemyPos = (PositionComponent) enemy.getComponent(POSITION);
                 float playerPosX = gameWorld.player.posX;
                 float playerPosY = gameWorld.player.posY;
