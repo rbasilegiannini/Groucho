@@ -160,6 +160,9 @@ public class Library extends Room {
                     // if key
                     door.play(1f);
                     level.fromLibraryToEntryHall = true;
+                    level.fromBathroomToEntryHall = false;
+                    level.fromKitchenToEntryHall = false;
+                    level.fromGardenToEntryHall = false;
                     level.goToEntryHall();
                 }
         );

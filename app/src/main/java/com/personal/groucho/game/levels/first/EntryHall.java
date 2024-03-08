@@ -6,6 +6,7 @@ import static com.personal.groucho.game.assets.Textures.lightWoodFloor;
 import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
+import static com.personal.groucho.game.controller.Orientation.DOWN;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.Orientation.RIGHT;
 import static com.personal.groucho.game.controller.Orientation.UP;
@@ -107,10 +108,16 @@ public class EntryHall extends Room {
                 3*cellSize, (int) (9*cellSize),
                 160, 280, Textures.brownDoor,
                 () -> {
-                    door.play(1f);
-                    level.fromEntryHallToLibrary = true;
-                    level.fromHallwayToLibrary = false;
-                    level.goToLibrary();
+                    if (!firstTime) {
+                        door.play(1f);
+                        level.fromEntryHallToLibrary = true;
+                        level.fromHallwayToLibrary = false;
+                        level.goToLibrary();
+                    }
+                    else {
+                        String sentence = gameWorld.activity.getString(R.string.groucho_library_closed);
+                        grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                    }
                 });
 
         // Door to bathroom
@@ -119,12 +126,17 @@ public class EntryHall extends Room {
                 (int) (12.3*cellSize), 2*cellSize,
                 90, 150, Textures.littleGreenCarpetVer,
                 ()->{
-                    if (!level.bathroomKey) {
-                        door.play(1f);
-                        level.goToBathroom();
+                    if (!firstTime) {
+                        if (!level.bathroomKey) {
+                            door.play(1f);
+                            level.goToBathroom();
+                        } else {
+                            String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
+                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                        }
                     }
                     else {
-                        String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
+                        String sentence = gameWorld.activity.getString(R.string.groucho_entrywall_closed_doors);
                         grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
                     }
                 });
@@ -135,12 +147,17 @@ public class EntryHall extends Room {
                 (int) (12.3*cellSize), 6*cellSize,
                 90, 150, Textures.littleGreenCarpetVer,
                 ()->{
-                    if (!level.gardenKey) {
-                        door.play(1f);
-                        level.goToGarden();
+                    if (!firstTime) {
+                        if (!level.gardenKey) {
+                            door.play(1f);
+                            level.goToGarden();
+                        } else {
+                            String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
+                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                        }
                     }
                     else {
-                        String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
+                        String sentence = gameWorld.activity.getString(R.string.groucho_entrywall_closed_doors);
                         grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
                     }
                 });
@@ -151,12 +168,17 @@ public class EntryHall extends Room {
                 (int) (-0.35*cellSize), 3*cellSize,
                 90, 150, Textures.littleGreenCarpetVer,
                 ()->{
-                    if (!level.kitchenKey) {
-                        door.play(1f);
-                        level.goToKitchen();
+                    if(!firstTime) {
+                        if (!level.kitchenKey) {
+                            door.play(1f);
+                            level.goToKitchen();
+                        } else {
+                            String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
+                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                        }
                     }
                     else {
-                        String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_room_complete);
+                        String sentence = gameWorld.activity.getString(R.string.groucho_entrywall_closed_doors);
                         grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
                     }
                 });
@@ -214,7 +236,7 @@ public class EntryHall extends Room {
                 firstTime = false;
             };
         }
-        else {
+        else if (!level.isEndGame()){
             runnable = () -> {
                 dylanTalk(gameWorld.activity.getString(R.string.dylan_entryhall_heavydoor),
                         (int) (9.5 * cellSize), cellSize);
@@ -223,8 +245,22 @@ public class EntryHall extends Room {
                                 gameWorld.player.posX, gameWorld.player.posY));
             };
         }
-        if (level.isEndGame()) {
-            // runnable = ...
+        else {
+            runnable = () -> {
+                // Open door (change texture door)
+
+                door.play(1f);
+
+                String sentence = gameWorld.activity.getString(R.string.groucho_endgame_init1);
+                grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
+                level.eventChain.addAction(()->{/*throw sound */});
+                level.eventChain.addAction(()->gameWorld.player.setOrientation(DOWN));
+                level.eventChain.addAction(()->{
+                    String sentence2 = gameWorld.activity.getString(R.string.groucho_endgame_init2);
+                    grouchoTalk(sentence2, gameWorld.player.posX, gameWorld.player.posY);
+                });
+                level.eventChain.addAction(()->{gameWorld.complete = true;});
+            };
         }
         makeWallTrigger(
                 6*cellSize, (int) (-0.85*cellSize),

@@ -112,8 +112,15 @@ public class Graphics {
         canvas.drawARGB(Math.min(fadeOut, 255),0,0,0);
 
         if (fadeOut >= 255){
-            gameWorld.gameOver = false;
-            MenuHandler.handleGameOverMenu(gameWorld);
+            if (gameWorld.gameOver) {
+                gameWorld.gameOver = false;
+                MenuHandler.handleGameOverMenu(gameWorld);
+            }
+            else {
+                gameWorld.complete = false;
+                // MenuHandler.handleCompleteMenu(gameWorld);
+            }
+
             fadeOut = 0;
         }
     }

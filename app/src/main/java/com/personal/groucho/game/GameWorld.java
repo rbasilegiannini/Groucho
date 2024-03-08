@@ -37,6 +37,7 @@ public class GameWorld {
     private TouchHandler touchHandler;
     private boolean pause = false;
     public boolean gameOver = false;
+    public boolean complete = false;
     public boolean grouchoIsTalking = false;
     public final BubbleSpeech bubbleSpeech;
 
@@ -142,7 +143,7 @@ public class GameWorld {
             }
         }
 
-        if (gameOver) {
+        if (gameOver || complete) {
             graphics.fadeOut();
         }
     }

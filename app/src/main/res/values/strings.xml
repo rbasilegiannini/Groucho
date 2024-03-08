@@ -20,9 +20,9 @@
         ... \n
         Alza la levetta a destra per caricare e abbassala subito dopo per sparare. \n
         Oppure, spegni la torcia e prova ad aggirare il nemico senza toccarlo o fare rumore. \n
-        A volte potrebbe essere la strategia migliore, ma ci sono meno suoni splatter e sparatorie... \n
-        Tuttavia, questo ha una chiave e quindi va ucciso.
+        A volte potrebbe essere la strategia migliore, ma ci sono meno suoni splatter e sparatorie...
     </string>
+    <string name="groucho_library_closed">Non serve tornare indietro.</string>
 
     <string name="dylan_entryhall_init">GROUCHO!</string>
     <string name="dylan_entryhall_heavydoor">LA PISTOLA!</string>
@@ -35,6 +35,7 @@
     <string name="groucho_entryhall_window">Vedo il capo, steso. Sembra in salute.</string>
     <string name="groucho_entryhall_me_frame">Direi autoreferenziale.</string>
     <string name="groucho_entryhall_dresser">È finto.</string>
+    <string name="groucho_entrywall_closed_doors">Il capo non è qui!</string>
 
     <string name="groucho_bathroom_init">Shh!</string>
     <string name="groucho_garden_statue">Siamo ancora in troppi!</string>
@@ -46,11 +47,16 @@
         Ho già preso la chiave e non ho intenzione di tornarci.
     </string>
     <string name="groucho_kitchen_init">
-        Un lupo! Come cliché mi aspettavo un vampiro.
+        Un lupo con una chiave! Come cliché mi aspettavo un vampiro.
     </string>
     <string name="groucho_entryhall_afterwolf">Capo! Ho battuto un vampiro vestito da lupo!</string>
 
     <string name="groucho_keys">Una chiave! Ora ne ho </string>
+    <string name="groucho_endgame_init1">Capo! La pistola!</string>
+    <string name="groucho_endgame_init2">
+        Bene. Ho finito le idee. \n
+        Arrivederci!
+    </string>
 
 
 </resources>
