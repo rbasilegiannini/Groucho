@@ -22,6 +22,7 @@
         Oppure, spegni la torcia e prova ad aggirare il nemico senza toccarlo o fare rumore. \n
         A volte potrebbe essere la strategia migliore, ma ci sono meno suoni splatter e sparatorie...
     </string>
+    <string name="groucho_library_closed_doors">Meglio esercitarmi prima nel combattimento.</string>
     <string name="groucho_library_closed">Non serve tornare indietro.</string>
 
     <string name="dylan_entryhall_init">GROUCHO!</string>
