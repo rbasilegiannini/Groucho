@@ -174,6 +174,10 @@ public class Room {
     protected void addEnemy(int posX, int posY, Orientation or, CharacterProp prop, StateName aiState) {
         gameObjects.add(GameObjectFactory.makeEnemy(posX, posY, or, prop, aiState,gameWorld));
     }
+    protected void addWall(int centerX, int centerY, int length ) {
+        gameObjects.addAll(
+                GameObjectFactory.makeWall(centerX, centerY, length, gameWorld.physics.world));
+    }
 
     public void handleDeath() {}
 }
