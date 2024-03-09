@@ -1,9 +1,10 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.CharacterFactory.getSkeleton;
-import static com.personal.groucho.game.assets.Sounds.door;
 import static com.personal.groucho.game.assets.Textures.bench;
 import static com.personal.groucho.game.assets.Textures.grassFloor;
+import static com.personal.groucho.game.assets.Textures.headstone;
+import static com.personal.groucho.game.assets.Textures.littleGreenCarpetVer;
 import static com.personal.groucho.game.assets.Textures.statueBottom;
 import static com.personal.groucho.game.assets.Textures.statueWithKey;
 import static com.personal.groucho.game.assets.Textures.stone;
@@ -16,28 +17,28 @@ import static com.personal.groucho.game.controller.Orientation.DOWN;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.Orientation.RIGHT;
 import static com.personal.groucho.game.controller.states.StateName.IDLE;
+import static com.personal.groucho.game.levels.first.GardenEvents.entryHallDoorEvent;
+import static com.personal.groucho.game.levels.first.GardenEvents.firstTimeInRoomEvent;
+import static com.personal.groucho.game.levels.first.GardenEvents.statueWithKeyEvent;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Shader;
 
 import com.google.fpl.liquidfun.World;
-import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
-import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.controller.Orientation;
-import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
-import com.personal.groucho.game.gameobjects.components.TextureComponent;
 import com.personal.groucho.game.levels.Room;
 
 public class Garden extends Room {
-    private final FirstLevel level;
-    private int playerPosX, playerPosY;
-    private Orientation playerOrientation;
-    private int skeletonsCounter;
-    private boolean firstTime = true;
+    protected final FirstLevel level;
+    protected int playerPosX, playerPosY;
+    protected Orientation playerOrientation;
+    protected GameObject statue;
+    protected int skeletonsCounter;
+    protected static boolean firstTime = true;
 
     public Garden(GameWorld gameWorld, FirstLevel level) {
         super(2100, 2000, gameWorld);
@@ -59,10 +60,7 @@ public class Garden extends Room {
         skeletonsCounter = 5;
 
         if (firstTime) {
-            playerOrientation = DOWN;
-            String sentence = gameWorld.activity.getString(R.string.groucho_garden_init);
-            grouchoTalk(sentence, playerPosX, playerPosY);
-            firstTime = false;
+            firstTimeInRoomEvent(this);
         }
         else {
             playerOrientation = RIGHT;
@@ -77,85 +75,46 @@ public class Garden extends Room {
         allocateRoom();
     }
 
+    @Override
+    public void allocateRoom(){
+        super.allocateRoom();
+        gameWorld.player.setPos(playerPosX, playerPosY);
+        gameWorld.player.setOrientation(playerOrientation);
+        setBrightness(maxBrightness);
+    }
+
     private void makeFurniture() {
-        World world = gameWorld.physics.world;;
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                3*cellSize, 2*cellSize, 100, 90, 10f, world, stone
-        ));
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                4*cellSize, 3*cellSize, 100, 90, 10f, world, stone
-        ));
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                (int) (2.5*cellSize), 7*cellSize, 100, 90, 10f, world, stone
-        ));
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                (int) (8.5*cellSize), 8*cellSize, 100, 90, 10f, world, stone
-        ));
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                (int) (9.5*cellSize), (int) (3.4*cellSize), 100, 90, 10f, world, stone
-        ));
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                (int) (2.4*cellSize), 10*cellSize, 100, 90, 10f, world, stone
-        ));
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                (int) (6.5*cellSize), (int) (8.5*cellSize), 100, 90, 10f, world, stone
-        ));
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                9*cellSize, 10*cellSize, 100, 90, 10f, world, stone
-        ));
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                (int) (12.4*cellSize), 3*cellSize, 120, 340, 35f, world, bench
-        ));
-        gameObjects.add(GameObjectFactory.makeDynamicFurniture(
-                (int) (12.4*cellSize), 7*cellSize, 120, 340, 35f, world, bench
-        ));
+        addDynamicFurn(3*unit, 2*unit, 100, 90, 10f, stone);
+        addDynamicFurn(4*unit, 3*unit, 100, 90, 10f, stone);
+        addDynamicFurn((int)(2.5*unit), 7*unit, 100, 90, 10f, stone);
+        addDynamicFurn((int)(8.5*unit), 8*unit, 100, 90, 10f, stone);
+        addDynamicFurn((int)(9.5*unit), (int)(3.4*unit), 100, 90, 10f, stone);
+        addDynamicFurn((int)(2.4*unit), 10*unit, 100, 90, 10f, stone);
+        addDynamicFurn((int)(6.5*unit), (int)(8.5*unit), 100, 90, 10f, stone);
+        addDynamicFurn(9*unit, 10*unit, 100, 90, 10f, stone);
+        addDynamicFurn((int)(12.4*unit), 3*unit, 120, 340, 35f, bench);
+        addDynamicFurn((int)(12.4*unit), 7*unit, 120, 340, 35f, bench);
     }
 
     private void makeTriggers() {
-        // Door to entry wall
-        makeFloorTrigger(
-                (int)(0.35*cellSize), 3*cellSize,
-                (int)(-0.35*cellSize), 3*cellSize,
-                90, 150, Textures.littleGreenCarpetVer,
-                ()->{
-                    level.fromBathroomToEntryHall = false;
-                    level.fromGardenToEntryHall = true;
-                    level.fromLibraryToEntryHall = false;
-                    level.fromKitchenToEntryHall = false;
-                    door.play(1f);
-                    level.goToEntryHall();
-                });
+        addFloorTrigger((int)(0.35*unit), 3*unit, (int)(-0.35*unit), 3*unit,
+                90, 150, littleGreenCarpetVer, ()->entryHallDoorEvent(this));
 
         buildStatue();
     }
 
-
     private void makeDecorations() {
-        // headstones
         for (int i = 1; i < 6; i++) {
-            gameObjects.add(GameObjectFactory.makeWallDecoration(
-                    i*2*cellSize + cellSize/2, (int)(0.3*cellSize),
-                    100, 160, Textures.headstone
-            ));
+            addWallDec(i*2*unit + unit/2, (int)(0.3*unit), 100, 160, headstone);
         }
     }
 
     private void makeEnemies() {
-        gameObjects.add(
-                GameObjectFactory.makeEnemy(
-                        (int) (5.5* cellSize), cellSize, RIGHT, getSkeleton(), IDLE, gameWorld));
-        gameObjects.add(
-                GameObjectFactory.makeEnemy(
-                        (int) (2* cellSize), 6*cellSize, DOWN, getSkeleton(), IDLE, gameWorld));
-        gameObjects.add(
-                GameObjectFactory.makeEnemy(
-                        (int) (8.5* cellSize), 5*cellSize, RIGHT, getSkeleton(), IDLE, gameWorld));
-        gameObjects.add(
-                GameObjectFactory.makeEnemy(
-                        (int) (11.5* cellSize), 10*cellSize, LEFT, getSkeleton(), IDLE, gameWorld));
-        gameObjects.add(
-                GameObjectFactory.makeEnemy(
-                        (int) (11.5* cellSize), 3*cellSize, LEFT, getSkeleton(), IDLE, gameWorld));
+        addEnemy((int) (5.5*unit), unit, RIGHT, getSkeleton(), IDLE);
+        addEnemy(2* unit, 6*unit, DOWN, getSkeleton(), IDLE);
+        addEnemy((int) (8.5* unit), 5*unit, RIGHT, getSkeleton(), IDLE);
+        addEnemy((int) (11.5* unit), 10*unit, LEFT, getSkeleton(), IDLE);
+        addEnemy( (int) (11.5* unit), 3*unit, LEFT, getSkeleton(), IDLE);
     }
 
     private void makeHealth(){
@@ -166,52 +125,16 @@ public class Garden extends Room {
     }
 
     private void buildStatue() {
-        gameObjects.add(GameObjectFactory.makeFloorDecoration(
-                (int) (6.05*cellSize), (int) (5.1*cellSize),
-                (float) (4.3*cellSize), 4*cellSize,
-                statueBottom
-        ));
-        GameObject statue = GameObjectFactory.makeStaticFurniture(
-                6*cellSize, 4*cellSize,
-                (float) (1.7*cellSize), 3*cellSize,
-                gameWorld.physics.world,
-                statueWithKey
-        );
-        gameObjects.add(GameObjectFactory.makeTrigger(
-                6*cellSize, (int) (4.3*cellSize),
-                cellSize, (int) (0.5*cellSize),
-                gameWorld.physics.world,
-                () -> {
-                    if (skeletonsCounter == 0) {
-                        if (!level.gardenKey) {
-                            TextureComponent textureComp = (TextureComponent) statue.getComponent(ComponentType.DRAWABLE);
-                            textureComp.init(Textures.statue, (int) (1.7 * cellSize), 3 * cellSize);
-                            level.gardenKey = true;
-                            level.counterKeys++;
-                            String sentence = gameWorld.activity.getString(R.string.groucho_keys)
-                                    + " " + level.counterKeys + ".";
-                            grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                        }
-                    }
-                    else {
-                        String sentence = gameWorld.activity.getString(R.string.groucho_garden_statue);
-                        grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                    }
-                }
-        ));
+        addFloorDec((int)(6.05*unit),(int)(5.1*unit),(float)(4.3*unit), 4*unit, statueBottom);
+        statue = makeStaticFurn(6*unit, 4*unit, (float)(1.7*unit), 3*unit,
+                statueWithKey);
+        gameObjects.add(GameObjectFactory
+                .makeTrigger(6*unit, (int) (4.3*unit), unit, (int) (0.5*unit),
+                gameWorld.physics.world, () -> statueWithKeyEvent(this)));
         gameObjects.add(statue);
     }
 
     @Override
-    public void handleDeath() {
-        skeletonsCounter--;
-    }
+    public void handleDeath() {skeletonsCounter--;}
 
-    @Override
-    public void allocateRoom(){
-        super.allocateRoom();
-        gameWorld.player.setPos(playerPosX, playerPosY);
-        gameWorld.player.setOrientation(playerOrientation);
-        setBrightness(maxBrightness);
-    }
 }
