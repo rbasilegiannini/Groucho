@@ -1,10 +1,22 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.CharacterFactory.getZombie;
-import static com.personal.groucho.game.assets.Sounds.door;
 import static com.personal.groucho.game.assets.Textures.bathroomFloor;
 import static com.personal.groucho.game.assets.Textures.bathroomWall;
-import static com.personal.groucho.game.assets.Textures.littleDresser;
+import static com.personal.groucho.game.assets.Textures.box;
+import static com.personal.groucho.game.assets.Textures.chairLeft;
+import static com.personal.groucho.game.assets.Textures.dresserRight;
+import static com.personal.groucho.game.assets.Textures.ironingBoard;
+import static com.personal.groucho.game.assets.Textures.lamp;
+import static com.personal.groucho.game.assets.Textures.littleCarpetBathroom;
+import static com.personal.groucho.game.assets.Textures.littleDresserWithKey;
+import static com.personal.groucho.game.assets.Textures.littleGrass;
+import static com.personal.groucho.game.assets.Textures.littleGreenCarpetVer;
+import static com.personal.groucho.game.assets.Textures.littleTable;
+import static com.personal.groucho.game.assets.Textures.sink;
+import static com.personal.groucho.game.assets.Textures.tableWithFlowers;
+import static com.personal.groucho.game.assets.Textures.wc;
+import static com.personal.groucho.game.assets.Textures.windowNight;
 import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
@@ -13,25 +25,24 @@ import static com.personal.groucho.game.controller.Orientation.RIGHT;
 import static com.personal.groucho.game.controller.Orientation.UP;
 import static com.personal.groucho.game.controller.states.StateName.IDLE;
 import static com.personal.groucho.game.controller.states.StateName.PATROL;
+import static com.personal.groucho.game.levels.first.BathroomEvents.dresserWithKeyEvent;
+import static com.personal.groucho.game.levels.first.BathroomEvents.entryHallDoorEvent;
+import static com.personal.groucho.game.levels.first.BathroomEvents.firstTimeInRoomEvent;
+import static com.personal.groucho.game.levels.first.BathroomEvents.talkEvent;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Shader;
 
-import com.google.fpl.liquidfun.World;
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
-import com.personal.groucho.game.assets.Textures;
-import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.gameobjects.GameObjectFactory;
-import com.personal.groucho.game.gameobjects.components.TextureComponent;
 import com.personal.groucho.game.levels.Room;
 
 public class Bathroom extends Room {
-    private final FirstLevel level;
-    private int playerPosX, playerPosY;
-    private GameObject bathroomKey;
+    protected final FirstLevel level;
+    protected int playerPosX, playerPosY;
+    protected GameObject bathroomKey;
 
     public static boolean firstTime = true;
 
@@ -54,8 +65,7 @@ public class Bathroom extends Room {
         playerPosY = 3*cellSize;
 
         if (firstTime) {
-            String sentence = gameWorld.activity.getString(R.string.groucho_bathroom_init);
-            grouchoTalk(sentence, playerPosX, playerPosY);
+            firstTimeInRoomEvent(this);
         }
 
         makeWalls();
@@ -65,8 +75,6 @@ public class Bathroom extends Room {
         makeEnemies();
 
         allocateRoom();
-
-        firstTime = false;
     }
 
     @Override
@@ -78,140 +86,51 @@ public class Bathroom extends Room {
     }
 
     private void makeWalls() {
-        int wallCenterY = (int)(-0.5 * cellSize);
-        int wallDim = 6 * cellSize;
-        World world = gameWorld.physics.world;
+        int wallCenterY = (int)(-0.5 * unit);
+        int wallDim = 6 * unit;
         for (int i = 2; i < 8; i++) {
-            gameObjects.addAll(
-                    GameObjectFactory.makeWall((int) (i*2 * cellSize + 0.5*cellSize), wallCenterY, wallDim, world));
+            addWall((int) (i*2 * unit + 0.5*unit), wallCenterY, wallDim);
         }
     }
 
+    private void makeFurniture() {
+        addDynamicFurn(5*unit, 5*unit, 90, 150, 5f, chairLeft);
+        addDynamicFurn((int)(3.9*unit), 2*unit, 90, 300, 35f, dresserRight);
+        addDynamicFurn((int)(0.5*unit), 5*unit, 150, 150, 5f, littleTable);
+        addDynamicFurn((int)(7.7*unit), 4*unit, 150, 130, 5f, ironingBoard);
+        addDynamicFurn((int)(10.7*unit), 5*unit, 150, 180, 15f, tableWithFlowers);
+        addDynamicFurn((int)(16.7*unit), 5*unit, 100, 100, 5f, box);
+        addDynamicFurn((int)(17.3*unit), 5*unit, 70, 70, 5f, box);
+        addDynamicFurn((int)(17.0*unit), (int)(4.5*unit), 110, 110, 5f, box);
+        addDynamicFurn((int)(17.7*unit), (int)(2*unit), 90, 300, 35f, dresserRight);
+    }
+
     private void makeDecorations() {
-        gameObjects.add(GameObjectFactory.makeWallDecoration(
-                (int)(0.85*cellSize), 0, 70, 140, Textures.littleGrass));
-        gameObjects.add(GameObjectFactory.makeWallDecoration(
-                (int)(3.5*cellSize), 0, 70, 140, Textures.littleGrass));
-        gameObjects.add(GameObjectFactory.makeWallDecoration(
-                (int) (5.5* cellSize), 0, 250, 250, Textures.wc));
-        gameObjects.add(GameObjectFactory.makeWallDecoration(
-                (int) (7.5* cellSize), 0, 250, 250, Textures.wc));
-        gameObjects.add(GameObjectFactory.makeWallDecoration(
-                (int) (9.5* cellSize), 0, 250, 250, Textures.wc));
-        gameObjects.add(GameObjectFactory.makeWallDecoration(
-                (int) (11.5* cellSize), 0, 250, 250, Textures.wc));
-        gameObjects.add(GameObjectFactory.makeWallDecoration(
-                (int) (13.5* cellSize), 0, 250, 250, Textures.wc));
-        gameObjects.add(GameObjectFactory.makeWallDecoration(
-                (int) (2.2* cellSize), -cellSize/2, 250, 380, Textures.sink));
-        gameObjects.add(GameObjectFactory.makeFloorDecoration(
-                (int) (2.2* cellSize), cellSize, 250, 100, Textures.littleCarpetBathroom));
-        gameObjects.add((GameObjectFactory.makeWallDecoration(
-                        (int) (15.2*cellSize), (int) (-0.5*cellSize), 100, 356, Textures.lamp)));
+        addWallDec((int)(0.85*unit), 0, 70, 140, littleGrass);
+        addWallDec((int)(3.5*unit), 0, 70, 140, littleGrass);
+        addWallDec((int)(5.5* unit), 0, 250, 250, wc);
+        addWallDec((int)(7.5* unit), 0, 250, 250, wc);
+        addWallDec((int)(9.5* unit), 0, 250, 250, wc);
+        addWallDec((int)(11.5* unit), 0, 250, 250, wc);
+        addWallDec((int)(13.5* unit), 0, 250, 250, wc);
+        addWallDec((int)(2.2* unit), -unit/2, 250, 380, sink);
+        addWallDec((int)(15.2*unit), (int)(-0.5*unit), 100, 356, lamp);
+        addFloorDec((int)(2.2* unit), unit, 250, 100, littleCarpetBathroom);
     }
 
     private void makeTriggers() {
-        makeWallTrigger(
-                (int)(16.3*cellSize), -cellSize,
-                (int)(16.0*cellSize), (int)(-0.75*cellSize),
-                188, 200,
-                Textures.windowNight,
-                () -> {
-                    String sentence = gameWorld.activity.getString(R.string.groucho_entryhall_window);
-                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                });
-
-        bathroomKey = makeWallTrigger(
-                (int)(17.3*cellSize), 0,
-                (int)(17.3*cellSize), -cellSize/4,
-                100, 100,
-                Textures.littleDresserWithKey,
-                () -> {
-                    if (!level.bathroomKey) {
-                        TextureComponent textureComp = (TextureComponent) bathroomKey.getComponent(ComponentType.DRAWABLE);
-                        textureComp.init(littleDresser, 100, 100);
-                        level.bathroomKey = true;
-                        level.counterKeys++;
-                        String sentence = gameWorld.activity.getString(R.string.groucho_keys)
-                                + " " + level.counterKeys + ".";
-                        grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                    }
-                });
-        makeFloorTrigger(
-                (int)(0.35*cellSize), 3*cellSize,
-                (int)(-0.35*cellSize), 3*cellSize,
-                90, 150, Textures.littleGreenCarpetVer,
-                ()->{
-                    level.fromBathroomToEntryHall = true;
-                    level.fromGardenToEntryHall = false;
-                    level.fromLibraryToEntryHall = false;
-                    level.fromKitchenToEntryHall = false;
-                    door.play(1f);
-                    level.goToEntryHall();
-                });
-    }
-    private void makeFurniture() {
-        World world = gameWorld.physics.world;
-
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        5*cellSize, 5*cellSize, 90, 150, 5f,
-                        world, Textures.chairLeft)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (3.9*cellSize), 2*cellSize, 90, 300, 35f,
-                        world, Textures.dresserRight)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (0.5*cellSize), 5*cellSize, 150, 150, 5f,
-                        world, Textures.littleTable)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (7.7*cellSize), 4*cellSize, 150, 130, 5f,
-                        world, Textures.ironingBoard)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (10.7*cellSize), 5*cellSize, 150, 180, 15f,
-                        world, Textures.tableWithFlowers)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (16.7*cellSize), 5*cellSize, 100, 100, 5f,
-                        world, Textures.box)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (17.3*cellSize), 5*cellSize, 70, 70, 5f,
-                        world, Textures.box)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (17.0*cellSize), (int) (4.5*cellSize), 110, 110, 5f,
-                        world, Textures.box)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (17.7*cellSize), (int) (2*cellSize), 90, 300, 35f,
-                        world, Textures.dresserRight)
-        );
+        addWallTrigger((int)(16.3*unit), -unit, (int)(16.0*unit), (int)(-0.75*unit),
+                188, 200, windowNight, () -> talkEvent(this, R.string.groucho_entryhall_window));
+        bathroomKey = addWallTrigger((int)(17.3*unit), 0, (int)(17.3*unit), -unit/4,
+                100, 100, littleDresserWithKey, () -> dresserWithKeyEvent(this));
+        addFloorTrigger((int)(0.35*unit), 3*unit, (int)(-0.35*unit), 3*unit,
+                90, 150, littleGreenCarpetVer, ()->entryHallDoorEvent(this));
     }
 
     private void makeEnemies() {
-        gameObjects.add(
-                GameObjectFactory.makeEnemy(
-                        (int) (5.5* cellSize), cellSize, DOWN, getZombie(), PATROL, gameWorld));
-        gameObjects.add(
-                GameObjectFactory.makeEnemy(
-                        (int) (7.5* cellSize), cellSize, DOWN, getZombie(), IDLE, gameWorld));
-        gameObjects.add(
-                GameObjectFactory.makeEnemy(
-                        (int) (11.5* cellSize), (int) (2.5*cellSize), UP, getZombie(), PATROL, gameWorld));
-        gameObjects.add(
-                GameObjectFactory.makeEnemy(
-                        (int) (13.5* cellSize), (int) (3.3*cellSize), UP, getZombie(), IDLE, gameWorld));
+        addEnemy((int)(5.5*unit), unit, DOWN, getZombie(), PATROL);
+        addEnemy((int)(7.5*unit), unit, DOWN, getZombie(), IDLE);
+        addEnemy((int)(11.5*unit), (int)(2.5*unit), UP, getZombie(), PATROL);
+        addEnemy((int)(13.5*unit), (int)(3.3*unit), UP, getZombie(), IDLE);
     }
 }
