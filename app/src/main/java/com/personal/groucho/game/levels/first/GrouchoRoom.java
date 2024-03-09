@@ -1,28 +1,33 @@
 package com.personal.groucho.game.levels.first;
 
-import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Textures.bed;
+import static com.personal.groucho.game.assets.Textures.brownDoor;
 import static com.personal.groucho.game.assets.Textures.brownFloor;
+import static com.personal.groucho.game.assets.Textures.grouchoFrame;
+import static com.personal.groucho.game.assets.Textures.grouchoWardrobe;
+import static com.personal.groucho.game.assets.Textures.littleGreenCarpet;
 import static com.personal.groucho.game.assets.Textures.orangeWall;
+import static com.personal.groucho.game.assets.Textures.redCarpet;
+import static com.personal.groucho.game.assets.Textures.table;
+import static com.personal.groucho.game.assets.Textures.windowInternal;
 import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
-import static com.personal.groucho.game.constants.System.cellSize;
-import static com.personal.groucho.game.controller.Orientation.UP;
+import static com.personal.groucho.game.levels.first.GrouchoRoomEvents.firstTimeInRoomEvent;
+import static com.personal.groucho.game.levels.first.GrouchoRoomEvents.hallwayDoorEvent;
+import static com.personal.groucho.game.levels.first.GrouchoRoomEvents.talkEvent;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Shader;
 
-import com.google.fpl.liquidfun.World;
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
-import com.personal.groucho.game.assets.Textures;
-import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.levels.Room;
 
 public class GrouchoRoom extends Room {
     public static boolean firstTime = true;
-    private final FirstLevel level;
-    private int playerPosX, playerPosY, tableX, tableY, bedX, bedY;
+    protected final FirstLevel level;
+    protected int playerPosX, playerPosY;
 
     public GrouchoRoom(GameWorld gameWorld, FirstLevel level) {
         super(1000, 1000, gameWorld);
@@ -39,33 +44,13 @@ public class GrouchoRoom extends Room {
     @Override
     public void init() {
         super.init();
-        tableX = 5*cellSize;
-        tableY = (int) (3.5*cellSize);
-        bedX = 5*cellSize;
-        bedY = 2*cellSize;
 
         if (firstTime) {
-            playerPosX = 500;
-            playerPosY = 500;
-
-            setControllerVisibility(false);
-
-            grouchoTalk(gameWorld.activity.getString(R.string.groucho_bedroom_init1), playerPosX, playerPosY);
-            level.eventChain.addAction(()-> {
-                gameWorld.player.setOrientation(UP);
-                dylanTalk( gameWorld.activity.getString(R.string.dylan_bedroom_init), 600, 500);
-            });
-            level.eventChain.addAction(()->
-                    grouchoTalk(gameWorld.activity.getString(R.string.groucho_bedroom_init2), playerPosX, playerPosY));
-            level.eventChain.addAction(()->{
-                gameWorld.controller.dpad.setVisibility(true);
-                gameWorld.controller.pause.setVisibility(true);
-            });
-
+            firstTimeInRoomEvent(this);
         }
         else {
-            playerPosX = 2*cellSize;
-            playerPosY = cellSize;
+            playerPosX = 2*unit;
+            playerPosY = unit;
         }
 
         makeFurniture();
@@ -73,8 +58,6 @@ public class GrouchoRoom extends Room {
         makeDecorations();
 
         allocateRoom();
-
-        firstTime = false;
     }
 
     @Override
@@ -85,79 +68,23 @@ public class GrouchoRoom extends Room {
     }
 
     private void makeTriggers() {
-        // Groucho's photo
-        makeWallTrigger(
-                (int)(0.75*cellSize), (int)(-cellSize),
-                (int)(0.75*cellSize), (int)(-0.5*cellSize),
-                128, 128,
-                Textures.grouchoFrame,
-                () -> {
-                    String sentence = gameWorld.activity.getString(R.string.groucho_bedroom_photo);
-                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                });
-
-        // Wardrobe
-        makeWallTrigger(
-                (int)(4.5*cellSize), (int)(-0.5*cellSize),
-                (int) (4.5*cellSize), (int) (-1.2*cellSize),
-                280, 350,
-                Textures.grouchoWardrobe,
-                () -> {
-                    String sentence = gameWorld.activity.getString(R.string.groucho_bedroom_wardrobe);
-                    grouchoTalk(sentence, gameWorld.player.posX, gameWorld.player.posY);
-                });
-
-        // Door to hallway
-        makeWallTrigger(
-                2*cellSize, (int)(-0.85*cellSize),
-                2*cellSize, (int) (-0.95*cellSize),
-                160, 280,
-                Textures.brownDoor,
-                () -> {
-                    door.play(1f);
-                    level.fromLibraryToHallway = false;
-                    level.fromGrouchoRoomToHallway = true;
-                    level.goToHallway();
-                });
-
+        addWallTrigger((int)(0.75*unit), (int)(-unit), (int)(0.75*unit), (int)(-0.5*unit),
+                128, 128, grouchoFrame, () -> talkEvent(this, R.string.groucho_bedroom_photo));
+        addWallTrigger((int)(4.5*unit), (int)(-0.5*unit), (int) (4.5*unit), (int) (-1.2*unit),
+                280, 350, grouchoWardrobe, () -> talkEvent(this, R.string.groucho_bedroom_wardrobe));
+        addWallTrigger(2*unit, (int)(-0.85*unit), 2*unit, (int) (-0.95*unit),
+                160, 280, brownDoor, () -> hallwayDoorEvent(this));
     }
 
-
     private void makeFurniture() {
-        World world = gameWorld.physics.world;
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(tableX, tableY, 250, 150, 5f, world, Textures.table)
-        );
-
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(bedX, bedY, 280, 350, 100f, world, Textures.bed)
-        );
+        addDynamicFurn(5*unit, (int)(3.5*unit), 250, 150, 5f, table);
+        addDynamicFurn(5*unit, 2*unit, 280, 350, 100f, bed);
     }
 
     private void makeDecorations() {
-        gameObjects.add((GameObjectFactory.
-                makeFloorDecoration(
-                        (int)(2*cellSize), (int)(0.4*cellSize),
-                        170, 90,
-                        Textures.littleGreenCarpet
-                )));
-        gameObjects.add((GameObjectFactory.
-                makeFloorDecoration(
-                        2*cellSize, (int)(2.5*cellSize),
-                        512, 380,
-                        Textures.redCarpet
-                )));
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int)(1.5*cellSize), (int)(6.0*cellSize),
-                        188, 200,
-                        Textures.windowInternal
-                )));
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int)(4.5*cellSize), (int)(6.0*cellSize),
-                        188, 200,
-                        Textures.windowInternal
-                )));
+        addFloorDec((int)(2*unit), (int)(0.4*unit), 170, 90, littleGreenCarpet);
+        addFloorDec(2*unit, (int)(2.5*unit), 512, 380, redCarpet);
+        addWallDec((int)(1.5*unit), 6*unit, 188, 200, windowInternal);
+        addWallDec((int)(4.5*unit), 6*unit, 188, 200, windowInternal);
     }
 }
