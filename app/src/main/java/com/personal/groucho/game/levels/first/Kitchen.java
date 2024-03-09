@@ -1,30 +1,43 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.CharacterFactory.getWolf;
-import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Textures.bigTable;
+import static com.personal.groucho.game.assets.Textures.box;
+import static com.personal.groucho.game.assets.Textures.brownCarpet;
+import static com.personal.groucho.game.assets.Textures.chairDown;
+import static com.personal.groucho.game.assets.Textures.chairLeft;
+import static com.personal.groucho.game.assets.Textures.chairRight;
+import static com.personal.groucho.game.assets.Textures.chairUp;
+import static com.personal.groucho.game.assets.Textures.dresserRight;
 import static com.personal.groucho.game.assets.Textures.fridge;
+import static com.personal.groucho.game.assets.Textures.greenCouchRight;
 import static com.personal.groucho.game.assets.Textures.kitchen;
+import static com.personal.groucho.game.assets.Textures.lamp;
+import static com.personal.groucho.game.assets.Textures.library;
 import static com.personal.groucho.game.assets.Textures.lightWoodFloor;
+import static com.personal.groucho.game.assets.Textures.littleGreenCarpetVer;
+import static com.personal.groucho.game.assets.Textures.littleTable;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.states.StateName.IDLE;
+import static com.personal.groucho.game.levels.first.KitchenEvents.entryHallDoorEvent;
+import static com.personal.groucho.game.levels.first.KitchenEvents.firstTimeInRoomEvent;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Shader;
 
 import com.google.fpl.liquidfun.World;
-import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.levels.Room;
 
 public class Kitchen extends Room {
-    private final FirstLevel level;
-    private int playerPosX, playerPosY;
-    private boolean firstTime = true;
+    protected final FirstLevel level;
+    protected int playerPosX, playerPosY;
+    protected boolean firstTime = true;
 
     public Kitchen(GameWorld gameWorld, FirstLevel level) {
         super(1650, 1650, gameWorld);
@@ -45,9 +58,7 @@ public class Kitchen extends Room {
         playerPosY = 4*cellSize;
 
         if (firstTime){
-            String sentence = gameWorld.activity.getString(R.string.groucho_kitchen_init);
-            grouchoTalk(sentence, playerPosX, playerPosY);
-            firstTime = false;
+            firstTimeInRoomEvent(this);
         }
 
         makeFurniture();
@@ -69,105 +80,39 @@ public class Kitchen extends Room {
 
     private void makeFurniture() {
         World world = gameWorld.physics.world;
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture((int)(9.4*cellSize), (int) (7*cellSize),
-                        150, 380, 25f, world, Textures.greenCouchRight)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture((int)(9.4*cellSize), (int) (5.5*cellSize),
-                        150, 150, 5f, world, Textures.littleTable)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int)(9.6*cellSize), (int) (1.5*cellSize), 90, 400, 35f,
-                        world, Textures.dresserRight)
-        );
+
         gameObjects.add(GameObjectFactory.
                 makeStaticFurniture(
-                (int) (1.7*cellSize), (int)(0.5*cellSize),
-                550, 400,
-                world, kitchen)
+                        (int) (1.7*cellSize), (int)(0.5*cellSize),
+                        550, 400,
+                        world, kitchen)
         );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int)(3.1*cellSize), (int) (6.7*cellSize), 250, 360, 35f,
-                        world, Textures.bigTable)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int)(2.1*cellSize), (int) (6.7*cellSize), 90, 150, 5f,
-                        world, Textures.chairLeft)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int)(4.1*cellSize), (int) (6.7*cellSize), 90, 150, 5f,
-                        world, Textures.chairRight)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int)(3.1*cellSize), (int) (5.3*cellSize), 90, 150, 5f,
-                        world, Textures.chairUp)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int)(2.9*cellSize), (int) (7.7*cellSize), 90, 110, 5f,
-                        world, Textures.chairDown)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (7.8*cellSize), (int) (7.8*cellSize), 110, 110, 5f,
-                        world, Textures.box)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeDynamicFurniture(
-                        (int) (7.4*cellSize), (int) (8.1*cellSize), 60, 60, 5f,
-                        world, Textures.box)
-        );
+        addDynamicFurn((int)(9.4*unit), (int)(7*unit), 150, 380, 25f, greenCouchRight);
+        addDynamicFurn((int)(9.4*unit), (int)(5.5*unit), 150, 150, 5f, littleTable);
+        addDynamicFurn((int)(9.6*unit), (int)(1.5*unit), 90, 400, 35f, dresserRight);
+        addDynamicFurn((int)(3.1*unit), (int)(6.7*unit), 250, 360, 35f, bigTable);
+        addDynamicFurn((int)(2.1*unit), (int)(6.7*unit), 90, 150, 5f, chairLeft);
+        addDynamicFurn((int)(4.1*unit), (int)(6.7*unit), 90, 150, 5f, chairRight);
+        addDynamicFurn((int)(3.1*unit), (int)(5.3*unit), 90, 150, 5f, chairUp);
+        addDynamicFurn((int)(2.9*unit), (int)(7.7*unit), 90, 110, 5f, chairDown);
+        addDynamicFurn((int)(7.8*unit), (int)(7.8*unit), 110, 110, 5f, box);
+        addDynamicFurn((int)(7.4*unit), (int)(8.1*unit), 60, 60, 5f, box);
     }
 
     private void makeTriggers(){
-        // Door to entry hall
-        makeFloorTrigger(
-                (int)(9.6*cellSize), 4*cellSize,
-                (int)(10.3*cellSize), 4*cellSize,
-                90, 150, Textures.littleGreenCarpetVer,
-                ()->{
-                    level.fromBathroomToEntryHall = false;
-                    level.fromGardenToEntryHall = false;
-                    level.fromLibraryToEntryHall = false;
-                    level.fromKitchenToEntryHall = true;
-                    door.play(1f);
-                    level.goToEntryHall();
-                });
+        addFloorTrigger((int)(9.6*unit), 4*unit, (int)(10.3*unit), 4*unit,
+                90, 150, littleGreenCarpetVer, ()->entryHallDoorEvent(this));
     }
 
     private void makeDecorations() {
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (9.3*cellSize), (int) (-0.5*cellSize),
-                        100, 356,
-                        Textures.lamp
-                )));
-        gameObjects.add((GameObjectFactory.
-                makeWallDecoration(
-                        (int) (7*cellSize), (int) (-0.5*cellSize),
-                        400, 400, Textures.library
-                )));
-        gameObjects.add(GameObjectFactory.
-                makeWallDecoration(
-                4*cellSize, (int)(-0.5*cellSize),
-                150, 400, fridge)
-        );
-        gameObjects.add(GameObjectFactory.
-                makeFloorDecoration(
-                        (int) (2.3*cellSize), (int) (2.1*cellSize),
-                        512, 356, Textures.brownCarpet)
-        );
+        addWallDec((int)(9.3*unit), (int)(-0.5*unit), 100, 356, lamp);
+        addWallDec((int)(7*unit), (int)(-0.5*unit), 400, 400, library);
+        addWallDec(4*unit, (int)(-0.5*unit), 150, 400, fridge);
+        addFloorDec((int)(2.3*unit), (int)(2.1*unit), 512, 356, brownCarpet);
     }
 
     private void makeEnemies() {
-        gameObjects.add(GameObjectFactory.
-                makeEnemy(6*cellSize, 4*cellSize, LEFT, getWolf(), IDLE, gameWorld));
+        addEnemy(6*unit, 4*unit, LEFT, getWolf(), IDLE);
     }
 
     private void makeHealth() {
@@ -178,7 +123,5 @@ public class Kitchen extends Room {
     }
 
     @Override
-    public void handleDeath() {
-        level.kitchenKey = true;
-    }
+    public void handleDeath() {level.kitchenKey = true;}
 }
