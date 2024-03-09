@@ -17,7 +17,7 @@ public class GardenEvents {
         String sentence = gw.activity.getString(R.string.groucho_garden_init);
         room.grouchoTalk(sentence, room.playerPosX, room.playerPosY);
 
-        Garden.firstTime = false;
+        room.firstTime = false;
     }
 
     public static void entryHallDoorEvent(Garden room){

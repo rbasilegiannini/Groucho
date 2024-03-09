@@ -30,7 +30,7 @@ public class FirstLevel extends Level {
     }
 
     public void init(){
-        activeRoom = wolfRoom;
+        activeRoom = entryHall;
         activeRoom.init();
     }
 

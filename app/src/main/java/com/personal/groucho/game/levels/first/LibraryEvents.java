@@ -24,7 +24,7 @@ public class LibraryEvents {
         });
         room.level.eventChain.addAction(()->room.setControllerVisibility(true));
 
-        Library.firstTime = false;
+        room.firstTime = false;
     }
 
     public static void fromHallwayEvent(Library room){

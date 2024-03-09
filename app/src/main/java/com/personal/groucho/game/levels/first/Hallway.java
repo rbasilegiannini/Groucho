@@ -30,7 +30,7 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.levels.Room;
 
 public class Hallway extends Room {
-    public static boolean firstTime = true;
+    protected boolean firstTime = true;
     protected final FirstLevel level;
     protected int playerPosX, playerPosY;
     protected Orientation playerOrientation = UP;

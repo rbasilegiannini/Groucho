@@ -53,7 +53,7 @@ public class EntryHallEvents {
             String grouchoSentence = gw.activity.getString(R.string.groucho_entryhall_heavydoor_init);
             room.grouchoTalk(grouchoSentence, gw.player.posX, gw.player.posY);
         });
-        EntryHall.firstTime = false;
+        room.firstTime = false;
     }
 
     public static void tryOpenHeavyDoorEvent(EntryHall room){
@@ -93,7 +93,7 @@ public class EntryHallEvents {
     public static void bathroomDoorEvent(EntryHall room) {
         GameWorld gw = room.gameWorld;
 
-        if (!EntryHall.firstTime) {
+        if (!room.firstTime) {
             if (!room.level.bathroomKey) {
                 door.play(1f);
                 room.level.goToBathroom();
@@ -111,7 +111,7 @@ public class EntryHallEvents {
     public static void gardenDoorEvent(EntryHall room) {
         GameWorld gw = room.gameWorld;
 
-        if (!EntryHall.firstTime) {
+        if (!room.firstTime) {
             if (!room.level.gardenKey) {
                 door.play(1f);
                 room.level.goToGarden();
@@ -129,7 +129,7 @@ public class EntryHallEvents {
     public static void kitchenDoorEvent(EntryHall room){
         GameWorld gw = room.gameWorld;
 
-        if(!EntryHall.firstTime) {
+        if(!room.firstTime) {
             if (!room.level.kitchenKey) {
                 door.play(1f);
                 room.level.goToKitchen();

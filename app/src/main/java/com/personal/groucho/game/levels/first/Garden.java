@@ -38,7 +38,7 @@ public class Garden extends Room {
     protected Orientation playerOrientation;
     protected GameObject statue;
     protected int skeletonsCounter;
-    protected static boolean firstTime = true;
+    protected boolean firstTime = true;
 
     public Garden(GameWorld gameWorld, FirstLevel level) {
         super(2100, 2000, gameWorld);

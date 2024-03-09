@@ -25,7 +25,7 @@ public class HallwayEvents {
             gw.controller.pause.setVisibility(true);
         });
 
-        Hallway.firstTime = false;
+        room.firstTime = false;
     }
 
     public static void fromGrouchoRoomEvent(Hallway room) {

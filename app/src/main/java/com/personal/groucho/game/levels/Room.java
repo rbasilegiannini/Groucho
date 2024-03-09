@@ -2,6 +2,7 @@ package com.personal.groucho.game.levels;
 
 import static com.personal.groucho.game.assets.Textures.dylanBubble;
 import static com.personal.groucho.game.assets.Textures.grouchoBubble;
+import static com.personal.groucho.game.assets.Textures.statueWithKey;
 import static com.personal.groucho.game.constants.Environment.brightness;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.Environment.minBrightness;
@@ -170,6 +171,10 @@ public class Room {
         World world = gameWorld.physics.world;
         gameObjects.add(GameObjectFactory.
                 makeDynamicFurniture(posX, posY, dimX, dimY, density, world, texture));
+    }
+    protected GameObject makeStaticFurn(int centerX, int centerY, float dimX, float dimY, Bitmap texture) {
+        return GameObjectFactory.
+                makeStaticFurniture(centerX, centerY, dimX, dimY, gameWorld.physics.world, texture);
     }
     protected void addEnemy(int posX, int posY, Orientation or, CharacterProp prop, StateName aiState) {
         gameObjects.add(GameObjectFactory.makeEnemy(posX, posY, or, prop, aiState,gameWorld));
