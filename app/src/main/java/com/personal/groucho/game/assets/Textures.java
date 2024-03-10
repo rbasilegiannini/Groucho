@@ -15,7 +15,7 @@ public class Textures {
     public static Bitmap dresser, dresserRight;
     public static Bitmap woodWall, orangeWall, greenWall, bathroomWall, whiteWall, stoneWall, stoneWall2;
     public static Bitmap windowInternal, windowNight;
-    public static Bitmap brownDoor, heavyDoor;
+    public static Bitmap brownDoor, heavyDoor, heavyDoorOpened;
     public static Bitmap redCarpet, brownCarpet, littleCarpetBathroom, sink;
     public static Bitmap orangeCouch, littleLibrary, library, greenCouchRight;
     public static Bitmap hanger, littleCarpet, littleGreenCarpet, littleGreenCarpetVer, lamp;
@@ -107,6 +107,7 @@ public class Textures {
 
     private static void loadDoors(Resources res) {
         heavyDoor = setBitmap(res, R.drawable.heavy_door, 128, 163);
+        heavyDoorOpened = setBitmap(res, R.drawable.heavy_door_opened, 128, 163);
         brownDoor = setBitmap(res, R.drawable.brown_door, 41, 72);
     }
 

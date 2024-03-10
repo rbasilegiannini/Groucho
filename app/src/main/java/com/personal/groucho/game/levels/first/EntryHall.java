@@ -38,9 +38,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Shader;
 
+import com.google.fpl.liquidfun.World;
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.controller.Orientation;
+import com.personal.groucho.game.gameobjects.GameObject;
+import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.levels.Room;
 
 public class EntryHall extends Room {
@@ -92,6 +95,7 @@ public class EntryHall extends Room {
         makeDecorations();
         makeTriggers();
         makeFurniture();
+        makeHealth();
 
         allocateRoom();
     }
@@ -133,9 +137,10 @@ public class EntryHall extends Room {
         else {
             runnable = () -> openHeavyDoorEvent(this);
         }
-        addWallTrigger(6*unit,(int)(-0.85*unit), 6*unit,(int)(-0.95 * unit),
+        heavyDoorGO = addWallTrigger(6*unit,(int)(-0.85*unit), 6*unit,(int)(-0.95 * unit),
                 320,280, heavyDoor, runnable);
     }
+    GameObject heavyDoorGO;
 
     private void makeDecorations() {
         addFloorDec((int)(6*unit), (int)(1.1*unit), 512, 356, brownCarpet);
@@ -152,5 +157,14 @@ public class EntryHall extends Room {
         addDynamicFurn((int)(0.80*unit),(int)(5.5*unit),150,150,5f,littleTable);
         addDynamicFurn((int)(11.3*unit),(int)(0.3*unit),150,150,5f,littleTable);
         addDynamicFurn((int)(11.3*unit),(int)(3.8*unit),150,380,25f,greenCouchRight);
+    }
+
+    private void makeHealth() {
+        World world = gameWorld.physics.world;
+        gameObjects.add(GameObjectFactory.makeHealth((int) (5*unit), (int) (4.5*unit), world));
+        gameObjects.add(GameObjectFactory.makeHealth((int) (6*unit), (int) (4.5*unit), world));
+        gameObjects.add(GameObjectFactory.makeHealth((int) (7*unit), (int) (4.5*unit), world));
+        gameObjects.add(GameObjectFactory.makeHealth((int) (6*unit), (int) (3.5*unit), world));
+        gameObjects.add(GameObjectFactory.makeHealth((int) (6*unit), (int) (5.5*unit), world));
     }
 }

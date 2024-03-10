@@ -13,6 +13,7 @@ public class Sounds {
     public static Sound bodyHitFurniture;
     public static Sound healing;
     public static Sound door;
+    public static Sound throwing;
 
     public static void init(Audio audio) {
         loading = audio.newSound("loading.mp3");
@@ -24,6 +25,7 @@ public class Sounds {
         bodyHitFurniture = audio.newSound("body_hit_furniture.mp3");
         healing = audio.newSound("healing.mp3");
         door = audio.newSound("door.mp3");
+        throwing = audio.newSound("throw.mp3");
     }
 
     public static void release() {
@@ -35,12 +37,13 @@ public class Sounds {
         releaseSound(bulletHitFurniture);
         releaseSound(bodyHitFurniture);
         releaseSound(healing);
+        releaseSound(door);
+        releaseSound(throwing);
     }
 
     private static void releaseSound(Sound sound) {
         if (sound != null) {
             sound.dispose();
-            sound = null;
         }
     }
 }

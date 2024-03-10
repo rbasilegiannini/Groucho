@@ -1,6 +1,8 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Sounds.throwing;
+import static com.personal.groucho.game.assets.Textures.heavyDoorOpened;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.Orientation.RIGHT;
@@ -8,6 +10,8 @@ import static com.personal.groucho.game.controller.Orientation.UP;
 
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.gameobjects.ComponentType;
+import com.personal.groucho.game.gameobjects.components.TextureComponent;
 
 public class EntryHallEvents {
     public static void firstTimeInRoomEvent(EntryHall room){
@@ -20,7 +24,6 @@ public class EntryHallEvents {
     }
 
     public static void endGameEvent(EntryHall room) {
-
     }
 
     public static void fromLibraryEvent(EntryHall room){
@@ -70,17 +73,16 @@ public class EntryHallEvents {
     public static void openHeavyDoorEvent(EntryHall room) {
         GameWorld gw = room.gameWorld;
 
-        // Open door (change texture door)
+        TextureComponent textureComp = (TextureComponent) room.heavyDoorGO.getComponent(ComponentType.DRAWABLE);
+        textureComp.init(heavyDoorOpened, 320,280);
 
         door.play(1f);
-        String grouchoSentence = gw.activity.getString(R.string.groucho_endgame_init1);
-        room.grouchoTalk(grouchoSentence, gw.player.posX, gw.player.posY);
-        room.level.eventChain.addAction(() -> {/*throw sound */});
+
+        talkEvent(room, R.string.groucho_endgame_init1);
+
+        room.level.eventChain.addAction(() -> throwing.play(1f));
         room.level.eventChain.addAction(() -> gw.player.setOrientation(DOWN));
-        room.level.eventChain.addAction(() -> {
-            String bye = gw.activity.getString(R.string.groucho_endgame_init2);
-            room.grouchoTalk(bye, gw.player.posX, gw.player.posY);
-        });
+        room.level.eventChain.addAction(() -> talkEvent(room, R.string.groucho_endgame_init2));
         room.level.eventChain.addAction(() -> gw.complete = true);
     }
 

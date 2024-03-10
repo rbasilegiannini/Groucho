@@ -18,7 +18,6 @@ import static com.personal.groucho.game.assets.Textures.lightWoodFloor;
 import static com.personal.groucho.game.assets.Textures.littleGreenCarpetVer;
 import static com.personal.groucho.game.assets.Textures.littleTable;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
-import static com.personal.groucho.game.constants.System.cellSize;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.states.StateName.IDLE;
 import static com.personal.groucho.game.levels.first.KitchenEvents.entryHallDoorEvent;
@@ -54,8 +53,8 @@ public class Kitchen extends Room {
     @Override
     public void init() {
         super.init();
-        playerPosX = (int)(9.1*cellSize);
-        playerPosY = 4*cellSize;
+        playerPosX = (int)(9.1*unit);
+        playerPosY = 4*unit;
 
         if (firstTime){
             firstTimeInRoomEvent(this);
@@ -83,7 +82,7 @@ public class Kitchen extends Room {
 
         gameObjects.add(GameObjectFactory.
                 makeStaticFurniture(
-                        (int) (1.7*cellSize), (int)(0.5*cellSize),
+                        (int) (1.7*unit), (int)(0.5*unit),
                         550, 400,
                         world, kitchen)
         );
@@ -117,11 +116,14 @@ public class Kitchen extends Room {
 
     private void makeHealth() {
         World world = gameWorld.physics.world;
-        gameObjects.add(GameObjectFactory.makeHealth((int) (4.8*cellSize), cellSize/2, world));
-        gameObjects.add(GameObjectFactory.makeHealth((int) (5.4*cellSize), cellSize/2, world));
-        gameObjects.add(GameObjectFactory.makeHealth(8*cellSize, (int) (8.1*cellSize), world));
+        gameObjects.add(GameObjectFactory.makeHealth((int) (4.8*unit), unit/2, world));
+        gameObjects.add(GameObjectFactory.makeHealth((int) (5.4*unit), unit/2, world));
+        gameObjects.add(GameObjectFactory.makeHealth(8*unit, (int) (8.1*unit), world));
     }
 
     @Override
-    public void handleDeath() {level.kitchenKey = true;}
+    public void handleDeath() {
+        level.counterKeys++;
+        level.kitchenKey = true;
+    }
 }

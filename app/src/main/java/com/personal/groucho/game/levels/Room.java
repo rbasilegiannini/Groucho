@@ -2,7 +2,6 @@ package com.personal.groucho.game.levels;
 
 import static com.personal.groucho.game.assets.Textures.dylanBubble;
 import static com.personal.groucho.game.assets.Textures.grouchoBubble;
-import static com.personal.groucho.game.assets.Textures.statueWithKey;
 import static com.personal.groucho.game.constants.Environment.brightness;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.constants.Environment.minBrightness;
