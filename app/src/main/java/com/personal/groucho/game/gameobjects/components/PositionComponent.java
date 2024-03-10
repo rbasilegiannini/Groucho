@@ -20,12 +20,20 @@ public class PositionComponent extends Component {
         orientation = UP;
     }
 
-    public void init(int posX, int posY) {
+    public void init(int posX, int posY){
         this.originalPosX = posX;
         this.originalPosY = posY;
         this.posX = posX;
         this.posY = posY;
         orientation = UP;
+    }
+
+    public void init(int posX, int posY, Orientation orientation) {
+        this.originalPosX = posX;
+        this.originalPosY = posY;
+        this.posX = posX;
+        this.posY = posY;
+        this.orientation = orientation;
     }
 
     @Override

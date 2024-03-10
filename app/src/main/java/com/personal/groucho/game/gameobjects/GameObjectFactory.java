@@ -139,7 +139,7 @@ public class GameObjectFactory {
 
         gameObject.init("Enemy", ENEMY);
 
-        posComp.init(posX, posY);
+        posComp.init(posX, posY, orientation);
         phyComp.init(gameWorld.physics.world, charScaleFactor * charDimX, charScaleFactor * charDimY);
         spriteComp.init(charProp.sheetIdle);
         aiComp.init(gameWorld, state);
@@ -155,7 +155,6 @@ public class GameObjectFactory {
         gameObject.addComponent(aliveComp);
         gameObject.addComponent(charComp);
 
-        posComp.setOrientation(orientation);
         PhysicsProp prop = new PhysicsProp(posX, posY,0f, -1f,
                 25f, 1f, kinematicBody);
         setCharacterPhysics(phyComp, prop);

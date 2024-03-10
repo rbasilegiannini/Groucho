@@ -141,6 +141,7 @@ public class AIComponent extends WalkingComponent {
 
             originalPosOnGrid = GameGrid.getInstance().getNode(posComp.getPosXOnGrid(), posComp.getPosYOnGrid());
             originalOrientation = posComp.orientation;
+            spriteComp.setAnim(posComp.orientation.getValue());
         }
     }
 
@@ -220,8 +221,7 @@ public class AIComponent extends WalkingComponent {
 
     public void updateDirection(Orientation orientation){
         posComp.setOrientation(orientation);
-        ((SpriteComponent)
-                owner.getComponent(DRAWABLE)).setAnim(posComp.orientation.getValue());
+        spriteComp.setAnim(posComp.orientation.getValue());
         sight.setNewOrientation(posComp.orientation);
     }
 
