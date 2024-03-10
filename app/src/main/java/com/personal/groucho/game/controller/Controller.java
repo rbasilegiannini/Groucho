@@ -194,4 +194,6 @@ public class Controller implements ControllerSubject {
         setCurrentState(Aiming.getInstance(this));
         trigger.resetAimColor();
     }
+
+    public boolean isLightOn(){return bulb.turnOn;}
 }

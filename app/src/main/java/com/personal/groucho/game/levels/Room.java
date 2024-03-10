@@ -94,7 +94,7 @@ public class Room {
         }
         else {
             brightness = minBrightness;
-            gameWorld.setPlayerVisibility(false);
+            gameWorld.setPlayerVisibility(gameWorld.controller.isLightOn());
         }
     }
 

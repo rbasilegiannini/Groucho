@@ -136,16 +136,16 @@ public class Events {
 
     public static void turnOnLightEvent(GameWorld gameWorld){
         click.play(1f);
-        if (brightness == minBrightness) {
+//        if (brightness == minBrightness) {
             gameWorld.setPlayerVisibility(true);
-        }
+//        }
     }
 
     public static void turnOffLightEvent(GameWorld gameWorld){
         click.play(1f);
-        if (brightness == minBrightness) {
+//        if (brightness == minBrightness) {
             gameWorld.setPlayerVisibility(false);
-        }
+//        }
     }
 
     public static void pauseEvent(GameWorld gameWorld) {

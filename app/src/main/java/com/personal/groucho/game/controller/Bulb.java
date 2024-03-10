@@ -13,7 +13,7 @@ public class Bulb extends Widget{
     private final Rect src, dest;
     private final int minAlpha, maxAlpha;
     private final Paint paint;
-    private boolean turnOn;
+    protected boolean turnOn;
 
     public Bulb(float cx, float cy){
         super(cx, cy);

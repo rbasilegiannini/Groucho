@@ -20,6 +20,7 @@ public class InvestigateActions implements Actions {
         aiComp.isNodeReached = true;
         isInvestigate = true;
         investigateTimeMillis = System.currentTimeMillis();
+        aiComp.charComp.properties.call.play(1f);
     }
 
     @Override

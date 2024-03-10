@@ -28,6 +28,7 @@ public class EngageActions implements Actions {
         lastSeenMills = System.currentTimeMillis();
         aiComp.setPathToPlayer();
         aiComp.isNodeReached = true;
+        aiComp.charComp.properties.call.play(1f);
     }
 
     @Override

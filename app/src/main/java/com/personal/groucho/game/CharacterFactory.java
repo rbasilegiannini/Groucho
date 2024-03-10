@@ -31,6 +31,9 @@ import static com.personal.groucho.game.constants.Character.zombieHealth;
 import static com.personal.groucho.game.constants.Character.zombiePower;
 import static com.personal.groucho.game.constants.Character.zombieSpeed;
 
+import com.personal.groucho.badlogic.androidgames.framework.Sound;
+import com.personal.groucho.game.assets.Sounds;
+
 public class CharacterFactory {
     public static class CharacterProp {
         public int health = 0;
@@ -44,6 +47,7 @@ public class CharacterFactory {
         public Spritesheet sheetDoor = null;
         public Spritesheet sheetHurt = null;
         public Spritesheet sheetDeath = null;
+        public Sound call = null;
     }
 
     public static CharacterProp getGroucho(){
@@ -72,6 +76,7 @@ public class CharacterFactory {
         zombie.sheetWalk = zombieWalk;
         zombie.sheetHurt = zombieHurt;
         zombie.sheetDeath = zombieDeath;
+        zombie.call = Sounds.zombie;
 
         return zombie;
     }
@@ -86,6 +91,7 @@ public class CharacterFactory {
         skeleton.sheetWalk = skeletonWalk;
         skeleton.sheetHurt = skeletonHurt;
         skeleton.sheetDeath = skeletonDeath;
+        skeleton.call = Sounds.skeleton;
 
         return skeleton;
     }
@@ -100,6 +106,7 @@ public class CharacterFactory {
         wolf.sheetWalk = wolfWalk;
         wolf.sheetHurt = wolfHurt;
         wolf.sheetDeath = wolfDeath;
+        wolf.call = Sounds.wolf;
 
         return wolf;
     }
