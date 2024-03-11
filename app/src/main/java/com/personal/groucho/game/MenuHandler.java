@@ -96,6 +96,15 @@ public class MenuHandler {
                 });
     }
 
+
+    public static void handleCompleteMenu(GameWorld gameWorld) {
+        gameWorld.activity.runOnUiThread(
+                () -> {
+                    gameWorld.activity.setContentView(R.layout.complete);
+                    handleTryAgain(gameWorld);
+                });
+    }
+
     public static void handleTryAgain(GameWorld gameWorld) {
         gameWorld.activity.runOnUiThread(
                 () -> {
@@ -103,8 +112,7 @@ public class MenuHandler {
                     ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
 
                     tryAgainButton.setOnClickListener(v -> {
-                        gameWorld.tryAgain(new FirstLevel(gameWorld));
-                        gameWorld.activity.setContentView(gameWorld.activity.renderView);
+                        handleMainMenu(gameWorld);
                     });
                     exitButton.setOnClickListener(v -> gameWorld.finalize());
                 });

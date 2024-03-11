@@ -118,7 +118,7 @@ public class Graphics {
             }
             else {
                 gameWorld.complete = false;
-                // MenuHandler.handleCompleteMenu(gameWorld);
+                MenuHandler.handleCompleteMenu(gameWorld);
             }
 
             fadeOut = 0;

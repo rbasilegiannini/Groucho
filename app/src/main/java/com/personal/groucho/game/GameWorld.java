@@ -22,7 +22,6 @@ import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.levels.first.GrouchoRoom;
 import com.personal.groucho.game.levels.Level;
 
 public class GameWorld {
@@ -60,17 +59,6 @@ public class GameWorld {
         currentLevel = level;
         initPlayer();
         currentLevel.init();
-    }
-
-    public void tryAgain(Level level) {
-        initEnvironment();
-        GrouchoRoom.firstTime = true;
-        GameGrid.getInstance().releasePool();
-
-        currentLevel = level;
-        initPlayer();
-        currentLevel.init();
-        controller.handleLightTouchDown();
     }
 
     private void initEnvironment() {
@@ -209,6 +197,7 @@ public class GameWorld {
     }
 
     protected void clearPools() {
+        GameGrid.getInstance().releasePool();
         goHandler.clear();
     }
 
