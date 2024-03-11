@@ -25,10 +25,6 @@ import static com.personal.groucho.game.levels.first.KitchenEvents.entryHallDoor
 import static com.personal.groucho.game.levels.first.KitchenEvents.firstTimeInRoomEvent;
 import static com.personal.groucho.game.levels.first.KitchenEvents.wolfDeath;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Shader;
-
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;

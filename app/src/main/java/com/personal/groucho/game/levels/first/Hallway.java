@@ -20,10 +20,6 @@ import static com.personal.groucho.game.levels.first.HallwayEvents.grouchoRoomDo
 import static com.personal.groucho.game.levels.first.HallwayEvents.libraryDoorEvent;
 import static com.personal.groucho.game.levels.first.HallwayEvents.talkEvent;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Shader;
-
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.controller.Orientation;

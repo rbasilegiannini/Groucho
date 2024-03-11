@@ -30,10 +30,6 @@ import static com.personal.groucho.game.levels.first.BathroomEvents.entryHallDoo
 import static com.personal.groucho.game.levels.first.BathroomEvents.firstTimeInRoomEvent;
 import static com.personal.groucho.game.levels.first.BathroomEvents.talkEvent;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Shader;
-
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.GameObject;
@@ -98,7 +94,7 @@ public class Bathroom extends Room {
         addDynamicFurn((int)(16.7*unit), 5*unit, 100, 100, 5f, box);
         addDynamicFurn((int)(17.3*unit), 5*unit, 70, 70, 5f, box);
         addDynamicFurn((int)(17.0*unit), (int)(4.5*unit), 110, 110, 5f, box);
-        addDynamicFurn((int)(17.7*unit), (int)(2*unit), 90, 300, 35f, dresserRight);
+        addDynamicFurn((int)(17.7*unit), 2*unit, 90, 300, 35f, dresserRight);
     }
 
     private void makeDecorations() {

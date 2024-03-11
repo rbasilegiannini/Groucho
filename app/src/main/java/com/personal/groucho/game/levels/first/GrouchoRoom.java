@@ -16,10 +16,6 @@ import static com.personal.groucho.game.levels.first.GrouchoRoomEvents.firstTime
 import static com.personal.groucho.game.levels.first.GrouchoRoomEvents.hallwayDoorEvent;
 import static com.personal.groucho.game.levels.first.GrouchoRoomEvents.talkEvent;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Shader;
-
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.levels.Room;

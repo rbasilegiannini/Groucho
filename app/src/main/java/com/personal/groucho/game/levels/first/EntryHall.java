@@ -34,10 +34,6 @@ import static com.personal.groucho.game.levels.first.EntryHallEvents.openHeavyDo
 import static com.personal.groucho.game.levels.first.EntryHallEvents.talkEvent;
 import static com.personal.groucho.game.levels.first.EntryHallEvents.tryOpenHeavyDoorEvent;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Shader;
-
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
@@ -102,7 +98,7 @@ public class EntryHall extends Room {
     }
 
     private void makeTriggers() {
-        addWallTrigger(3*unit, (int)(9.1*unit), 3*unit, (int)(9*unit),
+        addWallTrigger(3*unit, (int)(9.1*unit), 3*unit, 9*unit,
                 160, 280, brownDoor, () -> libraryDoorEvent(this));
         addFloorTrigger((int)(11.55*unit),2*unit, (int)(12.3*unit), 2*unit,
                 90, 150, littleGreenCarpetVer, () -> bathroomDoorEvent(this));
@@ -135,7 +131,7 @@ public class EntryHall extends Room {
     GameObject heavyDoorGO;
 
     private void makeDecorations() {
-        addFloorDec((int)(6*unit), (int)(1.1*unit), 512, 356, brownCarpet);
+        addFloorDec(6*unit, (int)(1.1*unit), 512, 356, brownCarpet);
         addWallDec((int)(4.2*unit), (int)(-0.5*unit), 100, 356, hanger);
         addWallDec((int)(7.8*unit), (int)(-0.5*unit), 100, 356, lamp);
         addFloorDec((int)(1.50*unit), (int)(6.6*unit), 90, 210, littleCarpet);
@@ -153,10 +149,10 @@ public class EntryHall extends Room {
 
     private void makeHealth() {
         World world = gameWorld.physics.world;
-        gameObjects.add(GameObjectFactory.makeHealth((int) (5*unit), (int) (4.5*unit), world));
-        gameObjects.add(GameObjectFactory.makeHealth((int) (6*unit), (int) (4.5*unit), world));
-        gameObjects.add(GameObjectFactory.makeHealth((int) (7*unit), (int) (4.5*unit), world));
-        gameObjects.add(GameObjectFactory.makeHealth((int) (6*unit), (int) (3.5*unit), world));
-        gameObjects.add(GameObjectFactory.makeHealth((int) (6*unit), (int) (5.5*unit), world));
+        gameObjects.add(GameObjectFactory.makeHealth(5*unit, (int) (4.5*unit), world));
+        gameObjects.add(GameObjectFactory.makeHealth(6*unit, (int) (4.5*unit), world));
+        gameObjects.add(GameObjectFactory.makeHealth(7*unit, (int) (4.5*unit), world));
+        gameObjects.add(GameObjectFactory.makeHealth(6*unit, (int) (3.5*unit), world));
+        gameObjects.add(GameObjectFactory.makeHealth(6*unit, (int) (5.5*unit), world));
     }
 }

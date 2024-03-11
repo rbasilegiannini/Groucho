@@ -26,12 +26,7 @@ import static com.personal.groucho.game.levels.first.LibraryEvents.fromEntryWall
 import static com.personal.groucho.game.levels.first.LibraryEvents.fromHallwayEvent;
 import static com.personal.groucho.game.levels.first.LibraryEvents.hallwayDoorEvent;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Shader;
-
 import com.personal.groucho.game.GameWorld;
-import com.personal.groucho.game.assets.Textures;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.levels.Room;
 
@@ -93,7 +88,7 @@ public class Library extends Room {
     }
 
     private void makeTriggers() {
-        addWallTrigger((int)(4.5*unit), (int)(9.1*unit), (int)(4.5*unit), (int)(9*unit),
+        addWallTrigger((int)(4.5*unit), (int)(9.1*unit), (int)(4.5*unit), 9*unit,
                 160, 280, brownDoor, () -> hallwayDoorEvent(this));
         addWallTrigger((int)(4.5*unit), (int)(-0.85*unit), (int)(4.5*unit), (int)(-0.95*unit),
                 160, 280, brownDoor, () -> entryHallDoorEvent(this));

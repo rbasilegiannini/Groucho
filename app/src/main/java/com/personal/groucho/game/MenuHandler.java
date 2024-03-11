@@ -111,9 +111,7 @@ public class MenuHandler {
                     ImageButton tryAgainButton = gameWorld.activity.findViewById(R.id.tryAgain);
                     ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
 
-                    tryAgainButton.setOnClickListener(v -> {
-                        handleMainMenu(gameWorld);
-                    });
+                    tryAgainButton.setOnClickListener(v -> handleMainMenu(gameWorld));
                     exitButton.setOnClickListener(v -> gameWorld.finalize());
                 });
     }

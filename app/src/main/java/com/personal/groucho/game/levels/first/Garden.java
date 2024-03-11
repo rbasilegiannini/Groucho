@@ -21,10 +21,6 @@ import static com.personal.groucho.game.levels.first.GardenEvents.entryHallDoorE
 import static com.personal.groucho.game.levels.first.GardenEvents.firstTimeInRoomEvent;
 import static com.personal.groucho.game.levels.first.GardenEvents.statueWithKeyEvent;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Shader;
-
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.controller.Orientation;
