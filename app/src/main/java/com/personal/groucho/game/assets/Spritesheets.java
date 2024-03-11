@@ -19,7 +19,7 @@ public class Spritesheets {
 
     public static Spritesheet skeletonIdle, skeletonWalk, skeletonHurt, skeletonDeath;
     public static Spritesheet zombieIdle, zombieWalk, zombieHurt, zombieDeath;
-    public static Spritesheet wolfIdle, wolfWalk, wolfHurt, wolfDeath;
+    public static Spritesheet wolfIdle, wolfWalk, wolfHurt, wolfDeath, wolfDeathWithoutKey;
 
 
 
@@ -48,6 +48,7 @@ public class Spritesheets {
         wolfWalk = loadAnimation(res, R.drawable.wolf_walk, 8, directions);
         wolfHurt = loadAnimation(res, R.drawable.wolf_hurt, 5, directions);
         wolfDeath = loadAnimation(res, R.drawable.wolf_death, 1, 1);
+        wolfDeathWithoutKey = loadAnimation(res, R.drawable.wolf_death_without_key, 1, 1);
     }
 
     private static Spritesheet loadAnimation(Resources res, int idDraw, int frames, int animations) {
@@ -86,5 +87,6 @@ public class Spritesheets {
         wolfWalk.dispose();
         wolfHurt.dispose();
         wolfDeath.dispose();
+        wolfDeathWithoutKey.dispose();
     }
 }
