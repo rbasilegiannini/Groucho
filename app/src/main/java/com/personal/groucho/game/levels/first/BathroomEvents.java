@@ -1,6 +1,7 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Sounds.key;
 import static com.personal.groucho.game.assets.Textures.littleDresser;
 
 import com.personal.groucho.R;
@@ -22,6 +23,7 @@ public class BathroomEvents {
         if (!room.level.bathroomKey) {
             TextureComponent textureComp = (TextureComponent)  room.bathroomKey.getComponent(ComponentType.DRAWABLE);
             textureComp.init(littleDresser, 100, 100);
+            key.play(1f);
             room.level.bathroomKey = true;
             room.level.counterKeys++;
             String sentence = gw.activity.getString(R.string.groucho_keys)

@@ -1,6 +1,7 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Sounds.key;
 import static com.personal.groucho.game.assets.Spritesheets.wolfDeathWithoutKey;
 import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
 
@@ -33,6 +34,7 @@ public class KitchenEvents {
         if (!room.level.kitchenKey) {
             SpriteComponent spriteComp = (SpriteComponent) room.wolf.getComponent(DRAWABLE);
             spriteComp.setCurrentSpritesheet(wolfDeathWithoutKey);
+            key.play(1f);
             room.level.kitchenKey = true;
             room.level.counterKeys++;
             String sentence = gw.activity.getString(R.string.groucho_keys)

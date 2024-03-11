@@ -1,6 +1,7 @@
 package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Sounds.door;
+import static com.personal.groucho.game.assets.Sounds.key;
 import static com.personal.groucho.game.controller.Orientation.DOWN;
 
 import com.personal.groucho.R;
@@ -35,6 +36,7 @@ public class GardenEvents {
             if (!room.level.gardenKey) {
                 TextureComponent textureComp = (TextureComponent) room.statue.getComponent(ComponentType.DRAWABLE);
                 textureComp.init(Textures.statue, (int) (1.7 * room.unit), 3 * room.unit);
+                key.play(1f);
                 room.level.gardenKey = true;
                 room.level.counterKeys++;
                 String sentence = gw.activity.getString(R.string.groucho_keys)
