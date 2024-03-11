@@ -55,10 +55,10 @@ public class GameWorld {
 
     public void init(Level level) {
         initEnvironment();
-
         currentLevel = level;
         initPlayer();
         currentLevel.init();
+        activity.backgroundMusic.play();
     }
 
     private void initEnvironment() {
@@ -172,8 +172,14 @@ public class GameWorld {
         }
     }
 
-    public void resume() {pause = false;}
-    public void pause() {pause = true;}
+    public void resume() {
+        activity.backgroundMusic.play();
+        pause = false;
+    }
+    public void pause() {
+        activity.backgroundMusic.pause();
+        pause = true;
+    }
 
     public void GameOver() {
         player.reset();

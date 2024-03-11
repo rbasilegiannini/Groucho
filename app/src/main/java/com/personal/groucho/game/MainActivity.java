@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.personal.groucho.R;
+import com.personal.groucho.badlogic.androidgames.framework.Music;
 import com.personal.groucho.badlogic.androidgames.framework.impl.AndroidAudio;
 import com.personal.groucho.badlogic.androidgames.framework.impl.MultiTouchHandler;
 import com.personal.groucho.badlogic.androidgames.framework.Audio;
@@ -25,6 +26,8 @@ public class MainActivity extends Activity {
 
     protected AndroidFastRenderView renderView;
     private Audio audio;
+    protected Music backgroundMusic;
+
     private MultiTouchHandler touch;
 
     private static final float XMIN = -15, XMAX = 15, YMIN = -10, YMAX = 10;
@@ -54,6 +57,9 @@ public class MainActivity extends Activity {
         // Sound
         audio = new AndroidAudio(this);
         Sounds.init(audio);
+        backgroundMusic = audio.newMusic("lavender_town.mp3");
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.2f);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -85,12 +91,17 @@ public class MainActivity extends Activity {
         Textures.load(getResources());
     }
 
+    private boolean wasPlaying = false;
     @Override
     public void onPause() {
         super.onPause();
         Log.i("Main thread", "pause");
 
         renderView.pause();
+        if (backgroundMusic.isPlaying()) {
+            backgroundMusic.pause();
+            wasPlaying = true;
+        }
     }
 
     @Override
@@ -105,6 +116,10 @@ public class MainActivity extends Activity {
         Log.i("Main thread", "resume");
 
         renderView.resume();
+        if (wasPlaying){
+            backgroundMusic.play();
+            wasPlaying = false;
+        }
     }
 
     @Override
