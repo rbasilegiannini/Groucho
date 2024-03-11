@@ -80,10 +80,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <Switch
+        android:id="@+id/godMode"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="236dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="300dp"
+        android:alpha="1"
+        android:contentDescription="Turn on/off god mode"
+        android:fontFamily="@font/dd_font"
+        android:switchMinWidth="100dp"
+        android:text="God mode"
+        android:textColor="#FFEB3B"
+        android:textSize="34sp"
+        android:thumbTint="#E10000"
+        android:trackTint="@drawable/switch_track_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <ImageButton
         android:id="@+id/undoButton"
-        android:layout_width="108dp"
-        android:layout_height="98dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
         android:contentDescription="undo"

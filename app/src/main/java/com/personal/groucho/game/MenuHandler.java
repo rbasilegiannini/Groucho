@@ -2,6 +2,7 @@ package com.personal.groucho.game;
 
 import static com.personal.groucho.game.constants.System.debugMode;
 import static com.personal.groucho.game.constants.System.fpsCounter;
+import static com.personal.groucho.game.constants.System.godMode;
 import static com.personal.groucho.game.constants.System.memoryUsage;
 
 import android.app.Activity;
@@ -16,6 +17,9 @@ public class MenuHandler {
     public static void handleMainMenu(GameWorld gameWorld) {
         gameWorld.activity.runOnUiThread(
                 () -> {
+                    if (gameWorld.activity.backgroundMusic != null)
+                        gameWorld.activity.backgroundMusic.stop();
+
                     gameWorld.activity.setContentView(R.layout.menu);
 
                     ImageButton newGameButton = gameWorld.activity.findViewById(R.id.newGame);
@@ -77,6 +81,7 @@ public class MenuHandler {
         Switch debugModeSwitch = activity.findViewById(R.id.debugMode);
         Switch fpsCounterSwitch = activity.findViewById(R.id.fpsCounter);
         Switch memoryUsageSwitch = activity.findViewById(R.id.memoryUsage);
+        Switch godModeSwitch = activity.findViewById(R.id.godMode);
 
         debugModeSwitch.setChecked(debugMode);
         debugModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> debugMode = isChecked);
@@ -86,6 +91,9 @@ public class MenuHandler {
 
         memoryUsageSwitch.setChecked(memoryUsage);
         memoryUsageSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> memoryUsage = isChecked);
+
+        godModeSwitch.setChecked(godMode);
+        godModeSwitch.setOnCheckedChangeListener(((buttonView, isChecked) -> godMode = isChecked));
     }
 
     public static void handleGameOverMenu(GameWorld gameWorld) {

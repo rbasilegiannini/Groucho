@@ -1,17 +1,21 @@
 package com.personal.groucho.game;
 
 import static com.personal.groucho.game.constants.System.fpsCounter;
+import static com.personal.groucho.game.constants.System.godMode;
 import static com.personal.groucho.game.constants.System.memoryUsage;
+import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
 import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 
 import android.graphics.Canvas;
 
+import com.personal.groucho.game.constants.Character;
 import com.personal.groucho.game.controller.Controller;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.states.Idle;
 import com.personal.groucho.game.gameobjects.GameObject;
+import com.personal.groucho.game.gameobjects.components.AliveComponent;
 import com.personal.groucho.game.gameobjects.components.ControllableComponent;
 import com.personal.groucho.game.gameobjects.components.PhysicsComponent;
 import com.personal.groucho.game.gameobjects.components.PositionComponent;
@@ -61,6 +65,11 @@ public class Player {
             if (posComp.hasChangedPos()) {
                 updateCamera(canvas, controller);
             }
+        }
+
+        if (godMode) {
+            AliveComponent aliveComp = (AliveComponent) gameObject.getComponent(ALIVE);
+            aliveComp.currentHealth = Character.grouchoHealth;
         }
 
         if (fpsCounter || memoryUsage) {

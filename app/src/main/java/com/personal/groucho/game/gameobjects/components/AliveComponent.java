@@ -13,7 +13,7 @@ import com.personal.groucho.game.gameobjects.Status;
 
 public class AliveComponent extends Component {
     private int maxHealth;
-    private int currentHealth;
+    public int currentHealth;
     public Status currentStatus;
     private SpriteComponent spriteComp = null;
     private CharacterComponent charComp = null;
