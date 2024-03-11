@@ -47,7 +47,6 @@ import com.personal.groucho.game.gameobjects.GameObjectFactory;
 import com.personal.groucho.game.levels.Room;
 
 public class EntryHall extends Room {
-    protected boolean firstTime = true;
     protected final FirstLevel level;
     protected int playerPosX, playerPosY;
     protected Orientation playerOrientation = UP;
@@ -58,10 +57,7 @@ public class EntryHall extends Room {
         this.externalWall = woodWall;
         this.level = level;
 
-        // Set floor
-        Bitmap floor = Bitmap.createScaledBitmap(lightWoodFloor, 128, 128, false);
-        BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        floorPaint.setShader(bs);
+        setFloor(lightWoodFloor, 128, 128);
     }
 
     @Override
@@ -86,10 +82,6 @@ public class EntryHall extends Room {
         }
         else if (level.fromKitchenToEntryHall) {
             fromKitchenEvent(this);
-        }
-
-        if (level.kitchenKey) {
-            talkEvent(this, R.string.groucho_entryhall_afterwolf);
         }
 
         makeDecorations();

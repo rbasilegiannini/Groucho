@@ -45,7 +45,9 @@ public class Player {
         }
     }
 
-    public void GameOver(){
+    public void reset(){
+        if (gameWorld.controller.isLightOn())
+            gameWorld.controller.handleLightTouchDown();
         posComp = null;
         ctrlComp = null;
     }

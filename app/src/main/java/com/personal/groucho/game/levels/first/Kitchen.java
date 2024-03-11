@@ -20,8 +20,10 @@ import static com.personal.groucho.game.assets.Textures.littleTable;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.states.StateName.IDLE;
+import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.levels.first.KitchenEvents.entryHallDoorEvent;
 import static com.personal.groucho.game.levels.first.KitchenEvents.firstTimeInRoomEvent;
+import static com.personal.groucho.game.levels.first.KitchenEvents.wolfDeath;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -30,13 +32,14 @@ import android.graphics.Shader;
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.assets.Textures;
+import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.GameObjectFactory;
+import com.personal.groucho.game.gameobjects.components.PositionComponent;
 import com.personal.groucho.game.levels.Room;
 
 public class Kitchen extends Room {
     protected final FirstLevel level;
     protected int playerPosX, playerPosY;
-    protected boolean firstTime = true;
 
     public Kitchen(GameWorld gameWorld, FirstLevel level) {
         super(1650, 1650, gameWorld);
@@ -44,10 +47,7 @@ public class Kitchen extends Room {
         this.externalWall = Textures.woodWall;
         this.level = level;
 
-        // Set floor
-        Bitmap floor = Bitmap.createScaledBitmap(lightWoodFloor, 128, 128, false);
-        BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        floorPaint.setShader(bs);
+        setFloor(lightWoodFloor, 128, 128);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Kitchen extends Room {
                         550, 400,
                         world, kitchen)
         );
-        addDynamicFurn((int)(9.4*unit), (int)(7*unit), 150, 380, 25f, greenCouchRight);
+        addDynamicFurn((int)(9.4*unit), 7*unit, 150, 380, 25f, greenCouchRight);
         addDynamicFurn((int)(9.4*unit), (int)(5.5*unit), 150, 150, 5f, littleTable);
         addDynamicFurn((int)(9.6*unit), (int)(1.5*unit), 90, 400, 35f, dresserRight);
         addDynamicFurn((int)(3.1*unit), (int)(6.7*unit), 250, 360, 35f, bigTable);
@@ -105,13 +105,15 @@ public class Kitchen extends Room {
 
     private void makeDecorations() {
         addWallDec((int)(9.3*unit), (int)(-0.5*unit), 100, 356, lamp);
-        addWallDec((int)(7*unit), (int)(-0.5*unit), 400, 400, library);
+        addWallDec(7*unit, (int)(-0.5*unit), 400, 400, library);
         addWallDec(4*unit, (int)(-0.5*unit), 150, 400, fridge);
         addFloorDec((int)(2.3*unit), (int)(2.1*unit), 512, 356, brownCarpet);
     }
 
+    GameObject wolf, keyGO;
     private void makeEnemies() {
-        addEnemy(6*unit, 4*unit, LEFT, getWolf(), IDLE);
+        wolf = GameObjectFactory.makeEnemy(6*unit, 4*unit, LEFT, getWolf(), IDLE, gameWorld);
+        gameObjects.add(wolf);
     }
 
     private void makeHealth() {
@@ -123,7 +125,9 @@ public class Kitchen extends Room {
 
     @Override
     public void handleDeath() {
-        level.counterKeys++;
-        level.kitchenKey = true;
+        PositionComponent posComp = (PositionComponent) wolf.getComponent(POSITION);
+        keyGO = GameObjectFactory.makeTrigger(posComp.posX, posComp.posY, 60, 60,
+                gameWorld.physics.world, ()->wolfDeath(this));
+        gameWorld.goHandler.addGameObject(keyGO);
     }
 }

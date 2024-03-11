@@ -14,7 +14,7 @@ public class BathroomEvents {
         GameWorld gw = room.gameWorld;
         String sentence = gw.activity.getString(R.string.groucho_bathroom_init);
         room.grouchoTalk(sentence, room.playerPosX, room.playerPosY);
-        Bathroom.firstTime = false;
+        room.firstTime = false;
     }
 
     public static void dresserWithKeyEvent(Bathroom room){

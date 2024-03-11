@@ -30,7 +30,19 @@ public class FirstLevel extends Level {
     }
 
     public void init(){
-        activeRoom = entryHall;
+        bathroomKey = false;
+        gardenKey = false;
+        kitchenKey = false;
+
+        grouchoRoom.firstTime = true;
+        hallway.firstTime = true;
+        library.firstTime = true;
+        entryHall.firstTime = true;
+        bathroom.firstTime = true;
+        garden.firstTime = true;
+        wolfRoom.firstTime = true;
+
+        activeRoom = grouchoRoom;
         activeRoom.init();
     }
 

@@ -30,7 +30,6 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.levels.Room;
 
 public class Hallway extends Room {
-    protected boolean firstTime = true;
     protected final FirstLevel level;
     protected int playerPosX, playerPosY;
     protected Orientation playerOrientation = UP;
@@ -41,10 +40,7 @@ public class Hallway extends Room {
         this.internalWall = orangeWall;
         this.externalWall = woodWall;
 
-        // Set floor
-        Bitmap floor = Bitmap.createScaledBitmap(woodFloor, 128, 128, false);
-        BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        floorPaint.setShader(bs);
+        setFloor(woodFloor, 128, 128);
     }
 
     @Override

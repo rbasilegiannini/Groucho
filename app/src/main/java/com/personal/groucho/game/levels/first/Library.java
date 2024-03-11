@@ -12,6 +12,7 @@ import static com.personal.groucho.game.assets.Textures.littleGreenCarpet;
 import static com.personal.groucho.game.assets.Textures.littleTable;
 import static com.personal.groucho.game.assets.Textures.mediumTable;
 import static com.personal.groucho.game.assets.Textures.orangeCouch;
+import static com.personal.groucho.game.assets.Textures.orangeFloor;
 import static com.personal.groucho.game.assets.Textures.orangeWall;
 import static com.personal.groucho.game.assets.Textures.redCarpet;
 import static com.personal.groucho.game.assets.Textures.woodWall;
@@ -35,7 +36,6 @@ import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.levels.Room;
 
 public class Library extends Room {
-    protected boolean firstTime = true;
     protected final FirstLevel level;
     protected int playerPosX, playerPosY;
     protected Orientation playerOrientation = UP;
@@ -47,10 +47,7 @@ public class Library extends Room {
         this.internalWall = orangeWall;
         this.externalWall = woodWall;
 
-        // Set floor
-        Bitmap floor = Bitmap.createScaledBitmap(Textures.orangeFloor, 128, 128, false);
-        BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        floorPaint.setShader(bs);
+        setFloor(orangeFloor, 128, 128);
     }
 
     @Override

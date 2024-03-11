@@ -139,21 +139,76 @@ public class Textures {
         return bitmap;
     }
 
-    // TODO: Update release
     public static void release() {
         releaseBitmap(woodFloor);
+        releaseBitmap(orangeFloor);
+        releaseBitmap(lightWoodFloor);
+        releaseBitmap(brownFloor);
+        releaseBitmap(bathroomFloor);
+        releaseBitmap(grassFloor);
         releaseBitmap(table);
+        releaseBitmap(littleTable);
+        releaseBitmap(mediumTable);
+        releaseBitmap(chairLeft);
+        releaseBitmap(chairRight);
+        releaseBitmap(chairUp);
+        releaseBitmap(chairDown);
+        releaseBitmap(armChairLeft);
+        releaseBitmap(armChairRight);
+        releaseBitmap(bed);
+        releaseBitmap(littleGrass);
+        releaseBitmap(ironingBoard);
+        releaseBitmap(statue);
+        releaseBitmap(statueWithKey);
+        releaseBitmap(statueBottom);
+        releaseBitmap(dresser);
+        releaseBitmap(dresserRight);
         releaseBitmap(woodWall);
+        releaseBitmap(orangeWall);
+        releaseBitmap(greenWall);
+        releaseBitmap(bathroomWall);
+        releaseBitmap(whiteWall);
+        releaseBitmap(stoneWall);
+        releaseBitmap(stoneWall2);
+        releaseBitmap(windowInternal);
+        releaseBitmap(windowNight);
+        releaseBitmap(brownDoor);
+        releaseBitmap(heavyDoor);
+        releaseBitmap(heavyDoorOpened);
+        releaseBitmap(redCarpet);
+        releaseBitmap(brownCarpet);
+        releaseBitmap(littleCarpetBathroom);
+        releaseBitmap(sink);
+        releaseBitmap(orangeCouch);
+        releaseBitmap(littleLibrary);
+        releaseBitmap(library);
+        releaseBitmap(greenCouchRight);
+        releaseBitmap(hanger);
+        releaseBitmap(littleCarpet);
+        releaseBitmap(littleGreenCarpet);
+        releaseBitmap(littleGreenCarpetVer);
+        releaseBitmap(lamp);
+        releaseBitmap(littleDresser);
+        releaseBitmap(littleDresserWithKey);
+        releaseBitmap(bench);
+        releaseBitmap(kitchen);
+        releaseBitmap(fridge);
+        releaseBitmap(bigTable);
+        releaseBitmap(wc);
+        releaseBitmap(box);
+        releaseBitmap(tableWithFlowers);
+        releaseBitmap(headstone);
+        releaseBitmap(stone);
         releaseBitmap(lightBulb);
+        releaseBitmap(grouchoFrame);
+        releaseBitmap(meFrame);
+        releaseBitmap(grouchoWardrobe);
         releaseBitmap(pause);
-        releaseBitmap(health);
-        releaseBitmap(grouchoBubble);
     }
 
     private static void releaseBitmap(Bitmap bitmap) {
         if (bitmap != null) {
             bitmap.recycle();
-            bitmap = null;
         }
     }
 }

@@ -25,7 +25,6 @@ import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.levels.Room;
 
 public class GrouchoRoom extends Room {
-    public static boolean firstTime = true;
     protected final FirstLevel level;
     protected int playerPosX, playerPosY;
 
@@ -35,10 +34,7 @@ public class GrouchoRoom extends Room {
         this.externalWall = woodWall;
         this.level = level;
 
-        // Set floor
-        Bitmap floor = Bitmap.createScaledBitmap(brownFloor, 128, 128, false);
-        BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        floorPaint.setShader(bs);
+        setFloor(brownFloor, 128, 128);
     }
 
     @Override

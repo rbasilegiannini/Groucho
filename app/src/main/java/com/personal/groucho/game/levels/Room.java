@@ -8,9 +8,11 @@ import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Shader;
 
 import com.google.fpl.liquidfun.World;
 import com.personal.groucho.game.AI.pathfinding.GameGrid;
@@ -33,6 +35,7 @@ public class Room {
     public int unit;
     private final int widthGrid;
     private final int heightGrid;
+    public boolean firstTime;
 
     public Room(int levelDimX, int levelDimY, GameWorld gameWorld) {
         this.gameWorld = gameWorld;
@@ -85,6 +88,12 @@ public class Room {
                 (int) ((surface.height()/2)-(1.75f * cellSize)),
                 surface.height()+(1.5f*cellSize),
                 gameWorld.physics.world));
+    }
+
+    protected void setFloor(Bitmap texture, int width, int heigth) {
+        Bitmap floor = Bitmap.createScaledBitmap(texture, width, heigth, false);
+        BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        floorPaint.setShader(bs);
     }
 
     protected void setBrightness(float intensity) {

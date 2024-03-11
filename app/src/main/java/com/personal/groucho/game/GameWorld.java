@@ -112,6 +112,10 @@ public class GameWorld {
                 player.update(graphics.canvas, controller);
             }
 
+            if (complete) {
+                player.reset();
+            }
+
             for (AIComponent aiComponent : ComponentHandler.getInstance().aiComps) {
                 aiComponent.update(this);
             }
@@ -172,7 +176,7 @@ public class GameWorld {
     public void pause() {pause = true;}
 
     public void GameOver() {
-        player.GameOver();
+        player.reset();
         this.gameOver = true;
 
         ComponentHandler.getInstance().removeComponent(player.gameObject, CONTROLLABLE);

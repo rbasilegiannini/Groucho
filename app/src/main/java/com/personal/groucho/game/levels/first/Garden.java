@@ -38,7 +38,6 @@ public class Garden extends Room {
     protected Orientation playerOrientation;
     protected GameObject statue;
     protected int skeletonsCounter;
-    protected boolean firstTime = true;
 
     public Garden(GameWorld gameWorld, FirstLevel level) {
         super(2100, 2000, gameWorld);
@@ -46,10 +45,7 @@ public class Garden extends Room {
         this.externalWall = stoneWall2;
         this.internalWall = stoneWall;
 
-        // Set floor
-        Bitmap floor = Bitmap.createScaledBitmap(grassFloor, 512, 512, false);
-        BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        floorPaint.setShader(bs);
+        setFloor(grassFloor, 512, 512);
     }
 
     @Override

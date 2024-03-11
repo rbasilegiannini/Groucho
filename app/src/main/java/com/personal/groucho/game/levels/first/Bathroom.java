@@ -25,7 +25,6 @@ import static com.personal.groucho.game.controller.Orientation.RIGHT;
 import static com.personal.groucho.game.controller.Orientation.UP;
 import static com.personal.groucho.game.controller.states.StateName.IDLE;
 import static com.personal.groucho.game.controller.states.StateName.PATROL;
-import static com.personal.groucho.game.gameobjects.ComponentType.LIGHT;
 import static com.personal.groucho.game.levels.first.BathroomEvents.dresserWithKeyEvent;
 import static com.personal.groucho.game.levels.first.BathroomEvents.entryHallDoorEvent;
 import static com.personal.groucho.game.levels.first.BathroomEvents.firstTimeInRoomEvent;
@@ -38,15 +37,12 @@ import android.graphics.Shader;
 import com.personal.groucho.R;
 import com.personal.groucho.game.GameWorld;
 import com.personal.groucho.game.gameobjects.GameObject;
-import com.personal.groucho.game.gameobjects.components.LightComponent;
 import com.personal.groucho.game.levels.Room;
 
 public class Bathroom extends Room {
     protected final FirstLevel level;
     protected int playerPosX, playerPosY;
     protected GameObject bathroomKey;
-
-    public static boolean firstTime = true;
 
     public Bathroom(GameWorld gameWorld, FirstLevel level) {
         super(3000, 1200, gameWorld);
@@ -55,9 +51,7 @@ public class Bathroom extends Room {
         this.level = level;
 
         // Set floor
-        Bitmap floor = Bitmap.createScaledBitmap(bathroomFloor, 128, 128, false);
-        BitmapShader bs = new BitmapShader(floor, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        floorPaint.setShader(bs);
+        setFloor(bathroomFloor, 128, 128);
     }
 
     @Override

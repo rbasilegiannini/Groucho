@@ -27,7 +27,7 @@ public class GrouchoRoomEvents {
             gw.controller.pause.setVisibility(true);
         });
 
-        GrouchoRoom.firstTime = false;
+        room.firstTime = false;
     }
 
     public static void talkEvent(GrouchoRoom room, int sentenceId){
