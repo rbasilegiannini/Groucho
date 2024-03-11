@@ -60,7 +60,7 @@ public class GrouchoRoom extends Room {
     }
 
     private void makeTriggers() {
-        addWallTrigger((int)(0.75*unit), (int)(-unit), (int)(0.75*unit), (int)(-0.5*unit),
+        addWallTrigger((int)(0.75*unit), (-unit), (int)(0.75*unit), (int)(-0.5*unit),
                 128, 128, grouchoFrame, () -> talkEvent(this, R.string.groucho_bedroom_photo));
         addWallTrigger((int)(4.5*unit), (int)(-0.5*unit), (int) (4.5*unit), (int) (-1.2*unit),
                 280, 350, grouchoWardrobe, () -> talkEvent(this, R.string.groucho_bedroom_wardrobe));
@@ -74,7 +74,7 @@ public class GrouchoRoom extends Room {
     }
 
     private void makeDecorations() {
-        addFloorDec((int)(2*unit), (int)(0.4*unit), 170, 90, littleGreenCarpet);
+        addFloorDec(2*unit, (int)(0.4*unit), 170, 90, littleGreenCarpet);
         addFloorDec(2*unit, (int)(2.5*unit), 512, 380, redCarpet);
         addWallDec((int)(1.5*unit), 6*unit, 188, 200, windowInternal);
         addWallDec((int)(4.5*unit), 6*unit, 188, 200, windowInternal);

@@ -1,7 +1,5 @@
 package com.personal.groucho.game.constants;
 
-import static com.personal.groucho.game.constants.System.godMode;
-
 import android.content.Context;
 import android.os.Build;
 
