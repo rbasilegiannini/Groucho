@@ -12,7 +12,7 @@ public class Sounds {
     public static Sound bulletHitEnemy;
     public static Sound bodyHitFurniture;
     public static Sound healing;
-    public static Sound door;
+    public static Sound door, key;
     public static Sound throwing;
     public static Sound wolf, zombie, skeleton;
 
@@ -30,6 +30,7 @@ public class Sounds {
         wolf = audio.newSound("wolf.mp3");
         zombie = audio.newSound("zombie.mp3");
         skeleton = audio.newSound("skeleton.mp3");
+        key = audio.newSound("key.mp3");
     }
 
     public static void release() {
@@ -46,6 +47,7 @@ public class Sounds {
         releaseSound(wolf);
         releaseSound(zombie);
         releaseSound(skeleton);
+        releaseSound(key);
     }
 
     private static void releaseSound(Sound sound) {
