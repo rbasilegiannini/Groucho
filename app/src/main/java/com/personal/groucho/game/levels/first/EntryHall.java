@@ -20,7 +20,6 @@ import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.maxBrightness;
 import static com.personal.groucho.game.controller.Orientation.UP;
 import static com.personal.groucho.game.levels.first.EntryHallEvents.bathroomDoorEvent;
-import static com.personal.groucho.game.levels.first.EntryHallEvents.endGameEvent;
 import static com.personal.groucho.game.levels.first.EntryHallEvents.firstTimeInRoomEvent;
 import static com.personal.groucho.game.levels.first.EntryHallEvents.firstTimeTryOpenHeavyDoorEvent;
 import static com.personal.groucho.game.levels.first.EntryHallEvents.fromBathroomEvent;
@@ -59,10 +58,6 @@ public class EntryHall extends Room {
     @Override
     public void init() {
         super.init();
-
-        if (level.isEndGame()) {
-            endGameEvent(this);
-        }
 
         if (firstTime) {
             firstTimeInRoomEvent(this);

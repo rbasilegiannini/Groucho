@@ -4,6 +4,8 @@ import static com.personal.groucho.game.Utils.directionBetweenGO;
 import static com.personal.groucho.game.Utils.distBetweenPos;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
+import static com.personal.groucho.game.Utils.fromMetersToBufferX;
+import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.Utils.isInCircle;
 import static com.personal.groucho.game.assets.Sounds.bodyHitFurniture;
 import static com.personal.groucho.game.assets.Sounds.bulletHitEnemy;
@@ -14,14 +16,20 @@ import static com.personal.groucho.game.assets.Sounds.stabbing;
 import static com.personal.groucho.game.constants.Character.grouchoPower;
 import static com.personal.groucho.game.constants.Character.hearingRangeSqr;
 import static com.personal.groucho.game.constants.Character.medicalKit;
+import static com.personal.groucho.game.constants.System.staticDCost;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
+import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.ComponentType.TRIGGER;
 import static com.personal.groucho.game.gameobjects.Role.ENEMY;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
+import android.util.SparseArray;
+
 import com.google.fpl.liquidfun.Vec2;
+import com.personal.groucho.game.AI.pathfinding.GameGrid;
+import com.personal.groucho.game.AI.pathfinding.Node;
 import com.personal.groucho.game.gameobjects.ComponentType;
 import com.personal.groucho.game.gameobjects.GameObject;
 import com.personal.groucho.game.gameobjects.components.AIComponent;
@@ -112,6 +120,16 @@ public class Events {
         AliveComponent aliveComp = (AliveComponent) player.getComponent(ComponentType.ALIVE);
         aliveComp.heal(medicalKit);
 
+        PhysicsComponent phyComp = (PhysicsComponent) health.getComponent(PHYSICS);
+        SparseArray<Node> newCellsToChange = GameGrid.getInstance().getNodes(
+                (int)fromMetersToBufferX(phyComp.getPosX()),
+                (int)fromMetersToBufferY(phyComp.getPosY()),
+                (int)phyComp.dimX,
+                (int)phyComp.dimY
+        ).clone();
+        for (int i = 0; i < newCellsToChange.size(); i++) {
+            GameGrid.getInstance().decreaseDefaultCostOnNode(newCellsToChange.valueAt(i), staticDCost);
+        }
         gameWorld.goHandler.removeGameObject(health);
     }
 

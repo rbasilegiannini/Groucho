@@ -12,4 +12,5 @@ public class System {
     public static int maxInvisiblePlayer = 5000;
     public static int maxInvestigateTime = 15000;
     public static int cellSize = charScaleFactor *(int) charDimX;
+    public static int staticDCost = 10000000;
 }

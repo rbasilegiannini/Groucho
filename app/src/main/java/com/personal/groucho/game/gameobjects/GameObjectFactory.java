@@ -16,6 +16,7 @@ import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.toMetersXLength;
 import static com.personal.groucho.game.Utils.toMetersYLength;
 import static com.personal.groucho.game.assets.Textures.health;
+import static com.personal.groucho.game.constants.System.staticDCost;
 import static com.personal.groucho.game.gameobjects.Role.ENEMY;
 import static com.personal.groucho.game.gameobjects.Role.FLOOR;
 import static com.personal.groucho.game.gameobjects.Role.FURNITURE;
@@ -499,7 +500,7 @@ public class GameObjectFactory {
         int cost = 0;
         switch (prop.type){
             case staticBody:
-                cost = 10000000;
+                cost = staticDCost;
                 break;
             case dynamicBody:
                 cost = 10000*(int)prop.density;

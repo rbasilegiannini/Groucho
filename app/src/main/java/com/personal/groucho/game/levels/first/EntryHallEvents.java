@@ -23,9 +23,6 @@ public class EntryHallEvents {
         room.dylanTalk(sentence, room.playerPosX+2*room.unit, (int)room.playerPosY);
     }
 
-    public static void endGameEvent(EntryHall room) {
-    }
-
     public static void fromLibraryEvent(EntryHall room){
         room.playerPosX = 3*room.unit;
         room.playerPosY = (int) (7.5*room.unit);
