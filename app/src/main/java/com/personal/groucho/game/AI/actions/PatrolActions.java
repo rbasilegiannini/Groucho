@@ -14,6 +14,10 @@ public class PatrolActions implements Actions {
         maxSteps = 100;
     }
 
+    public void init(){
+        currentSteps = 0;
+    }
+
     @Override
     public void entryAction() {
         currentSteps = 0;
