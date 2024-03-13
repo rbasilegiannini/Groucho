@@ -7,8 +7,6 @@ import static com.personal.groucho.game.constants.System.charDimX;
 import static com.personal.groucho.game.constants.System.charDimY;
 import static com.personal.groucho.game.constants.Environment.maxLightIntensity;
 import static com.personal.groucho.game.constants.Environment.minLightIntensity;
-import static com.personal.groucho.game.Utils.fromMetersToBufferX;
-import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.loading;
 import static com.personal.groucho.game.constants.System.charScaleFactor;
 import static com.personal.groucho.game.controller.states.StateName.AIMING;
@@ -120,9 +118,6 @@ public class ControllableComponent extends WalkingComponent implements Controlle
 
     private void shoot() {
         initComponents();
-//
-//        float originX = fromMetersToBufferX(phyComp.getPosX());
-//        float originY = fromMetersToBufferY(phyComp.getPosY());
 
         float originX = posComp.posX;
         float originY = posComp.posY;
