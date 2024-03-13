@@ -128,9 +128,5 @@ public class PhysicsComponent extends Component {
             posComp = (PositionComponent) owner.getComponent(POSITION);
         }
     }
-
-    public float getVelocityX() { return body.getLinearVelocity().getX();}
-    public float getVelocityY() { return body.getLinearVelocity().getY();}
-
 }
 

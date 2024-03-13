@@ -14,14 +14,16 @@ import com.personal.groucho.game.gameobjects.components.AliveComponent;
 
 public class AttackActions implements Actions {
     private final AIComponent aiComp;
-    private final AliveComponent playerAliveComp;
+    private AliveComponent playerAliveComp;
     private long lastHitMillis;
 
     public AttackActions(AIComponent aiComp) {
         this.aiComp = aiComp;
-        playerAliveComp = (AliveComponent) aiComp.gameWorld.player.gameObject.getComponent(ALIVE);
     }
 
+    public void init() {
+        playerAliveComp = (AliveComponent) aiComp.gameWorld.player.gameObject.getComponent(ALIVE);
+    }
     @Override
     public void entryAction() {
         lastHitMillis = System.currentTimeMillis();

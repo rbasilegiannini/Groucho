@@ -46,7 +46,7 @@ public class GameWorld {
         currentView = physicalSize;
         activity = newActivity;
 
-        player = new Player();  // TODO: Singleton?
+        player = new Player();
         physics = Physics.getInstance(this);
         graphics = Graphics.getInstance(this);
         goHandler = GameObjectHandler.getInstance();

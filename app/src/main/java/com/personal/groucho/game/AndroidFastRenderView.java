@@ -1,5 +1,7 @@
 package com.personal.groucho.game;
 
+import static com.personal.groucho.game.constants.System.fpsCounter;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -52,11 +54,13 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             renderGame(dstRect);
 
             // Measure FPS
-            frameCounter++;
-            if (fpsDeltaTime > 1) { // Print every second
-                Logger.getInstance().fps = (int)frameCounter;
-                frameCounter = 0;
-                fpsTime = currentTime;
+            if (fpsCounter) {
+                frameCounter++;
+                if (fpsDeltaTime > 1) { // Print every second
+                    Logger.getInstance().fps = (int) frameCounter;
+                    frameCounter = 0;
+                    fpsTime = currentTime;
+                }
             }
         }
     }

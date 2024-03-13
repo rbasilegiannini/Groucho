@@ -70,6 +70,7 @@ public class AIComponent extends WalkingComponent {
         patrolActions = new PatrolActions(this);
         engageActions = new EngageActions(this);
         investigateActions = new InvestigateActions(this);
+        attackActions = new AttackActions(this);
 
         idle = new Idle(this);
         patrol = new Patrol(this);
@@ -89,8 +90,7 @@ public class AIComponent extends WalkingComponent {
         isPlayerReached = false;
         investigateActions.isInvestigate = false;
         patrolActions.init();
-
-        attackActions = new AttackActions(this); // TODO: Use init?
+        attackActions.init();
 
         originalState = currentState;
 

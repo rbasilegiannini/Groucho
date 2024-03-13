@@ -46,7 +46,6 @@ public class Bathroom extends Room {
         this.externalWall = woodWall;
         this.level = level;
 
-        // Set floor
         setFloor(bathroomFloor, 128, 128);
     }
 
@@ -88,7 +87,7 @@ public class Bathroom extends Room {
     private void makeFurniture() {
         addDynamicFurn(5*unit, 5*unit, 90, 150, 5f, chairLeft);
         addDynamicFurn((int)(3.9*unit), 2*unit, 90, 300, 35f, dresserRight);
-        addDynamicFurn((int)(0.5*unit), 5*unit, 150, 150, 5f, littleTable);
+        addDynamicFurn(unit, 5*unit, 150, 150, 5f, littleTable);
         addDynamicFurn((int)(7.7*unit), 4*unit, 150, 130, 5f, ironingBoard);
         addDynamicFurn((int)(10.7*unit), 5*unit, 150, 180, 15f, tableWithFlowers);
         addDynamicFurn((int)(16.7*unit), 5*unit, 100, 100, 5f, box);
