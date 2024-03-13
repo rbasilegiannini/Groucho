@@ -6,7 +6,6 @@ import static com.personal.groucho.game.controller.Orientation.LEFT;
 import static com.personal.groucho.game.controller.Orientation.RIGHT;
 import static com.personal.groucho.game.controller.Orientation.UP;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
-import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
 
 import static java.lang.Math.abs;
 
