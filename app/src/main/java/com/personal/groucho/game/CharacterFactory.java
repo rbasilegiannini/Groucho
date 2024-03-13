@@ -2,7 +2,6 @@ package com.personal.groucho.game;
 
 import static com.personal.groucho.game.assets.Spritesheets.grouchoAim;
 import static com.personal.groucho.game.assets.Spritesheets.grouchoDeath;
-import static com.personal.groucho.game.assets.Spritesheets.grouchoDoor;
 import static com.personal.groucho.game.assets.Spritesheets.grouchoFire;
 import static com.personal.groucho.game.assets.Spritesheets.grouchoIdle;
 import static com.personal.groucho.game.assets.Spritesheets.grouchoWalk;
@@ -60,7 +59,6 @@ public class CharacterFactory {
         groucho.sheetWalk = grouchoWalk;
         groucho.sheetAim = grouchoAim;
         groucho.sheetFire = grouchoFire;
-        groucho.sheetDoor = grouchoDoor;
         groucho.sheetDeath = grouchoDeath;
 
         return groucho;
