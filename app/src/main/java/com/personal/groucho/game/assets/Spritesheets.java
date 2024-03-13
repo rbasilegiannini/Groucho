@@ -14,7 +14,6 @@ public class Spritesheets {
     public static Spritesheet grouchoShoot;
     public static Spritesheet grouchoAim;
     public static Spritesheet grouchoFire;
-    public static Spritesheet grouchoDoor;
     public static Spritesheet grouchoDeath;
 
     public static Spritesheet skeletonIdle, skeletonWalk, skeletonHurt, skeletonDeath;
@@ -31,7 +30,6 @@ public class Spritesheets {
         grouchoShoot = loadAnimation(res, R.drawable.groucho_shoot, 5, directions);
         grouchoAim = loadAnimation(res, R.drawable.groucho_aim, 1, directions);
         grouchoFire = loadAnimation(res, R.drawable.groucho_fire, 1, directions);
-        grouchoDoor = loadAnimation(res, R.drawable.groucho_door, 6, directions);
         grouchoDeath = loadAnimation(res, R.drawable.groucho_death, 1, 1);
 
         skeletonIdle = loadAnimation(res, R.drawable.skeleton_idle, 1, directions);
@@ -73,7 +71,6 @@ public class Spritesheets {
         grouchoShoot.dispose();
         grouchoAim.dispose();
         grouchoFire.dispose();
-        grouchoDoor.dispose();
         grouchoDeath.dispose();
         skeletonIdle.dispose();
         skeletonWalk.dispose();
