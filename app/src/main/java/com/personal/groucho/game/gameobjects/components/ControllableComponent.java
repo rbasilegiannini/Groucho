@@ -132,7 +132,7 @@ public class ControllableComponent extends WalkingComponent implements Controlle
                 endY = originY - 2000;
                 break;
             case DOWN:
-                originY = originY + charDimY;
+                originY = originY - charDimY;
                 endX = originX;
                 endY = originY + 2000;
                 break;
