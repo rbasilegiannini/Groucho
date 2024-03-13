@@ -4,6 +4,7 @@ import static com.personal.groucho.game.Utils.isInCircle;
 import static com.personal.groucho.game.assets.Textures.pause;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -16,7 +17,7 @@ public class Pause extends Widget{
     protected Pause(float centerX, float centerY) {
         super(centerX, centerY);
 
-        float distance = 50;
+        float distance = 100;
         distanceSqr = (float) Math.pow(distance, 2);
 
         posX = centerX - 70;

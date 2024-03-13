@@ -14,8 +14,6 @@ import static com.personal.groucho.game.assets.Sounds.stabbing;
 import static com.personal.groucho.game.constants.Character.grouchoPower;
 import static com.personal.groucho.game.constants.Character.hearingRangeSqr;
 import static com.personal.groucho.game.constants.Character.medicalKit;
-import static com.personal.groucho.game.constants.Environment.brightness;
-import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.gameobjects.ComponentType.AI;
 import static com.personal.groucho.game.gameobjects.ComponentType.ALIVE;
 import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
@@ -136,16 +134,12 @@ public class Events {
 
     public static void turnOnLightEvent(GameWorld gameWorld){
         click.play(1f);
-//        if (brightness == minBrightness) {
-            gameWorld.setPlayerVisibility(true);
-//        }
+        gameWorld.setPlayerVisibility(true);
     }
 
     public static void turnOffLightEvent(GameWorld gameWorld){
         click.play(1f);
-//        if (brightness == minBrightness) {
-            gameWorld.setPlayerVisibility(false);
-//        }
+        gameWorld.setPlayerVisibility(false);
     }
 
     public static void pauseEvent(GameWorld gameWorld) {
