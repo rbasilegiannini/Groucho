@@ -29,6 +29,7 @@ import com.personal.groucho.game.AI.states.Idle;
 import com.personal.groucho.game.AI.states.Investigate;
 import com.personal.groucho.game.AI.states.Patrol;
 import com.personal.groucho.game.GameWorld;
+import com.personal.groucho.game.Utils;
 import com.personal.groucho.game.controller.Orientation;
 import com.personal.groucho.game.controller.states.StateName;
 import com.personal.groucho.game.gameobjects.ComponentType;
@@ -183,7 +184,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void walkingToXCoordinate(int startX, int targetPosX){
-        if (abs(startX - targetPosX) < abs(charComp.properties.speed*increaseX)) {
+        if (abs(startX - targetPosX) < abs(Utils.toBufferXLength(phyIncreaseX))) {
             phyComp.setPosX(targetPosX);
             return;
         }
@@ -198,7 +199,7 @@ public class AIComponent extends WalkingComponent {
     }
 
     private void walkingToYCoordinate(int startY, int targetPosY){
-        if (abs(startY - targetPosY) < abs(charComp.properties.speed*increaseY)) {
+        if (abs(startY - targetPosY) < abs(charComp.properties.speed* phyIncreaseY)) {
             phyComp.setPosY(targetPosY);
             return;
         }

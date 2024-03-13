@@ -1,6 +1,5 @@
 package com.personal.groucho.game.gameobjects.components;
 
-import static com.personal.groucho.game.Utils.toMetersXLength;
 import static com.personal.groucho.game.gameobjects.ComponentType.CHARACTER;
 import static com.personal.groucho.game.gameobjects.ComponentType.DRAWABLE;
 import static com.personal.groucho.game.gameobjects.ComponentType.PHYSICS;
@@ -14,7 +13,7 @@ public abstract class WalkingComponent extends Component {
     protected SpriteComponent spriteComp = null;
     protected PhysicsComponent phyComp = null;
     public CharacterComponent charComp = null;
-    protected float increaseX, increaseY;
+    protected float phyIncreaseX, phyIncreaseY;
 
     @Override
     public void reset() {
@@ -28,35 +27,28 @@ public abstract class WalkingComponent extends Component {
     protected void walking(float elapsedTime) {
         initComponents();
 
-        float speedPerSecond = charComp.properties.speed;
-
-        // TODO: a temporary (non) solution to remove the stuttering.
-        elapsedTime = 1;
+        float phySpeedPerSecond = charComp.properties.speed;
 
         switch (posComp.orientation) {
             case UP:
-                increaseX = 0;
-                increaseY = -elapsedTime;
+                phyIncreaseX = 0;
+                phyIncreaseY = -(phySpeedPerSecond*elapsedTime);
                 break;
             case DOWN:
-                increaseX = 0;
-                increaseY = elapsedTime;
+                phyIncreaseX = 0;
+                phyIncreaseY = phySpeedPerSecond*elapsedTime;
                 break;
             case LEFT:
-                increaseX = -elapsedTime;
-                increaseY = 0;
+                phyIncreaseX = -(phySpeedPerSecond*elapsedTime);
+                phyIncreaseY = 0;
                 break;
             case RIGHT:
-                increaseX = elapsedTime;
-                increaseY = 0;
+                phyIncreaseX = phySpeedPerSecond*elapsedTime;
+                phyIncreaseY = 0;
                 break;
         }
-//        updatePhysicsPos(
-//                speedPerSecond*increaseX,
-//                speedPerSecond*increaseY);
-        updatePhysicsPos(
-                toMetersXLength(speedPerSecond) * increaseX,
-                toMetersXLength(speedPerSecond) * increaseY);
+        updatePhysicsPos(phyIncreaseX, phyIncreaseY);
+
         updateSprite(charComp.properties.sheetWalk);
     }
 

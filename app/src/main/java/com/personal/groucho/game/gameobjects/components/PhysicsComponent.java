@@ -101,14 +101,12 @@ public class PhysicsComponent extends Component {
         initComponents();
 
         body.setTransform(body.getPositionX() + increase, body.getPositionY(), 0);
-        posComp.updatePosX((int)increase);
     }
 
     public void updatePosY(float increase) {
         initComponents();
 
         body.setTransform(body.getPositionX(),body.getPositionY() + increase, 0);
-//        posComp.updatePosY((int)increase); // TODO: Remove this!
     }
 
     public float getPosX() {return body.getPositionX();}
