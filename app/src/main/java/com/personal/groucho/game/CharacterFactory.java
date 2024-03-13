@@ -43,7 +43,6 @@ public class CharacterFactory {
         public Spritesheet sheetWalk = null;
         public Spritesheet sheetAim = null;
         public Spritesheet sheetFire = null;
-        public Spritesheet sheetDoor = null;
         public Spritesheet sheetHurt = null;
         public Spritesheet sheetDeath = null;
         public Sound call = null;
