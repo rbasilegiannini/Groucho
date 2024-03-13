@@ -321,7 +321,7 @@ public class GameObjectFactory {
         PhysicsProp prop = new PhysicsProp(centerX, centerY, 0f,0f,
                 density, 0, dynamicBody);
         setFurniturePhysics(phyComp, prop);
-        setFurnitureOnGameGrid(prop, dimX, dimY);
+        setFurnitureOnGameGrid(prop, dimX, dimY/2);
 
         return gameObject;
     }

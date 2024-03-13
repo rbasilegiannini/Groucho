@@ -106,7 +106,7 @@ public class EntryHall extends Room {
                 90, 150, littleGreenCarpetVer, () -> gardenDoorEvent(this));
         addFloorTrigger((int)(0.35*unit), 3*unit, (int)(-0.35*unit), 3*unit,
                 90, 150, littleGreenCarpetVer, () -> kitchenDoorEvent(this));
-        addWallTrigger((int)(1.5*unit), (int)(-0.25*unit), (int)(1.5*unit), (int)(-0.9*unit),
+        addWallTrigger((int)(1.5*unit), (int)(-0.25*unit), (int)(1.5*unit), (int)(-0.8*unit),
                 180, 250, dresser, () -> talkEvent(this, R.string.groucho_entryhall_dresser));
         addWallTrigger((int)(3.5*unit), -unit, (int)(3.5*unit), (int)(-0.75*unit),
                 188, 200, windowNight, () -> talkEvent(this, R.string.groucho_entryhall_window));

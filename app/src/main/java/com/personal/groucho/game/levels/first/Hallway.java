@@ -82,7 +82,7 @@ public class Hallway extends Room {
                 160, 280, brownDoor, () -> libraryDoorEvent(this));
         addWallTrigger((int)(8.5*unit), (int)(-0.25*unit), (int)(8.5*unit), (int)(-0.5*unit),
                 180, 128, littleLibrary, ()-> talkEvent(this, R.string.groucho_hallway_library));
-        addWallTrigger((int)(2.5*unit), -unit, (int)(2.5*unit), (int)(-0.75*unit),
+        addWallTrigger((int)(2.5*unit), -unit, (int)(2.5*unit), (int)(-0.65*unit),
                 188, 200, windowNight, () -> talkEvent(this, R.string.groucho_hallway_window));
     }
 
