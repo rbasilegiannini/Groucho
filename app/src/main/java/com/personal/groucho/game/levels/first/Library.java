@@ -2,6 +2,7 @@ package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.CharacterFactory.getZombie;
 import static com.personal.groucho.game.assets.Textures.armChairRight;
+import static com.personal.groucho.game.assets.Textures.brownCarpet;
 import static com.personal.groucho.game.assets.Textures.brownDoor;
 import static com.personal.groucho.game.assets.Textures.chairDown;
 import static com.personal.groucho.game.assets.Textures.chairLeft;
@@ -14,7 +15,6 @@ import static com.personal.groucho.game.assets.Textures.mediumTable;
 import static com.personal.groucho.game.assets.Textures.orangeCouch;
 import static com.personal.groucho.game.assets.Textures.orangeFloor;
 import static com.personal.groucho.game.assets.Textures.orangeWall;
-import static com.personal.groucho.game.assets.Textures.redCarpet;
 import static com.personal.groucho.game.assets.Textures.woodWall;
 import static com.personal.groucho.game.constants.Environment.minBrightness;
 import static com.personal.groucho.game.constants.System.cellSize;
@@ -98,7 +98,7 @@ public class Library extends Room {
         addFloorDec((int)(4.5*unit), (int)(0.4*unit), 170, 90, littleGreenCarpet);
         addWallDec(2*unit, (int)(-0.5*unit), 400, 400, library);
         addWallDec(7*cellSize, (int)(-0.5*cellSize), 400, 400, library);
-        addFloorDec((int)(4.5*cellSize), (int)(4.5*cellSize), 700, 450, redCarpet);
+        addFloorDec((int)(4.5*cellSize), (int)(4.5*cellSize), 700, 450, brownCarpet);
     }
 
     private void makeEnemies(){

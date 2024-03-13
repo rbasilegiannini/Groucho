@@ -2,6 +2,7 @@ package com.personal.groucho.game.levels.first;
 
 import static com.personal.groucho.game.assets.Textures.brownCarpet;
 import static com.personal.groucho.game.assets.Textures.brownDoor;
+import static com.personal.groucho.game.assets.Textures.brownFloor;
 import static com.personal.groucho.game.assets.Textures.dresser;
 import static com.personal.groucho.game.assets.Textures.littleGreenCarpet;
 import static com.personal.groucho.game.assets.Textures.littleLibrary;
@@ -36,7 +37,7 @@ public class Hallway extends Room {
         this.internalWall = orangeWall;
         this.externalWall = woodWall;
 
-        setFloor(woodFloor, 128, 128);
+        setFloor(brownFloor, 128, 128);
     }
 
     @Override

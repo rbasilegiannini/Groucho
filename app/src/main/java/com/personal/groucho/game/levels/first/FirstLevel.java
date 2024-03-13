@@ -11,7 +11,7 @@ public class FirstLevel extends Level {
     private final Room entryHall;
     private final Room bathroom;
     private final Room garden;
-    private final Room wolfRoom;
+    private final Room kitchen;
 
     protected boolean fromBathroomToEntryHall, fromGardenToEntryHall, fromKitchenToEntryHall;
     protected int counterKeys = 0;
@@ -26,7 +26,7 @@ public class FirstLevel extends Level {
         entryHall = new EntryHall(gameWorld, this);
         bathroom = new Bathroom(gameWorld, this);
         garden = new Garden(gameWorld, this);
-        wolfRoom = new Kitchen(gameWorld, this);
+        kitchen = new Kitchen(gameWorld, this);
     }
 
     public void init(){
@@ -40,7 +40,7 @@ public class FirstLevel extends Level {
         entryHall.firstTime = true;
         bathroom.firstTime = true;
         garden.firstTime = true;
-        wolfRoom.firstTime = true;
+        kitchen.firstTime = true;
 
         activeRoom = grouchoRoom;
         activeRoom.init();
@@ -52,7 +52,7 @@ public class FirstLevel extends Level {
     public void goToEntryHall() {changeRoom(entryHall);}
     public void goToBathroom() {changeRoom(bathroom);}
     public void goToGarden() {changeRoom(garden);}
-    public void goToKitchen() {changeRoom(wolfRoom);}
+    public void goToKitchen() {changeRoom(kitchen);}
 
     private void changeRoom(Room hall) {
         activeRoom.releaseRoom();

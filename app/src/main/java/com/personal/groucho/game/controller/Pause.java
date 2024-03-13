@@ -4,7 +4,6 @@ import static com.personal.groucho.game.Utils.isInCircle;
 import static com.personal.groucho.game.assets.Textures.pause;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
