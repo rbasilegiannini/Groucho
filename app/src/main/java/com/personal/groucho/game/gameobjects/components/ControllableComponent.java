@@ -10,6 +10,7 @@ import static com.personal.groucho.game.constants.Environment.minLightIntensity;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
 import static com.personal.groucho.game.Utils.fromMetersToBufferY;
 import static com.personal.groucho.game.assets.Sounds.loading;
+import static com.personal.groucho.game.constants.System.charScaleFactor;
 import static com.personal.groucho.game.controller.states.StateName.AIMING;
 import static com.personal.groucho.game.controller.states.StateName.WALKING;
 import static com.personal.groucho.game.gameobjects.ComponentType.CONTROLLABLE;
@@ -119,9 +120,12 @@ public class ControllableComponent extends WalkingComponent implements Controlle
 
     private void shoot() {
         initComponents();
+//
+//        float originX = fromMetersToBufferX(phyComp.getPosX());
+//        float originY = fromMetersToBufferY(phyComp.getPosY());
 
-        float originX = fromMetersToBufferX(phyComp.getPosX());
-        float originY = fromMetersToBufferY(phyComp.getPosY());
+        float originX = posComp.posX;
+        float originY = posComp.posY;
         float endX = 0;
         float endY = 0;
 
@@ -137,12 +141,14 @@ public class ControllableComponent extends WalkingComponent implements Controlle
                 endY = originY + 2000;
                 break;
             case LEFT:
-                originX = originX - charDimX;
+                originX = originX + charDimX;
+                originY = originY - (charScaleFactor-2)*charDimY;
                 endX = originX - 2000;
                 endY = originY;
                 break;
             case RIGHT:
-                originX = originX + charDimX;
+                originX = originX - charDimX;
+                originY = originY - (charScaleFactor-2)*charDimY;
                 endX = originX + 2000;
                 endY = originY;
                 break;
