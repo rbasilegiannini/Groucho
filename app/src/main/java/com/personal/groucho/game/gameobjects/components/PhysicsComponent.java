@@ -108,7 +108,7 @@ public class PhysicsComponent extends Component {
         initComponents();
 
         body.setTransform(body.getPositionX(),body.getPositionY() + increase, 0);
-        posComp.updatePosY((int)increase);
+//        posComp.updatePosY((int)increase); // TODO: Remove this!
     }
 
     public float getPosX() {return body.getPositionX();}
@@ -130,5 +130,9 @@ public class PhysicsComponent extends Component {
             posComp = (PositionComponent) owner.getComponent(POSITION);
         }
     }
+
+    public float getVelocityX() { return body.getLinearVelocity().getX();}
+    public float getVelocityY() { return body.getLinearVelocity().getY();}
+
 }
 

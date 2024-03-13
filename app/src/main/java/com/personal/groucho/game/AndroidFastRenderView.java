@@ -1,13 +1,14 @@
 package com.personal.groucho.game;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+@SuppressLint("ViewConstructor")
 public class AndroidFastRenderView extends SurfaceView implements Runnable {
     private final GameWorld gameWorld;
 
@@ -35,6 +36,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
         float deltaTime, fpsDeltaTime;
         while(running) {
             if(!holder.getSurface().isValid()) {
+                startTime = System.nanoTime();
                 continue;
             }
 
@@ -47,12 +49,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             gameWorld.update(deltaTime);
             gameWorld.render();
 
-            Canvas canvas = holder.lockCanvas();
-            if (canvas != null) {
-                canvas.getClipBounds(dstRect);
-                canvas.drawBitmap(framebuffer, null, dstRect, null);
-                holder.unlockCanvasAndPost(canvas);
-            }
+            renderGame(dstRect);
 
             // Measure FPS
             frameCounter++;
@@ -61,6 +58,15 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
                 frameCounter = 0;
                 fpsTime = currentTime;
             }
+        }
+    }
+
+    private void renderGame(Rect dstRect) {
+        Canvas canvas = holder.lockCanvas();
+        if (canvas != null) {
+            canvas.getClipBounds(dstRect);
+            canvas.drawBitmap(framebuffer, null, dstRect, null);
+            holder.unlockCanvasAndPost(canvas);
         }
     }
 

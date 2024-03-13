@@ -47,11 +47,11 @@ public class ControllableComponent extends WalkingComponent implements Controlle
     @Override
     public ComponentType type() {return CONTROLLABLE;}
 
-    public void updatePlayerState() {
+    public void updatePlayerState(float elapsedTime) {
         initComponents();
 
         if (controller.currentState.getName() == WALKING)
-            handleWalkingPlayer();
+            handleWalkingPlayer(elapsedTime);
         else if (controller.currentState.getName() == AIMING)
             handleAimingPlayer();
 
@@ -91,9 +91,9 @@ public class ControllableComponent extends WalkingComponent implements Controlle
         updateSprite(charComp.properties.sheetIdle);
     }
 
-    private void handleWalkingPlayer() {
+    private void handleWalkingPlayer(float elapsedTime) {
         playLoadingSound = true;
-        walking();
+        walking(elapsedTime);
     }
 
     private void handleAimingPlayer() {

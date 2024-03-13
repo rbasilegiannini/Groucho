@@ -22,6 +22,7 @@ import static com.personal.groucho.game.gameobjects.Role.FURNITURE;
 import static com.personal.groucho.game.gameobjects.Role.HEALTH;
 import static com.personal.groucho.game.gameobjects.Role.NEUTRAL;
 import static com.personal.groucho.game.gameobjects.Role.PLAYER;
+import static com.personal.groucho.game.gameobjects.Role.TOP;
 import static com.personal.groucho.game.gameobjects.Role.TRIGGER;
 import static com.personal.groucho.game.gameobjects.Role.WALL;
 
@@ -218,7 +219,7 @@ public class GameObjectFactory {
                                                  World world) {
 
         int dimX = (int) length;
-        int dimRoofY = cellSize;
+        int dimRoofY = cellSize/2;
         int dimWallY = (int) (2* charScaleFactor * charDimY);
 
         Paint paintRoof = new Paint();
@@ -240,7 +241,7 @@ public class GameObjectFactory {
         BoxDrawableComponent boxCompWall = Pools.boxCompPool.acquire();
         BoxDrawableComponent boxCompRoof = Pools.boxCompPool.acquire();
 
-        roof.init("Roof", WALL);
+        roof.init("Roof", TOP);
         wall.init("Wall", WALL);
 
         posCompWall.init(centerX, centerY);
@@ -280,7 +281,7 @@ public class GameObjectFactory {
         PhysicsComponent phyComp = Pools.phyCompPool.acquire();
         BoxDrawableComponent boxComp = Pools.boxCompPool.acquire();
 
-        border.init("Wall", WALL);
+        border.init("Wall", TOP);
 
         posComp.init(centerX-cellSize/2, centerY);
         phyComp.init(world, (float) (dimX+0.2*cellSize), dimY);

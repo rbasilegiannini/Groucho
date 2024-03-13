@@ -7,6 +7,7 @@ import static com.personal.groucho.game.gameobjects.ComponentType.POSITION;
 import static com.personal.groucho.game.gameobjects.Role.ENEMY;
 import static com.personal.groucho.game.gameobjects.Role.FLOOR;
 import static com.personal.groucho.game.gameobjects.Role.PLAYER;
+import static com.personal.groucho.game.gameobjects.Role.TOP;
 import static com.personal.groucho.game.gameobjects.Status.DEAD;
 
 import android.graphics.Bitmap;
@@ -35,6 +36,8 @@ class DrawableComparator implements Comparator<DrawableComponent> {
         Entity e1 = obj1.getOwner();
         Entity e2 = obj2.getOwner();
 
+        if (e1.role == TOP) return 1;
+        if (e2.role == TOP) return -1;
         if (e1.role == FLOOR) return -1;
         if (e2.role == FLOOR) return 1;
 

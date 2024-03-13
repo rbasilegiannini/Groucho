@@ -72,7 +72,7 @@ public class Hallway extends Room {
     }
 
     private void makeFurniture(){
-        addDynamicFurn(6*unit,  (int)(0.75*unit), 150, 150, 5f, littleTable);
+        addDynamicFurn(3*unit,  (int)(0.3*unit), 150, 150, 5f, littleTable);
     }
 
     private void makeTriggers() {

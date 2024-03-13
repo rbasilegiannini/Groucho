@@ -44,12 +44,12 @@ public class Textures {
         woodFloor = setBitmap(res, R.drawable.wood_floor, 32, 32);
         orangeFloor = setBitmap(res, R.drawable.orange_floor, 64, 64);
         lightWoodFloor = setBitmap(res, R.drawable.light_wood_floor, 64, 64);
-        brownFloor = setBitmap(res, R.drawable.brown_floor, 64, 64);
+        brownFloor = setBitmap(res, R.drawable.brown_floor, 32, 32);
         grassFloor = setBitmap(res, R.drawable.grass_floor_big, 256, 256);
     }
 
     private static void loadWalls(Resources res) {
-        orangeWall = setBitmap(res, R.drawable.orange_internal_wall, 64, 64);
+        orangeWall = setBitmap(res, R.drawable.orange_internal_wall, 32, 32);
         whiteWall = setBitmap(res, R.drawable.white_wall, 64, 64);
         woodWall = setBitmap(res, R.drawable.wood_wall, 64, 64);
         greenWall = setBitmap(res, R.drawable.green_wall, 64, 64);
@@ -74,8 +74,8 @@ public class Textures {
         wc = setBitmap(res, R.drawable.wc, 231, 154);
         meFrame = setBitmap(res, R.drawable.me_frame, 64, 64);
         orangeCouch = setBitmap(res, R.drawable.orange_couch, 99, 63);
-        littleTable = setBitmap(res, R.drawable.little_table, 50, 75);
-        table = setBitmap(res, R.drawable.table, 95, 92);
+        littleTable = setBitmap(res, R.drawable.little_table, 20, 30);
+        table = setBitmap(res, R.drawable.table, 64, 62);
         tableWithFlowers = setBitmap(res, R.drawable.table_with_flowers, 91, 90);
         mediumTable = setBitmap(res, R.drawable.medium_table, 89, 70);
         armChairLeft = setBitmap(res, R.drawable.armchair_left, 74, 114);
@@ -86,7 +86,7 @@ public class Textures {
         chairLeft = setBitmap(res, R.drawable.chair_left, 50, 95);
         chairRight = setBitmap(res, R.drawable.chair_right, 50, 95);
         chairUp = setBitmap(res, R.drawable.chair_up, 66, 118);
-        dresser = setBitmap(res, R.drawable.dresser, 64, 85);
+        dresser = setBitmap(res, R.drawable.dresser, 32, 43);
         dresserRight = setBitmap(res, R.drawable.dresser_right, 38, 109);
         greenCouchRight = setBitmap(res, R.drawable.green_couch_right, 50, 125);
         hanger = setBitmap(res, R.drawable.hanger, 46, 125);
@@ -101,7 +101,7 @@ public class Textures {
     private static void loadGrouchoRes(Resources res) {
         grouchoBubble = setBitmap(res, R.drawable.groucho_bubble, 512, 256);
         grouchoFrame = setBitmap(res, R.drawable.groucho_frame, 64, 64);
-        grouchoWardrobe = setBitmap(res, R.drawable.groucho_wardrobe, 96, 108);
+        grouchoWardrobe = setBitmap(res, R.drawable.groucho_wardrobe, 64, 72);
         dylanBubble = setBitmap(res, R.drawable.dylan_bubble, 512, 340);
     }
 
@@ -117,7 +117,7 @@ public class Textures {
         littleCarpetBathroom = setBitmap(res, R.drawable.little_carpet_bathroom, 98, 44);
         littleGreenCarpet = setBitmap(res, R.drawable.green_little_carpet, 73, 40);
         littleGreenCarpetVer = setBitmap(res, R.drawable.green_little_carpet_ver, 40, 73);
-        redCarpet = setBitmap(res, R.drawable.red_carpet, 128, 85);
+        redCarpet = setBitmap(res, R.drawable.red_carpet, 92, 61);
     }
 
     private static void loadWindows (Resources res){

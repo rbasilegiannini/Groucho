@@ -56,9 +56,9 @@ public class Player {
         ctrlComp = null;
     }
 
-    public void update(Canvas canvas, Controller controller){
+    public void update(float elapsedTime, Canvas canvas, Controller controller){
         if (ctrlComp != null) {
-            ctrlComp.updatePlayerState();
+            ctrlComp.updatePlayerState(elapsedTime);
         }
 
         if (posComp != null) {
@@ -69,7 +69,7 @@ public class Player {
 
         if (godMode) {
             AliveComponent aliveComp = (AliveComponent) gameObject.getComponent(ALIVE);
-            aliveComp.currentHealth = Character.grouchoHealth;
+            aliveComp.currentHealth = 1000000;
         }
 
         if (fpsCounter || memoryUsage) {

@@ -79,14 +79,14 @@ public class Room {
         gameObjects.add(GameObjectFactory.makeVerBorder(
                 cellSize/4,
                 (int) ((surface.height()/2)-(1.75f * cellSize)),
-                surface.height()+(1.5f*cellSize),
+                surface.height()+cellSize,
                 gameWorld.physics.world));
 
         // Right border
         gameObjects.add(GameObjectFactory.makeVerBorder(
                 (int) (surface.width() + (0.74f)*cellSize),
                 (int) ((surface.height()/2)-(1.75f * cellSize)),
-                surface.height()+(1.5f*cellSize),
+                surface.height()+cellSize,
                 gameWorld.physics.world));
     }
 

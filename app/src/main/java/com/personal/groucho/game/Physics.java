@@ -63,17 +63,17 @@ public class Physics {
 
     public synchronized void update(float elapsedTime) {
         world.step(elapsedTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
-        updatePhysicsPos();
+        updatePhysicsPos(elapsedTime);
         handleCollisions();
     }
 
-    private void updatePhysicsPos() {
+    private void updatePhysicsPos(float elapsedTime) {
         for (PhysicsComponent phyComp : ComponentHandler.getInstance().phyComps) {
             Entity currentEntity = phyComp.getOwner();
             PositionComponent posComp = (PositionComponent) currentEntity.getComponent(POSITION);
 
             if (currentEntity.role == FURNITURE) {
-                handleFurnitureCollision(phyComp, posComp);
+                handleFurnitureCollision(phyComp, posComp, elapsedTime);
             }
             else {
                 if (phyComp.hasChangedPosition()) {
@@ -84,7 +84,7 @@ public class Physics {
         }
     }
 
-    private void handleFurnitureCollision(PhysicsComponent phyComp, PositionComponent posComp) {
+    private void handleFurnitureCollision(PhysicsComponent phyComp, PositionComponent posComp, float elapsedTime) {
         float originalPosX = fromMetersToBufferX(phyComp.originalPosX);
         float originalPosY = fromMetersToBufferY(phyComp.originalPosY);
 

@@ -47,6 +47,6 @@ public class PatrolActions implements Actions {
             aiComp.posComp.setOrientation(aiComp.posComp.orientation.getOpposite());
         }
         currentSteps++;
-        aiComp.walking();
+        aiComp.walking(aiComp.elapsedTime);
     }
 }

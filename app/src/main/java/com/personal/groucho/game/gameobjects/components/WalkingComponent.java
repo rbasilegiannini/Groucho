@@ -25,30 +25,38 @@ public abstract class WalkingComponent extends Component {
         this.charComp = null;
     }
 
-    protected void walking() {
+    protected void walking(float elapsedTime) {
         initComponents();
+
+        float speedPerSecond = charComp.properties.speed;
+
+        // TODO: a temporary (non) solution to remove the stuttering.
+        elapsedTime = 1;
 
         switch (posComp.orientation) {
             case UP:
                 increaseX = 0;
-                increaseY = -1;
+                increaseY = -elapsedTime;
                 break;
             case DOWN:
                 increaseX = 0;
-                increaseY = 1;
+                increaseY = elapsedTime;
                 break;
             case LEFT:
-                increaseX = -1;
+                increaseX = -elapsedTime;
                 increaseY = 0;
                 break;
             case RIGHT:
-                increaseX = 1;
+                increaseX = elapsedTime;
                 increaseY = 0;
                 break;
         }
-        updatePosition(
-                toMetersXLength(charComp.properties.speed) * increaseX,
-                toMetersXLength(charComp.properties.speed) * increaseY);
+//        updatePhysicsPos(
+//                speedPerSecond*increaseX,
+//                speedPerSecond*increaseY);
+        updatePhysicsPos(
+                toMetersXLength(speedPerSecond) * increaseX,
+                toMetersXLength(speedPerSecond) * increaseY);
         updateSprite(charComp.properties.sheetWalk);
     }
 
@@ -59,7 +67,7 @@ public abstract class WalkingComponent extends Component {
         spriteComp.setAnim(posComp.orientation.getValue());
     }
 
-    private void updatePosition(float increaseX, float increaseY) {
+    private void updatePhysicsPos(float increaseX, float increaseY) {
         initComponents();
 
         phyComp.updatePosX(increaseX);

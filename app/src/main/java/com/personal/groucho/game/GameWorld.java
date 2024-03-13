@@ -109,7 +109,7 @@ public class GameWorld {
             physics.update(elapsedTime);
 
             if (!gameOver) {
-                player.update(graphics.canvas, controller);
+                player.update(elapsedTime, graphics.canvas, controller);
             }
 
             if (complete) {
@@ -117,7 +117,7 @@ public class GameWorld {
             }
 
             for (AIComponent aiComponent : ComponentHandler.getInstance().aiComps) {
-                aiComponent.update(this);
+                aiComponent.update(elapsedTime, this);
             }
         }
     }

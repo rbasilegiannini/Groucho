@@ -50,6 +50,7 @@ public class AIComponent extends WalkingComponent {
     public boolean isNodeReached = true;
     public boolean isPlayerEngaged = false;
     public boolean isPlayerReached = false;
+    public float elapsedTime;
 
     public IdleActions idleActions;
     public PatrolActions patrolActions;
@@ -118,9 +119,9 @@ public class AIComponent extends WalkingComponent {
     @Override
     public ComponentType type() { return AI; }
 
-    public void update(GameWorld gameWorld) {
+    public void update(float elapsedTime, GameWorld gameWorld) {
         init(gameWorld);
-
+        this.elapsedTime = elapsedTime;
         List<Action> actions = fsm.getActions();
         for (Action action : actions) {
             action.doIt();
@@ -194,7 +195,7 @@ public class AIComponent extends WalkingComponent {
         if (startX > targetPosX) {
             posComp.setOrientation(LEFT);
         }
-        walking();
+        walking(elapsedTime);
     }
 
     private void walkingToYCoordinate(int startY, int targetPosY){
@@ -209,12 +210,12 @@ public class AIComponent extends WalkingComponent {
         if (startY > targetPosY) {
             posComp.setOrientation(UP);
         }
-        walking();
+        walking(elapsedTime);
     }
 
     @Override
-    public void walking() {
-        super.walking();
+    public void walking(float elapsedTime) {
+        super.walking(elapsedTime);
         sight.updateSightPosition(posComp.posX, posComp.posY);
         sight.setNewOrientation(posComp.orientation);
     }
