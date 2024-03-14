@@ -18,6 +18,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     Thread renderThread = null;
     SurfaceHolder holder;
     volatile boolean running = false;
+    private boolean surfaceReleased = false;
 
     public AndroidFastRenderView(Context context, GameWorld gameWorld) {
         super(context);
@@ -66,12 +67,35 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     }
 
     private void renderGame(Rect dstRect) {
-        Canvas canvas = holder.lockCanvas();
-        if (canvas != null) {
-            canvas.getClipBounds(dstRect);
-            canvas.drawBitmap(framebuffer, null, dstRect, null);
-            holder.unlockCanvasAndPost(canvas);
+        if (holder.getSurface().isValid() && !surfaceReleased) {
+            Canvas canvas = holder.lockCanvas();
+            if (canvas != null) {
+                try {
+                    canvas.getClipBounds(dstRect);
+                    canvas.drawBitmap(framebuffer, null, dstRect, null);
+                } finally {
+                    holder.unlockCanvasAndPost(canvas);
+                }
+            }
         }
+    }
+
+    public void releaseSurface() {
+        if (holder.getSurface().isValid()) {
+            surfaceReleased = true;
+            Canvas canvas = holder.lockCanvas();
+            if (canvas != null) {
+                holder.unlockCanvasAndPost(canvas);
+            }
+        }
+    }
+
+    public void prepareSurface() {
+        surfaceReleased = false;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public void pause() {

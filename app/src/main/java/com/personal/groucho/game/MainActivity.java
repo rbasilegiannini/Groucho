@@ -97,10 +97,13 @@ public class MainActivity extends Activity {
         super.onPause();
         Log.i("Main thread", "pause");
 
-        renderView.pause();
         if (backgroundMusic.isPlaying()) {
             backgroundMusic.pause();
             wasPlaying = true;
+        }
+
+        if (renderView != null && renderView.isRunning()) {
+            renderView.pause();
         }
     }
 

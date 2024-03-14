@@ -27,6 +27,7 @@ public class MenuHandler {
                     ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
                     newGameButton.setOnClickListener(v -> {
                         gameWorld.init(new FirstLevel(gameWorld));
+                        gameWorld.activity.renderView.prepareSurface();
                         gameWorld.activity.setContentView(gameWorld.activity.renderView);
                     });
                     optionsButton.setOnClickListener(v -> handleOptionsMainMenu(gameWorld));
@@ -40,7 +41,7 @@ public class MenuHandler {
                     gameWorld.activity.setContentView(R.layout.options);
 
                     ImageButton undoButton = gameWorld.activity.findViewById(R.id.undoButton);
-                    handleOptionsSwitches(gameWorld.activity);
+                    handleOptionsSwitches(gameWorld);
 
                     undoButton.setOnClickListener(v -> handleMainMenu(gameWorld));
                 });
@@ -49,12 +50,15 @@ public class MenuHandler {
     public static void handlePauseMenu(GameWorld gameWorld) {
         gameWorld.activity.runOnUiThread(
                 () -> {
+                    gameWorld.activity.renderView.releaseSurface();
                     gameWorld.activity.setContentView(R.layout.pause);
+
                     ImageButton resumeButton = gameWorld.activity.findViewById(R.id.resumeGame);
                     ImageButton optionsButton = gameWorld.activity.findViewById(R.id.options);
                     ImageButton exitButton = gameWorld.activity.findViewById(R.id.exit);
 
                     resumeButton.setOnClickListener( v -> {
+                        gameWorld.activity.renderView.prepareSurface();
                         gameWorld.activity.runOnUiThread(
                                 () -> gameWorld.activity.setContentView(gameWorld.activity.renderView));
                         gameWorld.resume();
@@ -73,32 +77,36 @@ public class MenuHandler {
                     ImageButton undoButton = gameWorld.activity.findViewById(R.id.undoButton);
                     undoButton.setOnClickListener(v -> handlePauseMenu(gameWorld));
 
-                    handleOptionsSwitches(gameWorld.activity);
+                    handleOptionsSwitches(gameWorld);
                 });
     }
 
-    private static void handleOptionsSwitches(Activity activity) {
-        Switch debugModeSwitch = activity.findViewById(R.id.debugMode);
-        Switch fpsCounterSwitch = activity.findViewById(R.id.fpsCounter);
-        Switch memoryUsageSwitch = activity.findViewById(R.id.memoryUsage);
-        Switch godModeSwitch = activity.findViewById(R.id.godMode);
+    private static void handleOptionsSwitches(GameWorld gameWorld) {
+        gameWorld.activity.runOnUiThread(
+                () -> {
+                Switch debugModeSwitch = gameWorld.activity.findViewById(R.id.debugMode);
+                Switch fpsCounterSwitch = gameWorld.activity.findViewById(R.id.fpsCounter);
+                Switch memoryUsageSwitch = gameWorld.activity.findViewById(R.id.memoryUsage);
+                Switch godModeSwitch = gameWorld.activity.findViewById(R.id.godMode);
 
-        debugModeSwitch.setChecked(debugMode);
-        debugModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> debugMode = isChecked);
+                debugModeSwitch.setChecked(debugMode);
+                debugModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> debugMode = isChecked);
 
-        fpsCounterSwitch.setChecked(fpsCounter);
-        fpsCounterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> fpsCounter = isChecked);
+                fpsCounterSwitch.setChecked(fpsCounter);
+                fpsCounterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> fpsCounter = isChecked);
 
-        memoryUsageSwitch.setChecked(memoryUsage);
-        memoryUsageSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> memoryUsage = isChecked);
+                memoryUsageSwitch.setChecked(memoryUsage);
+                memoryUsageSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> memoryUsage = isChecked);
 
-        godModeSwitch.setChecked(godMode);
-        godModeSwitch.setOnCheckedChangeListener(((buttonView, isChecked) -> godMode = isChecked));
+                godModeSwitch.setChecked(godMode);
+                godModeSwitch.setOnCheckedChangeListener(((buttonView, isChecked) -> godMode = isChecked));
+                });
     }
 
     public static void handleGameOverMenu(GameWorld gameWorld) {
         gameWorld.activity.runOnUiThread(
                 () -> {
+                    gameWorld.activity.renderView.releaseSurface();
                     gameWorld.activity.setContentView(R.layout.gameover);
                     handleTryAgain(gameWorld);
                 });
@@ -108,6 +116,7 @@ public class MenuHandler {
     public static void handleCompleteMenu(GameWorld gameWorld) {
         gameWorld.activity.runOnUiThread(
                 () -> {
+                    gameWorld.activity.renderView.releaseSurface();
                     gameWorld.activity.setContentView(R.layout.complete);
                     handleTryAgain(gameWorld);
                 });
