@@ -173,12 +173,12 @@ public class GameWorld {
     }
 
     public void resume() {
-        activity.backgroundMusic.play();
         pause = false;
+        activity.backgroundMusic.play();
     }
     public void pause() {
-        activity.backgroundMusic.pause();
         pause = true;
+        activity.backgroundMusic.pause();
     }
 
     public void GameOver() {

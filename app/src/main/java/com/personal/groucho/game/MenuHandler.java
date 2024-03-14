@@ -18,7 +18,7 @@ public class MenuHandler {
         gameWorld.activity.runOnUiThread(
                 () -> {
                     if (gameWorld.activity.backgroundMusic != null)
-                        gameWorld.activity.backgroundMusic.stop();
+                        gameWorld.activity.backgroundMusic.pause();
 
                     gameWorld.activity.setContentView(R.layout.menu);
 
