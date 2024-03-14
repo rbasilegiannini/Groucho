@@ -5,7 +5,6 @@ import static com.personal.groucho.game.constants.System.fpsCounter;
 import static com.personal.groucho.game.constants.System.godMode;
 import static com.personal.groucho.game.constants.System.memoryUsage;
 
-import android.app.Activity;
 import android.widget.ImageButton;
 import android.widget.Switch;
 
