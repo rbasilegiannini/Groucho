@@ -41,6 +41,14 @@ class DrawableComparator implements Comparator<DrawableComponent> {
         if (e1.role == FLOOR) return -1;
         if (e2.role == FLOOR) return 1;
 
+        if (e1.role == ENEMY && e2.role == ENEMY){
+            AliveComponent aliveComp1 = (AliveComponent) e1.getComponent(ALIVE);
+            AliveComponent aliveComp2 = (AliveComponent) e1.getComponent(ALIVE);
+            if (aliveComp1.currentStatus == DEAD && aliveComp2.currentStatus == DEAD){
+                return 1;
+            }
+        }
+
         if (e1.role == ENEMY || e1.role == PLAYER) {
             if (((AliveComponent)(e1.getComponent(ALIVE))).currentStatus == DEAD){
                 return -1;
