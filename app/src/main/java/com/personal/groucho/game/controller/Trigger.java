@@ -18,7 +18,7 @@ public class Trigger extends Widget{
     public Trigger(float cx, float cy) {
         super(cx, cy);
         radius = 50;
-        radiusSqr = (float) Math.pow(radius, 2);
+        radiusSqr = (float) Math.pow(2*radius, 2);
 
         loadPosX = centerX - 300;
         loadPosY = centerY - 200;
@@ -92,6 +92,6 @@ public class Trigger extends Widget{
     }
     public boolean isOnShootingArea(float x, float y) {
         if(!visible) return false;
-        return isInCircle(shootPosX +100, shootPosY+3*radius, x, y, radiusSqr);
+        return isInCircle(shootPosX +50, shootPosY+3*radius, x, y, radiusSqr);
     }
 }
