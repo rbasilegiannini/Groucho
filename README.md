@@ -35,4 +35,4 @@ Sprite:
 
 # Author
 
-[Roberto Basile Giannini](www.linkedin.com/in/rbgdotbrush)
+[Roberto Basile Giannini](https://www.linkedin.com/in/rbgdotbrush)
