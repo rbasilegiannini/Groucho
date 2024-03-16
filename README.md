@@ -27,7 +27,7 @@ Textures:
 - [Cainos](https://cainos.itch.io)
 
 Music/Sounds:
-- _Lavander Town_ from [Pokémon](https://www.pokemon.com/it)
+- _Lavender Town_ from [Pokémon](https://www.pokemon.com/it)
 - [Pixabay](https://pixabay.com/)
 
 Sprite: 
