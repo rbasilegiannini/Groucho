@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="groucho_speed">10f</dimen>
-    <integer name="groucho_health">100</integer>
+    <integer name="groucho_health">125</integer>
     <integer name="groucho_power">15</integer>
 
     <dimen name="skeleton_speed">4f</dimen>
@@ -10,13 +10,13 @@
 
     <dimen name="zombie_speed">2f</dimen>
     <integer name="zombie_health">200</integer>
-    <integer name="zombie_power">30</integer>
+    <integer name="zombie_power">20</integer>
 
     <dimen name="wolf_speed">5f</dimen>
-    <integer name="wolf_health">300</integer>
+    <integer name="wolf_health">270</integer>
     <integer name="wolf_power">10</integer>
 
-    <integer name="medical_kit">10</integer>
+    <integer name="medical_kit">25</integer>
 
     <integer name="hearing_range">1500</integer>
     <integer name="hearing_range_sqr">2250000</integer>
