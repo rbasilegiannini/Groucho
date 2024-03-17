@@ -66,10 +66,10 @@ public class Utils {
                 || (crossProduct1 <= 0 && crossProduct2 <= 0 && crossProduct3 <= 0);
     }
 
-    public static float distBetweenPos(float pos1x, float pos1y, float pos2x, float pos2y){
+    public static float distSquaredBetweenPos(float pos1x, float pos1y, float pos2x, float pos2y){
         float deltaX = pos2x - pos1x;
         float deltaY = pos2y - pos1y;
-        return (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        return deltaX * deltaX + deltaY * deltaY;
     }
 
     public static Orientation directionBetweenGO(GameObject go, GameObject goToTurn) {

@@ -1,7 +1,7 @@
 package com.personal.groucho.game;
 
 import static com.personal.groucho.game.Utils.directionBetweenGO;
-import static com.personal.groucho.game.Utils.distBetweenPos;
+import static com.personal.groucho.game.Utils.distSquaredBetweenPos;
 import static com.personal.groucho.game.Utils.fromBufferToMetersX;
 import static com.personal.groucho.game.Utils.fromBufferToMetersY;
 import static com.personal.groucho.game.Utils.fromMetersToBufferX;
@@ -74,7 +74,7 @@ public class Events {
 
     public static void alertEnemiesEvent(GameWorld gameWorld) {
         List<PositionComponent> enemiesPos = new ArrayList<>();
-        List<Float> enemiesDist = new ArrayList<>();
+        List<Float> enemiesDistSquared = new ArrayList<>();
 
         for (GameObject enemy : gameWorld.goHandler.getGOByRole(ENEMY)){
             AIComponent aiComp = (AIComponent) enemy.getComponent(AI);
@@ -84,14 +84,14 @@ public class Events {
                 float playerPosY = gameWorld.player.posY;
 
                 if (playerIsAudible(enemyPos, playerPosX, playerPosY)) {
-                    float dist = distBetweenPos(playerPosX, playerPosY, enemyPos.posX, enemyPos.posY);
+                    float dist = distSquaredBetweenPos(playerPosX, playerPosY, enemyPos.posX, enemyPos.posY);
                     enemiesPos.add(enemyPos);
-                    enemiesDist.add(dist);
+                    enemiesDistSquared.add(dist);
                 }
             }
         }
-        if (!enemiesDist.isEmpty()) {
-            callNearestEnemy(enemiesPos, enemiesDist);
+        if (!enemiesDistSquared.isEmpty()) {
+            callNearestEnemy(enemiesPos, enemiesDistSquared);
         }
     }
 
